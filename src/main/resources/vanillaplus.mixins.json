@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "BedBlockMixin",
   ],
   "client": [
   ],
