@@ -12,6 +12,7 @@
     "CreativeModeTabsMixin",
     "CrossbowItemMixin",
     "ExperienceOrbMixin",
+    "FireworkRocketEntityMixin",
     "ItemsMixin",
     "MobMixin",
     "OminousBottleAmplifierMixin",
