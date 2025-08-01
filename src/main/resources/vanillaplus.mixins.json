@@ -8,6 +8,7 @@
     "AnvilMenuMixin",
     "BedBlockMixin",
     "CreativeModeTabsMixin",
+    "ExperienceOrbMixin",
     "MobMixin",
     "OminousBottleAmplifierMixin"
   ],
