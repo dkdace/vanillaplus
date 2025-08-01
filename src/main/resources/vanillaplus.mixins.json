@@ -9,6 +9,7 @@
     "BedBlockMixin",
     "CreativeModeTabsMixin",
     "ExperienceOrbMixin",
+    "ItemsMixin",
     "MobMixin",
     "OminousBottleAmplifierMixin"
   ],
