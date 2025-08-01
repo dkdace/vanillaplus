@@ -8,10 +8,14 @@
     "AnvilMenuMixin",
     "BedBlockMixin",
     "CreativeModeTabsMixin",
+    "CrossbowItemMixin",
     "ExperienceOrbMixin",
     "ItemsMixin",
     "MobMixin",
-    "OminousBottleAmplifierMixin"
+    "OminousBottleAmplifierMixin",
+    "PiglinAiMixin",
+    "PiglinMixin",
+    "PillagerMixin"
   ],
   "client": [
   ],
