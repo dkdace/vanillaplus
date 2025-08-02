@@ -21,6 +21,7 @@
     "PillagerMixin"
   ],
   "client": [
+    "client.ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
