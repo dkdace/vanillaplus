@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin;
 
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
@@ -16,7 +15,7 @@ public final class MobMixin {
     private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
 
-        if (mob.level().getDifficulty() == Difficulty.HARD && isAggressive && mob.getVehicle() instanceof VehicleEntity)
+        if (isAggressive && mob.getVehicle() instanceof VehicleEntity)
             mob.stopRiding();
     }
 
@@ -24,7 +23,7 @@ public final class MobMixin {
     private void preventRidingIfAggressive(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
         Mob mob = (Mob) (Object) this;
 
-        if (mob.level().getDifficulty() == Difficulty.HARD && mob.isAggressive() && vehicle instanceof VehicleEntity)
+        if (mob.isAggressive() && vehicle instanceof VehicleEntity)
             cir.setReturnValue(false);
     }
 }
