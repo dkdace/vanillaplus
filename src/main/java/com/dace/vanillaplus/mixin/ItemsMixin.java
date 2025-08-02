@@ -9,14 +9,14 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public final class ItemsMixin {
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item$Properties;durability(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 8))
-    private static int getDurability(int durability) {
+    private static int modifyShieldDurability(int durability) {
         return 260;
     }
 
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/component/BlocksAttacks;<init>(FFLjava/util/List;Lnet/minecraft/world/item/component/BlocksAttacks$ItemDamageFunction;Ljava/util/Optional;Ljava/util/Optional;Ljava/util/Optional;)V"),
             index = 0)
-    private static float getBlockDelaySeconds(float blockDelaySeconds) {
+    private static float modifyShieldBlockDelaySeconds(float blockDelaySeconds) {
         return 0;
     }
 }

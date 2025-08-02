@@ -19,13 +19,13 @@ public final class ExperienceOrbMixin {
     @Inject(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;modifyDurabilityToRepairFromXp(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;I)I"),
             cancellable = true)
-    private void repairPlayerItems(ServerPlayer player, int amount, CallbackInfoReturnable<Integer> cir, @Local ItemStack itemStack) {
+    private void preventRepair(ServerPlayer player, int amount, CallbackInfoReturnable<Integer> cir, @Local ItemStack itemStack) {
         if (itemStack.getDamageValue() <= itemStack.getMaxDamage() * MENDING_CAP)
             cir.setReturnValue(amount);
     }
 
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V"))
-    private int getDamageValue(int damageValue, @Local ItemStack itemStack) {
+    private int modifyRepairAmount(int damageValue, @Local ItemStack itemStack) {
         return (int) Math.max(damageValue, itemStack.getMaxDamage() * MENDING_CAP);
     }
 }

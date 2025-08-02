@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public final class BlocksMixin {
     @ModifyArgs(method = "lambda$static$224", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/util/valueproviders/UniformInt;of(II)Lnet/minecraft/util/valueproviders/UniformInt;"))
-    private static void getXP(Args args) {
+    private static void modifyQuartzOreDropXP(Args args) {
         args.set(0, 1);
         args.set(1, 3);
     }

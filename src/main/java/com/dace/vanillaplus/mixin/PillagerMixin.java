@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public final class PillagerMixin {
     @ModifyArg(method = "registerGoals", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/goal/RangedCrossbowAttackGoal;<init>(Lnet/minecraft/world/entity/monster/Monster;DF)V"), index = 2)
-    private float getAttackRange(float attackRange) {
+    private float modifyAttackRange(float attackRange) {
         return 20;
     }
 

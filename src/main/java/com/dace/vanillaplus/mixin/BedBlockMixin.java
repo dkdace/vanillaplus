@@ -22,8 +22,8 @@ public final class BedBlockMixin {
     }
 
     @Inject(method = "useWithoutItem", at = @At("RETURN"), cancellable = true)
-    private void useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
-                                CallbackInfoReturnable<InteractionResult> cir) {
+    private void preventUseInOtherDimension(BlockState blockState, Level level, BlockPos blockPos, Player player,
+                                            BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
         if (level.dimension() == Level.OVERWORLD)
             return;
 

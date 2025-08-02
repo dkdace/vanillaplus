@@ -8,8 +8,9 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(CreakingHeartBlock.class)
 public final class CreakingHeartBlockMixin {
-    @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
-    private void getXP(Args args) {
+    @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
+    private void modifyDropXP(Args args) {
         args.set(0, 26);
         args.set(1, 32);
     }

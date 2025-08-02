@@ -21,7 +21,7 @@ public final class CrossbowItemMixin {
     }
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))
-    private double getY(double value) {
+    private double modifyShootProjectileTargetY(double y) {
         return -0.25;
     }
 }

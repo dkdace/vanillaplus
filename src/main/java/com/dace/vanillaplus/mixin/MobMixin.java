@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Mob.class)
 public final class MobMixin {
     @Inject(method = "setAggressive", at = @At("HEAD"))
-    private void setAggressive(boolean isAggressive, CallbackInfo ci) {
+    private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
 
         if (mob.level().getDifficulty() == Difficulty.HARD && isAggressive && mob.getVehicle() instanceof VehicleEntity)
@@ -21,7 +21,7 @@ public final class MobMixin {
     }
 
     @Inject(method = "startRiding", at = @At("HEAD"), cancellable = true)
-    private void startRiding(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
+    private void preventRidingIfAggressive(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
         Mob mob = (Mob) (Object) this;
 
         if (mob.level().getDifficulty() == Difficulty.HARD && mob.isAggressive() && vehicle instanceof VehicleEntity)
