@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
+import com.dace.vanillaplus.Rebalance;
 import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +12,6 @@ public final class BlocksMixin {
     @ModifyArgs(method = "lambda$static$224", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/util/valueproviders/UniformInt;of(II)Lnet/minecraft/util/valueproviders/UniformInt;"))
     private static void modifyQuartzOreDropXP(Args args) {
-        args.set(0, 1);
-        args.set(1, 3);
+        args.setAll(Rebalance.QUARTZ_ORE_DROP_XP[0], Rebalance.QUARTZ_ORE_DROP_XP[1]);
     }
 }

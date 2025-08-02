@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
+import com.dace.vanillaplus.Rebalance;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,7 +11,7 @@ public final class ItemsMixin {
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item$Properties;durability(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 8))
     private static int modifyShieldDurability(int durability) {
-        return 260;
+        return Rebalance.SHIELD_DURABILITY;
     }
 
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE",
