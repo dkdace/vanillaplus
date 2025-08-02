@@ -18,7 +18,8 @@
     "MobMixin",
     "OminousBottleAmplifierMixin",
     "PiglinMixin",
-    "PillagerMixin"
+    "PillagerMixin",
+    "LivingEntityMixin"
   ],
   "client": [
     "client.ScreenEffectRendererMixin"
