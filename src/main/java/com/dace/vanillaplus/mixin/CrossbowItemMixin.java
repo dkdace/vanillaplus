@@ -17,7 +17,7 @@ public final class CrossbowItemMixin {
 
     @Overwrite
     public int getDefaultProjectileRange() {
-        return 20;
+        return 16;
     }
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))

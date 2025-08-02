@@ -17,7 +17,6 @@
     "ItemsMixin",
     "MobMixin",
     "OminousBottleAmplifierMixin",
-    "PiglinAiMixin",
     "PiglinMixin",
     "PillagerMixin"
   ],
