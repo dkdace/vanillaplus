@@ -1,5 +1,6 @@
 package com.dace.vanillaplus;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.IntegerRange;
 
 import java.util.function.IntUnaryOperator;
@@ -7,6 +8,7 @@ import java.util.function.IntUnaryOperator;
 /**
  * 리밸런싱 설정을 관리하는 클래스.
  */
+@UtilityClass
 public final class Rebalance {
     /**
      * 모루에서의 아이템 수리 비용 (원본: 2n+1)
@@ -28,6 +30,7 @@ public final class Rebalance {
     /**
      * 겉날개 설정
      */
+    @UtilityClass
     public static final class Elytra {
         /**
          * 폭죽의 추가 속도 배수 (원본: 1.5)
@@ -42,6 +45,7 @@ public final class Rebalance {
     /**
      * 쇠뇌 설정
      */
+    @UtilityClass
     public static final class Crossbow {
         /**
          * 폭죽 발사 속력 (원본: 1.6)
@@ -64,6 +68,7 @@ public final class Rebalance {
     /**
      * 크리킹 설정
      */
+    @UtilityClass
     public static final class Creaking {
         /**
          * 크리킹 심장의 드롭 경험치 (원본: 20~24)
