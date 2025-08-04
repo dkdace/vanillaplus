@@ -12,6 +12,6 @@ public final class CreakingHeartBlockMixin {
     @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
     private void modifyDropXP(Args args) {
-        args.setAll(Rebalance.Creaking.CREAKING_HEART_DROP_XP[0], Rebalance.Creaking.CREAKING_HEART_DROP_XP[1]);
+        args.setAll(Rebalance.Creaking.CREAKING_HEART_DROP_XP.getMinimum(), Rebalance.Creaking.CREAKING_HEART_DROP_XP.getMaximum());
     }
 }

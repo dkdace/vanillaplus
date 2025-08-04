@@ -1,5 +1,7 @@
 package com.dace.vanillaplus;
 
+import org.apache.commons.lang3.IntegerRange;
+
 import java.util.function.IntUnaryOperator;
 
 /**
@@ -11,9 +13,9 @@ public final class Rebalance {
      */
     public static final IntUnaryOperator ANVIL_REPAIR_COST = cost -> (int) Math.min(cost + 1L, 2147483647L);
     /**
-     * 석영 원석의 드롭 경험치 (원본: {2, 5})
+     * 석영 원석의 드롭 경험치 (원본: 2~5)
      */
-    public static final int[] QUARTZ_ORE_DROP_XP = {1, 3};
+    public static final IntegerRange QUARTZ_ORE_DROP_XP = IntegerRange.of(1, 3);
     /**
      * 수선 인첸트의 수리 한계치
      */
@@ -64,9 +66,9 @@ public final class Rebalance {
      */
     public static final class Creaking {
         /**
-         * 크리킹 심장의 드롭 경험치 (원본: {20, 24})
+         * 크리킹 심장의 드롭 경험치 (원본: 20~24)
          */
-        public static final int[] CREAKING_HEART_DROP_XP = {26, 32};
+        public static final IntegerRange CREAKING_HEART_DROP_XP = IntegerRange.of(26, 32);
         /**
          * 피해량 (원본: 3)
          */

@@ -12,6 +12,6 @@ public final class BlocksMixin {
     @ModifyArgs(method = "lambda$static$224", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/util/valueproviders/UniformInt;of(II)Lnet/minecraft/util/valueproviders/UniformInt;"))
     private static void modifyQuartzOreDropXP(Args args) {
-        args.setAll(Rebalance.QUARTZ_ORE_DROP_XP[0], Rebalance.QUARTZ_ORE_DROP_XP[1]);
+        args.setAll(Rebalance.QUARTZ_ORE_DROP_XP.getMinimum(), Rebalance.QUARTZ_ORE_DROP_XP.getMaximum());
     }
 }
