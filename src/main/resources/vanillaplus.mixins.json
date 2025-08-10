@@ -15,11 +15,12 @@
     "ExperienceOrbMixin",
     "FireworkRocketEntityMixin",
     "ItemsMixin",
+    "LivingEntityMixin",
     "MobMixin",
     "OminousBottleAmplifierMixin",
     "PiglinMixin",
     "PillagerMixin",
-    "LivingEntityMixin"
+    "ZombifiedPiglinMixin"
   ],
   "client": [
     "client.ScreenEffectRendererMixin"
