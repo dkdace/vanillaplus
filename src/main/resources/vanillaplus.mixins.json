@@ -5,8 +5,27 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
+    "AnvilMenuMixin",
+    "BedBlockMixin",
+    "BlocksMixin",
+    "CreakingHeartBlockMixin",
+    "CreakingMixin",
+    "CreativeModeTabsMixin",
+    "CrossbowItemMixin",
+    "ExperienceOrbMixin",
+    "FireworkRocketEntityMixin",
+    "IronGolemMixin",
+    "ItemsMixin",
+    "LivingEntityMixin",
+    "MobMixin",
+    "OminousBottleAmplifierMixin",
+    "PiglinMixin",
+    "PillagerMixin",
+    "ZombifiedPiglinMixin"
   ],
   "client": [
+    "client.ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
