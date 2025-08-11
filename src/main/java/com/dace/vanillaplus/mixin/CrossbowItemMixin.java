@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.Rebalance;
+import com.dace.vanillaplus.rebalance.Rebalance;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;

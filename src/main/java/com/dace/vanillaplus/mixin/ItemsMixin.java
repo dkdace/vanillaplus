@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.Rebalance;
+import com.dace.vanillaplus.rebalance.Rebalance;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

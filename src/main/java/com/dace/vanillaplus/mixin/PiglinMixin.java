@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.Rebalance;
+import com.dace.vanillaplus.rebalance.Rebalance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;

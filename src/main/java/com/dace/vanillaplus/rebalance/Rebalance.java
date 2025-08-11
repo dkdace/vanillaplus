@@ -1,4 +1,4 @@
-package com.dace.vanillaplus;
+package com.dace.vanillaplus.rebalance;
 
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.IntegerRange;

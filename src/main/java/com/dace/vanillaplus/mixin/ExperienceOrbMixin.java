@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.Rebalance;
+import com.dace.vanillaplus.rebalance.Rebalance;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.Rebalance;
+import com.dace.vanillaplus.rebalance.Rebalance;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.phys.Vec3;
