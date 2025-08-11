@@ -1,9 +1,11 @@
 package com.dace.vanillaplus.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
-public final class MobMixin {
+public class MobMixin extends LivingEntityMixin {
     @Inject(method = "setAggressive", at = @At("HEAD"))
     private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
@@ -40,9 +42,15 @@ public final class MobMixin {
         double height = mob.getBbHeight();
 
         if (!mob.onGround() || !mob.hasLineOfSight(target) || yDiff < height || yDiff >= height + 2
-                || !mob.position().horizontal().closerThan(target.position().horizontal(), mob.getBbWidth() + 1))
+                || !mob.position().horizontal().closerThan(target.position().horizontal(), mob.getBbWidth() + 0.6))
             return;
 
         mob.getJumpControl().jump();
+    }
+
+
+    @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))
+    protected AABB modifyAttackBoundingBox(AABB aabb) {
+        return aabb;
     }
 }

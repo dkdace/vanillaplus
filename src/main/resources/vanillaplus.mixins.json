@@ -15,6 +15,7 @@
     "CrossbowItemMixin",
     "ExperienceOrbMixin",
     "FireworkRocketEntityMixin",
+    "IronGolemMixin",
     "ItemsMixin",
     "LivingEntityMixin",
     "MobMixin",

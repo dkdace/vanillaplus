@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ZombifiedPiglin.class)
-public abstract class ZombifiedPiglinMixin extends LivingEntityMixin {
+public abstract class ZombifiedPiglinMixin extends MobMixin {
     @Shadow
-    public abstract void setTarget(@Nullable LivingEntity p_34478_);
+    public abstract void setTarget(@Nullable LivingEntity target);
 
     @Shadow
     protected abstract void alertOthers();
