@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
     "AnvilMenuMixin",
     "BedBlockMixin",
     "BlocksMixin",
