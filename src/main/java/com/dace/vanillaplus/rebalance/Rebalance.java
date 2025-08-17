@@ -1292,7 +1292,7 @@ public final class Rebalance {
             /** 사막 마을 */
             VILLAGE_DESERT(StructureTags.ON_DESERT_VILLAGE_MAPS, "filled_map.village_desert", MapDecorationTypes.DESERT_VILLAGE),
             /** 땅에 묻힌 보물 */
-            BURIED_TREASURE(StructureTags.ON_TREASURE_MAPS, "filled_map.buried_trasure", MapDecorationTypes.RED_X),
+            BURIED_TREASURE(StructureTags.ON_TREASURE_MAPS, "filled_map.buried_treasure", MapDecorationTypes.RED_X),
             /** 바다 폐허 */
             OCEAN_MONUMENT(StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.OCEAN_MONUMENT),
             /** 시련의 회당 */
