@@ -30,7 +30,10 @@
     "ZombifiedPiglinMixin"
   ],
   "client": [
-    "client.ScreenEffectRendererMixin"
+    "client.AbstractContainerScreenMixin",
+    "client.MerchantScreenMixin",
+    "client.ScreenEffectRendererMixin",
+    "client.ScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

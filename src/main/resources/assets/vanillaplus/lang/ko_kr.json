@@ -4,5 +4,6 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
-  "key.prone": "엎드리기"
+  "key.prone": "엎드리기",
+  "merchant.stock": "남은 재고: %s / %s"
 }
