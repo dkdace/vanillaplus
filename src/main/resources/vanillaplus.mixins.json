@@ -6,6 +6,7 @@
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
+    "AbstractVillagerMixin",
     "AnvilMenuMixin",
     "BedBlockMixin",
     "BlocksMixin",
@@ -13,6 +14,7 @@
     "CreakingMixin",
     "CreativeModeTabsMixin",
     "CrossbowItemMixin",
+    "EntityMixin",
     "ExperienceOrbMixin",
     "FireworkRocketEntityMixin",
     "IronGolemMixin",
@@ -23,6 +25,7 @@
     "PiglinMixin",
     "PillagerMixin",
     "PlayerMixin",
+    "VillagerMixin",
     "VillagerTradesMixin",
     "ZombifiedPiglinMixin"
   ],
