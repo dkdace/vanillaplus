@@ -23,6 +23,7 @@
     "PiglinMixin",
     "PillagerMixin",
     "PlayerMixin",
+    "VillagerTradesMixin",
     "ZombifiedPiglinMixin"
   ],
   "client": [
