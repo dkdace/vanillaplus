@@ -1,9 +1,16 @@
 {
   "block.vanillaplus.bed.no_use": "You cannot sleep here.",
+  "filled_map.ancient_city": "Ancient City Explorer Map",
+  "filled_map.explorer_desert": "Desert Explorer Map",
+  "filled_map.explorer_snowy": "Snowy Explorer Map",
+  "filled_map.mineshaft": "Mineshaft Explorer Map",
+  "filled_map.pillager_outpost": "Pillager Outpost Explorer Map",
+  "key.prone": "Prone",
+  "merchant.closed": "Villager closed the store. Please come back later.",
+  "merchant.out_of_stock": "Currently out of stock. Please come back later.",
+  "merchant.stock": "Remaining Stock: %s / %s",
   "potion.potency.6": "VII",
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
-  "potion.potency.9": "X",
-  "key.prone": "Prone",
-  "merchant.stock": "Remaining Stock: %s / %s"
+  "potion.potency.9": "X"
 }

@@ -48,10 +48,6 @@
               "function": "minecraft:set_count"
             }
           ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:glass_bottle"
         }
       ],
       "rolls": 1.0

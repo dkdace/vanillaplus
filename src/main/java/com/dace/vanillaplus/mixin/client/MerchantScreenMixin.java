@@ -43,11 +43,11 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin {
         int stockTextY = y + 1;
         int stockTextColor;
         if (merchantOffer.isOutOfStock())
-            stockTextColor = ARGB.color(0xff, 0x60, 0x60);
+            stockTextColor = ARGB.color(255, 96, 96);
         else
             stockTextColor = remainingUses.equals(maxUses)
-                    ? ARGB.color(0x80, 0xff, 0x20)
-                    : ARGB.color(0xff, 0xff, 0xff);
+                    ? ARGB.color(128, 255, 32)
+                    : ARGB.color(255, 255, 255);
 
         guiGraphics.drawCenteredString(font, stockComponent, stockTextX, stockTextY, stockTextColor);
 

@@ -18,6 +18,7 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -30,6 +31,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -169,7 +171,7 @@ public final class Rebalance {
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .sellItem(Supply.MODERATE, 7, ItemStackFunction.item(Items.GOLDEN_APPLE))
-                                .sellItem(Supply.MODERATE, 10, ItemStackFunction.item(Items.TORCHFLOWER_SEEDS))
+                                .sellItem(Supply.MODERATE, 12, ItemStackFunction.item(Items.TORCHFLOWER_SEEDS))
                                 .build()));
         /** 어부 거래 품목 */
         public static final List<OfferInfo> FISHERMAN = List.of(
@@ -274,11 +276,11 @@ public final class Rebalance {
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .group(OfferInfo.OfferList.builder()
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.WHITE_WOOL, 16))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.LIGHT_GRAY_WOOL, 16))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.GRAY_WOOL, 16))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.BLACK_WOOL, 16))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.BROWN_WOOL, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.WHITE_WOOL, 14))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.LIGHT_GRAY_WOOL, 14))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.GRAY_WOOL, 14))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.BLACK_WOOL, 14))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.BROWN_WOOL, 14))
                                         .build())
                                 .group(OfferInfo.OfferList.builder()
                                         .sellItem(Supply.ABUNDANT, 1, ItemStackFunction.item(Blocks.CYAN_WOOL, 5))
@@ -404,7 +406,7 @@ public final class Rebalance {
                                         ItemStackFunction.item(Items.FLINT, 20))
                                 .build(),
                         OfferInfo.OfferList.builder()
-                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 45))
+                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 50))
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Items.ARROW, 16))
                                 .build()),
                 new OfferInfo(Level.L2_APPRENTICE,
@@ -515,71 +517,143 @@ public final class Rebalance {
                 new OfferInfo(Level.L1_NOVICE,
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.PAPER, 24))
-                                .group(OfferInfo.OfferList.builder()
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.WHITE_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIGHT_GRAY_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GRAY_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BLACK_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BROWN_BANNER))
-                                        .build())
+                                .sellItem(Supply.MODERATE, 3, ItemStackFunction.item(Items.MAP))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.GLASS_PANE, 16))
-                                .sellItem(Supply.MODERATE, 3, ItemStackFunction.item(Items.MAP))
+                                .sellItem(Supply.MODERATE, 3, (entity, randomSource) ->
+                                        entity.level() instanceof ServerLevel serverLevel
+                                                ? MapItem.create(serverLevel, entity.getBlockX(), entity.getBlockZ(), (byte) 0, true,
+                                                false)
+                                                : null)
                                 .build()),
                 new OfferInfo(Level.L2_APPRENTICE,
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.INK_SAC, 11))
-                                .group(OfferInfo.OfferList.builder()
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.RED_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.ORANGE_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.YELLOW_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIME_BANNER))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GREEN_BANNER))
-                                        .build())
+                                .typeSpecific(Map.of(
+                                        VillagerType.PLAINS, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.TAIGA, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_SWAMP), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_SNOWY), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.SNOW, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_SWAMP), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.DESERT, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_JUNGLE), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.JUNGLE, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_SWAMP), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_DESERT), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.SAVANNA, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_JUNGLE), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_DESERT), PriceMultiplier.HIGH)
+                                                .build(),
+                                        VillagerType.SWAMP, OfferInfo.OfferList.builder()
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.MINESHAFT), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.PILLAGER_OUTPOST), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_SNOWY), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 7, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.EXPLORER_JUNGLE), PriceMultiplier.HIGH)
+                                                .build()))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.COMPASS))
                                 .typeSpecific(Map.of(
                                         VillagerType.PLAINS, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SAVANNA))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_TAIGA))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_SAVANNA), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_TAIGA), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.TAIGA, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SWAMP))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_PLAINS))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SNOWY))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_PLAINS), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_SNOWY), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.SNOW, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SWAMP))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_TAIGA))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_PLAINS))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_TAIGA), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_PLAINS), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.DESERT, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_PLAINS))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_JUNGLE))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SAVANNA))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_PLAINS), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_SAVANNA), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.JUNGLE, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SAVANNA))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SWAMP))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_DESERT))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_SAVANNA), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_DESERT), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.SAVANNA, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_JUNGLE))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_PLAINS))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_DESERT))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_PLAINS), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_DESERT), PriceMultiplier.HIGH)
                                                 .build(),
                                         VillagerType.SWAMP, OfferInfo.OfferList.builder()
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_JUNGLE))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_PLAINS))
-                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.map(MapType.VILLAGE_SNOWY))
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_PLAINS), PriceMultiplier.HIGH)
+                                                .sellItem(Supply.SCARCE, 8, ItemStackFunction.item(Items.COMPASS),
+                                                        ItemStackFunction.map(MapType.VILLAGE_SNOWY), PriceMultiplier.HIGH)
                                                 .build()))
                                 .build()),
                 new OfferInfo(Level.L3_JOURNEYMAN,
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.GLOW_INK_SAC, 9))
                                 .group(OfferInfo.OfferList.builder()
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.WHITE_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIGHT_GRAY_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GRAY_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BLACK_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BROWN_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.RED_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.ORANGE_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.YELLOW_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIME_BANNER))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GREEN_BANNER))
                                         .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.CYAN_BANNER))
                                         .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIGHT_BLUE_BANNER))
                                         .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BLUE_BANNER))
@@ -619,7 +693,8 @@ public final class Rebalance {
                                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.MANGROVE_SIGN, 3))
                                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.DARK_OAK_SIGN, 3))
                                                 .build()))
-                                .sellItem(Supply.MODERATE, 6, ItemStackFunction.item(Blocks.LODESTONE))
+                                .sellItem(Supply.SCARCE, 9, ItemStackFunction.item(Items.COMPASS),
+                                        ItemStackFunction.map(MapType.BURIED_TREASURE), PriceMultiplier.HIGH)
                                 .build()),
                 new OfferInfo(Level.L4_EXPERT,
                         OfferInfo.OfferList.builder()
@@ -627,17 +702,21 @@ public final class Rebalance {
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Items.GLOW_ITEM_FRAME, 2))
                                 .build(),
                         OfferInfo.OfferList.builder()
-                                .sellItem(Supply.SCARCE, 12, ItemStackFunction.map(MapType.OCEAN_MONUMENT))
-                                .sellItem(Supply.SCARCE, 14, ItemStackFunction.map(MapType.WOODLAND_MANSION))
+                                .sellItem(Supply.SCARCE, 12, ItemStackFunction.item(Items.COMPASS),
+                                        ItemStackFunction.map(MapType.OCEAN_MONUMENT), PriceMultiplier.HIGH)
+                                .sellItem(Supply.SCARCE, 14, ItemStackFunction.item(Items.COMPASS),
+                                        ItemStackFunction.map(MapType.WOODLAND_MANSION), PriceMultiplier.HIGH)
                                 .build()),
                 new OfferInfo(Level.L5_MASTER,
                         OfferInfo.OfferList.builder()
                                 .sellItem(Supply.MODERATE, 8, ItemStackFunction.item(Items.MOJANG_BANNER_PATTERN))
-                                .sellItem(Supply.SCARCE, 9, ItemStackFunction.map(MapType.BURIED_TREASURE))
+                                .sellItem(Supply.MODERATE, 8, ItemStackFunction.item(Items.GLOBE_BANNER_PATTERN))
                                 .build(),
                         OfferInfo.OfferList.builder()
-                                .sellItem(Supply.MODERATE, 8, ItemStackFunction.item(Items.GLOBE_BANNER_PATTERN))
-                                .sellItem(Supply.SCARCE, 15, ItemStackFunction.map(MapType.TRIAL_CHAMBERS))
+                                .sellItem(Supply.SCARCE, 15, ItemStackFunction.item(Items.COMPASS),
+                                        ItemStackFunction.map(MapType.TRIAL_CHAMBERS), PriceMultiplier.HIGH)
+                                .sellItem(Supply.SCARCE, 22, ItemStackFunction.item(Items.COMPASS), ItemStackFunction.map(MapType.ANCIENT_CITY),
+                                        PriceMultiplier.HIGH)
                                 .build()));
         /** 성직자 거래 품목 */
         public static final List<OfferInfo> CLERIC = List.of(
@@ -698,20 +777,20 @@ public final class Rebalance {
                 new OfferInfo(Level.L1_NOVICE,
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.COAL, 12))
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Items.CHAINMAIL_HELMET))
+                                .sellItem(Supply.MODERATE, 2, ItemStackFunction.item(Items.CHAINMAIL_HELMET))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.RAW_IRON, 5))
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Items.CHAINMAIL_BOOTS))
+                                .sellItem(Supply.MODERATE, 2, ItemStackFunction.item(Items.CHAINMAIL_BOOTS))
                                 .build()),
                 new OfferInfo(Level.L2_APPRENTICE,
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.LAVA_BUCKET))
-                                .sellItem(Supply.MODERATE, 2, ItemStackFunction.item(Items.CHAINMAIL_CHESTPLATE))
+                                .sellItem(Supply.MODERATE, 3, ItemStackFunction.item(Items.CHAINMAIL_CHESTPLATE))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.IRON_INGOT, 4))
-                                .sellItem(Supply.MODERATE, 2, ItemStackFunction.item(Items.CHAINMAIL_LEGGINGS))
+                                .sellItem(Supply.MODERATE, 3, ItemStackFunction.item(Items.CHAINMAIL_LEGGINGS))
                                 .build()),
                 new OfferInfo(Level.L3_JOURNEYMAN,
                         OfferInfo.OfferList.builder()
@@ -774,7 +853,7 @@ public final class Rebalance {
                                 .build()),
                 new OfferInfo(Level.L2_APPRENTICE,
                         OfferInfo.OfferList.builder()
-                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 45))
+                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 50))
                                 .sellEnchantedItem(Supply.MODERATE, 0.9, ItemStackFunction.item(Items.IRON_SWORD), EnchantmentLevel.LOW,
                                         EnchantmentType.WEAPONS)
                                 .build(),
@@ -833,7 +912,7 @@ public final class Rebalance {
                                 .build()),
                 new OfferInfo(Level.L2_APPRENTICE,
                         OfferInfo.OfferList.builder()
-                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 45))
+                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.STICK, 50))
                                 .group(OfferInfo.OfferList.builder()
                                         .sellEnchantedItem(Supply.MODERATE, 0.85, ItemStackFunction.item(Items.IRON_HOE),
                                                 EnchantmentLevel.LOW, EnchantmentType.TOOLS)
@@ -861,7 +940,7 @@ public final class Rebalance {
                                         .build())
                                 .build(),
                         OfferInfo.OfferList.builder()
-                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.LAVA_BUCKET))
+                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.GOLD_INGOT, 3))
                                 .group(OfferInfo.OfferList.builder()
                                         .sellEnchantedItem(Supply.SCARCE, 0.9, ItemStackFunction.item(Items.IRON_AXE),
                                                 EnchantmentLevel.MEDIUM, EnchantmentType.TOOLS)
@@ -1027,22 +1106,22 @@ public final class Rebalance {
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .group(OfferInfo.OfferList.builder()
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.WHITE_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIGHT_GRAY_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.GRAY_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BLACK_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BROWN_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.RED_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.ORANGE_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.YELLOW_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIME_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.GREEN_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.CYAN_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIGHT_BLUE_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BLUE_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.PURPLE_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.MAGENTA_DYE, 15))
-                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.PINK_DYE, 15))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.WHITE_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIGHT_GRAY_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.GRAY_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BLACK_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BROWN_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.RED_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.ORANGE_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.YELLOW_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIME_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.GREEN_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.CYAN_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.LIGHT_BLUE_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.BLUE_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.PURPLE_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.MAGENTA_DYE, 16))
+                                        .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Items.PINK_DYE, 16))
                                         .build())
                                 .sellEnchantedItem(Supply.SCARCE, 0.45, ItemStackFunction.leatherItem(Items.LEATHER_HELMET),
                                         EnchantmentLevel.HIGHEST)
@@ -1116,7 +1195,10 @@ public final class Rebalance {
                                         .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.ANDESITE, 18))
                                         .buyItem(Supply.ABUNDANT, ItemStackFunction.item(Blocks.DIORITE, 18))
                                         .build())
-                                .sellItem(Supply.ABUNDANT, 1, ItemStackFunction.item(Items.MUD_BRICKS, 10))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_GRANITE, 25))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_ANDESITE, 25))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_DIORITE, 25))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_TUFF, 25))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .group(OfferInfo.OfferList.builder()
@@ -1138,23 +1220,42 @@ public final class Rebalance {
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.DEEPSLATE, 22))
                                 .group(OfferInfo.OfferList.builder()
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_GRANITE, 25))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_ANDESITE, 25))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_DIORITE, 25))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_TUFF, 25))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.SMOOTH_STONE, 17))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.STONE_BRICKS, 17))
                                         .build())
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.QUARTZ, 26))
                                 .group(OfferInfo.OfferList.builder()
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.SMOOTH_STONE, 17))
-                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.STONE_BRICKS, 17))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.QUARTZ_BLOCK, 12))
+                                        .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.QUARTZ_BRICKS, 12))
                                         .build())
                                 .build()),
                 new OfferInfo(Level.L4_EXPERT,
                         OfferInfo.OfferList.builder()
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.QUARTZ_BLOCK, 12))
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.QUARTZ_BRICKS, 12))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.WHITE_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIGHT_GRAY_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GRAY_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BLACK_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BROWN_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.RED_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.ORANGE_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.YELLOW_CONCRETE, 16))
+                                .build(),
+                        OfferInfo.OfferList.builder()
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIME_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GREEN_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.CYAN_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIGHT_BLUE_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.BLUE_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.PURPLE_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.MAGENTA_CONCRETE, 16))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.PINK_CONCRETE, 16))
+                                .build()),
+                new OfferInfo(Level.L5_MASTER,
+                        OfferInfo.OfferList.builder()
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_BLACKSTONE, 25))
+                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_BLACKSTONE_BRICKS, 25))
                                 .build(),
                         OfferInfo.OfferList.builder()
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.WHITE_GLAZED_TERRACOTTA, 16))
@@ -1165,13 +1266,6 @@ public final class Rebalance {
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.RED_GLAZED_TERRACOTTA, 16))
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.ORANGE_GLAZED_TERRACOTTA, 16))
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.YELLOW_GLAZED_TERRACOTTA, 16))
-                                .build()),
-                new OfferInfo(Level.L5_MASTER,
-                        OfferInfo.OfferList.builder()
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_BLACKSTONE, 25))
-                                .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.POLISHED_BLACKSTONE_BRICKS, 25))
-                                .build(),
-                        OfferInfo.OfferList.builder()
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.LIME_GLAZED_TERRACOTTA, 16))
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.GREEN_GLAZED_TERRACOTTA, 16))
                                 .sellItem(Supply.MODERATE, 1, ItemStackFunction.item(Blocks.CYAN_GLAZED_TERRACOTTA, 16))
@@ -1277,32 +1371,59 @@ public final class Rebalance {
          */
         @AllArgsConstructor
         private enum MapType {
-            /** 타이가 마을 */
-            VILLAGE_TAIGA(StructureTags.ON_TAIGA_VILLAGE_MAPS, "filled_map.village_taiga", MapDecorationTypes.TAIGA_VILLAGE),
-            /** 늪 마을 */
-            VILLAGE_SWAMP(StructureTags.ON_SWAMP_EXPLORER_MAPS, "filled_map.explorer_swamp", MapDecorationTypes.SWAMP_HUT),
-            /** 설원 마을 */
-            VILLAGE_SNOWY(StructureTags.ON_SNOWY_VILLAGE_MAPS, "filled_map.village_snowy", MapDecorationTypes.SNOWY_VILLAGE),
-            /** 사바나 마을 */
-            VILLAGE_SAVANNA(StructureTags.ON_SAVANNA_VILLAGE_MAPS, "filled_map.village_savanna", MapDecorationTypes.SAVANNA_VILLAGE),
-            /** 평원 마을 */
-            VILLAGE_PLAINS(StructureTags.ON_PLAINS_VILLAGE_MAPS, "filled_map.village_plains", MapDecorationTypes.PLAINS_VILLAGE),
-            /** 정글 마을 */
-            VILLAGE_JUNGLE(StructureTags.ON_JUNGLE_EXPLORER_MAPS, "filled_map.explorer_jungle", MapDecorationTypes.JUNGLE_TEMPLE),
-            /** 사막 마을 */
-            VILLAGE_DESERT(StructureTags.ON_DESERT_VILLAGE_MAPS, "filled_map.village_desert", MapDecorationTypes.DESERT_VILLAGE),
+            /** 폐광 */
+            MINESHAFT(StructureTags.MINESHAFT, "mineshaft", ARGB.color(92, 86, 71)),
+            /** 약탈자 전초기지 */
+            PILLAGER_OUTPOST(Tag.Structures.PILLAGER_OUTPOST, "pillager_outpost", ARGB.color(107, 56, 18)),
+            /** 고대 도시 */
+            ANCIENT_CITY(Tag.Structures.ANCIENT_CITY, "ancient_city", ARGB.color(40, 31, 97)),
+            /** 사막 탐험 */
+            EXPLORER_DESERT(Tag.Structures.ON_DESERT_EXPLORER_MAPS, "explorer_desert",
+                    ARGB.color(163, 143, 73)),
+            /** 설원 탐험 */
+            EXPLORER_SNOWY(Tag.Structures.ON_SNOWY_EXPLORER_MAPS, "explorer_snowy", ARGB.color(89, 154, 189)),
+            /** 정글 탐험 */
+            EXPLORER_JUNGLE(StructureTags.ON_JUNGLE_EXPLORER_MAPS, "explorer_jungle", MapDecorationTypes.JUNGLE_TEMPLE,
+                    ARGB.color(92, 130, 49)),
+            /** 늪 탐험 */
+            EXPLORER_SWAMP(StructureTags.ON_SWAMP_EXPLORER_MAPS, "explorer_swamp", MapDecorationTypes.SWAMP_HUT,
+                    ARGB.color(40, 99, 39)),
             /** 땅에 묻힌 보물 */
-            BURIED_TREASURE(StructureTags.ON_TREASURE_MAPS, "filled_map.buried_treasure", MapDecorationTypes.RED_X),
+            BURIED_TREASURE(StructureTags.ON_TREASURE_MAPS, "buried_treasure", MapDecorationTypes.RED_X,
+                    ARGB.color(219, 203, 20)),
+            /** 타이가 마을 */
+            VILLAGE_TAIGA(StructureTags.ON_TAIGA_VILLAGE_MAPS, "village_taiga", MapDecorationTypes.TAIGA_VILLAGE,
+                    ARGB.color(111, 173, 163)),
+            /** 설원 마을 */
+            VILLAGE_SNOWY(StructureTags.ON_SNOWY_VILLAGE_MAPS, "village_snowy", MapDecorationTypes.SNOWY_VILLAGE,
+                    ARGB.color(101, 188, 201)),
+            /** 사바나 마을 */
+            VILLAGE_SAVANNA(StructureTags.ON_SAVANNA_VILLAGE_MAPS, "village_savanna", MapDecorationTypes.SAVANNA_VILLAGE,
+                    ARGB.color(181, 134, 63)),
+            /** 평원 마을 */
+            VILLAGE_PLAINS(StructureTags.ON_PLAINS_VILLAGE_MAPS, "village_plains", MapDecorationTypes.PLAINS_VILLAGE,
+                    ARGB.color(85, 184, 62)),
+            /** 사막 마을 */
+            VILLAGE_DESERT(StructureTags.ON_DESERT_VILLAGE_MAPS, "village_desert", MapDecorationTypes.DESERT_VILLAGE,
+                    ARGB.color(181, 170, 69)),
             /** 바다 폐허 */
-            OCEAN_MONUMENT(StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.OCEAN_MONUMENT),
-            /** 시련의 회당 */
-            TRIAL_CHAMBERS(StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS),
+            OCEAN_MONUMENT(StructureTags.ON_OCEAN_EXPLORER_MAPS, "monument", MapDecorationTypes.OCEAN_MONUMENT,
+                    ARGB.color(28, 57, 145)),
             /** 삼림 대저택 */
-            WOODLAND_MANSION(StructureTags.ON_WOODLAND_EXPLORER_MAPS, "filled_map.mansion", MapDecorationTypes.WOODLAND_MANSION);
+            WOODLAND_MANSION(StructureTags.ON_WOODLAND_EXPLORER_MAPS, "mansion", MapDecorationTypes.WOODLAND_MANSION,
+                    ARGB.color(140, 87, 22)),
+            /** 시련의 회당 */
+            TRIAL_CHAMBERS(StructureTags.ON_TRIAL_CHAMBERS_MAPS, "trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS,
+                    ARGB.color(196, 99, 24));
 
             private final TagKey<Structure> destination;
             private final String displayName;
             private final Holder<MapDecorationType> destinationType;
+            private final int color;
+
+            MapType(TagKey<Structure> destination, String displayName, int color) {
+                this(destination, displayName, MapDecorationTypes.TARGET_POINT, color);
+            }
 
             /**
              * 지도 아이템을 생성하여 반환한다.
@@ -1320,10 +1441,12 @@ public final class Rebalance {
                     return null;
 
                 ItemStack itemstack = MapItem.create(serverLevel, blockPos.getX(), blockPos.getZ(), (byte) 2, true, true);
-                itemstack.set(DataComponents.ITEM_NAME, Component.translatable(displayName));
+                itemstack.set(DataComponents.ITEM_NAME, Component.translatable("filled_map." + displayName));
 
                 MapItem.renderBiomePreviewMap(serverLevel, itemstack);
                 MapItemSavedData.addTargetDecoration(itemstack, blockPos, "+", destinationType);
+
+                itemstack.set(DataComponents.MAP_COLOR, new MapItemColor(color));
 
                 return itemstack;
             }
@@ -1393,7 +1516,7 @@ public final class Rebalance {
              */
             @NonNull
             private static ItemStackFunction map(@NonNull MapType mapType) {
-                return (entity, randomSource) -> Objects.requireNonNull(mapType.createMap(entity));
+                return (entity, randomSource) -> mapType.createMap(entity);
             }
 
             /**
@@ -1431,7 +1554,7 @@ public final class Rebalance {
              * @param randomSource 랜덤 소스
              * @return 아이템
              */
-            @NonNull
+            @Nullable
             ItemStack apply(@NonNull Entity entity, @NonNull RandomSource randomSource);
         }
 
@@ -1540,13 +1663,44 @@ public final class Rebalance {
                      * @param price                     가격
                      * @param requiredItemStackFunction 추가 요구 아이템 반환 시 실행할 작업
                      * @param itemStackFunction         판매 아이템 반환 시 실행할 작업
+                     * @param priceMultiplier           가격 배수
                      * @return {@link Builder}
                      */
                     @NonNull
-                    private Builder sellItem(@NonNull Supply supply, int price, @Nullable ItemStackFunction requiredItemStackFunction,
-                                             @NonNull ItemStackFunction itemStackFunction) {
+                    private Builder sellItem(@NonNull Supply supply, int price, @NonNull ItemStackFunction requiredItemStackFunction,
+                                             @NonNull ItemStackFunction itemStackFunction, @NonNull PriceMultiplier priceMultiplier) {
                         return add(offerInfo -> new SellItem(offerInfo.level, supply, price, requiredItemStackFunction, itemStackFunction,
-                                PriceMultiplier.LOW));
+                                priceMultiplier));
+                    }
+
+                    /**
+                     * 판매 품목을 추가한다.
+                     *
+                     * @param supply                    수량
+                     * @param price                     가격
+                     * @param requiredItemStackFunction 추가 요구 아이템 반환 시 실행할 작업
+                     * @param itemStackFunction         판매 아이템 반환 시 실행할 작업
+                     * @return {@link Builder}
+                     */
+                    @NonNull
+                    private Builder sellItem(@NonNull Supply supply, int price, @NonNull ItemStackFunction requiredItemStackFunction,
+                                             @NonNull ItemStackFunction itemStackFunction) {
+                        return sellItem(supply, price, requiredItemStackFunction, itemStackFunction, PriceMultiplier.LOW);
+                    }
+
+                    /**
+                     * 판매 품목을 추가한다.
+                     *
+                     * @param supply            수량
+                     * @param price             가격
+                     * @param itemStackFunction 판매 아이템 반환 시 실행할 작업
+                     * @param priceMultiplier   가격 배수
+                     * @return {@link Builder}
+                     */
+                    @NonNull
+                    private Builder sellItem(@NonNull Supply supply, int price, @NonNull ItemStackFunction itemStackFunction,
+                                             @NonNull PriceMultiplier priceMultiplier) {
+                        return sellItem(supply, price, (entity, randomSource) -> null, itemStackFunction, priceMultiplier);
                     }
 
                     /**
@@ -1559,7 +1713,7 @@ public final class Rebalance {
                      */
                     @NonNull
                     private Builder sellItem(@NonNull Supply supply, int price, @NonNull ItemStackFunction itemStackFunction) {
-                        return sellItem(supply, price, null, itemStackFunction);
+                        return sellItem(supply, price, (entity, randomSource) -> null, itemStackFunction, PriceMultiplier.LOW);
                     }
 
                     /**
@@ -1577,7 +1731,7 @@ public final class Rebalance {
                      */
                     @NonNull
                     private Builder sellEnchantedItem(@NonNull Supply supply, double priceModifier,
-                                                      @Nullable ItemStackFunction requiredItemStackFunction,
+                                                      @NonNull ItemStackFunction requiredItemStackFunction,
                                                       @NonNull ItemStackFunction itemStackFunction, @NonNull EnchantmentLevel enchantmentLevel,
                                                       @NonNull EnchantmentType enchantmentType) {
                         return add(offerInfo -> new SellEnchantedItem(offerInfo.level, supply, priceModifier, requiredItemStackFunction,
@@ -1598,7 +1752,7 @@ public final class Rebalance {
                      */
                     @NonNull
                     private Builder sellEnchantedItem(@NonNull Supply supply, double priceModifier,
-                                                      @Nullable ItemStackFunction requiredItemStackFunction,
+                                                      @NonNull ItemStackFunction requiredItemStackFunction,
                                                       @NonNull ItemStackFunction itemStackFunction, @NonNull EnchantmentLevel enchantmentLevel) {
                         return sellEnchantedItem(supply, priceModifier, requiredItemStackFunction, itemStackFunction, enchantmentLevel,
                                 EnchantmentType.ALL);
@@ -1619,7 +1773,8 @@ public final class Rebalance {
                     @NonNull
                     private Builder sellEnchantedItem(@NonNull Supply supply, double priceModifier, @NonNull ItemStackFunction itemStackFunction,
                                                       @NonNull EnchantmentLevel enchantmentLevel, @NonNull EnchantmentType enchantmentType) {
-                        return sellEnchantedItem(supply, priceModifier, null, itemStackFunction, enchantmentLevel, enchantmentType);
+                        return sellEnchantedItem(supply, priceModifier, (entity, randomSource) -> null, itemStackFunction,
+                                enchantmentLevel, enchantmentType);
                     }
 
                     /**
@@ -1636,8 +1791,8 @@ public final class Rebalance {
                     @NonNull
                     private Builder sellEnchantedItem(@NonNull Supply supply, double priceModifier, @NonNull ItemStackFunction itemStackFunction,
                                                       @NonNull EnchantmentLevel enchantmentLevel) {
-                        return sellEnchantedItem(supply, priceModifier, null, itemStackFunction, enchantmentLevel,
-                                EnchantmentType.ALL);
+                        return sellEnchantedItem(supply, priceModifier, (entity, randomSource) -> null, itemStackFunction,
+                                enchantmentLevel, EnchantmentType.ALL);
                     }
 
                     /**
@@ -1647,9 +1802,14 @@ public final class Rebalance {
                      */
                     @NonNull
                     private OfferList build() {
-                        return new OfferList(offerInfo -> (entity, randomSource) ->
-                                itemListingFunctions.get(randomSource.nextInt(itemListingFunctions.size())).apply(offerInfo)
-                                        .getOffer(entity, randomSource));
+                        return new OfferList(offerInfo -> (entity, randomSource) -> {
+                            MerchantOffer offer = null;
+                            while (offer == null)
+                                offer = itemListingFunctions.get(randomSource.nextInt(itemListingFunctions.size())).apply(offerInfo)
+                                        .getOffer(entity, randomSource);
+
+                            return offer;
+                        });
                     }
                 }
             }
@@ -1665,10 +1825,14 @@ public final class Rebalance {
             private record BuyItem(@NonNull Level level, @NonNull Supply supply, @NonNull ItemStackFunction itemStackFunction,
                                    @NonNull PriceMultiplier priceMultiplier) implements VillagerTrades.ItemListing {
                 @Override
-                @NonNull
+                @Nullable
                 public MerchantOffer getOffer(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    return new MerchantOffer(getItemCost(itemStackFunction.apply(entity, randomSource)), new ItemStack(Items.EMERALD),
-                            supply.maxTradeCount, level.buyXP, priceMultiplier.value);
+                    ItemStack itemStack = itemStackFunction.apply(entity, randomSource);
+                    if (itemStack == null)
+                        return null;
+
+                    return new MerchantOffer(getItemCost(itemStack), new ItemStack(Items.EMERALD), supply.maxTradeCount, level.buyXP,
+                            priceMultiplier.value);
                 }
             }
 
@@ -1682,15 +1846,21 @@ public final class Rebalance {
              * @param itemStackFunction         판매 아이템 반환 시 실행할 작업
              * @param priceMultiplier           가격 배수
              */
-            private record SellItem(@NonNull Level level, @NonNull Supply supply, int price, @Nullable ItemStackFunction requiredItemStackFunction,
+            private record SellItem(@NonNull Level level, @NonNull Supply supply, int price, @NonNull ItemStackFunction requiredItemStackFunction,
                                     @NonNull ItemStackFunction itemStackFunction, @NonNull PriceMultiplier priceMultiplier)
                     implements VillagerTrades.ItemListing {
                 @Override
-                @NonNull
+                @Nullable
                 public MerchantOffer getOffer(@NonNull Entity entity, @NonNull RandomSource randomSource) {
+                    ItemStack itemStack = itemStackFunction.apply(entity, randomSource);
+                    if (itemStack == null)
+                        return null;
+
+                    ItemStack requiredItemStack = requiredItemStackFunction.apply(entity, randomSource);
+
                     return new MerchantOffer(getItemCost(new ItemStack(Items.EMERALD, price)),
-                            requiredItemStackFunction == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStackFunction.apply(entity, randomSource))),
-                            itemStackFunction.apply(entity, randomSource), supply.maxTradeCount, level.sellXP, priceMultiplier.value);
+                            requiredItemStack == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStack)), itemStack,
+                            supply.maxTradeCount, level.sellXP, priceMultiplier.value);
                 }
             }
 
@@ -1709,14 +1879,15 @@ public final class Rebalance {
              * @param priceMultiplier           가격 배수
              */
             private record SellEnchantedItem(@NonNull Level level, @NonNull Supply supply, double priceModifier,
-                                             @Nullable ItemStackFunction requiredItemStackFunction, @NonNull ItemStackFunction itemStackFunction,
+                                             @NonNull ItemStackFunction requiredItemStackFunction, @NonNull ItemStackFunction itemStackFunction,
                                              @NonNull EnchantmentLevel enchantmentLevel, @NonNull EnchantmentType enchantmentType,
-                                             @NonNull PriceMultiplier priceMultiplier)
-                    implements VillagerTrades.ItemListing {
+                                             @NonNull PriceMultiplier priceMultiplier) implements VillagerTrades.ItemListing {
                 @Override
-                @NonNull
+                @Nullable
                 public MerchantOffer getOffer(@NonNull Entity entity, @NonNull RandomSource randomSource) {
                     ItemStack itemStack = itemStackFunction.apply(entity, randomSource);
+                    if (itemStack == null)
+                        return null;
 
                     IntegerRange value = enchantmentLevel.value;
                     int enchantLevel = value.getMinimum() + randomSource.nextInt(value.getMaximum());
@@ -1733,9 +1904,11 @@ public final class Rebalance {
                             .anyMatch(enchantment -> enchantment.containsTag(EnchantmentTags.DOUBLE_TRADE_PRICE)))
                         finalPrice *= 1.5;
 
+                    ItemStack requiredItemStack = requiredItemStackFunction.apply(entity, randomSource);
+
                     return new MerchantOffer(getItemCost(new ItemStack(Items.EMERALD, Math.min((int) finalPrice, 64))),
-                            requiredItemStackFunction == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStackFunction.apply(entity, randomSource))),
-                            enchantedItem, supply.maxTradeCount, level.sellXP, priceMultiplier.value);
+                            requiredItemStack == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStack)), enchantedItem,
+                            supply.maxTradeCount, level.sellXP, priceMultiplier.value);
                 }
             }
         }
