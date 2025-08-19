@@ -48,7 +48,6 @@ public abstract class MobMixin extends LivingEntityMixin {
         mob.getJumpControl().jump();
     }
 
-
     @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))
     protected AABB modifyAttackBoundingBox(AABB aabb) {
         return aabb;

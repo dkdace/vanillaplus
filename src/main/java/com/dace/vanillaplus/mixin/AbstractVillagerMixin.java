@@ -13,6 +13,9 @@ public abstract class AbstractVillagerMixin extends MobMixin {
     @Shadow
     public abstract MerchantOffers getOffers();
 
+    @Shadow
+    public abstract boolean isTrading();
+
     @Overwrite
     protected void addOffersFromItemListings(MerchantOffers offers, VillagerTrades.ItemListing[] itemListings, int count) {
         for (int i = 0; i < Math.min(itemListings.length, count); i++) {
