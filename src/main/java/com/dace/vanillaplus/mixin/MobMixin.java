@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
-public class MobMixin extends LivingEntityMixin {
+public abstract class MobMixin extends LivingEntityMixin {
     @Inject(method = "setAggressive", at = @At("HEAD"))
     private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
@@ -47,7 +47,6 @@ public class MobMixin extends LivingEntityMixin {
 
         mob.getJumpControl().jump();
     }
-
 
     @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))
     protected AABB modifyAttackBoundingBox(AABB aabb) {

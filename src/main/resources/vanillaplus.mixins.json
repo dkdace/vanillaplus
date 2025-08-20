@@ -6,6 +6,7 @@
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
+    "AbstractVillagerMixin",
     "AnvilMenuMixin",
     "BedBlockMixin",
     "BlocksMixin",
@@ -13,6 +14,7 @@
     "CreakingMixin",
     "CreativeModeTabsMixin",
     "CrossbowItemMixin",
+    "EntityMixin",
     "ExperienceOrbMixin",
     "FireworkRocketEntityMixin",
     "IronGolemMixin",
@@ -23,10 +25,15 @@
     "PiglinMixin",
     "PillagerMixin",
     "PlayerMixin",
+    "VillagerMixin",
+    "VillagerTradesMixin",
     "ZombifiedPiglinMixin"
   ],
   "client": [
-    "client.ScreenEffectRendererMixin"
+    "client.AbstractContainerScreenMixin",
+    "client.MerchantScreenMixin",
+    "client.ScreenEffectRendererMixin",
+    "client.ScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

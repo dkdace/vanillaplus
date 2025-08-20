@@ -1,5 +1,6 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,5 +16,7 @@ public final class VanillaPlus {
 
     public VanillaPlus(FMLJavaModLoadingContext context) {
         LOGGER.debug("Hello, World!");
+
+        ReflectionUtil.loadClass(Tag.class);
     }
 }

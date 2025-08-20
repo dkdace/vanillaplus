@@ -1,8 +1,16 @@
 {
   "block.vanillaplus.bed.no_use": "여기서 잘 수 없습니다.",
+  "filled_map.ancient_city": "고대 도시 탐험가 지도",
+  "filled_map.explorer_desert": "사막 탐험가 지도",
+  "filled_map.explorer_snowy": "설원 탐험가 지도",
+  "filled_map.mineshaft": "폐광 탐험가 지도",
+  "filled_map.pillager_outpost": "약탈자 전초기지 탐험가 지도",
+  "key.prone": "엎드리기",
+  "merchant.closed": "주민이 상점을 마감했습니다. 나중에 다시 오세요.",
+  "merchant.out_of_stock": "현재 재고가 없습니다. 나중에 다시 오세요.",
+  "merchant.stock": "남은 재고: %s / %s",
   "potion.potency.6": "VII",
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
-  "potion.potency.9": "X",
-  "key.prone": "엎드리기"
+  "potion.potency.9": "X"
 }
