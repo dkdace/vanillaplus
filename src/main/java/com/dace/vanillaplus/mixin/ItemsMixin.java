@@ -8,10 +8,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(Items.class)
-public final class ItemsMixin {
+public abstract class ItemsMixin {
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/Item$Properties;durability(I)Lnet/minecraft/world/item/Item$Properties;",
-            ordinal = 8))
+            target = "Lnet/minecraft/world/item/Item$Properties;durability(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 8))
     private static int modifyShieldDurability(int durability) {
         return Rebalance.SHIELD_DURABILITY;
     }

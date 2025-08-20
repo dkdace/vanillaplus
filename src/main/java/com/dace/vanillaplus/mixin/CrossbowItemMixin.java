@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(CrossbowItem.class)
-public final class CrossbowItemMixin {
+public abstract class CrossbowItemMixin {
     @Overwrite
     private static float getShootingPower(ChargedProjectiles chargedProjectiles) {
         return chargedProjectiles.contains(Items.FIREWORK_ROCKET)

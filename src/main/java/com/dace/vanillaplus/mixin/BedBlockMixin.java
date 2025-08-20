@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BedBlock.class)
-public final class BedBlockMixin {
-    @Inject(method = "useWithoutItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z",
-            ordinal = 0), cancellable = true)
+public abstract class BedBlockMixin {
+    @Inject(method = "useWithoutItem", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/level/Level;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z", ordinal = 0), cancellable = true)
     private void preventUseIfCannotUse(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
                                        CallbackInfoReturnable<InteractionResult> cir) {
         player.displayClientMessage(Component.translatable("block.vanillaplus.bed.no_use"), true);

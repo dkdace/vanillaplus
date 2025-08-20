@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(AnvilMenu.class)
-public final class AnvilMenuMixin {
+public abstract class AnvilMenuMixin {
     @Overwrite
     public static int calculateIncreasedRepairCost(int cost) {
         return Rebalance.ANVIL_REPAIR_COST.applyAsInt(cost);

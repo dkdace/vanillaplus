@@ -1,16 +1,17 @@
 package com.dace.vanillaplus.mixin;
 
 import com.dace.vanillaplus.rebalance.Rebalance;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(Piglin.class)
-public final class PiglinMixin {
-    @Overwrite
-    public void performRangedAttack(LivingEntity entity, float speed) {
-        Piglin piglin = (Piglin) (Object) this;
-        piglin.performCrossbowAttack(piglin, Rebalance.Crossbow.MOB_SHOOTING_POWER_ARROW);
+public abstract class PiglinMixin {
+    @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
+            index = 1)
+    private float modifyBulletSpeed(float speed) {
+        return Rebalance.Crossbow.MOB_SHOOTING_POWER_ARROW;
     }
 }

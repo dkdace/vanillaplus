@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Player.class)
-public final class PlayerMixin implements CustomPlayer {
+public abstract class PlayerMixin extends LivingEntityMixin implements CustomPlayer {
     @Shadow
     @Final
     private Abilities abilities;
@@ -26,7 +26,6 @@ public final class PlayerMixin implements CustomPlayer {
 
     @ModifyReturnValue(method = "getDesiredPose", at = @At(value = "RETURN", ordinal = 4))
     private Pose modifyDesiredPose(Pose pose) {
-        Player player = (Player) (Object) this;
-        return vp$isProneKeyDown && !abilities.flying && player.onGround() ? Pose.SWIMMING : pose;
+        return vp$isProneKeyDown && !abilities.flying && onGround() ? Pose.SWIMMING : pose;
     }
 }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.List;
 
 @Mixin(VillagerTrades.class)
-public final class VillagerTradesMixin {
+public abstract class VillagerTradesMixin {
     @ModifyArg(method = "lambda$static$0", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/npc/VillagerTrades;toIntMap(Lcom/google/common/collect/ImmutableMap;)Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;",
             ordinal = 0))
