@@ -803,7 +803,7 @@ public final class Rebalance {
                                         .build())
                                 .build(),
                         OfferInfo.OfferList.builder()
-                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.ARMOR_STAND))
+                                .buyItem(Supply.MODERATE, ItemStackFunction.item(Items.ARMOR_STAND, 6))
                                 .group(OfferInfo.OfferList.builder()
                                         .sellEnchantedItem(Supply.SCARCE, 1.15, ItemStackFunction.item(Items.IRON_CHESTPLATE),
                                                 EnchantmentLevel.LOW)
