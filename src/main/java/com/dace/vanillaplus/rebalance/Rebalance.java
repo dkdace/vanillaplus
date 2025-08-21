@@ -108,6 +108,17 @@ public final class Rebalance {
     }
 
     /**
+     * 사슬 갑옷 설정.
+     */
+    @UtilityClass
+    public static final class Chainmail {
+        /** 마법 부여 가중치 (원본: 12) */
+        public static final int ENCHANTABILITY = 18;
+        /** 방어력 (부츠, 레깅스, 갑옷, 투구) (원본: 1, 4, 5, 2) */
+        public static final List<Integer> DEFENSE = List.of(2, 5, 6, 2);
+    }
+
+    /**
      * 주민 거래 설정.
      */
     @UtilityClass

@@ -8,6 +8,7 @@
     "AbstractFurnaceBlockEntityMixin",
     "AbstractVillagerMixin",
     "AnvilMenuMixin",
+    "ArmorMaterialsMixin",
     "BedBlockMixin",
     "BlocksMixin",
     "CreakingHeartBlockMixin",
