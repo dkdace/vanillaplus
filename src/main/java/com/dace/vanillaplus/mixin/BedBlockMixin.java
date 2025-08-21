@@ -19,7 +19,7 @@ public abstract class BedBlockMixin {
             target = "Lnet/minecraft/world/level/Level;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z", ordinal = 0), cancellable = true)
     private void preventUseIfCannotUse(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
                                        CallbackInfoReturnable<InteractionResult> cir) {
-        player.displayClientMessage(Component.translatable("block.vanillaplus.bed.no_use"), true);
+        player.displayClientMessage(Component.translatable("block.minecraft.bed.no_use"), true);
         cir.setReturnValue(InteractionResult.SUCCESS_SERVER);
     }
 }
