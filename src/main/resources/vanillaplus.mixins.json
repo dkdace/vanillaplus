@@ -15,6 +15,7 @@
     "CreakingMixin",
     "CreativeModeTabsMixin",
     "CrossbowItemMixin",
+    "DeathProtectionMixin",
     "EntityMixin",
     "ExperienceOrbMixin",
     "FireworkRocketEntityMixin",
