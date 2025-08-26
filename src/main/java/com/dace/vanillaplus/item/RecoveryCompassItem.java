@@ -1,8 +1,9 @@
 package com.dace.vanillaplus.item;
 
+import com.dace.vanillaplus.network.NetworkManager;
+import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
 import com.dace.vanillaplus.sound.SoundEventManager;
 import lombok.NonNull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -69,7 +70,8 @@ public final class RecoveryCompassItem extends Item {
         playUseEffects(serverLevel, oldPos);
         playUseEffects(serverLevel, pos);
 
-        Minecraft.getInstance().gameRenderer.displayItemActivation(getDefaultInstance());
+        if (player instanceof ServerPlayer serverPlayer)
+            NetworkManager.sendToPlayer(new RecoveryCompassTeleportPacketHandler(), serverPlayer);
 
         player.resetFallDistance();
         player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
