@@ -1,10 +1,11 @@
 {
-  "block.vanillaplus.bed.no_use": "You cannot sleep here.",
+  "block.minecraft.bed.no_use": "You cannot sleep here",
   "filled_map.ancient_city": "Ancient City Explorer Map",
   "filled_map.explorer_desert": "Desert Explorer Map",
   "filled_map.explorer_snowy": "Snowy Explorer Map",
   "filled_map.mineshaft": "Mineshaft Explorer Map",
   "filled_map.pillager_outpost": "Pillager Outpost Explorer Map",
+  "item.minecraft.recovery_compass.teleport_not_valid": "Your last death location was invalid or in different dimension",
   "key.prone": "Prone",
   "merchant.closed": "Villager closed the store. Please come back later.",
   "merchant.out_of_stock": "Currently out of stock. Please come back later.",
@@ -12,5 +13,6 @@
   "potion.potency.6": "VII",
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
-  "potion.potency.9": "X"
+  "potion.potency.9": "X",
+  "subtitles.item.recovery_compass.teleport": "Recovery Compass activates"
 }

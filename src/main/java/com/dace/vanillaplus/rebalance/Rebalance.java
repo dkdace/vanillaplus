@@ -20,6 +20,7 @@ import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
@@ -105,6 +106,31 @@ public final class Rebalance {
         public static final double ATTACK_DAMAGE = 6;
         /** 이동속도 (원본: 0.4) */
         public static final double MOVEMENT_SPEED = 0.5;
+    }
+
+    /**
+     * 사슬 갑옷 설정.
+     */
+    @UtilityClass
+    public static final class Chainmail {
+        /** 마법 부여 가중치 (원본: 12) */
+        public static final int ENCHANTABILITY = 18;
+        /** 방어력 (부츠, 레깅스, 갑옷, 투구) (원본: 1, 4, 5, 2) */
+        public static final List<Integer> DEFENSE = List.of(2, 5, 6, 2);
+    }
+
+    /**
+     * 불사의 토템 설정.
+     */
+    @UtilityClass
+    public static final class Totem {
+        /** 쿨타임 */
+        public static final int COOLDOWN_SECONDS = 10;
+        /** 상태 효과 목록 (원본: 재생 II 45초, 흡수 II 5초, 화염 저항 40초) */
+        public static final List<MobEffectInstance> MOB_EFFECTS = List.of(
+                new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1),
+                new MobEffectInstance(MobEffects.ABSORPTION, 5 * 20, 1),
+                new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 10 * 20, 0));
     }
 
     /**

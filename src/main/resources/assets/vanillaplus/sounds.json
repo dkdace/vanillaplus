@@ -1,0 +1,23 @@
+{
+  "item.recovery_compass.teleport": {
+    "subtitle": "subtitles.item.recovery_compass.teleport",
+    "sounds": [
+      {
+        "name": "mob/warden/sonic_boom1",
+        "pitch": 1.4
+      },
+      {
+        "name": "mob/warden/sonic_boom2",
+        "pitch": 1.4
+      },
+      {
+        "name": "mob/warden/sonic_boom3",
+        "pitch": 1.4
+      },
+      {
+        "name": "mob/warden/sonic_boom4",
+        "pitch": 1.4
+      }
+    ]
+  }
+}
