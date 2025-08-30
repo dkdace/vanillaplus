@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.custom.CustomChestBlock;
 import com.dace.vanillaplus.custom.CustomChestBlockEntity;
+import com.dace.vanillaplus.custom.CustomLootContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -20,7 +20,7 @@ public abstract class OceanRuinPieceMixin extends StructurePieceMixin {
             target = "Lnet/minecraft/world/level/ServerLevelAccessor;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
             ordinal = 0), index = 1)
     private BlockState modifyChestBlockState(BlockState blockState) {
-        return blockState.setValue(CustomChestBlock.vp$LOOT, true);
+        return blockState.setValue(CustomLootContainerBlock.vp$LOOT, true);
     }
 
     @Inject(method = "handleDataMarker", at = @At(value = "INVOKE",

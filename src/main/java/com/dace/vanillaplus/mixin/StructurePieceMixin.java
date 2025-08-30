@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.custom.CustomChestBlock;
 import com.dace.vanillaplus.custom.CustomChestBlockEntity;
+import com.dace.vanillaplus.custom.CustomLootContainerBlock;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -52,7 +52,7 @@ public abstract class StructurePieceMixin {
         if (blockState == null)
             return false;
 
-        serverLevelAccessor.setBlock(blockPos, blockState.setValue(CustomChestBlock.vp$LOOT, true), 2);
+        serverLevelAccessor.setBlock(blockPos, blockState.setValue(CustomLootContainerBlock.vp$LOOT, true), 2);
 
         BlockEntity blockentity = serverLevelAccessor.getBlockEntity(blockPos);
         if (blockentity instanceof ChestBlockEntity chestBlockEntity) {

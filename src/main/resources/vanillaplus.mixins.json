@@ -9,6 +9,8 @@
     "AbstractVillagerMixin",
     "AnvilMenuMixin",
     "ArmorMaterialsMixin",
+    "BarrelBlockEntityMixin",
+    "BarrelBlockMixin",
     "BedBlockMixin",
     "BlockEntityMixin",
     "BlockMixin",

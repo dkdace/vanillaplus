@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin;
 
-import com.dace.vanillaplus.custom.CustomChestBlock;
+import com.dace.vanillaplus.custom.CustomLootContainerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.MonsterRoomFeature;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +13,6 @@ public abstract class MonsterRoomFeatureMixin {
             target = "Lnet/minecraft/world/level/levelgen/structure/StructurePiece;reorient(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/state/BlockState;"),
             index = 2)
     private BlockState modifyChestBlockState(BlockState blockState) {
-        return blockState.setValue(CustomChestBlock.vp$LOOT, true);
+        return blockState.setValue(CustomLootContainerBlock.vp$LOOT, true);
     }
 }
