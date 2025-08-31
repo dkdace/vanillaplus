@@ -15,6 +15,7 @@
     "BlockEntityMixin",
     "BlockMixin",
     "BlocksMixin",
+    "BonusChestFeatureMixin",
     "BuriedTreasurePieceMixin",
     "ChestBlockEntityMixin",
     "ChestBlockMixin",
