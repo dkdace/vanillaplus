@@ -1,5 +1,7 @@
 {
   "block.minecraft.bed.no_use": "You cannot sleep here",
+  "container.barrelLoot": "Loot Barrel",
+  "container.chestLoot": "Loot Chest",
   "filled_map.ancient_city": "Ancient City Explorer Map",
   "filled_map.explorer_desert": "Desert Explorer Map",
   "filled_map.explorer_snowy": "Snowy Explorer Map",

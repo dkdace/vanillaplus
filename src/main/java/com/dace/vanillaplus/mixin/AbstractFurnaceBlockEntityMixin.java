@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class AbstractFurnaceBlockEntityMixin {
+public abstract class AbstractFurnaceBlockEntityMixin extends BlockEntityMixin {
     @Inject(method = "burn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"), cancellable = true)
     private void damageBurnedTool(RegistryAccess registryAccess, RecipeHolder<? extends AbstractCookingRecipe> recipeHolder,
                                   SingleRecipeInput recipeInput, NonNullList<ItemStack> itemStacks, int maxStackSize,

@@ -1,5 +1,7 @@
 {
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
+  "container.barrelLoot": "전리품 통",
+  "container.chestLoot": "전리품 상자",
   "filled_map.ancient_city": "고대 도시 탐험가 지도",
   "filled_map.explorer_desert": "사막 탐험가 지도",
   "filled_map.explorer_snowy": "설원 탐험가 지도",
