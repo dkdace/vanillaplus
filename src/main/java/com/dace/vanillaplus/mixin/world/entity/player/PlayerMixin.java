@@ -26,16 +26,16 @@ public abstract class PlayerMixin extends LivingEntityMixin implements CustomPla
     @Final
     private ItemCooldowns cooldowns;
     @Unique
-    private boolean vp$isProneKeyDown = false;
+    private boolean isProneKeyDown = false;
 
     @Override
-    public void vp$setProneKeyDown(boolean isProneKeyDown) {
-        vp$isProneKeyDown = isProneKeyDown;
+    public void setProneKeyDown(boolean isProneKeyDown) {
+        this.isProneKeyDown = isProneKeyDown;
     }
 
     @ModifyReturnValue(method = "getDesiredPose", at = @At(value = "RETURN", ordinal = 4))
     private Pose modifyDesiredPose(Pose pose) {
-        return vp$isProneKeyDown && !abilities.flying && onGround() ? Pose.SWIMMING : pose;
+        return isProneKeyDown && !abilities.flying && onGround() ? Pose.SWIMMING : pose;
     }
 
     @Override

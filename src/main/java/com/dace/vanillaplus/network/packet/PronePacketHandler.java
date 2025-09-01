@@ -30,6 +30,6 @@ public final class PronePacketHandler implements PacketHandler {
         if (player == null)
             return;
 
-        ((CustomPlayer) player).vp$setProneKeyDown(isPressed);
+        ((CustomPlayer) player).setProneKeyDown(isPressed);
     }
 }

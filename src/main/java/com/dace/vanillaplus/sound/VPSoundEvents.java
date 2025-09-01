@@ -9,10 +9,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 
 /**
- * 효과음 이벤트를 관리하는 클래스.
+ * 모드에서 사용하는 효과음 이벤트를 관리하는 클래스.
  */
 @UtilityClass
-public final class SoundEventManager {
+public final class VPSoundEvents {
     private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(Registries.SOUND_EVENT, VanillaPlus.MODID);
 
     public static final SoundEvent RECOVERY_COMPASS_TELEPORT = create("item.recovery_compass.teleport");

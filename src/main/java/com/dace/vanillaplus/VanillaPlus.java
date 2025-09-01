@@ -1,6 +1,6 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.sound.SoundEventManager;
+import com.dace.vanillaplus.sound.VPSoundEvents;
 import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.fml.common.Mod;
@@ -18,7 +18,7 @@ public final class VanillaPlus {
     public VanillaPlus(FMLJavaModLoadingContext context) {
         LOGGER.debug("Hello, World!");
 
-        ReflectionUtil.loadClass(Tag.class);
-        ReflectionUtil.loadClass(SoundEventManager.class);
+        ReflectionUtil.loadClass(VPTags.class);
+        ReflectionUtil.loadClass(VPSoundEvents.class);
     }
 }

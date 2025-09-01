@@ -21,7 +21,7 @@ public abstract class OceanRuinPieceMixin extends StructurePieceMixin {
             target = "Lnet/minecraft/world/level/ServerLevelAccessor;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
             ordinal = 0), index = 1)
     private BlockState modifyChestBlockState(BlockState blockState) {
-        return blockState.setValue(CustomLootContainerBlock.vp$LOOT, true);
+        return blockState.setValue(CustomLootContainerBlock.LOOT, true);
     }
 
     @Inject(method = "handleDataMarker", at = @At(value = "INVOKE",
@@ -29,6 +29,6 @@ public abstract class OceanRuinPieceMixin extends StructurePieceMixin {
     private void setLootChestXP(String metadata, BlockPos blockPos, ServerLevelAccessor serverLevelAccessor, RandomSource randomSource,
                                 BoundingBox boundingBox, CallbackInfo ci) {
         if (serverLevelAccessor.getBlockEntity(blockPos) instanceof CustomChestBlockEntity customChestBlockEntity)
-            customChestBlockEntity.vp$setXp(25);
+            customChestBlockEntity.setXp(25);
     }
 }

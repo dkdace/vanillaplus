@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  * 모드에서 사용하는 데이터 태그를 관리하는 클래스.
  */
 @UtilityClass
-public final class Tag {
+public final class VPTags {
     static {
         ReflectionUtil.loadClass(Enchantments.class);
         ReflectionUtil.loadClass(Structures.class);

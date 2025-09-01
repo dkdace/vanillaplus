@@ -34,12 +34,12 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
     protected abstract void stopTrading();
 
     @Unique
-    private boolean vp$isMerchantClosed() {
+    private boolean isMerchantClosed() {
         return !getOffers().isEmpty() && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
     }
 
     @Unique
-    private boolean vp$isMerchantOutOfStock() {
+    private boolean isMerchantOutOfStock() {
         return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
@@ -61,20 +61,20 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
     private boolean preventTradingIfClosed(boolean flag) {
-        return flag || vp$isMerchantClosed() || vp$isMerchantOutOfStock();
+        return flag || isMerchantClosed() || isMerchantOutOfStock();
     }
 
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
     private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (vp$isMerchantClosed())
+        if (isMerchantClosed())
             player.displayClientMessage(Component.translatable("merchant.closed"), true);
-        else if (vp$isMerchantOutOfStock())
+        else if (isMerchantOutOfStock())
             player.displayClientMessage(Component.translatable("merchant.out_of_stock"), true);
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))
     private void closeMerchant(ServerLevel serverLevel, CallbackInfo ci) {
-        if (!vp$isMerchantClosed())
+        if (!isMerchantClosed())
             return;
 
         getOffers().forEach(MerchantOffer::setToOutOfStock);

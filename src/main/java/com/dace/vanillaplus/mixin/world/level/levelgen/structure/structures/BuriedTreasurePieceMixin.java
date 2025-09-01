@@ -19,6 +19,6 @@ public abstract class BuriedTreasurePieceMixin extends StructurePieceMixin {
             target = "Lnet/minecraft/world/level/levelgen/structure/structures/BuriedTreasurePieces$BuriedTreasurePiece;createChest(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
     private boolean setLootChest(BuriedTreasurePieces.BuriedTreasurePiece instance, ServerLevelAccessor serverLevelAccessor, BoundingBox boundingBox,
                                  RandomSource randomSource, BlockPos blockPos, ResourceKey<LootTable> lootTableResourceKey, BlockState blockState) {
-        return vp$createLootChest(serverLevelAccessor, boundingBox, randomSource, blockPos, lootTableResourceKey, blockState, 60);
+        return createLootChest(serverLevelAccessor, boundingBox, randomSource, blockPos, lootTableResourceKey, blockState, 60);
     }
 }

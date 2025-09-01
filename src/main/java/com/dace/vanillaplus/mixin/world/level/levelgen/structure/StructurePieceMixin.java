@@ -34,15 +34,15 @@ public abstract class StructurePieceMixin {
     protected abstract BlockPos.MutableBlockPos getWorldPos(int x, int y, int z);
 
     @Unique
-    protected boolean vp$createLootChest(@NonNull WorldGenLevel worldGenLevel, @NonNull BoundingBox boundingBox, @NonNull RandomSource randomSource,
-                                         int x, int y, int z, @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, int xp) {
-        return vp$createLootChest(worldGenLevel, boundingBox, randomSource, getWorldPos(x, y, z), lootTableResourceKey, null, xp);
+    protected boolean createLootChest(@NonNull WorldGenLevel worldGenLevel, @NonNull BoundingBox boundingBox, @NonNull RandomSource randomSource,
+                                      int x, int y, int z, @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, int xp) {
+        return createLootChest(worldGenLevel, boundingBox, randomSource, getWorldPos(x, y, z), lootTableResourceKey, null, xp);
     }
 
     @Unique
-    protected boolean vp$createLootChest(@NonNull ServerLevelAccessor serverLevelAccessor, @NonNull BoundingBox boundingBox,
-                                         @NonNull RandomSource randomSource, @NonNull BlockPos blockPos,
-                                         @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, @Nullable BlockState blockState, int xp) {
+    protected boolean createLootChest(@NonNull ServerLevelAccessor serverLevelAccessor, @NonNull BoundingBox boundingBox,
+                                      @NonNull RandomSource randomSource, @NonNull BlockPos blockPos,
+                                      @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, @Nullable BlockState blockState, int xp) {
         if (!boundingBox.isInside(blockPos) || serverLevelAccessor.getBlockState(blockPos).is(Blocks.CHEST))
             return false;
 
@@ -52,12 +52,12 @@ public abstract class StructurePieceMixin {
         if (blockState == null)
             return false;
 
-        serverLevelAccessor.setBlock(blockPos, blockState.setValue(CustomLootContainerBlock.vp$LOOT, true), 2);
+        serverLevelAccessor.setBlock(blockPos, blockState.setValue(CustomLootContainerBlock.LOOT, true), 2);
 
         BlockEntity blockentity = serverLevelAccessor.getBlockEntity(blockPos);
         if (blockentity instanceof ChestBlockEntity chestBlockEntity) {
             chestBlockEntity.setLootTable(lootTableResourceKey, randomSource.nextLong());
-            ((CustomChestBlockEntity) chestBlockEntity).vp$setXp(xp);
+            ((CustomChestBlockEntity) chestBlockEntity).setXp(xp);
         }
 
         return true;

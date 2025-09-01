@@ -17,6 +17,6 @@ public abstract class JungleTemplePieceMixin extends StructurePieceMixin {
             target = "Lnet/minecraft/world/level/levelgen/structure/structures/JungleTemplePiece;createChest(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;IIILnet/minecraft/resources/ResourceKey;)Z"))
     private boolean setLootChest(JungleTemplePiece instance, WorldGenLevel worldGenLevel, BoundingBox boundingBox, RandomSource randomSource,
                                  int x, int y, int z, ResourceKey<LootTable> lootTableResourceKey) {
-        return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 35);
+        return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 35);
     }
 }

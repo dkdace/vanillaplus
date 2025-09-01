@@ -19,7 +19,7 @@ public abstract class StrongholdPiecesMixin {
                 target = "Lnet/minecraft/world/level/levelgen/structure/structures/StrongholdPieces$Library;createChest(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;IIILnet/minecraft/resources/ResourceKey;)Z"))
         private boolean setLootChest(StrongholdPieces.Library instance, WorldGenLevel worldGenLevel, BoundingBox boundingBox,
                                      RandomSource randomSource, int x, int y, int z, ResourceKey<LootTable> lootTableResourceKey) {
-            return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
+            return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
         }
     }
 
@@ -29,7 +29,7 @@ public abstract class StrongholdPiecesMixin {
                 target = "Lnet/minecraft/world/level/levelgen/structure/structures/StrongholdPieces$RoomCrossing;createChest(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;IIILnet/minecraft/resources/ResourceKey;)Z"))
         private boolean setLootChest(StrongholdPieces.RoomCrossing instance, WorldGenLevel worldGenLevel, BoundingBox boundingBox,
                                      RandomSource randomSource, int x, int y, int z, ResourceKey<LootTable> lootTableResourceKey) {
-            return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
+            return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
         }
     }
 
@@ -39,7 +39,7 @@ public abstract class StrongholdPiecesMixin {
                 target = "Lnet/minecraft/world/level/levelgen/structure/structures/StrongholdPieces$ChestCorridor;createChest(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;IIILnet/minecraft/resources/ResourceKey;)Z"))
         private boolean setLootChest(StrongholdPieces.ChestCorridor instance, WorldGenLevel worldGenLevel, BoundingBox boundingBox,
                                      RandomSource randomSource, int x, int y, int z, ResourceKey<LootTable> lootTableResourceKey) {
-            return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
+            return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
         }
     }
 }

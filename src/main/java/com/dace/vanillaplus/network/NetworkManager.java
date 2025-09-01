@@ -5,11 +5,15 @@ import com.dace.vanillaplus.network.packet.PacketHandler;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
@@ -19,6 +23,8 @@ import java.util.function.Function;
 /**
  * 네트워크 관련 기능을 제공하는 클래스.
  */
+@UtilityClass
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class NetworkManager {
     /** 프로토콜 버전 */
     private static final int PROTOCOL_VERSION = 1;
@@ -29,14 +35,15 @@ public final class NetworkManager {
             .acceptedVersions((status, version) -> version == PROTOCOL_VERSION)
             .simpleChannel();
 
-    /**
-     * 패킷 전송 채널을 등록한다.
-     */
-    public static void register() {
-        registerPacket(PacketFlow.SERVERBOUND, PronePacketHandler.class, PronePacketHandler::new);
-        registerPacket(PacketFlow.CLIENTBOUND, RecoveryCompassTeleportPacketHandler.class, buf -> new RecoveryCompassTeleportPacketHandler());
+    @SubscribeEvent
+    private static void onFMLCommonSetup(@NonNull FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            registerPacket(PacketFlow.SERVERBOUND, PronePacketHandler.class, PronePacketHandler::new);
+            registerPacket(PacketFlow.CLIENTBOUND, RecoveryCompassTeleportPacketHandler.class,
+                    buf -> new RecoveryCompassTeleportPacketHandler());
 
-        CHANNEL.build();
+            CHANNEL.build();
+        });
     }
 
     /**

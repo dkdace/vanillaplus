@@ -14,7 +14,7 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 public final class RecoveryCompassTeleportPacketHandler implements PacketHandler {
     @Override
     public void encode(@NonNull FriendlyByteBuf buf) {
-        // 미사용
+        buf.writeBoolean(true);
     }
 
     @Override

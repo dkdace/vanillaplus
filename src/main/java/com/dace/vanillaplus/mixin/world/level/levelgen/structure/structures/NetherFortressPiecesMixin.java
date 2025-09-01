@@ -20,7 +20,7 @@ public abstract class NetherFortressPiecesMixin {
         private boolean setLootChest(NetherFortressPieces.CastleSmallCorridorLeftTurnPiece instance, WorldGenLevel worldGenLevel,
                                      BoundingBox boundingBox, RandomSource randomSource, int x, int y, int z,
                                      ResourceKey<LootTable> lootTableResourceKey) {
-            return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
+            return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
         }
     }
 
@@ -31,7 +31,7 @@ public abstract class NetherFortressPiecesMixin {
         private boolean setLootChest(NetherFortressPieces.CastleSmallCorridorRightTurnPiece instance, WorldGenLevel worldGenLevel,
                                      BoundingBox boundingBox, RandomSource randomSource, int x, int y, int z,
                                      ResourceKey<LootTable> lootTableResourceKey) {
-            return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
+            return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 25);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.rebalance;
 
-import com.dace.vanillaplus.Tag;
+import com.dace.vanillaplus.VPTags;
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -1360,13 +1360,13 @@ public final class Rebalance {
         @AllArgsConstructor
         private enum EnchantmentLevel {
             /** 낮음 */
-            LOW(IntegerRange.of(8, 16), Tag.Enchantments.TRADEABLE),
+            LOW(IntegerRange.of(8, 16), VPTags.Enchantments.TRADEABLE),
             /** 중간 */
-            MEDIUM(IntegerRange.of(12, 24), Tag.Enchantments.TRADEABLE),
+            MEDIUM(IntegerRange.of(12, 24), VPTags.Enchantments.TRADEABLE),
             /** 높음 */
-            HIGH(IntegerRange.of(18, 30), Tag.Enchantments.TRADEABLE),
+            HIGH(IntegerRange.of(18, 30), VPTags.Enchantments.TRADEABLE),
             /** 매우 높음 */
-            HIGHEST(IntegerRange.of(24, 30), Tag.Enchantments.TRADEABLE_TREASURE);
+            HIGHEST(IntegerRange.of(24, 30), VPTags.Enchantments.TRADEABLE_TREASURE);
 
             /** 마법 부여 레벨 값 */
             private final IntegerRange value;
@@ -1383,10 +1383,10 @@ public final class Rebalance {
             ALL((itemStack, enchantmentHolder) -> true),
             /** 도구 */
             TOOLS((itemStack, enchantmentHolder) ->
-                    !itemStack.is(ItemTags.AXES) || enchantmentHolder.is(Tag.Enchantments.AXE_TOOL)),
+                    !itemStack.is(ItemTags.AXES) || enchantmentHolder.is(VPTags.Enchantments.AXE_TOOL)),
             /** 무기 */
             WEAPONS((itemStack, enchantmentHolder) ->
-                    !itemStack.is(ItemTags.AXES) || enchantmentHolder.is(Tag.Enchantments.AXE_WEAPON));
+                    !itemStack.is(ItemTags.AXES) || enchantmentHolder.is(VPTags.Enchantments.AXE_WEAPON));
 
             /** 인첸트 가능 여부 반환 시 실행할 작업 */
             private final BiPredicate<ItemStack, Holder<Enchantment>> canEnchant;
@@ -1400,14 +1400,14 @@ public final class Rebalance {
             /** 폐광 */
             MINESHAFT(StructureTags.MINESHAFT, "mineshaft", ARGB.color(92, 86, 71)),
             /** 약탈자 전초기지 */
-            PILLAGER_OUTPOST(Tag.Structures.PILLAGER_OUTPOST, "pillager_outpost", ARGB.color(107, 56, 18)),
+            PILLAGER_OUTPOST(VPTags.Structures.PILLAGER_OUTPOST, "pillager_outpost", ARGB.color(107, 56, 18)),
             /** 고대 도시 */
-            ANCIENT_CITY(Tag.Structures.ANCIENT_CITY, "ancient_city", ARGB.color(40, 31, 97)),
+            ANCIENT_CITY(VPTags.Structures.ANCIENT_CITY, "ancient_city", ARGB.color(40, 31, 97)),
             /** 사막 탐험 */
-            EXPLORER_DESERT(Tag.Structures.ON_DESERT_EXPLORER_MAPS, "explorer_desert",
+            EXPLORER_DESERT(VPTags.Structures.ON_DESERT_EXPLORER_MAPS, "explorer_desert",
                     ARGB.color(163, 143, 73)),
             /** 설원 탐험 */
-            EXPLORER_SNOWY(Tag.Structures.ON_SNOWY_EXPLORER_MAPS, "explorer_snowy", ARGB.color(89, 154, 189)),
+            EXPLORER_SNOWY(VPTags.Structures.ON_SNOWY_EXPLORER_MAPS, "explorer_snowy", ARGB.color(89, 154, 189)),
             /** 정글 탐험 */
             EXPLORER_JUNGLE(StructureTags.ON_JUNGLE_EXPLORER_MAPS, "explorer_jungle", MapDecorationTypes.JUNGLE_TEMPLE,
                     ARGB.color(92, 130, 49)),

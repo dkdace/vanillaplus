@@ -21,7 +21,7 @@ public abstract class BonusChestFeatureMixin {
             target = "Lnet/minecraft/world/level/WorldGenLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
             ordinal = 0), index = 1)
     private BlockState modifyChestBlockState(BlockState blockState) {
-        return blockState.setValue(CustomLootContainerBlock.vp$LOOT, true);
+        return blockState.setValue(CustomLootContainerBlock.LOOT, true);
     }
 
     @Inject(method = "place", at = @At(value = "INVOKE",
@@ -29,6 +29,6 @@ public abstract class BonusChestFeatureMixin {
     private void setLootChestXP(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext, CallbackInfoReturnable<Boolean> cir,
                                 @Local WorldGenLevel worldGenLevel, @Local BlockPos blockPos) {
         if (worldGenLevel.getBlockEntity(blockPos) instanceof CustomChestBlockEntity customChestBlockEntity)
-            customChestBlockEntity.vp$setXp(10);
+            customChestBlockEntity.setXp(10);
     }
 }

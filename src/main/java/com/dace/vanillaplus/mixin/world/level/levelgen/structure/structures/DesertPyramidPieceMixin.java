@@ -17,6 +17,6 @@ public abstract class DesertPyramidPieceMixin extends StructurePieceMixin {
             target = "Lnet/minecraft/world/level/levelgen/structure/structures/DesertPyramidPiece;createChest(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/levelgen/structure/BoundingBox;Lnet/minecraft/util/RandomSource;IIILnet/minecraft/resources/ResourceKey;)Z"))
     private boolean setLootChest(DesertPyramidPiece instance, WorldGenLevel worldGenLevel, BoundingBox boundingBox, RandomSource randomSource, int x,
                                  int y, int z, ResourceKey<LootTable> lootTableResourceKey) {
-        return vp$createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 20);
+        return createLootChest(worldGenLevel, boundingBox, randomSource, x, y, z, lootTableResourceKey, 20);
     }
 }

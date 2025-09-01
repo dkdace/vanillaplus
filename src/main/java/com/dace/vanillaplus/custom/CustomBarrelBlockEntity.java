@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.custom;
 
 public interface CustomBarrelBlockEntity {
-    int vp$getXp();
+    int getXp();
 
-    void vp$setXp(int xp);
+    void setXp(int xp);
 }

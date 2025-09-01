@@ -42,7 +42,7 @@ public final class ProneKey extends ToggleKeyMapping {
         if (player == null || minecraft.getConnection() == null)
             return;
 
-        ((CustomPlayer) player).vp$setProneKeyDown(isDown);
+        ((CustomPlayer) player).setProneKeyDown(isDown);
         NetworkManager.sendToServer(new PronePacketHandler(isDown));
     }
 }

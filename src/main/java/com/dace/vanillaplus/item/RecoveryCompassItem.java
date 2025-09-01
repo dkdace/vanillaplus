@@ -2,7 +2,7 @@ package com.dace.vanillaplus.item;
 
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
-import com.dace.vanillaplus.sound.SoundEventManager;
+import com.dace.vanillaplus.sound.VPSoundEvents;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -40,7 +40,7 @@ public final class RecoveryCompassItem extends Item {
      * @param pos         위치
      */
     private static void playUseEffects(@NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
-        serverLevel.playSound(null, pos.x, pos.y, pos.z, SoundEventManager.RECOVERY_COMPASS_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
+        serverLevel.playSound(null, pos.x, pos.y, pos.z, VPSoundEvents.RECOVERY_COMPASS_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
         serverLevel.playSound(null, pos.x, pos.y, pos.z, SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2.0F, 0.5F);
 
         serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);

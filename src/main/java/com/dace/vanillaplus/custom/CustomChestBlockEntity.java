@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.custom;
 
 public interface CustomChestBlockEntity {
-    void vp$openLid();
+    void openLid();
 
-    int vp$getXp();
+    int getXp();
 
-    void vp$setXp(int xp);
+    void setXp(int xp);
 }
