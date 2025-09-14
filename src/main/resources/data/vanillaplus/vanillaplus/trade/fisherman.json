@@ -1,0 +1,325 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:cod",
+                "count": 9
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_cod",
+                "count": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:string",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_salmon",
+                "count": 5
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:salmon",
+                "count": 8
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "tropical_fish_bucket"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:tropical_fish",
+                "count": 6
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:campfire"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:cherry_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:oak_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:birch_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:oak_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:spruce_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:oak_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:spruce_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:oak_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:jungle_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:bamboo_raft"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:jungle_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:oak_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:acacia_boat"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "buy",
+                  "price": {
+                    "type": "random",
+                    "items": [
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:mangrove_boat"
+                      },
+                      {
+                        "type": "itemstack",
+                        "id": "minecraft:dark_oak_boat"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:ink_sac",
+                "count": 9
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:pufferfish",
+                "count": 4
+              }
+            },
+            {
+              "type": "sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.7,
+              "enchantment_level": "low",
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:fishing_rod"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 2,
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "itemstack",
+                "id": "minecraft:dried_kelp",
+                "count": 25
+              },
+              {
+                "type": "itemstack",
+                "id": "minecraft:dried_kelp_block",
+                "count": 3
+              }
+            ]
+          }
+        },
+        {
+          "type": "sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 0.7,
+          "enchantment_level": "medium",
+          "product": {
+            "type": "itemstack",
+            "id": "minecraft:fishing_rod"
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 6,
+          "product": {
+            "type": "axolotl_bucket"
+          }
+        },
+        {
+          "type": "sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 0.7,
+          "enchantment_level": "highest",
+          "product": {
+            "type": "itemstack",
+            "id": "minecraft:fishing_rod"
+          }
+        }
+      ]
+    }
+  ]
+}

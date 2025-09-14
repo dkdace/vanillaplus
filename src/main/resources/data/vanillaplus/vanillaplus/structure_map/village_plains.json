@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.village_plains"
+  },
+  "structure_tag": "#minecraft:on_plains_village_maps",
+  "color": 5617726,
+  "decoration_type": "minecraft:village_plains"
+}

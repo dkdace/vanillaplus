@@ -1,0 +1,234 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:coal",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_sword"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:raw_iron",
+                "count": 5
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_axe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:stick",
+                "count": 50
+              }
+            },
+            {
+              "type": "sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 0.9,
+              "enchantment_level": "low",
+              "enchantment_tag": "#vanillaplus:weapon",
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_sword"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:iron_ingot",
+                "count": 4
+              }
+            },
+            {
+              "type": "sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 0.9,
+              "enchantment_level": "low",
+              "enchantment_tag": "#vanillaplus:weapon",
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_axe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:diamond"
+              }
+            },
+            {
+              "type": "sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.9,
+              "enchantment_level": "medium",
+              "enchantment_tag": "#vanillaplus:weapon",
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_sword"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:gunpowder",
+                "count": 7
+              }
+            },
+            {
+              "type": "sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.9,
+              "enchantment_level": "medium",
+              "enchantment_tag": "#vanillaplus:weapon",
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:iron_axe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1,
+          "enchantment_level": "medium",
+          "enchantment_tag": "#vanillaplus:weapon",
+          "product": {
+            "type": "itemstack",
+            "id": "minecraft:diamond_sword"
+          }
+        },
+        {
+          "type": "sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1,
+          "enchantment_level": "medium",
+          "enchantment_tag": "#vanillaplus:weapon",
+          "product": {
+            "type": "itemstack",
+            "id": "minecraft:diamond_axe"
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:tnt"
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:fire_charge",
+                "count": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1,
+          "enchantment_level": "high",
+          "enchantment_tag": "#vanillaplus:weapon",
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "itemstack",
+                "id": "minecraft:diamond_sword"
+              },
+              {
+                "type": "itemstack",
+                "id": "minecraft:diamond_axe"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.explorer_jungle"
+  },
+  "structure_tag": "#minecraft:on_jungle_explorer_maps",
+  "color": 6062641,
+  "decoration_type": "minecraft:jungle_temple"
+}

@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.explorer_snowy"
+  },
+  "structure_tag": "#vanillaplus:on_snowy_explorer_maps",
+  "color": 5872317,
+  "decoration_type": "minecraft:target_point"
+}

@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.mineshaft"
+  },
+  "structure_tag": "#minecraft:mineshaft",
+  "color": 6051399,
+  "decoration_type": "minecraft:target_point"
+}

@@ -1,5 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc;
 
+import com.dace.vanillaplus.rebalance.trade.Trade;
+import com.dace.vanillaplus.rebalance.trade.Trades;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,18 +46,38 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
         return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
-    @Inject(method = "resetNumberOfRestocks", at = @At("TAIL"))
-    private void rerollOffers(CallbackInfo ci) {
-        VillagerData villagerData = getVillagerData();
-        ResourceKey<VillagerProfession> resourcekey = villagerData.profession().unwrapKey().orElse(null);
-        if (resourcekey == null)
+    @Unique
+    private void addOffers(int level) {
+        ResourceKey<VillagerProfession> villagerProfessionResourceKey = getVillagerData().profession().unwrapKey().orElse(null);
+        if (villagerProfessionResourceKey == null)
             return;
 
+        ResourceKey<Trade> tradeResourceKey = Trades.fromVillagerProfession(villagerProfessionResourceKey);
+        if (tradeResourceKey == null)
+            return;
+
+        VillagerTrades.ItemListing[] itemListings = level().registryAccess().getOrThrow(tradeResourceKey).value().getOfferInfo(level).toItemListings();
         MerchantOffers offers = getOffers();
 
-        for (int i = 0; i < villagerData.level(); i++)
-            for (int j = 0; j < 2; j++)
-                offers.set(i * 2 + j, VillagerTrades.TRADES.get(resourcekey).get(i + 1)[j].getOffer((Villager) (Object) this, random));
+        for (VillagerTrades.ItemListing itemListing : itemListings) {
+            MerchantOffer offer = itemListing.getOffer((Villager) (Object) this, random);
+            if (offer != null)
+                offers.add(offer);
+        }
+    }
+
+    @Overwrite
+    protected void updateTrades() {
+        addOffers(getVillagerData().level());
+    }
+
+    @Inject(method = "resetNumberOfRestocks", at = @At("TAIL"))
+    private void rerollOffers(CallbackInfo ci) {
+        getOffers().clear();
+
+        VillagerData villagerData = getVillagerData();
+        for (int i = 1; i <= villagerData.level(); i++)
+            addOffers(i);
 
         resendOffersToTradingPlayer();
     }

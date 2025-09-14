@@ -35,14 +35,14 @@ public abstract class StructurePieceMixin {
 
     @Unique
     protected boolean createLootChest(@NonNull WorldGenLevel worldGenLevel, @NonNull BoundingBox boundingBox, @NonNull RandomSource randomSource,
-                                      int x, int y, int z, @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, int xp) {
+                                      int x, int y, int z, @NonNull ResourceKey<LootTable> lootTableResourceKey, int xp) {
         return createLootChest(worldGenLevel, boundingBox, randomSource, getWorldPos(x, y, z), lootTableResourceKey, null, xp);
     }
 
     @Unique
     protected boolean createLootChest(@NonNull ServerLevelAccessor serverLevelAccessor, @NonNull BoundingBox boundingBox,
                                       @NonNull RandomSource randomSource, @NonNull BlockPos blockPos,
-                                      @NonNull ResourceKey<@NonNull LootTable> lootTableResourceKey, @Nullable BlockState blockState, int xp) {
+                                      @NonNull ResourceKey<LootTable> lootTableResourceKey, @Nullable BlockState blockState, int xp) {
         if (!boundingBox.isInside(blockPos) || serverLevelAccessor.getBlockState(blockPos).is(Blocks.CHEST))
             return false;
 

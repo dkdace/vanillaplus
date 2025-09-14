@@ -1,0 +1,259 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:rotten_flesh",
+                "count": 14
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:redstone",
+                "count": 7
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:rabbit_foot",
+                "count": 2
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:lapis_lazuli",
+                "count": 5
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:gold_ingot",
+                "count": 3
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:glowstone_dust",
+                "count": 15
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:turtle_scute",
+                "count": 2
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:amethyst_shard",
+                "count": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:nether_wart",
+                "count": 16
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:ender_pearl"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:glass_bottle",
+                "count": 7
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "required_item": {
+                "type": "itemstack",
+                "id": "minecraft:glass_bottle"
+              },
+              "product": {
+                "type": "potion",
+                "potion": "minecraft:awkward"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:crying_obsidian"
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:experience_bottle",
+                "count": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 2,
+          "required_item": {
+            "type": "itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "potion",
+                "potion": "minecraft:swiftness"
+              },
+              {
+                "type": "potion",
+                "potion": "minecraft:leaping"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "sell",
+          "supply": "scarce",
+          "price": 3,
+          "required_item": {
+            "type": "itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "potion",
+                "potion": "minecraft:night_vision"
+              },
+              {
+                "type": "potion",
+                "potion": "minecraft:water_breathing"
+              }
+            ]
+          }
+        },
+        {
+          "type": "sell",
+          "supply": "scarce",
+          "price": 4,
+          "required_item": {
+            "type": "itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "potion",
+                "potion": "minecraft:fire_resistance"
+              },
+              {
+                "type": "potion",
+                "potion": "minecraft:regeneration"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
