@@ -9,11 +9,6 @@
           "name": "minecraft:leather_helmet",
           "functions": [
             {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 8,
-              "options": "#vanillaplus:tradeable"
-            },
-            {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
@@ -28,11 +23,6 @@
           "type": "minecraft:item",
           "name": "minecraft:leather_chestplate",
           "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 8,
-              "options": "#vanillaplus:tradeable"
-            },
             {
               "function": "minecraft:set_damage",
               "damage": {
@@ -49,11 +39,6 @@
           "name": "minecraft:leather_leggings",
           "functions": [
             {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 8,
-              "options": "#vanillaplus:tradeable"
-            },
-            {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
@@ -68,11 +53,6 @@
           "type": "minecraft:item",
           "name": "minecraft:leather_boots",
           "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 8,
-              "options": "#vanillaplus:tradeable"
-            },
             {
               "function": "minecraft:set_damage",
               "damage": {

@@ -7,13 +7,12 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:cooked_cod",
-          "weight": 4,
           "functions": [
             {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2.0,
+                "max": 3.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
@@ -23,34 +22,17 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:cooked_salmon",
-          "weight": 4,
           "functions": [
             {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2.0,
+                "max": 3.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:cod_bucket"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:salmon_bucket"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:tropical_fish_bucket"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:pufferfish_bucket"
         }
       ],
       "rolls": 1.0
