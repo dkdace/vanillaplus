@@ -13,7 +13,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
@@ -55,7 +54,7 @@ import java.util.stream.Stream;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Trade {
     /** 레지스트리 코덱 */
-    public static final Codec<Holder<Trade>> CODEC = RegistryFixedCodec.create(VPRegistries.TRADE.getRegistryKey());
+    public static final Codec<Holder<Trade>> CODEC = VPRegistries.TRADE.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<Trade> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(OfferList.CODEC.listOf().xmap(Trade::fromListToMap, Trade::fromMapToList).fieldOf("trades")
@@ -228,7 +227,7 @@ public final class Trade {
             /** 높음 */
             HIGH(IntegerRange.of(20, 30), VPTags.Enchantments.TRADEABLE),
             /** 최고 */
-            HIGHEST(IntegerRange.of(25, 35), VPTags.Enchantments.TRADEABLE_TREASURE);
+            HIGHEST(IntegerRange.of(30, 40), VPTags.Enchantments.TRADEABLE_TREASURE);
 
             /** JSON 코덱 */
             private static final Codec<EnchantmentLevel> CODEC = CodecUtil.fromEnum(EnchantmentLevel.class);
@@ -240,41 +239,11 @@ public final class Trade {
         }
 
         /**
-         * 거래 품목의 세부 요소 유형을 관리하는 인터페이스.
-         *
-         * @param <T> {@link OfferComponentType}을 상속받는 열거형 타입
-         * @param <U> {@link OfferComponent}을 상속받는 타입
-         */
-        private interface OfferComponentType<T extends Enum<T> & OfferComponentType<T, U>, U extends OfferComponent<T, U>> {
-            /**
-             * 세부 요소의 JSON 코덱을 반환한다.
-             *
-             * @return JSON 코덱
-             */
-            @NonNull
-            MapCodec<? extends U> getCodec();
-        }
-
-        /**
-         * 거래 품목의 세부 요소를 나타내는 인터페이스.
-         *
-         * @param <T> {@link OfferComponentType}을 상속받는 열거형 타입
-         * @param <U> {@link OfferComponent}을 상속받는 타입
-         */
-        private interface OfferComponent<T extends Enum<T> & OfferComponentType<T, U>, U extends OfferComponent<T, U>> {
-            /**
-             * @return 세부 요소 유형
-             */
-            @NonNull
-            T getType();
-        }
-
-        /**
          * 거래 품목 클래스.
          */
-        private interface OfferItem extends OfferComponent<OfferItem.Types, OfferItem> {
+        private interface OfferItem extends CodecUtil.CodecComponent<OfferItem, OfferItem.Types> {
             /** JSON 코덱 */
-            Codec<OfferItem> CODEC = CodecUtil.fromEnum(Types.class).dispatch(OfferItem::getType, Types::getCodec);
+            Codec<OfferItem> CODEC = CodecUtil.fromCodecComponent(Types.class);
 
             @NonNull
             private static ItemCost getItemCost(@NonNull ItemStack itemStack) {
@@ -294,7 +263,7 @@ public final class Trade {
              */
             @AllArgsConstructor
             @Getter
-            enum Types implements OfferComponentType<Types, OfferItem> {
+            enum Types implements CodecUtil.CodecComponentType<OfferItem, Types> {
                 BUY(Buy.CODEC),
                 SELL(Sell.CODEC),
                 SELL_ENCHANTED(SellEnchanted.CODEC),
@@ -512,9 +481,9 @@ public final class Trade {
         /**
          * 거래 품목에 사용되는 아이템 생성 처리기 인터페이스.
          */
-        private interface ItemStackGenerator extends OfferComponent<ItemStackGenerator.Types, ItemStackGenerator> {
+        private interface ItemStackGenerator extends CodecUtil.CodecComponent<ItemStackGenerator, ItemStackGenerator.Types> {
             /** JSON 코덱 */
-            Codec<ItemStackGenerator> CODEC = CodecUtil.fromEnum(Types.class).dispatch(ItemStackGenerator::getType, Types::getCodec);
+            Codec<ItemStackGenerator> CODEC = CodecUtil.fromCodecComponent(Types.class);
 
             /**
              * 아이템을 생성하여 반환한다.
@@ -531,7 +500,7 @@ public final class Trade {
              */
             @AllArgsConstructor
             @Getter
-            enum Types implements OfferComponentType<Types, ItemStackGenerator> {
+            enum Types implements CodecUtil.CodecComponentType<ItemStackGenerator, Types> {
                 EMPTY(EmptyGenerator.CODEC),
                 ITEMSTACK(DirectGenerator.CODEC),
                 RANDOM(RandomGenerator.CODEC),

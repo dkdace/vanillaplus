@@ -13,7 +13,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class StructureMap {
     /** 레지스트리 코덱 */
-    public static final Codec<Holder<StructureMap>> CODEC = RegistryFixedCodec.create(VPRegistries.STRUCTURE_MAP.getRegistryKey());
+    public static final Codec<Holder<StructureMap>> CODEC = VPRegistries.STRUCTURE_MAP.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<StructureMap> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ComponentSerialization.CODEC.fieldOf("description").forGetter(structureMap -> structureMap.itemComponent),

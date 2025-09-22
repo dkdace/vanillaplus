@@ -85,7 +85,7 @@
               "price": {
                 "type": "itemstack",
                 "id": "minecraft:sweet_berries",
-                "count": 10
+                "count": 15
               }
             },
             {

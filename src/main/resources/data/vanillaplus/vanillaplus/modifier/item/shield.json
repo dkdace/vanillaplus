@@ -1,0 +1,24 @@
+{
+  "type": "item",
+  "components": {
+    "minecraft:blocks_attacks": {
+      "block_delay_seconds": 0,
+      "block_sound": {
+        "sound_id": "minecraft:item.shield.block"
+      },
+      "bypassed_by": "#minecraft:bypasses_shield",
+      "disabled_sound": {
+        "sound_id": "minecraft:item.shield.break"
+      },
+      "item_damage": {
+        "base": 1.0,
+        "factor": 1.0,
+        "threshold": 3.0
+      }
+    },
+    "minecraft:max_damage": 260,
+    "minecraft:enchantable": {
+      "value": 1
+    }
+  }
+}

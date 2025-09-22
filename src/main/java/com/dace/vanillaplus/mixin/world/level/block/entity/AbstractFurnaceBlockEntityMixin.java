@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.rebalance.Rebalance;
+import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -28,7 +28,9 @@ public abstract class AbstractFurnaceBlockEntityMixin extends BlockEntityMixin {
                 .anyMatch(enchantmentHolder -> enchantmentHolder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP)))
             return;
 
-        int damage = (int) (input.getDamageValue() + input.getMaxDamage() * Rebalance.SMELTING_TOOL_DAMAGE_RATIO);
+        GeneralModifier generalModifier = registryAccess.getOrThrow(GeneralModifier.RESOURCE_KEY).value();
+
+        int damage = (int) (input.getDamageValue() + input.getMaxDamage() * generalModifier.getSmeltingToolDamageRatio());
         if (damage >= input.getMaxDamage())
             return;
 

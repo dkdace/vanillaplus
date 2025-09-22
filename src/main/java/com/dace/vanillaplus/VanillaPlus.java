@@ -34,6 +34,12 @@ public final class VanillaPlus {
         ReflectionUtil.loadClass(VPSoundEvents.class);
     }
 
+    /**
+     * DeferredRegister 인스턴스를 등록한다.
+     *
+     * @param deferredRegister DeferredRegister 인스턴스
+     * @param <T>              레지스트리 데이터 타입
+     */
     public <T> void registerBusGroup(@NonNull DeferredRegister<T> deferredRegister) {
         deferredRegister.register(busGroup);
     }

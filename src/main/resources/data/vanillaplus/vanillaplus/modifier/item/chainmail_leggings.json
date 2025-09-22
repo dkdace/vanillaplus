@@ -1,0 +1,24 @@
+{
+  "type": "item",
+  "components": {
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 5.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 0.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      }
+    ],
+    "minecraft:enchantable": {
+      "value": 18
+    }
+  }
+}

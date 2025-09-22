@@ -1,7 +1,11 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.custom.CustomModifiableData;
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
+import lombok.NonNull;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -11,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import javax.annotation.Nullable;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class EntityMixin implements CustomModifiableData<EntityType<?>, EntityModifier> {
     @Shadow
     @Final
     protected RandomSource random;
@@ -37,4 +41,9 @@ public abstract class EntityMixin {
 
     @Shadow
     public abstract Level level();
+
+    @Override
+    public void apply(@NonNull EntityModifier modifier) {
+        // 미사용
+    }
 }

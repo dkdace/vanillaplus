@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.rebalance.trade;
 
 import com.dace.vanillaplus.VPRegistries;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -11,7 +10,7 @@ import net.minecraft.resources.ResourceKey;
  *
  * @see StructureMap
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class StructureMaps {
     /** 고대 도시 */
     public static final ResourceKey<StructureMap> ANCIENT_CITY = create("ancient_city");

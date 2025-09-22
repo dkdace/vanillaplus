@@ -17,7 +17,7 @@ public final class VPSoundEvents {
     @NonNull
     private static SoundEvent create(@NonNull String name) {
         SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
-        VPRegistries.SOUND_EVENT.getDeferredRegister().register(name, () -> soundEvent);
+        VPRegistries.SOUND_EVENT.register(name, () -> soundEvent);
 
         return soundEvent;
     }
