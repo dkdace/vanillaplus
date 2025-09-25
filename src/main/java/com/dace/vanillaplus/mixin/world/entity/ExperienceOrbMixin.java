@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
-public abstract class ExperienceOrbMixin extends EntityMixin {
+public abstract class ExperienceOrbMixin extends EntityMixin<EntityModifier.LivingEntityModifier> {
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)

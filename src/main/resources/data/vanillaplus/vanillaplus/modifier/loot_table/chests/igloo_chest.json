@@ -1,0 +1,7 @@
+{
+  "experience": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 100,
+    "min_inclusive": 80
+  }
+}

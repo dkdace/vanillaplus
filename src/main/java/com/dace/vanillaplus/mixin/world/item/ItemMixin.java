@@ -2,17 +2,20 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.custom.CustomModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.ItemModifier;
+import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.*;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements CustomModifiableData<Item, ItemModifier> {
+public abstract class ItemMixin<T extends ItemModifier> implements CustomModifiableData<Item, T> {
+    @Unique
+    @Nullable
+    @Getter
+    protected T dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -22,8 +25,10 @@ public abstract class ItemMixin implements CustomModifiableData<Item, ItemModifi
 
     @Override
     @MustBeInvokedByOverriders
-    public void apply(@NonNull ItemModifier modifier) {
-        components = DataComponentMap.builder().addAll(components).addAll(modifier.getDataComponentMap()).build();
+    public void setDataModifier(@NonNull T dataModifier) {
+        this.dataModifier = dataModifier;
+
+        components = DataComponentMap.builder().addAll(components).addAll(dataModifier.getDataComponentMap()).build();
         builtComponents = components;
     }
 }

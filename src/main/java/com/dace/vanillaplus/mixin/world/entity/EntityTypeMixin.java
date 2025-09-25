@@ -2,16 +2,19 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.custom.CustomModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
+import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.*;
 
 @Mixin(EntityType.class)
-public abstract class EntityTypeMixin<T extends Entity> implements CustomModifiableData<EntityType<?>, EntityModifier> {
+public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier> implements CustomModifiableData<EntityType<?>, U> {
+    @Unique
+    @Nullable
+    @Getter
+    protected U dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -19,13 +22,14 @@ public abstract class EntityTypeMixin<T extends Entity> implements CustomModifia
 
     @Override
     @SuppressWarnings("unchecked")
-    public void apply(@NonNull EntityModifier modifier) {
+    public void setDataModifier(@NonNull U dataModifier) {
+        this.dataModifier = dataModifier;
         EntityType.EntityFactory<T> oldFactory = factory;
 
         factory = (entityType, level) -> {
             T entity = oldFactory.create(entityType, level);
             if (entity != null)
-                ((CustomModifiableData<EntityType<?>, EntityModifier>) entity).apply(modifier);
+                ((CustomModifiableData<EntityType<?>, EntityModifier>) entity).setDataModifier(dataModifier);
 
             return entity;
         };

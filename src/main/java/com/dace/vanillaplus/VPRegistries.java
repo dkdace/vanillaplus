@@ -1,9 +1,6 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
-import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
-import com.dace.vanillaplus.rebalance.modifier.ItemModifier;
+import com.dace.vanillaplus.rebalance.modifier.*;
 import com.dace.vanillaplus.rebalance.trade.StructureMap;
 import com.dace.vanillaplus.rebalance.trade.Trade;
 import com.mojang.serialization.Codec;
@@ -42,6 +39,8 @@ public final class VPRegistries {
     public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = new VPRegistry<>("modifier/block");
     /** 엔티티 수정자 */
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
+    /** 노획물 테이블 수정자 */
+    public static final VPRegistry<LootTableModifier> LOOT_TABLE_MODIFIER = new VPRegistry<>("modifier/loot_table");
 
     /**
      * 레지스트리 정보를 관리하는 클래스.

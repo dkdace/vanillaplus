@@ -72,9 +72,11 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
      */
     @Getter
     public static final class DropExperienceModifier extends BlockModifier {
-        private static final MapCodec<DropExperienceModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
-                .and(IntProvider.CODEC.optionalFieldOf("experience", ConstantInt.of(0)).forGetter(DropExperienceModifier::getXpRange))
-                .apply(instance, DropExperienceModifier::new));
+        private static final MapCodec<DropExperienceModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", ConstantInt.of(0))
+                                .forGetter(DropExperienceModifier::getXpRange))
+                        .apply(instance, DropExperienceModifier::new));
 
         /** 드롭 경험치 범위 */
         @NonNull

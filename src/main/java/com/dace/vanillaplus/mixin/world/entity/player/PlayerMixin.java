@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.player;
 
 import com.dace.vanillaplus.custom.CustomPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntityMixin implements CustomPlayer {
+public abstract class PlayerMixin extends LivingEntityMixin<EntityModifier.LivingEntityModifier> implements CustomPlayer {
     @Shadow
     @Final
     private Abilities abilities;

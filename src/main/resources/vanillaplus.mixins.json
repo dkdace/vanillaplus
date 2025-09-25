@@ -37,21 +37,7 @@
     "world.level.block.entity.BarrelBlockEntityMixin",
     "world.level.block.entity.BlockEntityMixin",
     "world.level.block.entity.ChestBlockEntityMixin",
-    "world.level.levelgen.feature.BonusChestFeatureMixin",
-    "world.level.levelgen.feature.MonsterRoomFeatureMixin",
-    "world.level.levelgen.structure.StructurePieceMixin",
-    "world.level.levelgen.structure.structures.BuriedTreasurePieceMixin",
-    "world.level.levelgen.structure.structures.DesertPyramidPieceMixin",
-    "world.level.levelgen.structure.structures.JungleTemplePieceMixin",
-    "world.level.levelgen.structure.structures.NetherFortressPiecesMixin",
-    "world.level.levelgen.structure.structures.NetherFortressPiecesMixin$CastleSmallCorridorLeftTurnPieceMixin",
-    "world.level.levelgen.structure.structures.NetherFortressPiecesMixin$CastleSmallCorridorRightTurnPieceMixin",
-    "world.level.levelgen.structure.structures.OceanRuinPieceMixin",
-    "world.level.levelgen.structure.structures.StrongholdPiecesMixin",
-    "world.level.levelgen.structure.structures.StrongholdPiecesMixin$ChestCorridorMixin",
-    "world.level.levelgen.structure.structures.StrongholdPiecesMixin$LibraryMixin",
-    "world.level.levelgen.structure.structures.StrongholdPiecesMixin$RoomCrossingMixin",
-    "world.level.levelgen.structure.structures.WoodlandMansionPieceMixin"
+    "world.level.block.entity.RandomizableContainerBlockEntityMixin"
   ],
   "client": [
     "client.gui.screens.ScreenMixin",

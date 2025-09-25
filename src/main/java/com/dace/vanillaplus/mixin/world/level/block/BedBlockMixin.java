@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
+import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BedBlock.class)
-public abstract class BedBlockMixin extends BlockMixin {
+public abstract class BedBlockMixin extends BlockMixin<BlockModifier> {
     @Inject(method = "useWithoutItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z", ordinal = 0), cancellable = true)
     private void preventUseIfCannotUse(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,

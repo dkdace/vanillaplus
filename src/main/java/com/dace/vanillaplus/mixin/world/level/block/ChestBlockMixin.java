@@ -1,11 +1,9 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.custom.CustomChestBlockEntity;
 import com.dace.vanillaplus.custom.CustomLootContainerBlock;
-import lombok.NonNull;
+import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -28,10 +25,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin extends BlockMixin implements CustomLootContainerBlock {
+public abstract class ChestBlockMixin extends BlockMixin<BlockModifier> implements CustomLootContainerBlock {
     @Shadow
     @UnknownNullability
-    public static Direction getConnectedDirection(BlockState p_51585_) {
+    public static Direction getConnectedDirection(BlockState blockState) {
         return null;
     }
 
@@ -61,22 +58,8 @@ public abstract class ChestBlockMixin extends BlockMixin implements CustomLootCo
         popOpenXP(level.getBlockState(connectedBlockPos), level, connectedBlockPos);
     }
 
-    @Unique
-    private void popOpenXP(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos) {
-        if (!(level instanceof ServerLevel serverLevel) || !blockState.getValue(LOOT) || blockState.getValue(ALWAYS_OPEN)
-                || !(level.getBlockEntity(blockPos) instanceof CustomChestBlockEntity customChestBlockEntity))
-            return;
-
-        level.setBlockAndUpdate(blockPos, blockState.setValue(ALWAYS_OPEN, true));
-        popExperience(serverLevel, blockPos, customChestBlockEntity.getXp());
-    }
-
     @Override
     public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        if (state.getValue(LOOT) && !state.getValue(ALWAYS_OPEN)
-                && level.getBlockEntity(pos) instanceof CustomChestBlockEntity customChestBlockEntity)
-            return customChestBlockEntity.getXp();
-
-        return 0;
+        return getXp(state, level, randomSource, pos);
     }
 }

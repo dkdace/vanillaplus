@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends EntityMixin {
+public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityModifier> extends EntityMixin<T> {
     @Shadow
     protected Brain<?> brain;
     @Mutable
@@ -66,7 +66,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     @Override
     @MustBeInvokedByOverriders
-    public void apply(@NonNull EntityModifier modifier) {
-        attributes.apply(((EntityModifier.LivingEntityModifier) modifier).getPackedAttributes());
+    public void setDataModifier(@NonNull T dataModifier) {
+        attributes.apply(dataModifier.getPackedAttributes());
     }
 }

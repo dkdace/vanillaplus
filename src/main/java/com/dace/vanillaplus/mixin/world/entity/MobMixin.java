@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 
 @Mixin(Mob.class)
-public abstract class MobMixin extends LivingEntityMixin {
+public abstract class MobMixin<T extends EntityModifier.LivingEntityModifier> extends LivingEntityMixin<T> {
     @Shadow
     protected JumpControl jumpControl;
 
