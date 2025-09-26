@@ -6,22 +6,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:lantern"
+          "name": "minecraft:compass"
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:clock"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:book",
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 8,
-              "options": "#vanillaplus:tradeable"
-            }
-          ]
         }
       ],
       "rolls": 1.0

@@ -1,0 +1,386 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:rabbit",
+                "count": 6
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_rabbit",
+                "count": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:mutton",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_mutton",
+                "count": 5
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:chicken",
+                "count": 9
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_chicken",
+                "count": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:sweet_berries",
+                "count": 15
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:campfire"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:porkchop",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_porkchop",
+                "count": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:beef",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cooked_beef",
+                "count": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "type_specific",
+          "map": {
+            "minecraft:plains": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:brown_egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:blue_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:taiga": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:blue_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:snow": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:blue_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:desert": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:brown_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:jungle": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:brown_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:savanna": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:brown_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            },
+            "minecraft:swamp": {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:egg",
+                    "count": 10
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:blue_egg",
+                    "count": 10
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 1,
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "itemstack",
+                "id": "minecraft:rabbit_foot",
+                "count": 2
+              },
+              {
+                "type": "itemstack",
+                "id": "minecraft:leather",
+                "count": 5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:rabbit_stew"
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:armadillo_scute",
+                "count": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "sell",
+          "supply": "scarce",
+          "price": 8,
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "goat_horn",
+                "instrument": "minecraft:ponder_goat_horn"
+              },
+              {
+                "type": "goat_horn",
+                "instrument": "minecraft:sing_goat_horn"
+              },
+              {
+                "type": "goat_horn",
+                "instrument": "minecraft:seek_goat_horn"
+              },
+              {
+                "type": "goat_horn",
+                "instrument": "minecraft:feel_goat_horn"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

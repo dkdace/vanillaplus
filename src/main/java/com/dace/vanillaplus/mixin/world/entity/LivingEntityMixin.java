@@ -1,17 +1,23 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.level.ClipContext;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,9 +26,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends EntityMixin {
+public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityModifier> extends EntityMixin<T> {
     @Shadow
     protected Brain<?> brain;
+    @Mutable
+    @Shadow
+    @Final
+    private AttributeMap attributes;
 
     @Shadow
     public abstract void stopRiding();
@@ -52,5 +62,11 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Inject(method = "checkTotemDeathProtection", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
     protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, @Local ItemStack itemStack) {
         // 미사용
+    }
+
+    @Override
+    @MustBeInvokedByOverriders
+    public void setDataModifier(@NonNull T dataModifier) {
+        attributes.apply(dataModifier.getPackedAttributes());
     }
 }

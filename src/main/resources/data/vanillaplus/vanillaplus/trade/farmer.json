@@ -1,0 +1,267 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:wheat",
+                "count": 12
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:cookie",
+                "count": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:beetroot",
+                "count": 10
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:bread",
+                "count": 6
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:potato",
+                "count": 17
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:mushroom_stew"
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:carrot",
+                "count": 15
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:beetroot_soup"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:pumpkin",
+                "count": 4
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:baked_potato",
+                "count": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "buy",
+              "price": {
+                "type": "itemstack",
+                "id": "minecraft:melon",
+                "count": 3
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:apple",
+                "count": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 1,
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "itemstack",
+                "id": "minecraft:cake"
+              },
+              {
+                "type": "itemstack",
+                "id": "minecraft:pumpkin_pie",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 1,
+          "product": {
+            "type": "suspicious_stew",
+            "effects": [
+              {
+                "id": "minecraft:saturation",
+                "duration": 7
+              },
+              {
+                "id": "minecraft:night_vision",
+                "duration": 600
+              },
+              {
+                "id": "minecraft:jump_boost",
+                "duration": 600
+              },
+              {
+                "id": "minecraft:regeneration",
+                "duration": 300
+              },
+              {
+                "id": "minecraft:fire_resistance",
+                "duration": 300
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "sell",
+          "supply": "moderate",
+          "price": 2,
+          "product": {
+            "type": "random",
+            "items": [
+              {
+                "type": "itemstack",
+                "id": "minecraft:glistering_melon_slice",
+                "count": 5
+              },
+              {
+                "type": "itemstack",
+                "id": "minecraft:golden_carrot",
+                "count": 5
+              }
+            ]
+          }
+        },
+        {
+          "type": "random",
+          "offers": [
+            {
+              "type": "sell",
+              "supply": "moderate",
+              "price": 5,
+              "product": {
+                "type": "itemstack",
+                "id": "minecraft:golden_apple"
+              }
+            },
+            {
+              "type": "sell",
+              "supply": "scarce",
+              "price": 12,
+              "price_multiplier": "high",
+              "product": {
+                "type": "random",
+                "items": [
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:torchflower_seeds"
+                  },
+                  {
+                    "type": "itemstack",
+                    "id": "minecraft:pitcher_pod"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

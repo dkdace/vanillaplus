@@ -22,7 +22,7 @@ public final class VPTags {
     }
 
     @NonNull
-    private static <T> TagKey<T> create(@NonNull ResourceKey<@NonNull Registry<T>> registry, @NonNull String name) {
+    private static <T> TagKey<T> create(@NonNull ResourceKey<Registry<T>> registry, @NonNull String name) {
         return TagKey.create(registry, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
     }
 
@@ -31,11 +31,11 @@ public final class VPTags {
      */
     @UtilityClass
     public static final class Enchantments {
-        public static final TagKey<Enchantment> AXE_TOOL = create(Registries.ENCHANTMENT, "axe_tool");
-        public static final TagKey<Enchantment> AXE_WEAPON = create(Registries.ENCHANTMENT, "axe_weapon");
         public static final TagKey<Enchantment> DURABILITY = create(Registries.ENCHANTMENT, "durability");
+        public static final TagKey<Enchantment> TOOL = create(Registries.ENCHANTMENT, "tool");
         public static final TagKey<Enchantment> TRADEABLE = create(Registries.ENCHANTMENT, "tradeable");
         public static final TagKey<Enchantment> TRADEABLE_TREASURE = create(Registries.ENCHANTMENT, "tradeable_treasure");
+        public static final TagKey<Enchantment> WEAPON = create(Registries.ENCHANTMENT, "weapon");
     }
 
     /**

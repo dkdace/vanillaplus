@@ -1,0 +1,8 @@
+{
+  "type": "item",
+  "components": {
+    "minecraft:enchantable": {
+      "value": 1
+    }
+  }
+}

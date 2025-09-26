@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.explorer_desert"
+  },
+  "structure_tag": "#vanillaplus:on_desert_explorer_maps",
+  "color": 10719049,
+  "decoration_type": "minecraft:target_point"
+}

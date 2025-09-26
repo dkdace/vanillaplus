@@ -1,28 +1,30 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.rebalance.Rebalance;
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
+import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
-public abstract class ExperienceOrbMixin {
-    @Inject(method = "repairPlayerItems", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;modifyDurabilityToRepairFromXp(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;I)I"),
-            cancellable = true)
-    private void preventRepair(ServerPlayer player, int amount, CallbackInfoReturnable<Integer> cir, @Local ItemStack itemStack) {
-        if (itemStack.getDamageValue() <= itemStack.getMaxDamage() * Rebalance.MENDING_REPAIR_LIMIT)
-            cir.setReturnValue(amount);
+public abstract class ExperienceOrbMixin extends EntityMixin<EntityModifier.LivingEntityModifier> {
+    @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
+            index = 2)
+    private Predicate<ItemStack> preventRepair(Predicate<ItemStack> predicate) {
+        GeneralModifier generalModifier = level().registryAccess().getOrThrow(GeneralModifier.RESOURCE_KEY).value();
+        return predicate.and(itemStack ->
+                itemStack.getMaxDamage() - itemStack.getDamageValue() < itemStack.getMaxDamage() * generalModifier.getMendingRepairLimit());
     }
 
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V"))
     private int modifyRepairAmount(int damageValue, @Local ItemStack itemStack) {
-        return (int) Math.max(damageValue, itemStack.getMaxDamage() * Rebalance.MENDING_REPAIR_LIMIT);
+        GeneralModifier generalModifier = level().registryAccess().getOrThrow(GeneralModifier.RESOURCE_KEY).value();
+        return (int) Math.max(damageValue, itemStack.getMaxDamage() - itemStack.getMaxDamage() * generalModifier.getMendingRepairLimit());
     }
 }

@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ZombifiedPiglin.class)
-public abstract class ZombifiedPiglinMixin extends MobMixin {
+public abstract class ZombifiedPiglinMixin extends MobMixin<EntityModifier.LivingEntityModifier> {
     @Shadow
     public abstract void setTarget(@Nullable LivingEntity target);
 

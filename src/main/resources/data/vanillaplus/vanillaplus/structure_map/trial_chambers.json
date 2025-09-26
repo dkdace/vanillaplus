@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.trial_chambers"
+  },
+  "structure_tag": "#minecraft:on_trial_chambers_maps",
+  "color": 12870424,
+  "decoration_type": "minecraft:trial_chambers"
+}

@@ -2,14 +2,16 @@ package com.dace.vanillaplus.mixin.world.entity.player;
 
 import com.dace.vanillaplus.custom.CustomPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.rebalance.Rebalance;
+import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.UseCooldown;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntityMixin implements CustomPlayer {
+public abstract class PlayerMixin extends LivingEntityMixin<EntityModifier.LivingEntityModifier> implements CustomPlayer {
     @Shadow
     @Final
     private Abilities abilities;
@@ -45,6 +47,8 @@ public abstract class PlayerMixin extends LivingEntityMixin implements CustomPla
 
     @Override
     protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, ItemStack itemStack) {
-        cooldowns.addCooldown(itemStack, Rebalance.Totem.COOLDOWN_SECONDS * 20);
+        UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
+        if (useCooldown != null)
+            useCooldown.apply(itemStack, (Player) (Object) this);
     }
 }

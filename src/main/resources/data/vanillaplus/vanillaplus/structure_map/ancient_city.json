@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.ancient_city"
+  },
+  "structure_tag": "#vanillaplus:ancient_city",
+  "color": 2629473,
+  "decoration_type": "minecraft:target_point"
+}

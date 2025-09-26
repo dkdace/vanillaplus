@@ -1,0 +1,13 @@
+{
+  "type": "living_entity",
+  "attributes": [
+    {
+      "id": "minecraft:attack_damage",
+      "base": 6
+    },
+    {
+      "id": "minecraft:movement_speed",
+      "base": 0.5
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.explorer_swamp"
+  },
+  "structure_tag": "#minecraft:on_swamp_explorer_maps",
+  "color": 2646823,
+  "decoration_type": "minecraft:swamp_hut"
+}

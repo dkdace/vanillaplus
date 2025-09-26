@@ -1,0 +1,8 @@
+{
+  "type": "drop_experience",
+  "experience": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 3,
+    "min_inclusive": 1
+  }
+}

@@ -6,14 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:chainmail_helmet",
+          "name": "minecraft:iron_helmet",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.8,
-                "max": 1
+                "min": 0.6,
+                "max": 0.9
               },
               "add": false
             }
@@ -21,14 +21,14 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:chainmail_chestplate",
+          "name": "minecraft:iron_chestplate",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.8,
-                "max": 1
+                "min": 0.6,
+                "max": 0.9
               },
               "add": false
             }
@@ -36,14 +36,14 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:chainmail_leggings",
+          "name": "minecraft:iron_leggings",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.8,
-                "max": 1
+                "min": 0.6,
+                "max": 0.9
               },
               "add": false
             }
@@ -51,14 +51,14 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:chainmail_boots",
+          "name": "minecraft:iron_boots",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.8,
-                "max": 1
+                "min": 0.6,
+                "max": 0.9
               },
               "add": false
             }
