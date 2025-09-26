@@ -30,6 +30,7 @@ public final class LootTableModifier implements DataModifier<ResourceKey<LootTab
             .apply(instance, LootTableModifier::new));
 
     /** 경험치 획득량 범위 */
+    @NonNull
     private final IntProvider xpRange;
 
     @SubscribeEvent

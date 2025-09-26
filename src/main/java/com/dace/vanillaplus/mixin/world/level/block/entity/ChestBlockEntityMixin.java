@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.custom.CustomChestBlockEntity;
-import com.dace.vanillaplus.custom.CustomLootContainerBlock;
+import com.dace.vanillaplus.extension.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.VPChestBlockEntity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -17,20 +17,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChestBlockEntity.class)
-public abstract class ChestBlockEntityMixin extends RandomizableContainerBlockEntityMixin implements CustomChestBlockEntity {
+public abstract class ChestBlockEntityMixin extends RandomizableContainerBlockEntityMixin implements VPChestBlockEntity {
     @Shadow
     @Final
     private ChestLidController chestLidController;
 
     @Inject(method = "lidAnimateTick", at = @At("HEAD"))
     private static void openIfAlwaysOpen(Level level, BlockPos blockPos, BlockState blockState, ChestBlockEntity chestBlockEntity, CallbackInfo ci) {
-        if (blockState.getValue(CustomLootContainerBlock.ALWAYS_OPEN))
-            ((CustomChestBlockEntity) chestBlockEntity).openLid();
+        if (blockState.getValue(VPLootContainerBlock.ALWAYS_OPEN))
+            VPChestBlockEntity.openLid(chestBlockEntity);
     }
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))
     private Component modifyDefaultName(Component component) {
-        return getBlockState().getValue(CustomLootContainerBlock.LOOT) ? Component.translatable("container.chestLoot") : component;
+        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? Component.translatable("container.chestLoot") : component;
     }
 
     @Override

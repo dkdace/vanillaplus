@@ -2,7 +2,7 @@ package com.dace.vanillaplus.rebalance.modifier;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.custom.CustomModifiableData;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.DefaultedRegistry;
@@ -35,13 +35,12 @@ public final class DataModifiers {
         create(VPRegistries.ENTITY_MODIFIER, BuiltInRegistries.ENTITY_TYPE);
     }
 
-    @SuppressWarnings("unchecked")
     private static <T, U extends DataModifier<T>> void create(@NonNull VPRegistries.VPRegistry<U> vpRegistry, @NonNull DefaultedRegistry<T> registry) {
         TASKS.add(registryAccess -> registry.forEach(element -> {
             ResourceKey<U> dataModifierResourceKey = vpRegistry.createResourceKey(registry.getKey(element).getPath());
 
             registryAccess.get(dataModifierResourceKey).ifPresent(reference ->
-                    ((CustomModifiableData<T, U>) element).setDataModifier(reference.value()));
+                    VPModifiableData.setDataModifier(element, reference.value()));
         }));
     }
 

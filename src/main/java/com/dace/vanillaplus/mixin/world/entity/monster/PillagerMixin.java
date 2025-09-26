@@ -16,6 +16,6 @@ public abstract class PillagerMixin extends MobMixin<EntityModifier.CrossbowAtta
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"), index = 1)
     private float modifyBulletSpeed(float speed, @Local(argsOnly = true) LivingEntity entity) {
-        return Objects.requireNonNull(dataModifier).getShootingPower();
+        return Objects.requireNonNull(getDataModifier()).getShootingPower();
     }
 }

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.custom.CustomModifiableData;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.ItemModifier;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(Item.class)
-public abstract class ItemMixin<T extends ItemModifier> implements CustomModifiableData<Item, T> {
+public abstract class ItemMixin<T extends ItemModifier> implements VPModifiableData<Item, T> {
     @Unique
     @Nullable
     @Getter

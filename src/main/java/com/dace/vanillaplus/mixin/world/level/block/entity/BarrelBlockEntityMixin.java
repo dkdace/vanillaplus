@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.custom.CustomLootContainerBlock;
+import com.dace.vanillaplus.extension.VPLootContainerBlock;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
@@ -14,12 +14,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockEntityMixin {
     @Inject(method = "updateBlockState", at = @At("HEAD"), cancellable = true)
     private void cancelCloseIfAlwaysOpen(BlockState blockState, boolean isOpen, CallbackInfo ci) {
-        if (!isOpen && blockState.getValue(CustomLootContainerBlock.ALWAYS_OPEN))
+        if (!isOpen && blockState.getValue(VPLootContainerBlock.ALWAYS_OPEN))
             ci.cancel();
     }
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))
     private Component modifyDefaultName(Component component) {
-        return getBlockState().getValue(CustomLootContainerBlock.LOOT) ? Component.translatable("container.barrelLoot") : component;
+        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? Component.translatable("container.barrelLoot") : component;
     }
 }

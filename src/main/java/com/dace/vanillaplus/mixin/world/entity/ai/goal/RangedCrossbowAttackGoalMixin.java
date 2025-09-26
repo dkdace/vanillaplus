@@ -1,12 +1,11 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
-import com.dace.vanillaplus.custom.CustomModifiableData;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.Monster;
@@ -21,9 +20,8 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Definition(id = "p_25816_", local = @Local(type = float.class, argsOnly = true))
     @Expression("p_25816_")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
-    @SuppressWarnings("unchecked")
     private float modifyAttackRange(float original, @Local(argsOnly = true) T monster) {
-        return Objects.requireNonNull(((CustomModifiableData<EntityType<?>, EntityModifier.CrossbowAttackMobModifier>) monster).getDataModifier())
+        return Objects.requireNonNull((EntityModifier.CrossbowAttackMobModifier) VPModifiableData.getDataModifier(monster.getType()))
                 .getShootingRange();
     }
 }

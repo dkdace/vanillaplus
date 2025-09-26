@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.behavior;
 
-import com.dace.vanillaplus.custom.CustomModifiableData;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -17,12 +16,10 @@ import java.util.Objects;
 @Mixin(BehaviorUtils.class)
 public abstract class BehaviorUtilsMixin {
     @Redirect(method = "isWithinAttackRange", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getDefaultProjectileRange()I"))
-    @SuppressWarnings("unchecked")
     private static int modifyAttackRange(ProjectileWeaponItem instance, @Local(argsOnly = true) Mob mob) {
         if (!(mob instanceof CrossbowAttackMob))
             return instance.getDefaultProjectileRange();
 
-        return Objects.requireNonNull(((CustomModifiableData<EntityType<?>, EntityModifier.CrossbowAttackMobModifier>) mob).getDataModifier())
-                .getShootingRange();
+        return Objects.requireNonNull((EntityModifier.CrossbowAttackMobModifier) VPModifiableData.getDataModifier(mob.getType())).getShootingRange();
     }
 }

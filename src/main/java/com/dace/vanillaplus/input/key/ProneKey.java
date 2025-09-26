@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.input.key;
 
-import com.dace.vanillaplus.custom.CustomPlayer;
+import com.dace.vanillaplus.extension.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public final class ProneKey extends ToggleKeyMapping {
         if (player == null || minecraft.getConnection() == null)
             return;
 
-        ((CustomPlayer) player).setProneKeyDown(isDown);
+        VPPlayer.setProneKeyDown(player, isDown);
         NetworkManager.sendToServer(new PronePacketHandler(isDown));
     }
 }

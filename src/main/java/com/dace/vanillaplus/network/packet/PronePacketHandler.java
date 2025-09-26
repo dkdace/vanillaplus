@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.network.packet;
 
-import com.dace.vanillaplus.custom.CustomPlayer;
+import com.dace.vanillaplus.extension.VPPlayer;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,6 +30,6 @@ public final class PronePacketHandler implements PacketHandler {
         if (player == null)
             return;
 
-        ((CustomPlayer) player).setProneKeyDown(isPressed);
+        VPPlayer.setProneKeyDown(player, isPressed);
     }
 }

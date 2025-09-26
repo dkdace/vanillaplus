@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.custom.CustomLootContainerBlock;
+import com.dace.vanillaplus.extension.VPLootContainerBlock;
 import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin extends BlockMixin<BlockModifier> implements CustomLootContainerBlock {
+public abstract class ChestBlockMixin extends BlockMixin<BlockModifier> implements VPLootContainerBlock {
     @Shadow
     @UnknownNullability
     public static Direction getConnectedDirection(BlockState blockState) {

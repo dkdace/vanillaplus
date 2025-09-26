@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.custom.CustomLootContainerBlock;
+import com.dace.vanillaplus.extension.VPLootContainerBlock;
 import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BarrelBlock.class)
-public abstract class BarrelBlockMixin extends BlockMixin<BlockModifier> implements CustomLootContainerBlock {
+public abstract class BarrelBlockMixin extends BlockMixin<BlockModifier> implements VPLootContainerBlock {
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/BarrelBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private BlockState modifyBlockState(BlockState blockState) {

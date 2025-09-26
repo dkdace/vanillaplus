@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.VPRegistries;
-import com.dace.vanillaplus.custom.CustomLootContainerBlock;
-import com.dace.vanillaplus.custom.CustomRandomizableContainerBlockEntity;
+import com.dace.vanillaplus.extension.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.VPRandomizableContainerBlockEntity;
 import com.dace.vanillaplus.rebalance.modifier.LootTableModifier;
 import lombok.Getter;
 import net.minecraft.core.Holder;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(RandomizableContainerBlockEntity.class)
-public abstract class RandomizableContainerBlockEntityMixin extends BlockEntityMixin implements CustomRandomizableContainerBlockEntity {
+public abstract class RandomizableContainerBlockEntityMixin extends BlockEntityMixin implements VPRandomizableContainerBlockEntity {
     @Unique
     @Nullable
     @Getter
@@ -46,7 +46,7 @@ public abstract class RandomizableContainerBlockEntityMixin extends BlockEntityM
             return;
 
         lootTableModifier = reference.value();
-        if (getBlockState().hasProperty(CustomLootContainerBlock.LOOT))
-            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(CustomLootContainerBlock.LOOT, true));
+        if (getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
     }
 }
