@@ -9,6 +9,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +48,12 @@ public final class DataModifiers {
     @SubscribeEvent
     private static void onServerAboutToStart(@NonNull ServerAboutToStartEvent event) {
         RegistryAccess registryAccess = event.getServer().registryAccess();
+        TASKS.forEach(v -> v.accept(registryAccess));
+    }
+
+    @SubscribeEvent
+    private static void onClientPlayerNetworkLoggingIn(@NonNull ClientPlayerNetworkEvent.LoggingIn event) {
+        RegistryAccess registryAccess = event.getPlayer().registryAccess();
         TASKS.forEach(v -> v.accept(registryAccess));
     }
 }
