@@ -27,6 +27,7 @@
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
     "world.item.component.OminousBottleAmplifierMixin",
+    "world.item.enchantment.ItemEnchantmentsMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BedBlockMixin",
     "world.level.block.BlockMixin",

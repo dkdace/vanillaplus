@@ -1,5 +1,6 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.rebalance.enchantment.VPEnchantmentLevelBasedValueTypes;
 import com.dace.vanillaplus.sound.VPSoundEvents;
 import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
@@ -32,6 +33,7 @@ public final class VanillaPlus {
         ReflectionUtil.loadClass(VPRegistries.class);
         ReflectionUtil.loadClass(VPTags.class);
         ReflectionUtil.loadClass(VPSoundEvents.class);
+        ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
     }
 
     /**

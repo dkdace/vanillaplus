@@ -1,7 +1,7 @@
 {
-  "anvil_cost": 2,
+  "anvil_cost": 1,
   "description": {
-    "translate": "enchantment.minecraft.smite"
+    "translate": "enchantment.minecraft.power"
   },
   "effects": {
     "minecraft:damage": [
@@ -10,33 +10,32 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:smite",
+            "value": "vanillaplus:power",
             "name": "damage"
           }
         },
         "requirements": {
           "condition": "minecraft:entity_properties",
-          "entity": "this",
+          "entity": "direct_attacker",
           "predicate": {
-            "type": "#minecraft:sensitive_to_smite"
+            "type": "#minecraft:arrows"
           }
         }
       }
     ]
   },
-  "exclusive_set": "#minecraft:exclusive_set/damage",
   "max_cost": {
-    "base": 25,
-    "per_level_above_first": 8
+    "base": 16,
+    "per_level_above_first": 10
   },
   "max_level": 5,
   "min_cost": {
-    "base": 5,
-    "per_level_above_first": 8
+    "base": 1,
+    "per_level_above_first": 10
   },
   "slots": [
     "mainhand"
   ],
-  "supported_items": "#minecraft:enchantable/sharp_weapon",
-  "weight": 5
+  "supported_items": "#minecraft:enchantable/bow",
+  "weight": 10
 }

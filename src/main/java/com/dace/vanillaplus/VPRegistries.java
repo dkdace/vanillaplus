@@ -1,9 +1,11 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.rebalance.enchantment.EnchantmentValuePreset;
 import com.dace.vanillaplus.rebalance.modifier.*;
 import com.dace.vanillaplus.rebalance.trade.StructureMap;
 import com.dace.vanillaplus.rebalance.trade.Trade;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -14,6 +16,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
@@ -27,10 +30,15 @@ import java.util.function.Supplier;
 public final class VPRegistries {
     /** 효과음 이벤트 */
     public static final VPRegistry<SoundEvent> SOUND_EVENT = new VPRegistry<>(Registries.SOUND_EVENT);
+    /** 마법 부여의 레벨 기반 값 타입 */
+    public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
+
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
+    /** 마법 부여 수치 프리셋 */
+    public static final VPRegistry<EnchantmentValuePreset> ENCHANTMENT_VALUE_PRESET = new VPRegistry<>("enchantment_value_preset");
     /** 전역 수정자 */
     public static final VPRegistry<GeneralModifier> MODIFIER = new VPRegistry<>("modifier");
     /** 아이템 수정자 */

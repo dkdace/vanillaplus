@@ -1,24 +1,17 @@
 {
   "anvil_cost": 2,
   "description": {
-    "translate": "enchantment.minecraft.smite"
+    "translate": "enchantment.minecraft.density"
   },
   "effects": {
-    "minecraft:damage": [
+    "minecraft:smash_damage_per_fallen_block": [
       {
         "effect": {
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:smite",
-            "name": "damage"
-          }
-        },
-        "requirements": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "type": "#minecraft:sensitive_to_smite"
+            "value": "vanillaplus:density",
+            "name": "damage_increment"
           }
         }
       }
@@ -37,6 +30,6 @@
   "slots": [
     "mainhand"
   ],
-  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "supported_items": "#minecraft:enchantable/mace",
   "weight": 5
 }
