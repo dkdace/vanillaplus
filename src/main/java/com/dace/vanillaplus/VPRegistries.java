@@ -16,6 +16,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -30,6 +31,8 @@ import java.util.function.Supplier;
 public final class VPRegistries {
     /** 효과음 이벤트 */
     public static final VPRegistry<SoundEvent> SOUND_EVENT = new VPRegistry<>(Registries.SOUND_EVENT);
+    /** 엔티티 속성 */
+    public static final VPRegistry<Attribute> ATTRIBUTE = new VPRegistry<>(Registries.ATTRIBUTE);
     /** 마법 부여의 레벨 기반 값 타입 */
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
 

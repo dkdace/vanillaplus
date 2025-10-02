@@ -33,6 +33,7 @@ public final class VanillaPlus {
         ReflectionUtil.loadClass(VPRegistries.class);
         ReflectionUtil.loadClass(VPTags.class);
         ReflectionUtil.loadClass(VPSoundEvents.class);
+        ReflectionUtil.loadClass(VPAttributes.class);
         ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
     }
 

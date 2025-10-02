@@ -1,4 +1,6 @@
 {
+  "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
+  "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "block.minecraft.bed.no_use": "You cannot sleep here",
   "container.barrelLoot": "Loot Barrel",
   "container.chestLoot": "Loot Chest",

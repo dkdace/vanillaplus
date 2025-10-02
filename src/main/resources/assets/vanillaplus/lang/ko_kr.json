@@ -1,4 +1,6 @@
 {
+  "attribute.name.generic.projectile_knockback_resistance": "발사체 밀치기 저항",
+  "attribute.name.projectile_knockback_resistance": "발사체 밀치기 저항",
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
   "container.barrelLoot": "전리품 통",
   "container.chestLoot": "전리품 상자",

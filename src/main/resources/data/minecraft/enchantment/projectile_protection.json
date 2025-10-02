@@ -4,6 +4,18 @@
     "translate": "enchantment.minecraft.projectile_protection"
   },
   "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.12,
+          "per_level_above_first": 0.12
+        },
+        "attribute": "vanillaplus:projectile_knockback_resistance",
+        "id": "minecraft:enchantment.projectile_protection",
+        "operation": "add_value"
+      }
+    ],
     "minecraft:damage_protection": [
       {
         "effect": {

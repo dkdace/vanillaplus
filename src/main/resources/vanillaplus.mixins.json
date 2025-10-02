@@ -20,6 +20,7 @@
     "world.entity.npc.VillagerDataMixin",
     "world.entity.npc.VillagerMixin",
     "world.entity.player.PlayerMixin",
+    "world.entity.projectile.AbstractArrowMixin",
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.inventory.AnvilMenuMixin",
     "world.item.CreativeModeTabsMixin",
