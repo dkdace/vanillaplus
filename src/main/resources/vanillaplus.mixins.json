@@ -26,6 +26,7 @@
     "world.item.CrossbowItemMixin",
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
+    "world.item.ItemStackMixin",
     "world.item.component.OminousBottleAmplifierMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
     "world.level.block.BarrelBlockMixin",
