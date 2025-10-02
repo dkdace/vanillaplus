@@ -69,14 +69,9 @@
             ]
           },
           "radius": {
-            "type": "minecraft:clamped",
-            "max": 16.0,
-            "min": 0.0,
-            "value": {
-              "type": "vanillaplus:preset",
-              "value": "vanillaplus:frost_walker",
-              "name": "radius"
-            }
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:frost_walker",
+            "name": "radius"
           },
           "trigger_game_event": "minecraft:block_place"
         },
