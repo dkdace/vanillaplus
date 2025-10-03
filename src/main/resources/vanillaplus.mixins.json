@@ -40,7 +40,9 @@
     "world.level.block.entity.BarrelBlockEntityMixin",
     "world.level.block.entity.BlockEntityMixin",
     "world.level.block.entity.ChestBlockEntityMixin",
-    "world.level.block.entity.RandomizableContainerBlockEntityMixin"
+    "world.level.block.entity.RandomizableContainerBlockEntityMixin",
+    "world.level.storage.loot.functions.ApplyBonusCountMixin",
+    "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin"
   ],
   "client": [
     "client.gui.screens.ScreenMixin",
