@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
@@ -35,6 +36,8 @@ public final class VPRegistries {
     public static final VPRegistry<Attribute> ATTRIBUTE = new VPRegistry<>(Registries.ATTRIBUTE);
     /** 마법 부여의 레벨 기반 값 타입 */
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
+    /** 데이터 요소 타입 */
+    public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(Registries.DATA_COMPONENT_TYPE);
 
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");

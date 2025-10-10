@@ -43,6 +43,7 @@
   "filled_map.mineshaft": "Mineshaft Explorer Map",
   "filled_map.pillager_outpost": "Pillager Outpost Explorer Map",
   "item.minecraft.recovery_compass.teleport_not_valid": "Your last death location was invalid or in different dimension",
+  "item.repairLimit": "Repair Limit : %s / %s",
   "key.prone": "Prone",
   "merchant.closed": "Villager closed the store. Please come back later.",
   "merchant.out_of_stock": "Currently out of stock. Please come back later.",
