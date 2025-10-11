@@ -1,10 +1,13 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.extension.VPItemStack;
 import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
-import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -16,15 +19,33 @@ public abstract class ExperienceOrbMixin extends EntityMixin<EntityModifier.Livi
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)
-    private Predicate<ItemStack> preventRepair(Predicate<ItemStack> predicate) {
-        GeneralModifier generalModifier = level().registryAccess().getOrThrow(GeneralModifier.RESOURCE_KEY).value();
-        return predicate.and(itemStack ->
-                itemStack.getMaxDamage() - itemStack.getDamageValue() < itemStack.getMaxDamage() * generalModifier.getMendingRepairLimit());
+    private Predicate<ItemStack> preventRepair(Predicate<ItemStack> predicate, @Local(argsOnly = true) ServerPlayer serverPlayer) {
+        return predicate.and(itemStack -> {
+            if (serverPlayer.hasInfiniteMaterials() || VPItemStack.getRepairLimit(itemStack) < VPItemStack.getMaxRepairLimit(itemStack))
+                return true;
+
+            return serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
+                if (targetItemStack.is(Items.LAPIS_LAZULI)) {
+                    targetItemStack.shrink(1);
+                    VPItemStack.setRepairLimit(itemStack, 0);
+
+                    return true;
+                }
+
+                return false;
+            });
+        });
     }
 
-    @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V"))
-    private int modifyRepairAmount(int damageValue, @Local ItemStack itemStack) {
-        GeneralModifier generalModifier = level().registryAccess().getOrThrow(GeneralModifier.RESOURCE_KEY).value();
-        return (int) Math.max(damageValue, itemStack.getMaxDamage() - itemStack.getMaxDamage() * generalModifier.getMendingRepairLimit());
+    @ModifyExpressionValue(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
+    private int modifyRepairValue(int original, @Local(argsOnly = true) ServerPlayer serverPlayer, @Local ItemStack itemStack) {
+        if (serverPlayer.hasInfiniteMaterials())
+            return original;
+
+        int repairLimit = VPItemStack.getRepairLimit(itemStack);
+        int finalValue = Math.min(original, VPItemStack.getMaxRepairLimit(itemStack) - repairLimit);
+        VPItemStack.setRepairLimit(itemStack, repairLimit + finalValue);
+
+        return finalValue;
     }
 }

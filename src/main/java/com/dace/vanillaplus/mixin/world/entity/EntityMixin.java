@@ -17,6 +17,8 @@ import javax.annotation.Nullable;
 @Mixin(Entity.class)
 public abstract class EntityMixin<T extends EntityModifier> implements VPModifiableData<EntityType<?>, T> {
     @Shadow
+    public boolean hasImpulse;
+    @Shadow
     @Final
     protected RandomSource random;
 
@@ -44,6 +46,12 @@ public abstract class EntityMixin<T extends EntityModifier> implements VPModifia
 
     @Shadow
     public abstract EntityType<?> getType();
+
+    @Shadow
+    public abstract Vec3 getDeltaMovement();
+
+    @Shadow
+    public abstract void setDeltaMovement(double x, double y, double z);
 
     @Override
     @Nullable

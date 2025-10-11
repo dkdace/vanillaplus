@@ -9,9 +9,9 @@
         "effect": {
           "type": "minecraft:add",
           "value": {
-            "type": "minecraft:linear",
-            "base": 2.5,
-            "per_level_above_first": 2.5
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:bane_of_arthropods",
+            "name": "damage"
           }
         },
         "requirements": {
@@ -30,12 +30,16 @@
           "type": "minecraft:apply_mob_effect",
           "max_amplifier": 3.0,
           "max_duration": {
-            "type": "minecraft:linear",
-            "base": 1.5,
-            "per_level_above_first": 0.5
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:bane_of_arthropods",
+            "name": "slowness_duration"
           },
           "min_amplifier": 3.0,
-          "min_duration": 1.5,
+          "min_duration": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:bane_of_arthropods",
+            "name": "slowness_duration"
+          },
           "to_apply": "minecraft:slowness"
         },
         "enchanted": "attacker",

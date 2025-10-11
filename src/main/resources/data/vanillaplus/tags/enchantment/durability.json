@@ -1,7 +1,5 @@
 {
   "values": [
-    "minecraft:binding_curse",
-    "minecraft:vanishing_curse",
     "minecraft:mending",
     "minecraft:unbreaking"
   ]
