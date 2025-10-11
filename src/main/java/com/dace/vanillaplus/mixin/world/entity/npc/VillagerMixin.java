@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.npc;
 
+import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.rebalance.trade.Trade;
 import com.dace.vanillaplus.rebalance.trade.Trades;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -56,7 +57,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
         if (tradeResourceKey == null)
             return;
 
-        VillagerTrades.ItemListing[] itemListings = level().registryAccess().getOrThrow(tradeResourceKey).value().getOfferInfo(level).toItemListings();
+        VillagerTrades.ItemListing[] itemListings = VPRegistries.getValueOrThrow(tradeResourceKey).getOfferInfo(level).toItemListings();
         MerchantOffers offers = getOffers();
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {

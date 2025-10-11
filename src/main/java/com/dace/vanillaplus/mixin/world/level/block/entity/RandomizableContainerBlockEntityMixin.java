@@ -5,7 +5,6 @@ import com.dace.vanillaplus.extension.VPLootContainerBlock;
 import com.dace.vanillaplus.extension.VPRandomizableContainerBlockEntity;
 import com.dace.vanillaplus.rebalance.modifier.LootTableModifier;
 import lombok.Getter;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -41,12 +40,9 @@ public abstract class RandomizableContainerBlockEntityMixin extends BlockEntityM
         if (lootTableModifierResourceKey == null)
             return;
 
-        Holder.Reference<LootTableModifier> reference = level.registryAccess().get(lootTableModifierResourceKey).orElse(null);
-        if (reference == null)
-            return;
+        lootTableModifier = VPRegistries.getValue(lootTableModifierResourceKey);
 
-        lootTableModifier = reference.value();
-        if (getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+        if (lootTableModifier != null && getBlockState().hasProperty(VPLootContainerBlock.LOOT))
             level.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
     }
 }

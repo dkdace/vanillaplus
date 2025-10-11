@@ -1,8 +1,5 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.rebalance.enchantment.VPEnchantmentLevelBasedValueTypes;
-import com.dace.vanillaplus.sound.VPSoundEvents;
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import lombok.Getter;
 import lombok.NonNull;
@@ -24,18 +21,11 @@ public final class VanillaPlus {
     private static VanillaPlus instance;
     private final BusGroup busGroup;
 
-    public VanillaPlus(FMLJavaModLoadingContext context) {
-        LOGGER.debug("Hello, World!");
+    public VanillaPlus(@NonNull FMLJavaModLoadingContext context) {
+        LOGGER.debug("VanillaPlus Loaded");
 
         instance = this;
         busGroup = context.getModBusGroup();
-
-        ReflectionUtil.loadClass(VPRegistries.class);
-        ReflectionUtil.loadClass(VPTags.class);
-        ReflectionUtil.loadClass(VPSoundEvents.class);
-        ReflectionUtil.loadClass(VPAttributes.class);
-        ReflectionUtil.loadClass(VPDataComponentTypes.class);
-        ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
     }
 
     /**

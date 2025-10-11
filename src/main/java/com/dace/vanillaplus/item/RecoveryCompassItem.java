@@ -40,7 +40,8 @@ public final class RecoveryCompassItem extends Item {
      * @param pos         위치
      */
     private static void playUseEffects(@NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
-        serverLevel.playSound(null, pos.x, pos.y, pos.z, VPSoundEvents.RECOVERY_COMPASS_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
+        serverLevel.playSound(null, pos.x, pos.y, pos.z, VPSoundEvents.RECOVERY_COMPASS_TELEPORT.get(), SoundSource.PLAYERS, 2.0F,
+                1.0F);
         serverLevel.playSound(null, pos.x, pos.y, pos.z, SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2.0F, 0.5F);
 
         serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);

@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -84,22 +83,19 @@ public abstract class ItemEnchantmentsMixin {
     }
 
     @Unique
-    private static void applyExtraDescrption(@NonNull Item.TooltipContext tooltipContext, @NonNull Consumer<Component> componentConsumer,
-                                             @NonNull Holder<Enchantment> enchantmentHolder, int level) {
-        HolderLookup.Provider registries = tooltipContext.registries();
-        if (registries == null)
-            return;
-
+    private static void applyExtraDescrption(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<Enchantment> enchantmentHolder,
+                                             int level) {
+        Enchantment enchantment = enchantmentHolder.value();
         ResourceKey<Enchantment> enchantmentResourceKey = enchantmentHolder.unwrapKey().orElse(null);
         if (enchantmentResourceKey == null)
             return;
 
-        Enchantment enchantment = enchantmentHolder.value();
         ResourceKey<EnchantmentValuePreset> enchantmentValuePresetResourceKey = VPRegistries.ENCHANTMENT_VALUE_PRESET
                 .createResourceKey(enchantmentResourceKey.location().getPath());
 
-        registries.get(enchantmentValuePresetResourceKey)
-                .ifPresent(reference -> applyComponent(componentConsumer, enchantment, level, reference.value()));
+        EnchantmentValuePreset enchantmentValuePreset = VPRegistries.getValue(enchantmentValuePresetResourceKey);
+        if (enchantmentValuePreset != null)
+            applyComponent(componentConsumer, enchantment, level, enchantmentValuePreset);
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, level));
@@ -110,7 +106,7 @@ public abstract class ItemEnchantmentsMixin {
     private void addDescriptionToolTip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                         DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
                                         @Local int level) {
-        applyExtraDescrption(tooltipContext, componentConsumer, enchantmentHolder, level);
+        applyExtraDescrption(componentConsumer, enchantmentHolder, level);
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE",
@@ -118,6 +114,6 @@ public abstract class ItemEnchantmentsMixin {
     private void addDescriptionToolTip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                         DataComponentGetter dataComponentGetter, CallbackInfo ci,
                                         @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
-        applyExtraDescrption(tooltipContext, componentConsumer, entry.getKey(), entry.getIntValue());
+        applyExtraDescrption(componentConsumer, entry.getKey(), entry.getIntValue());
     }
 }

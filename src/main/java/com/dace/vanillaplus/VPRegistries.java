@@ -1,17 +1,24 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.rebalance.enchantment.EnchantmentValuePreset;
+import com.dace.vanillaplus.rebalance.enchantment.VPEnchantmentLevelBasedValueTypes;
 import com.dace.vanillaplus.rebalance.modifier.*;
 import com.dace.vanillaplus.rebalance.trade.StructureMap;
 import com.dace.vanillaplus.rebalance.trade.Trade;
+import com.dace.vanillaplus.sound.VPSoundEvents;
+import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
@@ -19,9 +26,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -29,6 +41,7 @@ import java.util.function.Supplier;
  * 모드에서 사용하는 레지스트리를 관리하는 클래스.
  */
 @UtilityClass
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class VPRegistries {
     /** 효과음 이벤트 */
     public static final VPRegistry<SoundEvent> SOUND_EVENT = new VPRegistry<>(Registries.SOUND_EVENT);
@@ -55,6 +68,65 @@ public final class VPRegistries {
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
     /** 노획물 테이블 수정자 */
     public static final VPRegistry<LootTableModifier> LOOT_TABLE_MODIFIER = new VPRegistry<>("modifier/loot_table");
+
+    /** 레지스트리 Provider 인스턴스 */
+    @Nullable
+    private static HolderLookup.Provider provider;
+
+    static {
+        ReflectionUtil.loadClass(VPTags.class);
+        ReflectionUtil.loadClass(VPSoundEvents.class);
+        ReflectionUtil.loadClass(VPAttributes.class);
+        ReflectionUtil.loadClass(VPDataComponentTypes.class);
+        ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
+    }
+
+    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull VPRegistries.VPRegistry<U> vpRegistry,
+                                                                          @NonNull DefaultedRegistry<T> registry) {
+        registry.forEach(element -> {
+            ResourceKey<U> dataModifierResourceKey = vpRegistry.createResourceKey(registry.getKey(element).getPath());
+            VPModifiableData.setDataModifier(element, VPRegistries.getValue(dataModifierResourceKey));
+        });
+    }
+
+    @SubscribeEvent
+    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
+        provider = event.getRegistries();
+
+        applyDataModifiers(VPRegistries.ITEM_MODIFIER, BuiltInRegistries.ITEM);
+        applyDataModifiers(VPRegistries.BLOCK_MODIFIER, BuiltInRegistries.BLOCK);
+        applyDataModifiers(VPRegistries.ENTITY_MODIFIER, BuiltInRegistries.ENTITY_TYPE);
+    }
+
+    /**
+     * 지정한 리소스 키의 값을 반환한다.
+     *
+     * @param resourceKey 리소스 키
+     * @param <T>         데이터 타입
+     * @return 리소스 키의 값
+     * @throws IllegalStateException 레지스트리에 접근할 수 없으면 발생
+     */
+    @Nullable
+    public static <T> T getValue(@NonNull ResourceKey<T> resourceKey) {
+        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
+
+        Holder.Reference<T> reference = provider.get(resourceKey).orElse(null);
+        return reference == null ? null : reference.value();
+    }
+
+    /**
+     * 지정한 리소스 키의 값을 반환한다.
+     *
+     * @param resourceKey 리소스 키
+     * @param <T>         데이터 타입
+     * @return 리소스 키의 값
+     * @throws IllegalStateException 레지스트리에 접근할 수 없거나 값이 존재하지 않으면 발생
+     */
+    @NonNull
+    public static <T> T getValueOrThrow(@NonNull ResourceKey<T> resourceKey) {
+        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
+        return provider.getOrThrow(resourceKey).value();
+    }
 
     /**
      * 레지스트리 정보를 관리하는 클래스.

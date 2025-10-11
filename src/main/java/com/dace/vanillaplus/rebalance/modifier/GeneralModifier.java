@@ -25,11 +25,15 @@ public final class GeneralModifier {
     /** JSON 코덱 */
     private static final Codec<GeneralModifier> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
-                    .forGetter(GeneralModifier::getSmeltingToolDamageRatio))
+                            .forGetter(GeneralModifier::getSmeltingToolDamageRatio),
+                    Codec.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
+                            .forGetter(GeneralModifier::getMaxRepairLimitRatio))
             .apply(instance, GeneralModifier::new));
 
     /** 철 또는 금 도구를 화로에서 녹일 때 내구도 감소 비율 */
     private final float smeltingToolDamageRatio;
+    /** 최대 내구도 : 최대 수리 한도 비율 */
+    private final float maxRepairLimitRatio;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {

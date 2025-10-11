@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -108,7 +107,8 @@ public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityMod
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@NonNull T dataModifier) {
-        attributes.apply(dataModifier.getPackedAttributes());
+    public void setDataModifier(@Nullable T dataModifier) {
+        if (dataModifier != null)
+            attributes.apply(dataModifier.getPackedAttributes());
     }
 }

@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import lombok.Getter;
-import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier
 
     @Override
     @SuppressWarnings("unchecked")
-    public void setDataModifier(@NonNull U dataModifier) {
+    public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
         EntityType.EntityFactory<T> oldFactory = factory;
 

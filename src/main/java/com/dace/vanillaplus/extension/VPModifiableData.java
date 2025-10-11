@@ -35,12 +35,12 @@ public interface VPModifiableData<T, U extends DataModifier<T>> {
      * @param <U>          {@link DataModifier}를 상속받는 데이터 수정자
      */
     @SuppressWarnings("unchecked")
-    static <T, U extends DataModifier<T>> void setDataModifier(@NonNull T element, @NonNull U dataModifier) {
+    static <T, U extends DataModifier<T>> void setDataModifier(@NonNull T element, @Nullable U dataModifier) {
         ((VPModifiableData<T, U>) element).setDataModifier(dataModifier);
     }
 
     @Nullable
     U getDataModifier();
 
-    void setDataModifier(@NonNull U dataModifier);
+    void setDataModifier(@Nullable U dataModifier);
 }
