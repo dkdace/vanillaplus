@@ -1,6 +1,7 @@
-package com.dace.vanillaplus.rebalance.enchantment;
+package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.data.EnchantmentValuePreset;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

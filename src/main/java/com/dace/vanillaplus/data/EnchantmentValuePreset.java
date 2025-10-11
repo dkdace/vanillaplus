@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.rebalance.enchantment;
+package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VanillaPlus;

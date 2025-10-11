@@ -1,10 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.VPDataComponentTypes;
 import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
-import com.dace.vanillaplus.rebalance.modifier.ItemModifier;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import lombok.Getter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;

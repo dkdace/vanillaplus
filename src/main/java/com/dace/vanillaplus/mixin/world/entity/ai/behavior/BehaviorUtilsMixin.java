@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.behavior;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;

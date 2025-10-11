@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPItemStack;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;

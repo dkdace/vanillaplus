@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;

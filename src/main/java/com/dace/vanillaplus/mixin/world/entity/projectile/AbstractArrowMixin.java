@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.VPAttributes;
+import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.damagesource.DamageSource;

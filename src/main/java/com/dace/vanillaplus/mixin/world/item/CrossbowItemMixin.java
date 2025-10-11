@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.rebalance.modifier.ItemModifier;
+import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;

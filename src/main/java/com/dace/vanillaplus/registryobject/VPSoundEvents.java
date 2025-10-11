@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.sound;
+package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VanillaPlus;

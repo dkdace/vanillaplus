@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.rebalance.modifier;
+package com.dace.vanillaplus.data.modifier;
 
 /**
  * 기존 요소의 데이터를 수정하는 데이터 수정자 인터페이스.

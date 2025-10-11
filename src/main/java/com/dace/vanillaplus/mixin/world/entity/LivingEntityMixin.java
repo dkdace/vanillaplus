@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.VPAttributes;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

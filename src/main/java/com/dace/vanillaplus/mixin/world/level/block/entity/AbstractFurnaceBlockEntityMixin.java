@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.VPRegistries;
-import com.dace.vanillaplus.rebalance.modifier.GeneralModifier;
+import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;

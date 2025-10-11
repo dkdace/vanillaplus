@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.VPRegistries;
-import com.dace.vanillaplus.rebalance.trade.Trade;
-import com.dace.vanillaplus.rebalance.trade.Trades;
+import com.dace.vanillaplus.data.trade.Trade;
+import com.dace.vanillaplus.data.trade.Trades;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;

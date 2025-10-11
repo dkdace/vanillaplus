@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

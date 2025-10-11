@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

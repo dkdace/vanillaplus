@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension;
 
-import com.dace.vanillaplus.rebalance.modifier.LootTableModifier;
+import com.dace.vanillaplus.data.LootTableReward;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -33,12 +33,12 @@ public interface VPLootContainerBlock {
                 || !(level.getBlockEntity(blockPos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity))
             return;
 
-        LootTableModifier lootTableModifier = VPRandomizableContainerBlockEntity.getLootTableModifier(randomizableContainerBlockEntity);
-        if (lootTableModifier == null)
+        LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.getLootTableReward(randomizableContainerBlockEntity);
+        if (lootTableReward == null)
             return;
 
         level.setBlockAndUpdate(blockPos, blockState.setValue(ALWAYS_OPEN, true));
-        ((Block) this).popExperience(serverLevel, blockPos, lootTableModifier.getXpRange().sample(level.random));
+        ((Block) this).popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.random));
     }
 
     /**
@@ -53,9 +53,9 @@ public interface VPLootContainerBlock {
     default int getXp(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull RandomSource randomSource, @NonNull BlockPos blockPos) {
         if (blockState.getValue(LOOT) && !blockState.getValue(ALWAYS_OPEN)
                 && levelReader.getBlockEntity(blockPos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
-            LootTableModifier lootTableModifier = VPRandomizableContainerBlockEntity.getLootTableModifier(randomizableContainerBlockEntity);
-            if (lootTableModifier != null)
-                return lootTableModifier.getXpRange().sample(randomSource);
+            LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.getLootTableReward(randomizableContainerBlockEntity);
+            if (lootTableReward != null)
+                return lootTableReward.getXpRange().sample(randomSource);
         }
 
         return 0;

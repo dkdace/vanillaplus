@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;

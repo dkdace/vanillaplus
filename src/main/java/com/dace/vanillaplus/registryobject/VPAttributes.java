@@ -1,5 +1,6 @@
-package com.dace.vanillaplus;
+package com.dace.vanillaplus.registryobject;
 
+import com.dace.vanillaplus.VPRegistries;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.tags.DamageTypeTags;

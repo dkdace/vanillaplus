@@ -1,12 +1,15 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.data.EnchantmentValuePreset;
+import com.dace.vanillaplus.data.LootTableReward;
+import com.dace.vanillaplus.data.modifier.*;
+import com.dace.vanillaplus.data.trade.StructureMap;
+import com.dace.vanillaplus.data.trade.Trade;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.rebalance.enchantment.EnchantmentValuePreset;
-import com.dace.vanillaplus.rebalance.enchantment.VPEnchantmentLevelBasedValueTypes;
-import com.dace.vanillaplus.rebalance.modifier.*;
-import com.dace.vanillaplus.rebalance.trade.StructureMap;
-import com.dace.vanillaplus.rebalance.trade.Trade;
-import com.dace.vanillaplus.sound.VPSoundEvents;
+import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.registryobject.VPEnchantmentLevelBasedValueTypes;
+import com.dace.vanillaplus.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -56,6 +59,8 @@ public final class VPRegistries {
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
+    /** 노획물 테이블 보상 */
+    public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
     /** 마법 부여 수치 프리셋 */
     public static final VPRegistry<EnchantmentValuePreset> ENCHANTMENT_VALUE_PRESET = new VPRegistry<>("enchantment_value_preset");
     /** 전역 수정자 */
@@ -66,10 +71,7 @@ public final class VPRegistries {
     public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = new VPRegistry<>("modifier/block");
     /** 엔티티 수정자 */
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
-    /** 노획물 테이블 수정자 */
-    public static final VPRegistry<LootTableModifier> LOOT_TABLE_MODIFIER = new VPRegistry<>("modifier/loot_table");
 
-    /** 레지스트리 Provider 인스턴스 */
     @Nullable
     private static HolderLookup.Provider provider;
 
@@ -77,8 +79,8 @@ public final class VPRegistries {
         ReflectionUtil.loadClass(VPTags.class);
         ReflectionUtil.loadClass(VPSoundEvents.class);
         ReflectionUtil.loadClass(VPAttributes.class);
-        ReflectionUtil.loadClass(VPDataComponentTypes.class);
         ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
+        ReflectionUtil.loadClass(VPDataComponentTypes.class);
     }
 
     private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull VPRegistries.VPRegistry<U> vpRegistry,

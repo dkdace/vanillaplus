@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPLootContainerBlock;
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;

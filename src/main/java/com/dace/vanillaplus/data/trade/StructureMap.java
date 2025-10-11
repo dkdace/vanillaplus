@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.rebalance.trade;
+package com.dace.vanillaplus.data.trade;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VanillaPlus;

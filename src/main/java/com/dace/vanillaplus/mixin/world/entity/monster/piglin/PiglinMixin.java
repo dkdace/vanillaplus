@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.Piglin;

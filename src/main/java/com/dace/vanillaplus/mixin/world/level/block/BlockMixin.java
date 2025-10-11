@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
 import lombok.Getter;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.extensions.IForgeBlock;

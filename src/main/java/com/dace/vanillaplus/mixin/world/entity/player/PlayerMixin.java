@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.player;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.damagesource.DamageSource;

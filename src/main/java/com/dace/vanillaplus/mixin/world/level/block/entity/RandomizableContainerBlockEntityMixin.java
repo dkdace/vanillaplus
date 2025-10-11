@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.data.LootTableReward;
 import com.dace.vanillaplus.extension.VPLootContainerBlock;
 import com.dace.vanillaplus.extension.VPRandomizableContainerBlockEntity;
-import com.dace.vanillaplus.rebalance.modifier.LootTableModifier;
 import lombok.Getter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -15,34 +15,35 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(RandomizableContainerBlockEntity.class)
 public abstract class RandomizableContainerBlockEntityMixin extends BlockEntityMixin implements VPRandomizableContainerBlockEntity {
     @Unique
     @Nullable
     @Getter
-    protected LootTableModifier lootTableModifier;
+    protected LootTableReward lootTableReward;
     @Unique
     @Nullable
-    private ResourceKey<LootTableModifier> lootTableModifierResourceKey;
+    private ResourceKey<LootTableReward> lootTableRewardResourceKey;
 
     @Inject(method = "setLootTable", at = @At("TAIL"))
-    private void setLootTableModifier(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
-        if (lootTableResourceKey != null)
-            lootTableModifierResourceKey = VPRegistries.LOOT_TABLE_MODIFIER.createResourceKey(lootTableResourceKey.location().getPath());
+    private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
+        if (lootTableResourceKey == null)
+            return;
+
+        lootTableRewardResourceKey = VPRegistries.LOOT_TABLE_REWARD.createResourceKey(lootTableResourceKey.location().getPath());
+
+        if (lootTableReward == null)
+            onLoad();
     }
 
     @Override
     public void onLoad() {
-        Objects.requireNonNull(level);
-
-        if (lootTableModifierResourceKey == null)
+        if (level == null || lootTableRewardResourceKey == null)
             return;
 
-        lootTableModifier = VPRegistries.getValue(lootTableModifierResourceKey);
+        lootTableReward = VPRegistries.getValue(lootTableRewardResourceKey);
 
-        if (lootTableModifier != null && getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+        if (lootTableReward != null && getBlockState().hasProperty(VPLootContainerBlock.LOOT))
             level.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
     }
 }

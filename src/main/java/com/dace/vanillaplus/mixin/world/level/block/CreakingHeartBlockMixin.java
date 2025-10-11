@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.rebalance.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CreakingHeartBlock;

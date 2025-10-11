@@ -2,7 +2,7 @@ package com.dace.vanillaplus.item;
 
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
-import com.dace.vanillaplus.sound.VPSoundEvents;
+import com.dace.vanillaplus.registryobject.VPSoundEvents;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;

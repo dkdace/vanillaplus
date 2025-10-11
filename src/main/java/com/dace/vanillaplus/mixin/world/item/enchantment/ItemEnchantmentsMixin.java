@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
 import com.dace.vanillaplus.VPRegistries;
-import com.dace.vanillaplus.rebalance.enchantment.EnchantmentValuePreset;
+import com.dace.vanillaplus.data.EnchantmentValuePreset;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.rebalance.modifier;
+package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VanillaPlus;

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension;
 
-import com.dace.vanillaplus.rebalance.modifier.DataModifier;
+import com.dace.vanillaplus.data.modifier.DataModifier;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 

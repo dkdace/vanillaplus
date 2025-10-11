@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.animal;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.rebalance.modifier.EntityModifier;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
