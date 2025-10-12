@@ -2,9 +2,9 @@ package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.EnchantmentValuePreset;
 import com.dace.vanillaplus.data.LootTableReward;
+import com.dace.vanillaplus.data.StructureMap;
+import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.*;
-import com.dace.vanillaplus.data.trade.StructureMap;
-import com.dace.vanillaplus.data.trade.Trade;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;

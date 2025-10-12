@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -42,6 +44,17 @@ public final class EnchantmentValuePreset {
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistries.ENCHANTMENT_VALUE_PRESET.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
+    }
+
+    /**
+     * 지정한 마법 부여에 해당하는 마법 부여 수치 프리셋 리소스 키를 반환한다.
+     *
+     * @param enchantmentResourceKey 마법 부여 리소스 키
+     * @return 마법 부여 수치 프리셋 리소스 키
+     */
+    @NonNull
+    public static ResourceKey<EnchantmentValuePreset> fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
+        return VPRegistries.ENCHANTMENT_VALUE_PRESET.createResourceKey(enchantmentResourceKey.location().getPath());
     }
 
     /**

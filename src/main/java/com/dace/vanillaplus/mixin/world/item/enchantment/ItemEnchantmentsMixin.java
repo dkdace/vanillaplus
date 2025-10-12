@@ -90,10 +90,7 @@ public abstract class ItemEnchantmentsMixin {
         if (enchantmentResourceKey == null)
             return;
 
-        ResourceKey<EnchantmentValuePreset> enchantmentValuePresetResourceKey = VPRegistries.ENCHANTMENT_VALUE_PRESET
-                .createResourceKey(enchantmentResourceKey.location().getPath());
-
-        EnchantmentValuePreset enchantmentValuePreset = VPRegistries.getValue(enchantmentValuePresetResourceKey);
+        EnchantmentValuePreset enchantmentValuePreset = VPRegistries.getValue(EnchantmentValuePreset.fromEnchantment(enchantmentResourceKey));
         if (enchantmentValuePreset != null)
             applyComponent(componentConsumer, enchantment, level, enchantmentValuePreset);
 

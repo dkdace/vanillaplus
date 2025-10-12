@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.data.trade;
+package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.VPTags;
@@ -13,6 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.*;
@@ -89,6 +91,17 @@ public final class Trade {
     @NonNull
     private static Map<OfferList.Level, OfferList> fromListToMap(@NonNull List<OfferList> offerLists) {
         return offerLists.stream().collect(Collectors.toMap(offerList -> offerList.level, Function.identity()));
+    }
+
+    /**
+     * 지정한 주민 직업에 해당하는 거래 정보 리소스 키를 반환한다.
+     *
+     * @param villagerProfessionResourceKey 주민 직업 리소스 키
+     * @return 거래 정보 리소스 키
+     */
+    @NonNull
+    public static ResourceKey<Trade> fromVillagerProfession(@NonNull ResourceKey<VillagerProfession> villagerProfessionResourceKey) {
+        return VPRegistries.TRADE.createResourceKey(villagerProfessionResourceKey.location().getPath());
     }
 
     /**

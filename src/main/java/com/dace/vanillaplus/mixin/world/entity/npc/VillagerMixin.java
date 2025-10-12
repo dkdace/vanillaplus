@@ -1,8 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.VPRegistries;
-import com.dace.vanillaplus.data.trade.Trade;
-import com.dace.vanillaplus.data.trade.Trades;
+import com.dace.vanillaplus.data.Trade;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -53,11 +52,11 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
         if (villagerProfessionResourceKey == null)
             return;
 
-        ResourceKey<Trade> tradeResourceKey = Trades.fromVillagerProfession(villagerProfessionResourceKey);
-        if (tradeResourceKey == null)
+        Trade trade = VPRegistries.getValue(Trade.fromVillagerProfession(villagerProfessionResourceKey));
+        if (trade == null)
             return;
 
-        VillagerTrades.ItemListing[] itemListings = VPRegistries.getValueOrThrow(tradeResourceKey).getOfferInfo(level).toItemListings();
+        VillagerTrades.ItemListing[] itemListings = trade.getOfferInfo(level).toItemListings();
         MerchantOffers offers = getOffers();
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
