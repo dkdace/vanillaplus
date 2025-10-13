@@ -24,6 +24,7 @@
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.inventory.AnvilMenuMixin",
     "world.inventory.GrindstoneMenuMixin",
+    "world.item.BowItemMixin",
     "world.item.CreativeModeTabsMixin",
     "world.item.CrossbowItemMixin",
     "world.item.ItemMixin",
