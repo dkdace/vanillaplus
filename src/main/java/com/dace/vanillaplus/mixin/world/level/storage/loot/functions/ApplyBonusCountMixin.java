@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ApplyBonusCount.class)
 public abstract class ApplyBonusCountMixin {
-    @Mixin(targets = {"net.minecraft.world.level.storage.loot.functions.ApplyBonusCount$OreDrops"})
+    @Mixin(targets = "net.minecraft.world.level.storage.loot.functions.ApplyBonusCount$OreDrops")
     public abstract static class OreDropsMixin {
         @Overwrite
         public int calculateNewCount(RandomSource randomSource, int count, int level) {
