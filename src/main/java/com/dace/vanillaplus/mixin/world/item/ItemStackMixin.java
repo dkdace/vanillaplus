@@ -130,6 +130,21 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Shadow
     public abstract Item getItem();
 
+    @Shadow
+    public abstract boolean isEnchanted();
+
+    @Overwrite
+    public Rarity getRarity() {
+        return ((ItemStack) (Object) this).getOrDefault(DataComponents.RARITY, Rarity.COMMON);
+    }
+
+    @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"))
+    private void applyEnchantmentStyle(CallbackInfoReturnable<Component> cir, @Local MutableComponent mutableComponent) {
+        if (isEnchanted())
+            mutableComponent.withStyle(ChatFormatting.BOLD);
+    }
+
     @Redirect(method = "forEachModifier(Lnet/minecraft/world/entity/EquipmentSlotGroup;Lorg/apache/commons/lang3/function/TriConsumer;)V",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;forEachModifier(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlotGroup;Ljava/util/function/BiConsumer;)V"))
