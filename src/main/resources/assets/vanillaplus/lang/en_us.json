@@ -2,6 +2,8 @@
   "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "block.minecraft.bed.no_use": "You cannot sleep here",
+  "consumable.clearAllStatusEffects": "Removes All Status Effects",
+  "consumable.removeStatusEffect": "Removes %s",
   "container.barrelLoot": "Loot Barrel",
   "container.chestLoot": "Loot Chest",
   "enchantment.minecraft.bane_of_arthropods.description.0": "+%s Attack Damage against Arthropod Mobs",
@@ -23,7 +25,7 @@
   "enchantment.minecraft.lure.description.0": "-%s Fishing Time",
   "enchantment.minecraft.multishot.description.0": "+%s Projectile Count",
   "enchantment.minecraft.piercing.description.0": "+%s Number of Piercing",
-  "enchantment.minecraft.power.description.0": "+%s%% Attack Damage",
+  "enchantment.minecraft.power.description.0": "+%s%% Projectile Damage",
   "enchantment.minecraft.projectile_protection.description.0": "+%s Projectile Damage Resistance",
   "enchantment.minecraft.protection.description.0": "+%s Damage Resistance",
   "enchantment.minecraft.punch.description.0": "+%s Attack Knockback",
@@ -42,7 +44,12 @@
   "filled_map.explorer_snowy": "Snowy Explorer Map",
   "filled_map.mineshaft": "Mineshaft Explorer Map",
   "filled_map.pillager_outpost": "Pillager Outpost Explorer Map",
+  "food.nutrition": "+%s Hunger Restore",
+  "food.saturation": "+%s Saturation",
+  "food.whenEat": "When Eat:",
   "item.minecraft.recovery_compass.teleport_not_valid": "Your last death location was invalid or in different dimension",
+  "item.projectileWeapon.damage": "%s Projectile Damage",
+  "item.projectileWeapon.when_shoot": "When shoot:",
   "item.repairLimit": "Repair Limit : %s / %s",
   "key.prone": "Prone",
   "merchant.closed": "Villager closed the store. Please come back later.",
@@ -52,5 +59,6 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
-  "subtitles.item.recovery_compass.teleport": "Recovery Compass activates"
+  "subtitles.item.recovery_compass.teleport": "Recovery Compass activates",
+  "tool.when_breaking": "When breaking correct Blocks:"
 }

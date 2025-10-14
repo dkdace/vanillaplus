@@ -24,6 +24,7 @@
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.inventory.AnvilMenuMixin",
     "world.inventory.GrindstoneMenuMixin",
+    "world.item.BowItemMixin",
     "world.item.CreativeModeTabsMixin",
     "world.item.CrossbowItemMixin",
     "world.item.ItemMixin",
@@ -48,6 +49,7 @@
   ],
   "client": [
     "client.gui.GuiGraphicsMixin",
+    "client.gui.GuiMixin",
     "client.gui.screens.ScreenMixin",
     "client.gui.screens.inventory.AbstractContainerScreenMixin",
     "client.gui.screens.inventory.MerchantScreenMixin",

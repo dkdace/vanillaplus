@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -61,6 +62,7 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
     public enum Types implements CodecUtil.CodecComponentType<ItemModifier, Types> {
         ITEM(CODEC),
         ELYTRA(ElytraModifier.CODEC),
+        PROJECTILE_WEAPON(ProjectileWeaponModifier.CODEC),
         CROSSBOW(CrossbowModifier.CODEC);
 
         /** JSON 코덱 */
@@ -99,27 +101,51 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
     }
 
     /**
+     * {@link ProjectileWeaponItem}의 아이템 수정자 클래스.
+     */
+    @Getter
+    public static class ProjectileWeaponModifier extends ItemModifier {
+        private static final MapCodec<ProjectileWeaponModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance).apply(instance, ProjectileWeaponModifier::new));
+
+        /** 화살 발사 속력 */
+        private final float shootingPower;
+
+        private ProjectileWeaponModifier(@NonNull DataComponentMap dataComponentMap, float shootingPower) {
+            super(dataComponentMap);
+            this.shootingPower = shootingPower;
+        }
+
+        @NonNull
+        private static <T extends ProjectileWeaponModifier> Products.P2<RecordCodecBuilder.Mu<T>, DataComponentMap, Float> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+            return ItemModifier.createBaseCodec(instance)
+                    .and(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 3.0F)
+                            .forGetter(ProjectileWeaponModifier::getShootingPower));
+        }
+
+        @Override
+        @NonNull
+        public Types getType() {
+            return Types.PROJECTILE_WEAPON;
+        }
+    }
+
+    /**
      * {@link Items#CROSSBOW}의 아이템 수정자 클래스.
      */
     @Getter
-    public static final class CrossbowModifier extends ItemModifier {
+    public static final class CrossbowModifier extends ProjectileWeaponModifier {
         private static final MapCodec<CrossbowModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                createBaseCodec(instance)
-                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power_arrow", 3.15F)
-                                        .forGetter(CrossbowModifier::getShootingPowerArrow),
-                                ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power_firework_rocket", 1.6F)
-                                        .forGetter(CrossbowModifier::getShootingPowerFireworkRocket)))
+                ProjectileWeaponModifier.createBaseCodec(instance)
+                        .and(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power_firework_rocket", 1.6F)
+                                .forGetter(CrossbowModifier::getShootingPowerFireworkRocket))
                         .apply(instance, CrossbowModifier::new));
 
-        /** 화살 발사 속력 */
-        private final float shootingPowerArrow;
         /** 폭죽 발사 속력 */
         private final float shootingPowerFireworkRocket;
 
-        private CrossbowModifier(@NonNull DataComponentMap dataComponentMap, float shootingPowerArrow, float shootingPowerFireworkRocket) {
-            super(dataComponentMap);
-
-            this.shootingPowerArrow = shootingPowerArrow;
+        private CrossbowModifier(@NonNull DataComponentMap dataComponentMap, float shootingPower, float shootingPowerFireworkRocket) {
+            super(dataComponentMap, shootingPower);
             this.shootingPowerFireworkRocket = shootingPowerFireworkRocket;
         }
 

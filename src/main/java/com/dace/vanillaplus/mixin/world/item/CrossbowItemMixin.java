@@ -1,11 +1,9 @@
 package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -17,12 +15,9 @@ import java.util.Objects;
 public abstract class CrossbowItemMixin extends ItemMixin<ItemModifier.CrossbowModifier> {
     @Redirect(method = "use", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/CrossbowItem;getShootingPower(Lnet/minecraft/world/item/component/ChargedProjectiles;)F"))
-    private float getShootingPower(ChargedProjectiles chargedProjectiles, @Local(argsOnly = true) Level level) {
+    private float getShootingPower(ChargedProjectiles chargedProjectiles) {
         Objects.requireNonNull(dataModifier);
-
-        return chargedProjectiles.contains(Items.FIREWORK_ROCKET)
-                ? dataModifier.getShootingPowerFireworkRocket()
-                : dataModifier.getShootingPowerArrow();
+        return chargedProjectiles.contains(Items.FIREWORK_ROCKET) ? dataModifier.getShootingPowerFireworkRocket() : dataModifier.getShootingPower();
     }
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))
