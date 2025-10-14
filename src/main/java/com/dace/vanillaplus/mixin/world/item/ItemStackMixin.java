@@ -171,8 +171,7 @@ public abstract class ItemStackMixin implements VPItemStack {
                 addProjectileWeaponTooltip(componentConsumer));
     }
 
-    @Inject(method = "addDetailsToTooltip", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/core/component/DataComponents;DAMAGE:Lnet/minecraft/core/component/DataComponentType;"))
+    @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
     private void addRepairLimitTooltip(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player,
                                        TooltipFlag tooltipFlag, Consumer<Component> componentConsumer, CallbackInfo ci) {
         if (EnchantmentHelper.has(((ItemStack) (Object) this), EnchantmentEffectComponents.REPAIR_WITH_XP)
