@@ -1,5 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
+import com.dace.vanillaplus.extension.VPMixin;
+import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(BlockEntity.class)
-public abstract class BlockEntityMixin implements IForgeBlockEntity {
+public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeBlockEntity, VPMixin<T> {
     @Shadow
     @Final
     protected BlockPos worldPosition;
@@ -21,4 +23,10 @@ public abstract class BlockEntityMixin implements IForgeBlockEntity {
 
     @Shadow
     public abstract BlockState getBlockState();
+
+    @Override
+    @NonNull
+    public T self() {
+        return VPMixin.super.self();
+    }
 }

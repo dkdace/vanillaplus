@@ -1,5 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin {
+public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @ModifyExpressionValue(method = "doKnockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackStrength(double original, @Local(argsOnly = true) LivingEntity livingEntity,

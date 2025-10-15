@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin extends MobMixin<EntityModifier.LivingEntityModifier> {
+public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extends EntityModifier.LivingEntityModifier> extends MobMixin<T, U> {
     @Shadow
     public abstract MerchantOffers getOffers();
 

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Objects;
 
 @Mixin(CrossbowItem.class)
-public abstract class CrossbowItemMixin extends ItemMixin<ItemModifier.CrossbowModifier> {
+public abstract class CrossbowItemMixin extends ItemMixin<CrossbowItem, ItemModifier.CrossbowModifier> {
     @Redirect(method = "use", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/CrossbowItem;getShootingPower(Lnet/minecraft/world/item/component/ChargedProjectiles;)F"))
     private float getShootingPower(ChargedProjectiles chargedProjectiles) {

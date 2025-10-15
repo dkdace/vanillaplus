@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DropExperienceBlock.class)
-public abstract class DropExperienceBlockMixin extends BlockMixin<BlockModifier.DropExperienceModifier> {
+public abstract class DropExperienceBlockMixin<T extends DropExperienceBlock, U extends BlockModifier.DropExperienceModifier> extends BlockMixin<T, U> {
     @Mutable
     @Shadow
     @Final
@@ -19,7 +19,7 @@ public abstract class DropExperienceBlockMixin extends BlockMixin<BlockModifier.
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable BlockModifier.DropExperienceModifier dataModifier) {
+    public void setDataModifier(@Nullable U dataModifier) {
         super.setDataModifier(dataModifier);
 
         if (dataModifier != null)

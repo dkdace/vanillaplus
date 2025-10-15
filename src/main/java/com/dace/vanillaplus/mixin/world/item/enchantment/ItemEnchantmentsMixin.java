@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.item.enchantment;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.EnchantmentValuePreset;
+import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.NonNull;
@@ -33,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(ItemEnchantments.class)
-public abstract class ItemEnchantmentsMixin {
+public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
     private static void applyComponent(@NonNull Consumer<Component> componentConsumer, @NonNull Enchantment enchantment, int level,
                                        @NonNull EnchantmentValuePreset enchantmentValuePreset) {

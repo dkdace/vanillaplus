@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityModifier> extends EntityMixin<T> {
+public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @Shadow
     protected Brain<?> brain;
     @Mutable
@@ -80,7 +80,7 @@ public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityMod
 
     @Unique
     private void knockback(@Nullable DamageSource damageSource, double strength, double ratioX, double ratioZ) {
-        LivingKnockBackEvent event = ForgeEventFactory.onLivingKnockBack((LivingEntity) (Object) this, (float) strength, ratioX, ratioZ);
+        LivingKnockBackEvent event = ForgeEventFactory.onLivingKnockBack(self(), (float) strength, ratioX, ratioZ);
         if (event == null)
             return;
 
@@ -88,7 +88,7 @@ public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityMod
         ratioX = event.getRatioX();
         ratioZ = event.getRatioZ();
 
-        strength *= 1.0 - VPAttributes.getFinalKnockbackResistance((LivingEntity) (Object) this, damageSource);
+        strength *= 1.0 - VPAttributes.getFinalKnockbackResistance(self(), damageSource);
 
         if (strength > 0) {
             hasImpulse = true;
@@ -107,7 +107,9 @@ public abstract class LivingEntityMixin<T extends EntityModifier.LivingEntityMod
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable T dataModifier) {
+    public void setDataModifier(@Nullable U dataModifier) {
+        super.setDataModifier(dataModifier);
+
         if (dataModifier != null)
             attributes.apply(dataModifier.getPackedAttributes());
     }

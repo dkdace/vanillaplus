@@ -12,35 +12,14 @@ import org.jetbrains.annotations.Nullable;
  * @see DataModifier
  */
 public interface VPModifiableData<T, U extends DataModifier<T>> {
-    /**
-     * 데이터 수정자를 반환한다.
-     *
-     * @param element 대상 요소
-     * @param <T>     수정 대상 데이터 타입
-     * @param <U>     {@link DataModifier}를 상속받는 데이터 수정자
-     * @return 데이터 수정자
-     */
-    @Nullable
+    @NonNull
     @SuppressWarnings("unchecked")
-    static <T, U extends DataModifier<T>> U getDataModifier(@NonNull T element) {
-        return ((VPModifiableData<T, U>) element).getDataModifier();
+    static <T, U extends DataModifier<T>> VPModifiableData<T, U> cast(@NonNull T object) {
+        return (VPModifiableData<T, U>) object;
     }
 
     /**
-     * 데이터 수정자를 지정한다.
-     *
-     * @param element      대상 요소
      * @param dataModifier 데이터 수정자
-     * @param <T>          수정 대상 데이터 타입
-     * @param <U>          {@link DataModifier}를 상속받는 데이터 수정자
      */
-    @SuppressWarnings("unchecked")
-    static <T, U extends DataModifier<T>> void setDataModifier(@NonNull T element, @Nullable U dataModifier) {
-        ((VPModifiableData<T, U>) element).setDataModifier(dataModifier);
-    }
-
-    @Nullable
-    U getDataModifier();
-
     void setDataModifier(@Nullable U dataModifier);
 }

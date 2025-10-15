@@ -1,8 +1,9 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
 import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import lombok.Getter;
+import lombok.NonNull;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -11,15 +12,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Block.class)
-public abstract class BlockMixin<T extends BlockModifier> implements IForgeBlock, VPModifiableData<Block, T> {
+public abstract class BlockMixin<T extends Block, U extends BlockModifier> implements IForgeBlock, VPModifiableData<Block, U>, VPMixin<T> {
     @Unique
     @Nullable
-    @Getter
-    protected T dataModifier;
+    protected U dataModifier;
+
+    @Override
+    @NonNull
+    public T self() {
+        return VPMixin.super.self();
+    }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable T dataModifier) {
+    public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
     }
 }

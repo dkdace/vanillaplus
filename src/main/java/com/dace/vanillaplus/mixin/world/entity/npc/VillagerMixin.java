@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.Trade;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -26,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class VillagerMixin extends AbstractVillagerMixin {
+public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, EntityModifier.LivingEntityModifier> {
     @Shadow
     public abstract VillagerData getVillagerData();
 
@@ -60,7 +61,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin {
         MerchantOffers offers = getOffers();
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
-            MerchantOffer offer = itemListing.getOffer((Villager) (Object) this, random);
+            MerchantOffer offer = itemListing.getOffer(self(), random);
             if (offer != null)
                 offers.add(offer);
         }

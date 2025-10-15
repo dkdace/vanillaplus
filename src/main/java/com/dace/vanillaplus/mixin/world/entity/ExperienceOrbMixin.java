@@ -15,19 +15,20 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
-public abstract class ExperienceOrbMixin extends EntityMixin<EntityModifier.LivingEntityModifier> {
+public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, EntityModifier.LivingEntityModifier> {
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)
     private Predicate<ItemStack> preventRepair(Predicate<ItemStack> predicate, @Local(argsOnly = true) ServerPlayer serverPlayer) {
         return predicate.and(itemStack -> {
-            if (serverPlayer.hasInfiniteMaterials() || VPItemStack.getRepairLimit(itemStack) < VPItemStack.getMaxRepairLimit(itemStack))
+            VPItemStack vpItemStack = VPItemStack.cast(itemStack);
+            if (serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
                 return true;
 
             return serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
                 if (targetItemStack.is(Items.LAPIS_LAZULI)) {
                     targetItemStack.shrink(1);
-                    VPItemStack.setRepairLimit(itemStack, 0);
+                    vpItemStack.setRepairLimit(0);
 
                     return true;
                 }
@@ -42,9 +43,11 @@ public abstract class ExperienceOrbMixin extends EntityMixin<EntityModifier.Livi
         if (serverPlayer.hasInfiniteMaterials())
             return original;
 
-        int repairLimit = VPItemStack.getRepairLimit(itemStack);
-        int finalValue = Math.min(original, VPItemStack.getMaxRepairLimit(itemStack) - repairLimit);
-        VPItemStack.setRepairLimit(itemStack, repairLimit + finalValue);
+        VPItemStack vpItemStack = VPItemStack.cast(itemStack);
+
+        int repairLimit = vpItemStack.getRepairLimit();
+        int finalValue = Math.min(original, vpItemStack.getMaxRepairLimit() - repairLimit);
+        vpItemStack.setRepairLimit(repairLimit + finalValue);
 
         return finalValue;
     }

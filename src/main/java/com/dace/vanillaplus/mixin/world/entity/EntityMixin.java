@@ -1,20 +1,25 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.VPEntity;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin<T extends EntityModifier> implements VPModifiableData<EntityType<?>, T> {
+public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
     @Shadow
     public boolean hasImpulse;
+    @Unique
+    @Nullable
+    protected U dataModifier;
     @Shadow
     @Final
     protected RandomSource random;
@@ -48,13 +53,8 @@ public abstract class EntityMixin<T extends EntityModifier> implements VPModifia
     public abstract void setDeltaMovement(double x, double y, double z);
 
     @Override
-    @Nullable
-    public final T getDataModifier() {
-        return VPModifiableData.getDataModifier(getType());
-    }
-
-    @Override
-    public void setDataModifier(@Nullable T dataModifier) {
-        // 미사용
+    @MustBeInvokedByOverriders
+    public void setDataModifier(@Nullable U dataModifier) {
+        this.dataModifier = dataModifier;
     }
 }

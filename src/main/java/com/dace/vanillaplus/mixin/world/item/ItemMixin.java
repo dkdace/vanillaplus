@@ -3,9 +3,9 @@ package com.dace.vanillaplus.mixin.world.item;
 import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
-import lombok.Getter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
@@ -14,11 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(Item.class)
-public abstract class ItemMixin<T extends ItemModifier> implements VPModifiableData<Item, T> {
+public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPModifiableData<Item, U>, VPMixin<T> {
     @Unique
     @Nullable
-    @Getter
-    protected T dataModifier;
+    protected U dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -28,7 +27,7 @@ public abstract class ItemMixin<T extends ItemModifier> implements VPModifiableD
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable T dataModifier) {
+    public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
 
         DataComponentMap.Builder builder = DataComponentMap.builder().addAll(components);

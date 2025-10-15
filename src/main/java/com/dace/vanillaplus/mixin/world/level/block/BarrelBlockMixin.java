@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BarrelBlock.class)
-public abstract class BarrelBlockMixin extends BlockMixin<BlockModifier> implements VPLootContainerBlock {
+public abstract class BarrelBlockMixin<T extends BarrelBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T> {
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/BarrelBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private BlockState modifyBlockState(BlockState blockState) {

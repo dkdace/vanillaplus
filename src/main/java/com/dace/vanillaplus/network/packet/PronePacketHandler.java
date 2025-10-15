@@ -27,9 +27,7 @@ public final class PronePacketHandler implements PacketHandler {
     @Override
     public void handle(@NonNull CustomPayloadEvent.Context context) {
         ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-
-        VPPlayer.setProneKeyDown(player, isPressed);
+        if (player != null)
+            VPPlayer.cast(player).setProneKeyDown(isPressed);
     }
 }

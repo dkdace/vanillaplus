@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntityMixin<EntityModifier.LivingEntityModifier> implements VPPlayer {
+public abstract class PlayerMixin extends LivingEntityMixin<Player, EntityModifier.LivingEntityModifier> implements VPPlayer<Player> {
     @Shadow
     @Final
     private Abilities abilities;
@@ -49,6 +49,6 @@ public abstract class PlayerMixin extends LivingEntityMixin<EntityModifier.Livin
     protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, ItemStack itemStack) {
         UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null)
-            useCooldown.apply(itemStack, (Player) (Object) this);
+            useCooldown.apply(itemStack, self());
     }
 }

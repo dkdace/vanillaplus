@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin extends BlockMixin<BlockModifier> implements VPLootContainerBlock {
+public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T> {
     @Shadow
     @UnknownNullability
     public static Direction getConnectedDirection(BlockState blockState) {

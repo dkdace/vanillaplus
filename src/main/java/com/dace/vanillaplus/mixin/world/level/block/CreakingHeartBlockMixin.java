@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import java.util.Objects;
 
 @Mixin(CreakingHeartBlock.class)
-public abstract class CreakingHeartBlockMixin extends BlockMixin<BlockModifier.DropExperienceModifier> {
+public abstract class CreakingHeartBlockMixin extends BlockMixin<CreakingHeartBlock, BlockModifier.DropExperienceModifier> {
     @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
     private void modifyDropXP(Args args) {
         Objects.requireNonNull(dataModifier);

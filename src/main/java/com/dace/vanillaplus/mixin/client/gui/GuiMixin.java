@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.client.gui;
 
+import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Gui;
@@ -13,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
-public abstract class GuiMixin {
+public abstract class GuiMixin implements VPMixin<Gui> {
     @Shadow
     private ItemStack lastToolHighlight;
 

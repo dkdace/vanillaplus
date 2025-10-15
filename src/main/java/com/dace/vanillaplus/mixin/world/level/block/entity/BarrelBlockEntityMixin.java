@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BarrelBlockEntity.class)
-public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockEntityMixin {
+public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockEntityMixin<BarrelBlockEntity> {
     @Inject(method = "updateBlockState", at = @At("HEAD"), cancellable = true)
     private void cancelCloseIfAlwaysOpen(BlockState blockState, boolean isOpen, CallbackInfo ci) {
         if (!isOpen && blockState.getValue(VPLootContainerBlock.ALWAYS_OPEN))
