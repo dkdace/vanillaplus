@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPItemStack;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
@@ -99,7 +98,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (!(getItem() instanceof ProjectileWeaponItem projectileWeaponItem))
             return;
 
-        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = VPRegistries.getValue(ItemModifier.fromItem(projectileWeaponItem));
+        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = ItemModifier.fromItem(projectileWeaponItem);
         if (projectileWeaponModifier == null)
             return;
 
@@ -118,7 +117,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (!tooltipDisplay.shows(dataComponentType))
             return;
 
-        T component = self().get(dataComponentType);
+        T component = getThis().get(dataComponentType);
         if (component != null)
             onAdd.accept(component);
     }
@@ -135,7 +134,7 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Overwrite
     public Rarity getRarity() {
-        return self().getOrDefault(DataComponents.RARITY, Rarity.COMMON);
+        return getThis().getOrDefault(DataComponents.RARITY, Rarity.COMMON);
     }
 
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",
@@ -174,7 +173,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
     private void addRepairLimitTooltip(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player,
                                        TooltipFlag tooltipFlag, Consumer<Component> componentConsumer, CallbackInfo ci) {
-        if (EnchantmentHelper.has(self(), EnchantmentEffectComponents.REPAIR_WITH_XP)
+        if (EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP)
                 && tooltipDisplay.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
             componentConsumer.accept(Component.translatable("item.repairLimit",
                     getMaxRepairLimit() - getRepairLimit(),
@@ -183,7 +182,7 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Override
     public int getRepairLimit() {
-        return Math.clamp(self().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
+        return Math.clamp(getThis().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
     }
 
     @Override
@@ -193,6 +192,6 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Override
     public int getMaxRepairLimit() {
-        return self().getOrDefault(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), 0);
+        return getThis().getOrDefault(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), 0);
     }
 }

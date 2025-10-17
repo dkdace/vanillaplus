@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data.modifier;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -20,8 +19,8 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GeneralModifier {
-    /** 전역 수정자 리소스 키 */
-    public static final ResourceKey<GeneralModifier> RESOURCE_KEY = VPRegistries.MODIFIER.createResourceKey("general");
+    /** 전역 수정자 리소스 이름 */
+    private static final String RESOURCE_NAME = "general";
     /** JSON 코덱 */
     private static final Codec<GeneralModifier> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
@@ -35,8 +34,18 @@ public final class GeneralModifier {
     /** 최대 내구도 : 최대 수리 한도 비율 */
     private final float maxRepairLimitRatio;
 
+    /**
+     * 전역 수정자를 반환한다.
+     *
+     * @return 전역 수정자
+     */
+    @NonNull
+    public static GeneralModifier get() {
+        return VPRegistry.MODIFIER.getValueOrThrow(RESOURCE_NAME);
+    }
+
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistries.MODIFIER.getRegistryKey(), CODEC);
+        event.dataPackRegistry(VPRegistry.MODIFIER.getRegistryKey(), CODEC);
     }
 }

@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,10 +22,4 @@ public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeB
 
     @Shadow
     public abstract BlockState getBlockState();
-
-    @Override
-    @NonNull
-    public T self() {
-        return VPMixin.super.self();
-    }
 }

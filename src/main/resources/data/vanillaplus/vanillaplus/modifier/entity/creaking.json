@@ -1,5 +1,5 @@
 {
-  "type": "living_entity",
+  "type": "vanillaplus:living_entity",
   "attributes": [
     {
       "id": "minecraft:attack_damage",

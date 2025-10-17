@@ -1,6 +1,5 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.util.ReflectionUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Registry;
@@ -16,11 +15,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  */
 @UtilityClass
 public final class VPTags {
-    static {
-        ReflectionUtil.loadClass(Enchantments.class);
-        ReflectionUtil.loadClass(Structures.class);
-    }
-
     @NonNull
     private static <T> TagKey<T> create(@NonNull ResourceKey<Registry<T>> registry, @NonNull String name) {
         return TagKey.create(registry, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));

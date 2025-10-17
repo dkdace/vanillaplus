@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.tags.DamageTypeTags;
@@ -22,7 +22,7 @@ public final class VPAttributes {
 
     @NonNull
     private static RegistryObject<Attribute> create(@NonNull String name, @NonNull Attribute attribute) {
-        return VPRegistries.ATTRIBUTE.register(name, () -> attribute);
+        return VPRegistry.ATTRIBUTE.register(name, () -> attribute);
     }
 
     /**

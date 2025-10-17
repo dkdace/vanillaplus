@@ -4,29 +4,29 @@
       "level": 1,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:coal",
                 "count": 12
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_hoe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_shovel"
                   }
                 ]
@@ -35,29 +35,29 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:raw_iron",
                 "count": 5
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_axe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_pickaxe"
                   }
                 ]
@@ -71,31 +71,31 @@
       "level": 2,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:stick",
                 "count": 50
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "moderate",
               "price_modifier": 0.85,
               "enchantment_level": "low",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_hoe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_shovel"
                   }
                 ]
@@ -104,31 +104,31 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:iron_ingot",
                 "count": 4
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "moderate",
               "price_modifier": 0.9,
               "enchantment_level": "low",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_axe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_pickaxe"
                   }
                 ]
@@ -142,30 +142,30 @@
       "level": 3,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond"
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 0.85,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_hoe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_shovel"
                   }
                 ]
@@ -174,31 +174,31 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:gold_ingot",
                 "count": 3
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 0.9,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_axe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_pickaxe"
                   }
                 ]
@@ -212,40 +212,40 @@
       "level": 4,
       "offers": [
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 0.95,
           "enchantment_level": "medium",
           "enchantment_tag": "#vanillaplus:tool",
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_hoe"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_shovel"
               }
             ]
           }
         },
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 1,
           "enchantment_level": "medium",
           "enchantment_tag": "#vanillaplus:tool",
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_axe"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_pickaxe"
               }
             ]
@@ -257,72 +257,72 @@
       "level": 5,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "scarce",
               "price": 11,
               "price_multiplier": "high",
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:bell"
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "scarce",
               "price": 9,
               "price_multiplier": "high",
               "required_item": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:damaged_anvil"
               },
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:anvil"
               }
             }
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 0.95,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_hoe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_shovel"
                   }
                 ]
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_axe"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_pickaxe"
                   }
                 ]

@@ -10,7 +10,7 @@ import lombok.NonNull;
 public interface VPMixin<T> {
     @NonNull
     @SuppressWarnings("unchecked")
-    default T self() {
+    default T getThis() {
         return (T) this;
     }
 }

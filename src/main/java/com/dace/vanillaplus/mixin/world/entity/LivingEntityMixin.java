@@ -80,7 +80,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Unique
     private void knockback(@Nullable DamageSource damageSource, double strength, double ratioX, double ratioZ) {
-        LivingKnockBackEvent event = ForgeEventFactory.onLivingKnockBack(self(), (float) strength, ratioX, ratioZ);
+        LivingKnockBackEvent event = ForgeEventFactory.onLivingKnockBack(getThis(), (float) strength, ratioX, ratioZ);
         if (event == null)
             return;
 
@@ -88,7 +88,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         ratioX = event.getRatioX();
         ratioZ = event.getRatioZ();
 
-        strength *= 1.0 - VPAttributes.getFinalKnockbackResistance(self(), damageSource);
+        strength *= 1.0 - VPAttributes.getFinalKnockbackResistance(getThis(), damageSource);
 
         if (strength > 0) {
             hasImpulse = true;

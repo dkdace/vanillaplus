@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.level.block;
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import lombok.NonNull;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -16,12 +15,6 @@ public abstract class BlockMixin<T extends Block, U extends BlockModifier> imple
     @Unique
     @Nullable
     protected U dataModifier;
-
-    @Override
-    @NonNull
-    public T self() {
-        return VPMixin.super.self();
-    }
 
     @Override
     @MustBeInvokedByOverriders

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
@@ -8,7 +8,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -56,19 +59,40 @@ import java.util.stream.Stream;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Trade {
     /** 레지스트리 코덱 */
-    public static final Codec<Holder<Trade>> CODEC = VPRegistries.TRADE.createRegistryCodec();
+    public static final Codec<Holder<Trade>> CODEC = VPRegistry.TRADE.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<Trade> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(OfferList.CODEC.listOf().xmap(Trade::fromListToMap, Trade::fromMapToList).fieldOf("trades")
                     .forGetter(trade -> trade.offerListMap))
             .apply(instance, Trade::new));
 
+    static {
+        OfferList.OfferItem.REGISTRY.register("buy", () -> OfferList.OfferItem.Buy.CODEC);
+        OfferList.OfferItem.REGISTRY.register("sell", () -> OfferList.OfferItem.Sell.CODEC);
+        OfferList.OfferItem.REGISTRY.register("sell_enchanted", () -> OfferList.OfferItem.SellEnchanted.CODEC);
+        OfferList.OfferItem.REGISTRY.register("random", () -> OfferList.OfferItem.RandomOffer.CODEC);
+        OfferList.OfferItem.REGISTRY.register("type_specific", () -> OfferList.OfferItem.TypeSpecificOffer.CODEC);
+
+        OfferList.ItemStackGenerator.REGISTRY.register("empty", () -> OfferList.ItemStackGenerator.EmptyGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("itemstack", () -> OfferList.ItemStackGenerator.DirectGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("random", () -> OfferList.ItemStackGenerator.RandomGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("suspicious_stew", () -> OfferList.ItemStackGenerator.SuspiciousStewGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("tropical_fish_bucket", () -> OfferList.ItemStackGenerator.TropicalFishBucketGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("axolotl_bucket", () -> OfferList.ItemStackGenerator.AxolotlBucketGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("potion", () -> OfferList.ItemStackGenerator.PotionGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("tipped_arrow", () -> OfferList.ItemStackGenerator.TippedArrowGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("map", () -> OfferList.ItemStackGenerator.MapGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("structure_map", () -> OfferList.ItemStackGenerator.StructureMapGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("leather_item", () -> OfferList.ItemStackGenerator.LeatherItemGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("goat_horn", () -> OfferList.ItemStackGenerator.GoatHornItemGenerator.CODEC);
+    }
+
     /* 주민 등급별 거래 품목 목록 (주민 등급 : 거래 품목 목록) */
     private final Map<OfferList.Level, OfferList> offerListMap;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistries.TRADE.getRegistryKey(), DIRECT_CODEC);
+        event.dataPackRegistry(VPRegistry.TRADE.getRegistryKey(), DIRECT_CODEC);
     }
 
     /**
@@ -94,14 +118,14 @@ public final class Trade {
     }
 
     /**
-     * 지정한 주민 직업에 해당하는 거래 정보 리소스 키를 반환한다.
+     * 지정한 주민 직업에 해당하는 주민 거래 정보를 반환한다.
      *
      * @param villagerProfessionResourceKey 주민 직업 리소스 키
-     * @return 거래 정보 리소스 키
+     * @return 주민 거래 정보. 존재하지 않으면 {@code null} 반환
      */
-    @NonNull
-    public static ResourceKey<Trade> fromVillagerProfession(@NonNull ResourceKey<VillagerProfession> villagerProfessionResourceKey) {
-        return VPRegistries.TRADE.createResourceKey(villagerProfessionResourceKey.location().getPath());
+    @Nullable
+    public static Trade fromVillagerProfession(@NonNull ResourceKey<VillagerProfession> villagerProfessionResourceKey) {
+        return VPRegistry.TRADE.getValue(villagerProfessionResourceKey.location().getPath());
     }
 
     /**
@@ -254,9 +278,11 @@ public final class Trade {
         /**
          * 거래 품목 클래스.
          */
-        private interface OfferItem extends CodecUtil.CodecComponent<OfferItem, OfferItem.Types> {
+        private interface OfferItem extends CodecUtil.CodecComponent<OfferItem> {
+            /** 레지스트리 */
+            VPRegistry<MapCodec<? extends OfferItem>> REGISTRY = VPRegistry.TRADE.createRegistry("offer_item");
             /** JSON 코덱 */
-            Codec<OfferItem> CODEC = CodecUtil.fromCodecComponent(Types.class);
+            Codec<OfferItem> CODEC = CodecUtil.fromCodecRegistry(REGISTRY);
 
             @NonNull
             private static ItemCost getItemCost(@NonNull ItemStack itemStack) {
@@ -272,22 +298,6 @@ public final class Trade {
             VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerList);
 
             /**
-             * 거래 품목의 유형 목록.
-             */
-            @AllArgsConstructor
-            @Getter
-            enum Types implements CodecUtil.CodecComponentType<OfferItem, Types> {
-                BUY(Buy.CODEC),
-                SELL(Sell.CODEC),
-                SELL_ENCHANTED(SellEnchanted.CODEC),
-                RANDOM(RandomOffer.CODEC),
-                TYPE_SPECIFIC(TypeSpecificOffer.CODEC);
-
-                /** JSON 코덱 */
-                private final MapCodec<? extends OfferItem> codec;
-            }
-
-            /**
              * 구매 품목 클래스.
              *
              * @param itemStackGenerator 구매 아이템 생성 처리기
@@ -301,8 +311,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.BUY;
+                public MapCodec<? extends OfferItem> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -341,8 +351,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.SELL;
+                public MapCodec<? extends OfferItem> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -393,8 +403,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.SELL_ENCHANTED;
+                public MapCodec<? extends OfferItem> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -435,13 +445,13 @@ public final class Trade {
              * @param offerItems 거래 품목 목록
              */
             record RandomOffer(@NonNull List<OfferItem> offerItems) implements OfferItem {
-                private static final MapCodec<RandomOffer> CODEC = Codec.lazyInitialized(() -> OfferItem.CODEC).listOf().fieldOf("offers")
+                private static final MapCodec<RandomOffer> CODEC = OfferItem.CODEC.listOf().fieldOf("offers")
                         .xmap(RandomOffer::new, RandomOffer::offerItems);
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.RANDOM;
+                public MapCodec<? extends OfferItem> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -464,13 +474,13 @@ public final class Trade {
              * @param offerItemMap 주민 타입별 거래 품목 목록
              */
             record TypeSpecificOffer(@NonNull Map<Holder<VillagerType>, OfferItem> offerItemMap) implements OfferItem {
-                private static final MapCodec<TypeSpecificOffer> CODEC = Codec.unboundedMap(VillagerType.CODEC, Codec.lazyInitialized(() -> OfferItem.CODEC))
+                private static final MapCodec<TypeSpecificOffer> CODEC = Codec.unboundedMap(VillagerType.CODEC, OfferItem.CODEC)
                         .fieldOf("map").xmap(TypeSpecificOffer::new, TypeSpecificOffer::offerItemMap);
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.TYPE_SPECIFIC;
+                public MapCodec<? extends OfferItem> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -494,9 +504,11 @@ public final class Trade {
         /**
          * 거래 품목에 사용되는 아이템 생성 처리기 인터페이스.
          */
-        private interface ItemStackGenerator extends CodecUtil.CodecComponent<ItemStackGenerator, ItemStackGenerator.Types> {
+        private interface ItemStackGenerator extends CodecUtil.CodecComponent<ItemStackGenerator> {
+            /** 레지스트리 */
+            VPRegistry<MapCodec<? extends ItemStackGenerator>> REGISTRY = VPRegistry.TRADE.createRegistry("itemstack_generator");
             /** JSON 코덱 */
-            Codec<ItemStackGenerator> CODEC = CodecUtil.fromCodecComponent(Types.class);
+            Codec<ItemStackGenerator> CODEC = CodecUtil.fromCodecRegistry(REGISTRY);
 
             /**
              * 아이템을 생성하여 반환한다.
@@ -509,29 +521,6 @@ public final class Trade {
             ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource);
 
             /**
-             * 아이템 생성 처리기의 유형 목록.
-             */
-            @AllArgsConstructor
-            @Getter
-            enum Types implements CodecUtil.CodecComponentType<ItemStackGenerator, Types> {
-                EMPTY(EmptyGenerator.CODEC),
-                ITEMSTACK(DirectGenerator.CODEC),
-                RANDOM(RandomGenerator.CODEC),
-                SUSPICIOUS_STEW(SuspiciousStewGenerator.CODEC),
-                TROPICAL_FISH_BUCKET(TropicalFishBucketGenerator.CODEC),
-                AXOLOTL_BUCKET(AxolotlBucketGenerator.CODEC),
-                POTION(PotionGenerator.CODEC),
-                TIPPED_ARROW(TippedArrowGenerator.CODEC),
-                MAP(MapGenerator.CODEC),
-                STRUCTURE_MAP(StructureMapGenerator.CODEC),
-                LEATHER_ITEM(LeatherItemGenerator.CODEC),
-                GOAT_HORN(GoatHornItemGenerator.CODEC);
-
-                /** JSON 코덱 */
-                private final MapCodec<? extends ItemStackGenerator> codec;
-            }
-
-            /**
              * {@code null}을 반환하는 아이템 생성 처리기 클래스.
              */
             @NoArgsConstructor
@@ -541,8 +530,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.EMPTY;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -562,8 +551,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.ITEMSTACK;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -579,13 +568,13 @@ public final class Trade {
              * @param itemStackGenerators 아이템 생성 처리기 목록
              */
             record RandomGenerator(@NonNull List<ItemStackGenerator> itemStackGenerators) implements ItemStackGenerator {
-                private static final MapCodec<RandomGenerator> CODEC = Codec.lazyInitialized(() -> ItemStackGenerator.CODEC).listOf()
+                private static final MapCodec<RandomGenerator> CODEC = ItemStackGenerator.CODEC.listOf()
                         .fieldOf("items").xmap(RandomGenerator::new, RandomGenerator::itemStackGenerators);
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.RANDOM;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -606,8 +595,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.SUSPICIOUS_STEW;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -631,8 +620,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.TROPICAL_FISH_BUCKET;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -661,8 +650,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.AXOLOTL_BUCKET;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -686,8 +675,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.POTION;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -712,8 +701,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.TIPPED_ARROW;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -736,16 +725,15 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.MAP;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
                 @Nullable
                 public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
                     return entity.level() instanceof ServerLevel serverLevel
-                            ? MapItem.create(serverLevel, entity.getBlockX(), entity.getBlockZ(), (byte) 0, true,
-                            false)
+                            ? MapItem.create(serverLevel, entity.getBlockX(), entity.getBlockZ(), (byte) 0, true, false)
                             : null;
                 }
             }
@@ -761,8 +749,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.STRUCTURE_MAP;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -788,8 +776,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.LEATHER_ITEM;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override
@@ -820,8 +808,8 @@ public final class Trade {
 
                 @Override
                 @NonNull
-                public Types getType() {
-                    return Types.GOAT_HORN;
+                public MapCodec<? extends ItemStackGenerator> getCodec() {
+                    return CODEC;
                 }
 
                 @Override

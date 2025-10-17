@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.behavior;
 
-import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -19,7 +18,6 @@ public abstract class BehaviorUtilsMixin implements VPMixin<BehaviorUtils> {
         if (!(mob instanceof CrossbowAttackMob))
             return instance.getDefaultProjectileRange();
 
-        return ((EntityModifier.CrossbowAttackMobModifier) VPRegistries.getValueOrThrow(EntityModifier.fromEntityType(mob.getType())))
-                .getShootingRange();
+        return ((EntityModifier.CrossbowAttackMobModifier) EntityModifier.fromEntityTypeOrThrow(mob.getType())).getShootingRange();
     }
 }

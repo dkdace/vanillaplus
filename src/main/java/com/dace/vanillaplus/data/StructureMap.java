@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class StructureMap {
     /** 레지스트리 코덱 */
-    public static final Codec<Holder<StructureMap>> CODEC = VPRegistries.STRUCTURE_MAP.createRegistryCodec();
+    public static final Codec<Holder<StructureMap>> CODEC = VPRegistry.STRUCTURE_MAP.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<StructureMap> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ComponentSerialization.CODEC.fieldOf("description").forGetter(structureMap -> structureMap.itemComponent),
@@ -57,7 +57,7 @@ public final class StructureMap {
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistries.STRUCTURE_MAP.getRegistryKey(), DIRECT_CODEC);
+        event.dataPackRegistry(VPRegistry.STRUCTURE_MAP.getRegistryKey(), DIRECT_CODEC);
     }
 
     /**

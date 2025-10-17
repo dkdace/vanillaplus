@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.component.DataComponentType;
@@ -21,9 +21,7 @@ public final class VPDataComponentTypes {
             builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {
-        return (RegistryObject<DataComponentType<T>>) (Object) VPRegistries.DATA_COMPONENT_TYPE.register(name,
-                onBuilder.apply(DataComponentType.builder())::build);
+        return VPRegistry.register(VPRegistry.DATA_COMPONENT_TYPE, name, onBuilder.apply(DataComponentType.builder())::build);
     }
 }

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -16,6 +16,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class EnchantmentValuePreset {
     /** 레지스트리 코덱 */
-    public static final Codec<Holder<EnchantmentValuePreset>> CODEC = VPRegistries.ENCHANTMENT_VALUE_PRESET.createRegistryCodec();
+    public static final Codec<Holder<EnchantmentValuePreset>> CODEC = VPRegistry.ENCHANTMENT_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<EnchantmentValuePreset> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.unboundedMap(Codec.STRING, DefinedValue.CODEC).fieldOf("values")
@@ -43,18 +44,18 @@ public final class EnchantmentValuePreset {
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistries.ENCHANTMENT_VALUE_PRESET.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
+        event.dataPackRegistry(VPRegistry.ENCHANTMENT_VALUE_PRESET.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
     }
 
     /**
-     * 지정한 마법 부여에 해당하는 마법 부여 수치 프리셋 리소스 키를 반환한다.
+     * 지정한 마법 부여에 해당하는 마법 부여 수치 프리셋을 반환한다.
      *
      * @param enchantmentResourceKey 마법 부여 리소스 키
-     * @return 마법 부여 수치 프리셋 리소스 키
+     * @return 마법 부여 수치 프리셋. 존재하지 않으면 {@code null} 반환
      */
-    @NonNull
-    public static ResourceKey<EnchantmentValuePreset> fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
-        return VPRegistries.ENCHANTMENT_VALUE_PRESET.createResourceKey(enchantmentResourceKey.location().getPath());
+    @Nullable
+    public static EnchantmentValuePreset fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
+        return VPRegistry.ENCHANTMENT_VALUE_PRESET.getValue(enchantmentResourceKey.location().getPath());
     }
 
     /**

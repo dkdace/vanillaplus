@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
  *
  * @param <T> {@link ChestBlockEntity}를 상속받는 타입
  */
-public interface VPChestBlockEntity<T extends ChestBlockEntity> extends VPMixin<T> {
+public interface VPChestBlockEntity<T extends ChestBlockEntity> extends VPRandomizableContainerBlockEntity<T> {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends ChestBlockEntity> VPChestBlockEntity<T> cast(@NonNull T object) {

@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
@@ -18,7 +17,7 @@ public abstract class FireworkRocketEntityMixin extends EntityMixin<FireworkRock
     @ModifyArgs(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;",
             ordinal = 0))
     private void modifyElytraDeltaMovement(Args args, @Local(ordinal = 0) Vec3 direction, @Local(ordinal = 1) Vec3 velocity) {
-        ItemModifier.ElytraModifier itemModifier = VPRegistries.getValueOrThrow(ItemModifier.fromItem(Items.ELYTRA));
+        ItemModifier.ElytraModifier itemModifier = ItemModifier.fromItemOrThrow(Items.ELYTRA);
 
         args.setAll(direction.x * 0.1 + (direction.x * itemModifier.getFireworkAddSpeedMultiplier() - velocity.x)
                         * itemModifier.getFireworkFinalSpeedModifier(),

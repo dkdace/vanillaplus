@@ -4,29 +4,29 @@
       "level": 1,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:coal",
                 "count": 12
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 2,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_helmet"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_boots"
                   }
                 ]
@@ -35,29 +35,29 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:raw_iron",
                 "count": 5
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 3,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_chestplate"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_leggings"
                   }
                 ]
@@ -71,28 +71,28 @@
       "level": 2,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:lava_bucket"
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 4,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:chainmail_helmet"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:chainmail_boots"
                   }
                 ]
@@ -101,29 +101,29 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:iron_ingot",
                 "count": 4
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 5,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:chainmail_chestplate"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:chainmail_leggings"
                   }
                 ]
@@ -137,29 +137,29 @@
       "level": 3,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond"
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.1,
               "enchantment_level": "low",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_helmet"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_boots"
                   }
                 ]
@@ -168,30 +168,30 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:armor_stand",
                 "count": 6
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.15,
               "enchantment_level": "low",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_chestplate"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_leggings"
                   }
                 ]
@@ -205,38 +205,38 @@
       "level": 4,
       "offers": [
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 1.2,
           "enchantment_level": "medium",
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_helmet"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_boots"
               }
             ]
           }
         },
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 1.25,
           "enchantment_level": "medium",
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_chestplate"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_leggings"
               }
             ]
@@ -248,72 +248,72 @@
       "level": 5,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "scarce",
           "price": 12,
           "price_multiplier": "high",
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:sentry_armor_trim_smithing_template"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:dune_armor_trim_smithing_template"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:eye_armor_trim_smithing_template"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:wild_armor_trim_smithing_template"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:coast_armor_trim_smithing_template"
               }
             ]
           }
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.2,
               "enchantment_level": "high",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_helmet"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_boots"
                   }
                 ]
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.25,
               "enchantment_level": "high",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_chestplate"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_leggings"
                   }
                 ]

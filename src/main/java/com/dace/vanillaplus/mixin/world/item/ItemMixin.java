@@ -1,17 +1,21 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.util.ReflectionUtil;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
+
+import java.lang.reflect.Field;
 
 @Mixin(Item.class)
 public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPModifiableData<Item, U>, VPMixin<T> {
@@ -22,27 +26,32 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     @Shadow
     @Final
     private DataComponentMap components;
-    @Shadow
-    private DataComponentMap builtComponents;
 
     @Override
     @MustBeInvokedByOverriders
+    @SuppressWarnings("unchecked")
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
 
-        DataComponentMap.Builder builder = DataComponentMap.builder().addAll(components);
-        if (dataModifier != null)
-            builder.addAll(dataModifier.getDataComponentMap());
+        try {
+            Class<?> simpleMapClass = ReflectionUtil.getClass("net.minecraft.core.component.DataComponentMap$Builder$SimpleMap");
+            Field mapField = ReflectionUtil.getField(simpleMapClass, "map");
 
-        Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
-        if (maxDamage != null) {
-            float maxRepairLimitRatio = VPRegistries.getValueOrThrow(GeneralModifier.RESOURCE_KEY).getMaxRepairLimitRatio();
+            Reference2ObjectMap<DataComponentType<?>, Object> map = (Reference2ObjectMap<DataComponentType<?>, Object>) mapField.get(components);
 
-            builder.set(VPDataComponentTypes.REPAIR_LIMIT.get(), 0)
-                    .set(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * maxRepairLimitRatio));
+            if (dataModifier != null)
+                dataModifier.getDataComponentMap().forEach(typedDataComponent ->
+                        map.put(typedDataComponent.type(), typedDataComponent.value()));
+
+            Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
+            if (maxDamage != null) {
+                float maxRepairLimitRatio = GeneralModifier.get().getMaxRepairLimitRatio();
+
+                map.put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
+                map.put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * maxRepairLimitRatio));
+            }
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
         }
-
-        components = builder.build();
-        builtComponents = components;
     }
 }

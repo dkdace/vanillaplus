@@ -30,7 +30,7 @@ public interface VPItemStack extends VPMixin<ItemStack> {
      * @return 수리 한도 표시 여부
      */
     default boolean isRepairLimitBarVisible() {
-        return EnchantmentHelper.has(self(), EnchantmentEffectComponents.REPAIR_WITH_XP);
+        return EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP);
     }
 
     /**

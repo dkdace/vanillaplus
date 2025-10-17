@@ -1,5 +1,5 @@
 {
-  "type": "drop_experience",
+  "type": "vanillaplus:drop_experience",
   "experience": {
     "type": "minecraft:uniform",
     "max_inclusive": 32,

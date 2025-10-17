@@ -49,6 +49,6 @@ public abstract class PlayerMixin extends LivingEntityMixin<Player, EntityModifi
     protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, ItemStack itemStack) {
         UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null)
-            useCooldown.apply(itemStack, self());
+            useCooldown.apply(itemStack, getThis());
     }
 }

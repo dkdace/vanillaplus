@@ -4,22 +4,22 @@
       "level": 1,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:wheat",
                 "count": 12
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:cookie",
                 "count": 12
               }
@@ -27,22 +27,22 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:beetroot",
                 "count": 10
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:bread",
                 "count": 6
               }
@@ -55,44 +55,44 @@
       "level": 2,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:potato",
                 "count": 17
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:mushroom_stew"
               }
             }
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:carrot",
                 "count": 15
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:beetroot_soup"
               }
             }
@@ -104,22 +104,22 @@
       "level": 3,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:pumpkin",
                 "count": 4
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:baked_potato",
                 "count": 6
               }
@@ -127,22 +127,22 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:melon",
                 "count": 3
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:apple",
                 "count": 4
               }
@@ -155,18 +155,18 @@
       "level": 4,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 1,
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:cake"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:pumpkin_pie",
                 "count": 4
               }
@@ -174,11 +174,11 @@
           }
         },
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 1,
           "product": {
-            "type": "suspicious_stew",
+            "type": "vanillaplus:suspicious_stew",
             "effects": [
               {
                 "id": "minecraft:saturation",
@@ -209,19 +209,19 @@
       "level": 5,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 2,
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:glistering_melon_slice",
                 "count": 5
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:golden_carrot",
                 "count": 5
               }
@@ -229,31 +229,31 @@
           }
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 5,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:golden_apple"
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "scarce",
               "price": 12,
               "price_multiplier": "high",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:torchflower_seeds"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:pitcher_pod"
                   }
                 ]

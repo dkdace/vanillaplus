@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.data.EnchantmentValuePreset;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 @UtilityClass
 public final class VPEnchantmentLevelBasedValueTypes {
     static {
-        VPRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
+        VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
     }
 
     private record Preset(@NonNull Holder<EnchantmentValuePreset> enchantmentValuePresetHolder, @NonNull String name) implements LevelBasedValue {

@@ -4,27 +4,27 @@
       "level": 1,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:feather",
                 "count": 12
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "required_item": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:gravel",
                 "count": 20
               },
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:flint",
                 "count": 20
               }
@@ -32,22 +32,22 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:stick",
                 "count": 50
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:arrow",
                 "count": 16
               }
@@ -60,27 +60,27 @@
       "level": 2,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:string",
                 "count": 12
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "required_item": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:arrow",
                 "count": 12
               },
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:spectral_arrow",
                 "count": 12
               }
@@ -88,22 +88,22 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:flint",
                 "count": 18
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:spectral_arrow",
                 "count": 7
               }
@@ -116,46 +116,46 @@
       "level": 3,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:glowstone_dust",
                 "count": 26
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 2,
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:target"
               }
             }
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:tripwire_hook",
                 "count": 6
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.1,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:weapon",
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:bow"
               }
             }
@@ -167,29 +167,29 @@
       "level": 4,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 2,
           "required_item": {
-            "type": "itemstack",
+            "type": "vanillaplus:itemstack",
             "id": "minecraft:arrow",
             "count": 8
           },
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:slowness",
                 "count": 8
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:poison",
                 "count": 8
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:weakness",
                 "count": 8
               }
@@ -197,13 +197,13 @@
           }
         },
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 1.15,
           "enchantment_level": "medium",
           "enchantment_tag": "#vanillaplus:weapon",
           "product": {
-            "type": "itemstack",
+            "type": "vanillaplus:itemstack",
             "id": "minecraft:crossbow"
           }
         }
@@ -213,44 +213,44 @@
       "level": 5,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 2,
           "required_item": {
-            "type": "itemstack",
+            "type": "vanillaplus:itemstack",
             "id": "minecraft:arrow",
             "count": 7
           },
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:strong_slowness",
                 "count": 7
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:long_slowness",
                 "count": 7
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:strong_poison",
                 "count": 7
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:long_poison",
                 "count": 7
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:long_weakness",
                 "count": 7
               },
               {
-                "type": "tipped_arrow",
+                "type": "vanillaplus:tipped_arrow",
                 "potion": "minecraft:harming",
                 "count": 7
               }
@@ -258,27 +258,27 @@
           }
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.1,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:weapon",
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:bow"
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
               "price_modifier": 1.15,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:weapon",
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:crossbow"
               }
             }

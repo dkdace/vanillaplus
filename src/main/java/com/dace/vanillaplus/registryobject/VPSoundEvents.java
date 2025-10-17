@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -18,6 +18,6 @@ public final class VPSoundEvents {
     @NonNull
     private static RegistryObject<SoundEvent> create(@NonNull String name) {
         SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
-        return VPRegistries.SOUND_EVENT.register(name, () -> soundEvent);
+        return VPRegistry.SOUND_EVENT.register(name, () -> soundEvent);
     }
 }

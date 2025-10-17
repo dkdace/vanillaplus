@@ -4,50 +4,50 @@
       "level": 1,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:white_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_gray_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:gray_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:black_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:brown_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:red_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:orange_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:yellow_dye",
                     "count": 14
                   }
@@ -55,34 +55,34 @@
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:red_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:orange_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:yellow_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:lime_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:green_wool",
                     "count": 5
                   }
@@ -92,25 +92,25 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:white_wool",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_gray_wool",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:gray_wool",
                     "count": 10
                   }
@@ -118,34 +118,34 @@
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:cyan_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_blue_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:blue_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:purple_wool",
                     "count": 5
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:magenta_wool",
                     "count": 5
                   }
@@ -160,50 +160,50 @@
       "level": 2,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:lime_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:green_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:cyan_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_blue_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:blue_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:purple_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:magenta_dye",
                     "count": 14
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:pink_dye",
                     "count": 14
                   }
@@ -211,49 +211,49 @@
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:white_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_gray_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:gray_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:black_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:brown_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:red_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:orange_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:yellow_carpet",
                     "count": 10
                   }
@@ -263,25 +263,25 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:black_wool",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:brown_wool",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:pink_wool",
                     "count": 10
                   }
@@ -289,49 +289,49 @@
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "abundant",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:lime_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:green_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:cyan_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_blue_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:blue_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:purple_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:magenta_carpet",
                     "count": 10
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:pink_carpet",
                     "count": 10
                   }
@@ -346,85 +346,85 @@
       "level": 3,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:wheat",
                 "count": 10
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:white_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_gray_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:gray_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:black_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:brown_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:red_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:orange_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:yellow_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:lime_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:green_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:cyan_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:light_blue_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:blue_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:purple_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:magenta_bed"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:pink_bed"
                   }
                 ]
@@ -433,24 +433,24 @@
           ]
         },
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "buy",
+              "type": "vanillaplus:buy",
               "price": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:lead",
                 "count": 4
               }
             },
             {
-              "type": "sell_enchanted",
+              "type": "vanillaplus:sell_enchanted",
               "supply": "moderate",
               "price_modifier": 0.4,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:tool",
               "product": {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:shears"
               }
             }
@@ -462,87 +462,87 @@
       "level": 4,
       "offers": [
         {
-          "type": "sell",
+          "type": "vanillaplus:sell",
           "supply": "moderate",
           "price": 1,
           "product": {
-            "type": "random",
+            "type": "vanillaplus:random",
             "items": [
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:white_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:light_gray_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:gray_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:black_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:brown_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:red_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:orange_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:yellow_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:lime_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:green_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:cyan_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:light_blue_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:blue_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:purple_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:magenta_banner"
               },
               {
-                "type": "itemstack",
+                "type": "vanillaplus:itemstack",
                 "id": "minecraft:pink_banner"
               }
             ]
           }
         },
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 0.4,
           "enchantment_level": "high",
           "enchantment_tag": "#vanillaplus:tool",
           "product": {
-            "type": "itemstack",
+            "type": "vanillaplus:itemstack",
             "id": "minecraft:shears"
           }
         }
@@ -552,44 +552,44 @@
       "level": 5,
       "offers": [
         {
-          "type": "random",
+          "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
               "price": 2,
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:field_masoned_banner_pattern"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:bordure_indented_banner_pattern"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:flower_banner_pattern"
                   }
                 ]
               }
             },
             {
-              "type": "sell",
+              "type": "vanillaplus:sell",
               "supply": "scarce",
               "price": 9,
               "price_multiplier": "high",
               "product": {
-                "type": "random",
+                "type": "vanillaplus:random",
                 "items": [
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:skull_banner_pattern"
                   },
                   {
-                    "type": "itemstack",
+                    "type": "vanillaplus:itemstack",
                     "id": "minecraft:creeper_banner_pattern"
                   }
                 ]
@@ -598,13 +598,13 @@
           ]
         },
         {
-          "type": "sell_enchanted",
+          "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
           "price_modifier": 0.4,
           "enchantment_level": "highest",
           "enchantment_tag": "#vanillaplus:tool",
           "product": {
-            "type": "itemstack",
+            "type": "vanillaplus:itemstack",
             "id": "minecraft:shears"
           }
         }

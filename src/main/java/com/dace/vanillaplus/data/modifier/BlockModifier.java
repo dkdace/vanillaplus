@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data.modifier;
 
-import com.dace.vanillaplus.VPRegistries;
+import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 블록의 요소를 수정하는 블록 수정자 클래스.
@@ -26,12 +28,19 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier, BlockModifier.Types> {
+public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier> {
+    /** 코덱 레지스트리 */
+    private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */
-    private static final Codec<BlockModifier> TYPE_CODEC = CodecUtil.fromCodecComponent(Types.class);
+    private static final Codec<BlockModifier> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
     /** JSON 코덱 */
     private static final MapCodec<BlockModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
             .apply(instance, BlockModifier::new));
+
+    static {
+        CODEC_REGISTRY.register("block", () -> CODEC);
+        CODEC_REGISTRY.register("drop_experience", () -> DropExperienceModifier.CODEC);
+    }
 
     /** 블록 속성 */
     @NonNull
@@ -39,7 +48,32 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistries.BLOCK_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
+        event.dataPackRegistry(VPRegistry.BLOCK_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
+    }
+
+    /**
+     * 지정한 블록에 해당하는 블록 수정자를 반환한다.
+     *
+     * @param block 블록
+     * @return 블록 수정자. 존재하지 않으면 {@code null} 반환
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public static <T extends BlockModifier> T fromBlock(@NonNull Block block) {
+        return (T) VPRegistry.BLOCK_MODIFIER.getValue(BuiltInRegistries.BLOCK.getKey(block).getPath());
+    }
+
+    /**
+     * 지정한 블록에 해당하는 블록 수정자를 반환한다.
+     *
+     * @param block 블록
+     * @return 블록 수정자
+     * @throws IllegalStateException 해당하는 블록 수정자가 존재하지 않으면 발생
+     */
+    @NonNull
+    @SuppressWarnings("unchecked")
+    public static <T extends BlockModifier> T fromBlockOrThrow(@NonNull Block block) {
+        return (T) VPRegistry.BLOCK_MODIFIER.getValueOrThrow(BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
     @NonNull
@@ -50,21 +84,8 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
 
     @Override
     @NonNull
-    public Types getType() {
-        return Types.BLOCK;
-    }
-
-    /**
-     * 블록 수정자의 유형 목록.
-     */
-    @AllArgsConstructor
-    @Getter
-    public enum Types implements CodecUtil.CodecComponentType<BlockModifier, Types> {
-        BLOCK(CODEC),
-        DROP_EXPERIENCE(DropExperienceModifier.CODEC);
-
-        /** JSON 코덱 */
-        private final MapCodec<? extends BlockModifier> codec;
+    public MapCodec<? extends BlockModifier> getCodec() {
+        return CODEC;
     }
 
     /**
@@ -89,8 +110,8 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
 
         @Override
         @NonNull
-        public Types getType() {
-            return Types.DROP_EXPERIENCE;
+        public MapCodec<? extends BlockModifier> getCodec() {
+            return CODEC;
         }
     }
 }

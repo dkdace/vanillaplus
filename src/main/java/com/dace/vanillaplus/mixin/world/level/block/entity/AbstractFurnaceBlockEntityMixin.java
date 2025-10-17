@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.VPRegistries;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
@@ -29,7 +28,7 @@ public abstract class AbstractFurnaceBlockEntityMixin<T extends AbstractFurnaceB
                 .anyMatch(enchantmentHolder -> enchantmentHolder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP)))
             return;
 
-        GeneralModifier generalModifier = VPRegistries.getValueOrThrow(GeneralModifier.RESOURCE_KEY);
+        GeneralModifier generalModifier = GeneralModifier.get();
 
         int damage = (int) (input.getDamageValue() + input.getMaxDamage() * generalModifier.getSmeltingToolDamageRatio());
         if (damage >= input.getMaxDamage())
