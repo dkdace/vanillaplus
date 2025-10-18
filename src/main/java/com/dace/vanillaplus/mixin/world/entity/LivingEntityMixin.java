@@ -49,6 +49,11 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Shadow
     public abstract boolean hasLineOfSight(Entity target);
 
+    @Shadow
+    public boolean canAttack(LivingEntity livingEntity) {
+        return false;
+    }
+
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)

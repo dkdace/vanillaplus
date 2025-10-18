@@ -6,9 +6,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.JumpControl;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
 public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEntityModifier> extends LivingEntityMixin<T, U> {
+    @Shadow
+    @Final
+    public GoalSelector targetSelector;
+    @Shadow
+    @Final
+    public GoalSelector goalSelector;
     @Shadow
     protected JumpControl jumpControl;
 
