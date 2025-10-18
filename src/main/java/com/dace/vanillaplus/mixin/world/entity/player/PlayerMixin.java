@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntityMixin<Player, EntityModifier.LivingEntityModifier> implements VPPlayer<Player> {
+public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T, EntityModifier.LivingEntityModifier> implements VPPlayer<T> {
+    @Unique
+    protected boolean isProneKeyDown = false;
     @Shadow
     @Final
     private Abilities abilities;
     @Shadow
     @Final
     private ItemCooldowns cooldowns;
-    @Unique
-    private boolean isProneKeyDown = false;
 
     @Override
     public void setProneKeyDown(boolean isProneKeyDown) {
