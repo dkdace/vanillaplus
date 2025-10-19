@@ -1,9 +1,6 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.data.EnchantmentValuePreset;
-import com.dace.vanillaplus.data.LootTableReward;
-import com.dace.vanillaplus.data.StructureMap;
-import com.dace.vanillaplus.data.Trade;
+import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPAttributes;
@@ -61,6 +58,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
     /** 마법 부여 수치 프리셋 */
     public static final VPRegistry<EnchantmentValuePreset> ENCHANTMENT_VALUE_PRESET = new VPRegistry<>("enchantment_value_preset");
+    /** 습격 웨이브 정보 */
+    public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
     /** 전역 수정자 */
     public static final VPRegistry<GeneralModifier> MODIFIER = new VPRegistry<>("modifier");
     /** 아이템 수정자 */
