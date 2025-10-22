@@ -1,0 +1,5 @@
+{
+  "type": "vanillaplus:bell",
+  "raider_detection_range": 80,
+  "glow_duration_seconds": 5
+}

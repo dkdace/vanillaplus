@@ -51,6 +51,7 @@
     "world.level.block.DropExperienceBlockMixin",
     "world.level.block.entity.AbstractFurnaceBlockEntityMixin",
     "world.level.block.entity.BarrelBlockEntityMixin",
+    "world.level.block.entity.BellBlockEntityMixin",
     "world.level.block.entity.BlockEntityMixin",
     "world.level.block.entity.ChestBlockEntityMixin",
     "world.level.block.entity.RandomizableContainerBlockEntityMixin",

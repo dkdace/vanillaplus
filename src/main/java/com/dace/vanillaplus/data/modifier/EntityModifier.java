@@ -54,6 +54,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
      * 지정한 엔티티 타입에 해당하는 엔티티 수정자를 반환한다.
      *
      * @param entityType 엔티티 타입
+     * @param <T>        {@link EntityModifier}를 상속받는 엔티티 수정자
      * @return 엔티티 수정자. 존재하지 않으면 {@code null} 반환
      */
     @Nullable
