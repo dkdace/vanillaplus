@@ -55,7 +55,8 @@
     "world.level.block.entity.ChestBlockEntityMixin",
     "world.level.block.entity.RandomizableContainerBlockEntityMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
-    "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin"
+    "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
+    "world.level.storage.loot.functions.SetOminousBottleAmplifierFunctionMixin"
   ],
   "client": [
     "client.gui.GuiGraphicsMixin",
