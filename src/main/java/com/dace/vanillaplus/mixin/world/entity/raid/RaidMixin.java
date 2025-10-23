@@ -2,7 +2,10 @@ package com.dace.vanillaplus.mixin.world.entity.raid;
 
 import com.dace.vanillaplus.data.RaidWave;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -13,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +29,8 @@ public abstract class RaidMixin {
     private float totalHealth;
     @Shadow
     private Optional<BlockPos> waveSpawnPos;
+    @Shadow
+    private int raidCooldownTicks;
 
     @Shadow
     public abstract void updateBossbar();
@@ -52,6 +58,14 @@ public abstract class RaidMixin {
     public int getNumGroups(Difficulty difficulty) {
         RaidWave raidWave = RaidWave.fromDifficulty(difficulty);
         return raidWave == null ? 0 : raidWave.getTotalWaves();
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;"))
+    private Component modifyRaidBarName(Component component, @Local(argsOnly = true) ServerLevel serverLevel) {
+        return raidCooldownTicks > 0
+                ? component
+                : Component.translatable("event.minecraft.raid.waves", groupsSpawned, getNumGroups(serverLevel.getDifficulty()));
     }
 
     @Overwrite
