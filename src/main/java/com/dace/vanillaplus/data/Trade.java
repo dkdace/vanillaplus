@@ -137,7 +137,7 @@ public final class Trade {
      * @see OfferList.Level
      */
     @NonNull
-    public OfferList getOfferInfo(int level) {
+    public OfferList getOfferList(int level) {
         return offerListMap.get(OfferList.Level.fromInt(level));
     }
 
@@ -276,7 +276,7 @@ public final class Trade {
         }
 
         /**
-         * 거래 품목 클래스.
+         * 거래 품목 인터페이스.
          */
         private interface OfferItem extends CodecUtil.CodecComponent<OfferItem> {
             /** 레지스트리 */

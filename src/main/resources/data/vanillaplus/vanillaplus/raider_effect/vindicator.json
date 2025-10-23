@@ -1,0 +1,137 @@
+{
+  "type": "vanillaplus:vindicator",
+  "enchant_items": [
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0.25,
+          0.5,
+          0.75
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:sharpness",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:sharpness",
+      "level": 2
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:sharpness",
+      "level": 3
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:sharpness",
+      "level": 4
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:sharpness",
+      "level": 5
+    }
+  ],
+  "mob_effects": [
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "effect": "minecraft:speed",
+      "amplifier": 0
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6
+        ]
+      },
+      "effect": "minecraft:speed",
+      "amplifier": 1
+    }
+  ]
+}

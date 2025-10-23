@@ -6,27 +6,25 @@ import com.dace.vanillaplus.util.ReflectionUtil;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.lang.reflect.Constructor;
-import java.util.Objects;
 
-@Mixin(Pillager.class)
-public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.CrossbowAttackMobModifier> {
+@Mixin(Evoker.class)
+public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityModifier.LivingEntityModifier> {
     @Inject(method = "registerGoals", at = @At(value = "NEW",
-            target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;"))
+            target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;",
+            ordinal = 0))
     private void addOpenDoorGoal(CallbackInfo ci) {
         try {
             Class<?> raiderOpenDoorGoalClass = ReflectionUtil.getClass("net.minecraft.world.entity.monster.AbstractIllager$RaiderOpenDoorGoal");
@@ -39,25 +37,24 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void setCanOpenDoors(EntityType<? extends Pillager> entityType, Level level, CallbackInfo ci) {
+    private void setCanOpenDoors(EntityType<? extends Evoker> entityType, Level level, CallbackInfo ci) {
         getNavigation().setCanOpenDoors(true);
-    }
-
-    @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/monster/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"), index = 1)
-    private float modifyBulletSpeed(float speed, @Local(argsOnly = true) LivingEntity entity) {
-        return Objects.requireNonNull(dataModifier).getShootingPower();
     }
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        RaiderEffect.PillagerEffect pillagerEffect = RaiderEffect.fromEntityType(getType());
-        pillagerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
+        RaiderEffect.EvokerEffect evokerEffect = RaiderEffect.fromEntityType(getType());
+        evokerEffect.getEquipItemInfos().forEach(itemInfo -> itemInfo.equipItem(getThis()));
     }
 
-    @Override
-    public ItemStack modifyProjectileItem(ItemStack itemStack) {
-        return ((RaiderEffect.PillagerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
-                .applyArrowPotionEffect(getThis(), itemStack);
+
+    @Mixin(targets = "net.minecraft.world.entity.monster.Evoker$EvokerSummonSpellGoal")
+    public abstract static class EvokerSummonSpellGoal {
+        @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
+                target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
+        private void applyRaidBuffsToVex(CallbackInfo ci, @Local Vex vex) {
+            RaiderEffect.EvokerEffect evokerEffect = RaiderEffect.fromEntityType(EntityType.EVOKER);
+            evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex));
+        }
     }
 }

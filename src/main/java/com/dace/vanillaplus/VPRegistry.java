@@ -60,6 +60,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<EnchantmentValuePreset> ENCHANTMENT_VALUE_PRESET = new VPRegistry<>("enchantment_value_preset");
     /** 습격 웨이브 정보 */
     public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
+    /** 습격자 효과 */
+    public static final VPRegistry<RaiderEffect> RAIDER_EFFECT = new VPRegistry<>("raider_effect");
     /** 전역 수정자 */
     public static final VPRegistry<GeneralModifier> MODIFIER = new VPRegistry<>("modifier");
     /** 아이템 수정자 */

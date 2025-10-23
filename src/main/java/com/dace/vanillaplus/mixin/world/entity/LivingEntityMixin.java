@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -47,12 +47,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract void stopRiding();
 
     @Shadow
-    public abstract boolean hasLineOfSight(Entity target);
-
-    @Shadow
     public boolean canAttack(LivingEntity livingEntity) {
         return false;
     }
+
+    @Shadow
+    public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
 
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),

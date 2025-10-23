@@ -1,14 +1,13 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(AbstractIllager.class)
-public abstract class AbstractIllagerMixin<T extends AbstractIllager, U extends EntityModifier.LivingEntityModifier> extends MobMixin<T, U> {
+public abstract class AbstractIllagerMixin<T extends AbstractIllager, U extends EntityModifier.LivingEntityModifier> extends MonsterMixin<T, U> {
     @Overwrite
     public boolean canAttack(LivingEntity livingEntity) {
         return super.canAttack(livingEntity);

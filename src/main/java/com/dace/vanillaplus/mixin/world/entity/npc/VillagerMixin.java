@@ -56,7 +56,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
         if (trade == null)
             return;
 
-        VillagerTrades.ItemListing[] itemListings = trade.getOfferInfo(level).toItemListings();
+        VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
         MerchantOffers offers = getOffers();
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
