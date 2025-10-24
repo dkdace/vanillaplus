@@ -9,10 +9,16 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(BellBlockEntity.class)
 public abstract class BellBlockEntityMixin extends BlockEntityMixin<BellBlockEntity> {
-    @ModifyArg(method = "isRaiderWithinRange", at = @At(value = "INVOKE",
+    @ModifyArg(method = "areRaidersNearby", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
     private static double modifyRaiderDetectionRange(double range) {
         return ((BlockModifier.BellModifier) BlockModifier.fromBlockOrThrow(Blocks.BELL)).getRaiderDetectionRange();
+    }
+
+    @ModifyArg(method = "isRaiderWithinRange", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
+    private static double modifyGlowRange(double range) {
+        return ((BlockModifier.BellModifier) BlockModifier.fromBlockOrThrow(Blocks.BELL)).getGlowRange();
     }
 
     @ModifyArg(method = "glow", at = @At(value = "INVOKE",

@@ -125,8 +125,10 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     public static final class BellModifier extends BlockModifier {
         private static final MapCodec<BellModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
-                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range", 48)
+                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range", 32)
                                         .forGetter(BellModifier::getRaiderDetectionRange),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("glow_range", 48)
+                                        .forGetter(BellModifier::getGlowRange),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("glow_duration_seconds", 3F)
                                         .forGetter(bellModifier -> bellModifier.glowDurationSeconds)))
                         .apply(instance, BellModifier::new));
@@ -134,13 +136,17 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         /** 습격자 탐지 범위 */
         @Getter
         private final int raiderDetectionRange;
+        /** 발광 효과 범위 */
+        @Getter
+        private final int glowRange;
         /** 발광 효과 지속시간 (초) */
         private final float glowDurationSeconds;
 
-        private BellModifier(@NonNull BlockBehaviour.Properties properties, int raiderDetectionRange, float glowDurationSeconds) {
+        private BellModifier(@NonNull BlockBehaviour.Properties properties, int raiderDetectionRange, int glowRange, float glowDurationSeconds) {
             super(properties);
 
             this.raiderDetectionRange = raiderDetectionRange;
+            this.glowRange = glowRange;
             this.glowDurationSeconds = glowDurationSeconds;
         }
 
