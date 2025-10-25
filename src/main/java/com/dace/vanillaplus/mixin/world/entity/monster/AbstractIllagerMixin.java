@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(AbstractIllager.class)
 public abstract class AbstractIllagerMixin<T extends AbstractIllager, U extends EntityModifier.LivingEntityModifier> extends MonsterMixin<T, U> {
+    @Override
     @Overwrite
     public boolean canAttack(LivingEntity livingEntity) {
         return super.canAttack(livingEntity);

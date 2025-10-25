@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.raid;
 
 import com.dace.vanillaplus.data.RaidWave;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Map;
 import java.util.Optional;
@@ -29,8 +32,6 @@ public abstract class RaidMixin {
     private float totalHealth;
     @Shadow
     private Optional<BlockPos> waveSpawnPos;
-    @Shadow
-    private int raidCooldownTicks;
 
     @Shadow
     public abstract void updateBossbar();
@@ -43,6 +44,9 @@ public abstract class RaidMixin {
 
     @Shadow
     public abstract void joinRaid(ServerLevel serverLevel, int wave, Raider raider, @Nullable BlockPos blockPos, boolean isSpawned);
+
+    @Shadow
+    public abstract int getTotalRaidersAlive();
 
     @Overwrite
     public int getMaxRaidOmenLevel() {
@@ -63,9 +67,26 @@ public abstract class RaidMixin {
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;"))
     private Component modifyRaidBarName(Component component, @Local(argsOnly = true) ServerLevel serverLevel) {
-        return raidCooldownTicks > 0
-                ? component
-                : Component.translatable("event.minecraft.raid.waves", groupsSpawned, getNumGroups(serverLevel.getDifficulty()));
+        int wave = groupsSpawned;
+        if (getTotalRaidersAlive() == 0)
+            wave++;
+
+        return Component.translatable("event.minecraft.raid.waves", wave, getNumGroups(serverLevel.getDifficulty()));
+    }
+
+    @Expression("? <= 64.0")
+    @ModifyExpressionValue(method = "playSound", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
+    private boolean modifyRaidHornCondition(boolean original) {
+        return true;
+    }
+
+    @ModifyArgs(method = "playSound", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/network/protocol/game/ClientboundSoundPacket;<init>(Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;DDDFFJ)V"))
+    private void modifyRaidHornPosition(Args args, @Local(argsOnly = true) BlockPos raidPos) {
+        args.set(2, (double) raidPos.getX());
+        args.set(3, (double) raidPos.getY());
+        args.set(4, (double) raidPos.getZ());
+        args.set(5, 1000F);
     }
 
     @Overwrite
