@@ -12,8 +12,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -40,6 +42,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     static {
         CODEC_REGISTRY.register("block", () -> CODEC);
         CODEC_REGISTRY.register("drop_experience", () -> DropExperienceModifier.CODEC);
+        CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
     }
 
     /** 블록 속성 */
@@ -55,6 +58,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
      * 지정한 블록에 해당하는 블록 수정자를 반환한다.
      *
      * @param block 블록
+     * @param <T>   {@link BlockModifier}를 상속받는 블록 수정자
      * @return 블록 수정자. 존재하지 않으면 {@code null} 반환
      */
     @Nullable
@@ -106,6 +110,51 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         private DropExperienceModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange) {
             super(properties);
             this.xpRange = xpRange;
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends BlockModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link BellBlock}의 블록 수정자 클래스.
+     */
+    public static final class BellModifier extends BlockModifier {
+        private static final MapCodec<BellModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range", 32)
+                                        .forGetter(BellModifier::getRaiderDetectionRange),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("glow_range", 48)
+                                        .forGetter(BellModifier::getGlowRange),
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("glow_duration_seconds", 3F)
+                                        .forGetter(bellModifier -> bellModifier.glowDurationSeconds)))
+                        .apply(instance, BellModifier::new));
+
+        /** 습격자 탐지 범위 */
+        @Getter
+        private final int raiderDetectionRange;
+        /** 발광 효과 범위 */
+        @Getter
+        private final int glowRange;
+        /** 발광 효과 지속시간 (초) */
+        private final float glowDurationSeconds;
+
+        private BellModifier(@NonNull BlockBehaviour.Properties properties, int raiderDetectionRange, int glowRange, float glowDurationSeconds) {
+            super(properties);
+
+            this.raiderDetectionRange = raiderDetectionRange;
+            this.glowRange = glowRange;
+            this.glowDurationSeconds = glowDurationSeconds;
+        }
+
+        /**
+         * @return 발광 효과 지속시간 (tick)
+         */
+        public int getGlowDuration() {
+            return (int) (glowDurationSeconds * 20.0);
         }
 
         @Override

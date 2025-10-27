@@ -1,0 +1,177 @@
+{
+  "type": "vanillaplus:pillager",
+  "enchant_items": [
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0.25,
+          0.5,
+          0.75
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:quick_charge",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:quick_charge",
+      "level": 2
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:quick_charge",
+      "level": 3
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:multishot",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:piercing",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:piercing",
+      "level": 2
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:piercing",
+      "level": 3
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:piercing",
+      "level": 4
+    }
+  ],
+  "tipped_arrow": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0.08,
+        0.16,
+        0.24,
+        0.32,
+        0.40,
+        0.48
+      ]
+    },
+    "potions": [
+      "minecraft:slowness",
+      "minecraft:poison",
+      "minecraft:weakness"
+    ]
+  }
+}

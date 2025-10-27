@@ -1,0 +1,36 @@
+{
+  "waves": [
+    {
+      "pillager": 5,
+      "vindicator": 1
+    },
+    {
+      "pillager": 4,
+      "vindicator": 3
+    },
+    {
+      "pillager": 5,
+      "vindicator": 3,
+      "witch": 1
+    },
+    {
+      "pillager": 4,
+      "vindicator": 2,
+      "witch": 1,
+      "ravager": 1
+    },
+    {
+      "pillager": 4,
+      "vindicator": 4,
+      "witch": 2,
+      "evoker": 1
+    },
+    {
+      "pillager": 4,
+      "vindicator": 4,
+      "witch": 1,
+      "evoker": 1,
+      "ravager_with_pillager": 1
+    }
+  ]
+}

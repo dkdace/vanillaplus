@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.monster.Ravager;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -43,6 +44,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         CODEC_REGISTRY.register("entity", () -> CODEC);
         CODEC_REGISTRY.register("living_entity", () -> LivingEntityModifier.CODEC);
         CODEC_REGISTRY.register("crossbow_attack_mob", () -> CrossbowAttackMobModifier.CODEC);
+        CODEC_REGISTRY.register("ravager", () -> RavagerModifier.CODEC);
     }
 
     @SubscribeEvent
@@ -54,6 +56,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
      * 지정한 엔티티 타입에 해당하는 엔티티 수정자를 반환한다.
      *
      * @param entityType 엔티티 타입
+     * @param <T>        {@link EntityModifier}를 상속받는 엔티티 수정자
      * @return 엔티티 수정자. 존재하지 않으면 {@code null} 반환
      */
     @Nullable
@@ -130,6 +133,38 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
 
             this.shootingPower = shootingPower;
             this.shootingRange = shootingRange;
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends EntityModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link Ravager}의 엔티티 수정자 클래스.
+     */
+    public static final class RavagerModifier extends LivingEntityModifier {
+        private static final MapCodec<RavagerModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                LivingEntityModifier.createBaseCodec(instance)
+                        .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("roar_cooldown_seconds", 10F)
+                                .forGetter(ravagerModifier -> ravagerModifier.roarCooldownSeconds))
+                        .apply(instance, RavagerModifier::new));
+
+        /** 포효 쿨타임 (초) */
+        private final float roarCooldownSeconds;
+
+        private RavagerModifier(@NonNull List<AttributeInstance.Packed> packedAttributes, float roarCooldownSeconds) {
+            super(packedAttributes);
+            this.roarCooldownSeconds = roarCooldownSeconds;
+        }
+
+        /**
+         * @return 포효 쿨타임 (tick)
+         */
+        public int getRoarCooldown() {
+            return (int) (roarCooldownSeconds * 20.0);
         }
 
         @Override

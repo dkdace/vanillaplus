@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class OminousBottleAmplifierMixin implements VPMixin<OminousBottleAmplifier> {
     @Shadow
     @Final
-    public static final int MAX_AMPLIFIER = 9;
+    public static final int MAX_AMPLIFIER = Byte.MAX_VALUE;
     @Shadow
     @Final
     public static final Codec<OminousBottleAmplifier> CODEC =

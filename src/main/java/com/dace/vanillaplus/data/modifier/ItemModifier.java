@@ -57,6 +57,7 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
      * 지정한 아이템에 해당하는 아이템 수정자를 반환한다.
      *
      * @param item 아이템
+     * @param <T>  {@link ItemModifier}를 상속받는 아이템 수정자
      * @return 아이템 수정자. 존재하지 않으면 {@code null} 반환
      */
     @Nullable

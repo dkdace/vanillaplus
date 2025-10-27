@@ -2,11 +2,13 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +32,9 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     protected JumpControl jumpControl;
 
     @Shadow
+    public abstract PathNavigation getNavigation();
+
+    @Shadow
     public abstract boolean isAggressive();
 
     @Shadow
@@ -48,21 +53,21 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
             cir.setReturnValue(false);
     }
 
-    @Inject(method = "aiStep", at = @At("TAIL"))
-    private void aiStep(CallbackInfo ci) {
-        LivingEntity target = getTarget();
+    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;aiStep()V", shift = At.Shift.AFTER))
+    private void jumpIfCannotReachTarget(CallbackInfo ci) {
+        if (!(level() instanceof ServerLevel))
+            return;
 
+        LivingEntity target = getTarget();
         if (target == null)
             return;
 
         double yDiff = target.getY() - getY();
         double height = getBbHeight();
 
-        if (!onGround() || !hasLineOfSight(target) || yDiff < height || yDiff >= height + 2
-                || !position().horizontal().closerThan(target.position().horizontal(), getBbWidth() + 0.6))
-            return;
-
-        jumpControl.jump();
+        if (onGround() && yDiff > height && yDiff < height + 2
+                && position().horizontal().closerThan(target.position().horizontal(), getBbWidth() + 1.0))
+            jumpControl.jump();
     }
 
     @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))

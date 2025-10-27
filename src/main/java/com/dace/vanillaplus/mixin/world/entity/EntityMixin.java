@@ -2,9 +2,11 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPEntity;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +53,15 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
 
     @Shadow
     public abstract void setDeltaMovement(double x, double y, double z);
+
+    @Shadow
+    public abstract Level level();
+
+    @Shadow
+    public abstract boolean closerThan(Entity entity, double distance);
+
+    @Shadow
+    public abstract void playSound(SoundEvent soundEvent, float volume, float pitch);
 
     @Override
     @MustBeInvokedByOverriders

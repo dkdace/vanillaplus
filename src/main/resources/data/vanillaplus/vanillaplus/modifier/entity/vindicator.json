@@ -1,0 +1,9 @@
+{
+  "type": "vanillaplus:living_entity",
+  "attributes": [
+    {
+      "id": "minecraft:follow_range",
+      "base": 16
+    }
+  ]
+}
