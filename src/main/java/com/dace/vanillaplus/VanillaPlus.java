@@ -14,8 +14,10 @@ import org.slf4j.Logger;
  */
 @Mod(VanillaPlus.MODID)
 public final class VanillaPlus {
+    /** 모드 ID */
     public static final String MODID = "vanillaplus";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    /** 로거 인스턴스 */
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     @Getter
     private static VanillaPlus instance;

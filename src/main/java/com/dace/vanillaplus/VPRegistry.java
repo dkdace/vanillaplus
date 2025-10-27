@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -124,7 +125,21 @@ public final class VPRegistry<T> {
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        provider = event.getServerResources().fullRegistries().lookup();
+        initData(event::getRegistries);
+        VanillaPlus.LOGGER.debug("Server-side Data Loaded");
+    }
+
+    @SubscribeEvent
+    private static void onClientPlayerNetworkLoggingIn(@NonNull ClientPlayerNetworkEvent.LoggingIn event) {
+        if (provider != null)
+            return;
+
+        initData(event.getPlayer()::registryAccess);
+        VanillaPlus.LOGGER.debug("Client-side Data Loaded");
+    }
+
+    private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
+        provider = providerFunction.get();
 
         applyDataModifiers(ItemModifier::fromItem, BuiltInRegistries.ITEM);
         applyDataModifiers(BlockModifier::fromBlock, BuiltInRegistries.BLOCK);
