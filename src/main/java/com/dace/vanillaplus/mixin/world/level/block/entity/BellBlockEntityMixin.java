@@ -17,7 +17,13 @@ public abstract class BellBlockEntityMixin extends BlockEntityMixin<BellBlockEnt
 
     @ModifyArg(method = "isRaiderWithinRange", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
-    private static double modifyGlowRange(double range) {
+    private static double modifyGlowRange0(double range) {
+        return ((BlockModifier.BellModifier) BlockModifier.fromBlockOrThrow(Blocks.BELL)).getGlowRange();
+    }
+
+    @ModifyArg(method = "lambda$showBellParticles$1", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
+    private static double modifyGlowRange1(double range) {
         return ((BlockModifier.BellModifier) BlockModifier.fromBlockOrThrow(Blocks.BELL)).getGlowRange();
     }
 

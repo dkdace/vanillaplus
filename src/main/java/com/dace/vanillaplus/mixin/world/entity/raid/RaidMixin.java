@@ -7,18 +7,23 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Map;
@@ -27,11 +32,20 @@ import java.util.Optional;
 @Mixin(Raid.class)
 public abstract class RaidMixin {
     @Shadow
+    @Final
+    private static final int RAID_TIMEOUT_TICKS = 3 * 60 * 20;
+
+    @Shadow
+    @Final
+    private int numGroups;
+    @Shadow
     private int groupsSpawned;
     @Shadow
     private float totalHealth;
     @Shadow
     private Optional<BlockPos> waveSpawnPos;
+    @Shadow
+    private long ticksActive;
 
     @Shadow
     public abstract void updateBossbar();
@@ -46,7 +60,7 @@ public abstract class RaidMixin {
     public abstract void joinRaid(ServerLevel serverLevel, int wave, Raider raider, @Nullable BlockPos blockPos, boolean isSpawned);
 
     @Shadow
-    public abstract int getTotalRaidersAlive();
+    protected abstract boolean isFinalWave();
 
     @Overwrite
     public int getMaxRaidOmenLevel() {
@@ -66,12 +80,37 @@ public abstract class RaidMixin {
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;"))
-    private Component modifyRaidBarName(Component component, @Local(argsOnly = true) ServerLevel serverLevel) {
+    private Component modifyRaidBarName(Component originalComponent, @Local(argsOnly = true) ServerLevel serverLevel, @Local int raiderCount) {
         int wave = groupsSpawned;
-        if (getTotalRaidersAlive() == 0)
+        if (raiderCount == 0 && !isFinalWave())
             wave++;
 
-        return Component.translatable("event.minecraft.raid.waves", wave, getNumGroups(serverLevel.getDifficulty()));
+        MutableComponent component = Component.translatable("event.minecraft.raid.waves", wave, numGroups);
+        if (ticksActive > 20) {
+            MutableComponent timeComponent = Component.translatable("event.minecraft.raid.time_remaining",
+                    StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), serverLevel.tickRateManager().tickrate()));
+
+            component.append(" - ").append(timeComponent);
+        }
+
+        return component;
+    }
+
+    @Expression("48000")
+    @ModifyExpressionValue(method = "tick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
+    private long modifyTimeoutCondition(long original) {
+        return RAID_TIMEOUT_TICKS;
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raid;hasMoreWaves()Z", ordinal = 0))
+    private void resetTimeoutIfNoRaiders(ServerLevel serverLevel, CallbackInfo ci) {
+        ticksActive = 0;
+    }
+
+    @Inject(method = "updateRaiders", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raider;isRemoved()Z"))
+    private void resetTimeoutIfRaiderIsInVillage(ServerLevel serverLevel, CallbackInfo ci, @Local Raider raider, @Local BlockPos raiderBlockPos) {
+        if (serverLevel.isVillage(raiderBlockPos))
+            ticksActive = 0;
     }
 
     @Expression("? <= 64.0")
@@ -91,6 +130,7 @@ public abstract class RaidMixin {
 
     @Overwrite
     private void spawnGroup(ServerLevel serverLevel, BlockPos blockPos) {
+        ticksActive = 0;
         totalHealth = 0;
 
         RaidWave raidWave = RaidWave.fromDifficulty(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty());
