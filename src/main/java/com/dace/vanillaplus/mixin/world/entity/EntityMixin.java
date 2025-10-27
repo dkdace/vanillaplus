@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPEntity;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -55,6 +56,12 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
 
     @Shadow
     public abstract Level level();
+
+    @Shadow
+    public abstract boolean closerThan(Entity entity, double distance);
+
+    @Shadow
+    public abstract void playSound(SoundEvent soundEvent, float volume, float pitch);
 
     @Override
     @MustBeInvokedByOverriders
