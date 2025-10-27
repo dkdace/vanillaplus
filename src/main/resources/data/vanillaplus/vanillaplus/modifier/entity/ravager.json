@@ -1,0 +1,13 @@
+{
+  "type": "vanillaplus:living_entity",
+  "attributes": [
+    {
+      "id": "minecraft:max_health",
+      "base": 75
+    },
+    {
+      "id": "minecraft:armor",
+      "base": 15
+    }
+  ]
+}
