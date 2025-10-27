@@ -27,7 +27,6 @@
     "world.entity.monster.SpiderMixin",
     "world.entity.monster.VindicatorMixin",
     "world.entity.monster.WitchMixin",
-    "world.entity.monster.ZombifiedPiglinMixin",
     "world.entity.monster.piglin.PiglinMixin",
     "world.entity.npc.AbstractVillagerMixin",
     "world.entity.npc.VillagerDataMixin",

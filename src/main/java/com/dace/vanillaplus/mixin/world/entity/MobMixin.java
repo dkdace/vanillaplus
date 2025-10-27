@@ -3,11 +3,13 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.phys.AABB;
@@ -73,5 +75,13 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))
     protected AABB modifyAttackBoundingBox(AABB aabb) {
         return aabb;
+    }
+
+    @Override
+    protected void onDie(DamageSource damageSource, CallbackInfo ci) {
+        targetSelector.getAvailableGoals().forEach(wrappedGoal -> {
+            if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal)
+                hurtByTargetGoal.start();
+        });
     }
 }
