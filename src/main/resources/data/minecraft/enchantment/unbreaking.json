@@ -11,32 +11,7 @@
           "chance": {
             "type": "vanillaplus:preset",
             "value": "vanillaplus:unbreaking",
-            "name": "armor_chance"
-          }
-        },
-        "requirements": {
-          "condition": "minecraft:match_tool",
-          "predicate": {
-            "items": "#minecraft:enchantable/armor"
-          }
-        }
-      },
-      {
-        "effect": {
-          "type": "minecraft:remove_binomial",
-          "chance": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:unbreaking",
-            "name": "non_armor_chance"
-          }
-        },
-        "requirements": {
-          "condition": "minecraft:inverted",
-          "term": {
-            "condition": "minecraft:match_tool",
-            "predicate": {
-              "items": "#minecraft:enchantable/armor"
-            }
+            "name": "chance"
           }
         }
       }
