@@ -14,6 +14,7 @@
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",
     "world.entity.animal.IronGolemMixin",
+    "world.entity.decoration.ArmorStandMixin",
     "world.entity.monster.AbstractIllagerMixin",
     "world.entity.monster.AbstractSkeletonMixin",
     "world.entity.monster.EvokerMixin",

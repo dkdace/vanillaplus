@@ -54,6 +54,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Shadow
     public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
 
+    @Shadow
+    public abstract boolean hasItemInSlot(EquipmentSlot equipmentSlot);
+
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
