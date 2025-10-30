@@ -1,0 +1,236 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:paper",
+                "count": 16
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:ink_sac",
+                "count": 12
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:clock"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:book",
+                "count": 3
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 5,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:bookshelf"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:chiseled_bookshelf",
+                "count": 4
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 1.3,
+              "enchantment_level": "low",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:book"
+              },
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:book"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:writable_book"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:lectern"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glow_ink_sac",
+                "count": 9
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 1.3,
+              "enchantment_level": "low",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:book"
+              },
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:book"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 8,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:enchanting_table"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 15,
+              "price_multiplier": "high",
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:name_tag"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1.3,
+          "enchantment_level": "medium",
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          },
+          "product": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "vanillaplus:sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1.3,
+          "enchantment_level": "high",
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          },
+          "product": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          }
+        },
+        {
+          "type": "vanillaplus:sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 1.3,
+          "enchantment_level": "highest",
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          },
+          "product": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:book"
+          }
+        }
+      ]
+    }
+  ]
+}

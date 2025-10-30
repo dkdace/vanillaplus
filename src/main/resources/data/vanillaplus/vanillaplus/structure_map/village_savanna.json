@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.village_savanna"
+  },
+  "structure_tag": "#minecraft:on_savanna_village_maps",
+  "color": 11896383,
+  "decoration_type": "minecraft:village_savanna"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "vanillaplus:elytra",
+  "components": {
+    "minecraft:enchantable": {
+      "value": 1
+    }
+  },
+  "firework_add_speed_multiplier": 1.2,
+  "firework_final_speed_multiplier": 0.25
+}

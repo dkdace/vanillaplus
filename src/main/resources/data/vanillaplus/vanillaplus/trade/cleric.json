@@ -1,0 +1,259 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:rotten_flesh",
+                "count": 14
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:redstone",
+                "count": 7
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:rabbit_foot",
+                "count": 2
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:lapis_lazuli",
+                "count": 5
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:gold_ingot",
+                "count": 3
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "abundant",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glowstone_dust",
+                "count": 15
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:turtle_scute",
+                "count": 2
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:amethyst_shard",
+                "count": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:nether_wart",
+                "count": 16
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:ender_pearl"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glass_bottle",
+                "count": 7
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glass_bottle"
+              },
+              "product": {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:awkward"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:crying_obsidian"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:experience_bottle",
+                "count": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:sell",
+          "supply": "moderate",
+          "price": 2,
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:swiftness"
+              },
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:leaping"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "vanillaplus:sell",
+          "supply": "scarce",
+          "price": 3,
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:night_vision"
+              },
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:water_breathing"
+              }
+            ]
+          }
+        },
+        {
+          "type": "vanillaplus:sell",
+          "supply": "scarce",
+          "price": 4,
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:glass_bottle"
+          },
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:fire_resistance"
+              },
+              {
+                "type": "vanillaplus:potion",
+                "potion": "minecraft:regeneration"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

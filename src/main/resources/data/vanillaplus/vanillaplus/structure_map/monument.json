@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.monument"
+  },
+  "structure_tag": "#minecraft:on_ocean_explorer_maps",
+  "color": 1849745,
+  "decoration_type": "minecraft:monument"
+}

@@ -1,0 +1,526 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:leather",
+                "count": 5
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:white_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:light_gray_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:gray_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:black_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:brown_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:red_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:orange_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:yellow_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:lime_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:green_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:cyan_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:light_blue_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:blue_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:purple_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:magenta_bundle"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:pink_bundle"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:white_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:light_gray_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:gray_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:black_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:brown_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:red_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:orange_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:yellow_dye",
+                    "count": 14
+                  }
+                ]
+              }
+            },
+            {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:leather_item",
+                        "id": "minecraft:leather_helmet"
+                      },
+                      {
+                        "type": "vanillaplus:leather_item",
+                        "id": "minecraft:leather_boots"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:leather_item",
+                        "id": "minecraft:leather_chestplate"
+                      },
+                      {
+                        "type": "vanillaplus:leather_item",
+                        "id": "minecraft:leather_leggings"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:rabbit_hide",
+                "count": 7
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 0.45,
+              "enchantment_level": "medium",
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_helmet"
+                  },
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_boots"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:lime_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:green_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:cyan_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:light_blue_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:blue_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:purple_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:magenta_dye",
+                    "count": 14
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:pink_dye",
+                    "count": 14
+                  }
+                ]
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "moderate",
+              "price_modifier": 0.5,
+              "enchantment_level": "medium",
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_chestplate"
+                  },
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_leggings"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:turtle_scute",
+                "count": 2
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:saddle"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:water_bucket"
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.45,
+              "enchantment_level": "high",
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_helmet"
+                  },
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_boots"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "product": {
+                "type": "vanillaplus:leather_item",
+                "id": "minecraft:leather_horse_armor"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 4,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:turtle_helmet"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:sell_enchanted",
+          "supply": "scarce",
+          "price_modifier": 0.5,
+          "enchantment_level": "high",
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:leather_item",
+                "id": "minecraft:leather_chestplate"
+              },
+              {
+                "type": "vanillaplus:leather_item",
+                "id": "minecraft:leather_leggings"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "vanillaplus:sell",
+          "supply": "moderate",
+          "price": 3,
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:white_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:light_gray_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:gray_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:black_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:brown_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:red_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:orange_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:yellow_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:lime_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:green_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:cyan_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:light_blue_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:blue_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:purple_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:magenta_harness"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:pink_harness"
+              }
+            ]
+          }
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.45,
+              "enchantment_level": "highest",
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_helmet"
+                  },
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_boots"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "vanillaplus:sell_enchanted",
+              "supply": "scarce",
+              "price_modifier": 0.5,
+              "enchantment_level": "highest",
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_chestplate"
+                  },
+                  {
+                    "type": "vanillaplus:leather_item",
+                    "id": "minecraft:leather_leggings"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

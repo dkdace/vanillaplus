@@ -1,0 +1,117 @@
+{
+  "type": "vanillaplus:witch",
+  "upgrade_potion_for_self": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0.17,
+        0.34,
+        0.51,
+        0.68,
+        0.85
+      ]
+    }
+  },
+  "upgrade_potion_for_support": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0,
+        0.17,
+        0.34,
+        0.51,
+        0.68,
+        0.85
+      ]
+    }
+  },
+  "upgrade_potion_for_attack": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6
+      ]
+    }
+  },
+  "replace_potion_for_self": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5
+      ]
+    },
+    "predicate": {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:entity_properties",
+        "entity": "this",
+        "predicate": {
+          "effects": {
+            "minecraft:invisibility": {}
+          }
+        }
+      }
+    },
+    "potion": "minecraft:invisibility"
+  },
+  "modify_potion_cooldowns": [
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      },
+      "multiplier": 0.75
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "multiplier": 0.5
+    }
+  ]
+}

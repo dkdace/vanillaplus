@@ -1,0 +1,178 @@
+{
+  "type": "vanillaplus:illusioner",
+  "enchant_items": [
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:power",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:power",
+      "level": 2
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:power",
+      "level": 3
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:power",
+      "level": 4
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:power",
+      "level": 5
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:punch",
+      "level": 1
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:punch",
+      "level": 2
+    },
+    {
+      "chance": {
+        "type": "minecraft:lookup",
+        "fallback": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0.17,
+          0.34,
+          0.51,
+          0.68,
+          0.85
+        ]
+      },
+      "equipment": "mainhand",
+      "enchantment": "minecraft:flame",
+      "level": 1
+    }
+  ],
+  "tipped_arrow": {
+    "chance": {
+      "type": "minecraft:lookup",
+      "fallback": 1,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0.08,
+        0.16,
+        0.24,
+        0.32,
+        0.40,
+        0.48
+      ]
+    },
+    "potions": [
+      "minecraft:slowness",
+      "minecraft:poison",
+      "minecraft:weakness"
+    ]
+  }
+}

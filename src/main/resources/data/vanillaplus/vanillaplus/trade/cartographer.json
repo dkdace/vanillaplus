@@ -1,0 +1,806 @@
+{
+  "trades": [
+    {
+      "level": 1,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:paper",
+                "count": 16
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:map"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glass_pane",
+                "count": 16
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 3,
+              "product": {
+                "type": "vanillaplus:map"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:ink_sac",
+                "count": 12
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 1,
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:item_frame",
+                "count": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              }
+            },
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_swamp"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_snowy"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_swamp"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_jungle"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_swamp"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_desert"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_jungle"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_desert"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 8,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:mineshaft"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_snowy"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:explorer_jungle"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "offers": [
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:buy",
+              "price": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:glow_ink_sac",
+                "count": 9
+              }
+            },
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_savanna"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_taiga"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_plains"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_snowy"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_taiga"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_plains"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_plains"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_savanna"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_savanna"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_desert"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_plains"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_desert"
+                      }
+                    ]
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 9,
+                  "price_multiplier": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:compass"
+                  },
+                  "product": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_plains"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:village_snowy"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:cherry_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:birch_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:spruce_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:spruce_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:jungle_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:bamboo_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:jungle_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:acacia_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:mangrove_sign",
+                        "count": 3
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:dark_oak_sign",
+                        "count": 3
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 9,
+              "price_multiplier": "high",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              },
+              "product": {
+                "type": "vanillaplus:structure_map",
+                "structure_map": "vanillaplus:buried_treasure"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "offers": [
+        {
+          "type": "vanillaplus:sell",
+          "supply": "moderate",
+          "price": 1,
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:white_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:light_gray_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:gray_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:black_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:brown_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:red_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:orange_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:yellow_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:lime_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:green_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:cyan_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:light_blue_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:blue_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:purple_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:magenta_banner"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:pink_banner"
+              }
+            ]
+          }
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 12,
+              "price_multiplier": "high",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              },
+              "product": {
+                "type": "vanillaplus:structure_map",
+                "structure_map": "vanillaplus:monument"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 14,
+              "price_multiplier": "high",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              },
+              "product": {
+                "type": "vanillaplus:structure_map",
+                "structure_map": "vanillaplus:mansion"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "vanillaplus:sell",
+          "supply": "scarce",
+          "price": 9,
+          "price_multiplier": "high",
+          "product": {
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:mojang_banner_pattern"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:globe_banner_pattern"
+              }
+            ]
+          }
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 15,
+              "price_multiplier": "high",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              },
+              "product": {
+                "type": "vanillaplus:structure_map",
+                "structure_map": "vanillaplus:trial_chambers"
+              }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 23,
+              "price_multiplier": "high",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:compass"
+              },
+              "product": {
+                "type": "vanillaplus:structure_map",
+                "structure_map": "vanillaplus:ancient_city"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

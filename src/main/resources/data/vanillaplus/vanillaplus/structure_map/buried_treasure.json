@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.buried_treasure"
+  },
+  "structure_tag": "#minecraft:on_treasure_maps",
+  "color": 14404372,
+  "decoration_type": "minecraft:red_x"
+}

@@ -1,0 +1,14 @@
+{
+  "type": "vanillaplus:ravager",
+  "attributes": [
+    {
+      "id": "minecraft:max_health",
+      "base": 75
+    },
+    {
+      "id": "minecraft:armor",
+      "base": 15
+    }
+  ],
+  "roar_cooldown_seconds": 10
+}

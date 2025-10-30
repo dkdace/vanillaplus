@@ -1,0 +1,20 @@
+{
+  "values": {
+    "power": {
+      "description_index": 0,
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": {
+          "type": "minecraft:linear",
+          "base": 1.5,
+          "per_level_above_first": 0.35
+        },
+        "values": [
+          1.2,
+          1.75,
+          2.2
+        ]
+      }
+    }
+  }
+}

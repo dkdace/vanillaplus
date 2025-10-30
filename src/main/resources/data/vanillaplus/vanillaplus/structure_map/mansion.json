@@ -1,0 +1,8 @@
+{
+  "description": {
+    "translate": "filled_map.mansion"
+  },
+  "structure_tag": "#minecraft:on_woodland_explorer_maps",
+  "color": 9197334,
+  "decoration_type": "minecraft:mansion"
+}
