@@ -54,6 +54,7 @@
     "world.level.block.ChestBlockMixin",
     "world.level.block.CreakingHeartBlockMixin",
     "world.level.block.DropExperienceBlockMixin",
+    "world.level.block.PumpkinBlockMixin",
     "world.level.block.entity.AbstractFurnaceBlockEntityMixin",
     "world.level.block.entity.BarrelBlockEntityMixin",
     "world.level.block.entity.BellBlockEntityMixin",
