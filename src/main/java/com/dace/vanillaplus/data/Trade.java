@@ -558,7 +558,7 @@ public final class Trade {
                 @Override
                 @NonNull
                 public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    return itemStack;
+                    return itemStack.copy();
                 }
             }
 
