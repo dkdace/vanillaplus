@@ -56,7 +56,7 @@ import java.util.stream.Stream;
  * 주민 거래 정보를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class Trade {
     /** 레지스트리 코덱 */
     public static final Codec<Holder<Trade>> CODEC = VPRegistry.TRADE.createRegistryCodec();

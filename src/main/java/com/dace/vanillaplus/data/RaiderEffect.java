@@ -48,7 +48,7 @@ import java.util.Optional;
  * 흉조 레벨에 따라 습격대 엔티티에게 적용되는 효과를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEffect> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends RaiderEffect>> CODEC_REGISTRY = VPRegistry.RAIDER_EFFECT.createRegistry("type");

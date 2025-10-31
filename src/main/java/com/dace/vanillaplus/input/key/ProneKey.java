@@ -23,7 +23,7 @@ public final class ProneKey extends ToggleKeyMapping {
     public static final ProneKey instance = new ProneKey();
 
     private ProneKey() {
-        super("key.prone", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.movement", () -> false);
+        super("key.prone", GLFW.GLFW_KEY_LEFT_ALT, Category.MOVEMENT, () -> false, true);
     }
 
     @Override

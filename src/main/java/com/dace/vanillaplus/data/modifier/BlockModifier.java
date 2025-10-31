@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");

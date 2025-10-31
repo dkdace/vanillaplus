@@ -17,8 +17,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
-    @Shadow
-    public boolean hasImpulse;
     @Unique
     @Nullable
     protected U dataModifier;
@@ -47,12 +45,6 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
 
     @Shadow
     public abstract EntityType<?> getType();
-
-    @Shadow
-    public abstract Vec3 getDeltaMovement();
-
-    @Shadow
-    public abstract void setDeltaMovement(double x, double y, double z);
 
     @Shadow
     public abstract Level level();

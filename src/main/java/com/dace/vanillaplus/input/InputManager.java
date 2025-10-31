@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
  * 키 입력 이벤트를 관리하는 클래스.
  */
 @UtilityClass
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class InputManager {
     @SubscribeEvent
     private static void onRegisterKeyMappings(@NonNull RegisterKeyMappingsEvent event) {

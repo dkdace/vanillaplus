@@ -31,7 +31,7 @@ import java.util.List;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.CodecComponent<EntityModifier> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends EntityModifier>> CODEC_REGISTRY = VPRegistry.ENTITY_MODIFIER.createRegistry("type");

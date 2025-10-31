@@ -18,7 +18,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class GeneralModifier {
     /** JSON 코덱 */
     private static final Codec<GeneralModifier> CODEC = RecordCodecBuilder.create(instance -> instance
