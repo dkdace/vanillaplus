@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * 마법 부여의 수치 프리셋을 관리하는 클래스.
  */
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EnchantmentValuePreset {
     /** 레지스트리 코덱 */
     public static final Codec<Holder<EnchantmentValuePreset>> CODEC = VPRegistry.ENCHANTMENT_VALUE_PRESET.createRegistryCodec();

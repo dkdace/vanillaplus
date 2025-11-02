@@ -23,9 +23,9 @@ public abstract class SlimeMixin extends MobMixin<Slime, EntityModifier.LivingEn
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));
     }
 
-    @Definition(id = "p_33636_", local = @Local(type = Entity.class, argsOnly = true))
+    @Definition(id = "pEntity", local = @Local(type = Entity.class, argsOnly = true))
     @Definition(id = "IronGolem", type = IronGolem.class)
-    @Expression("p_33636_ instanceof IronGolem")
+    @Expression("pEntity instanceof IronGolem")
     @ModifyExpressionValue(method = "push", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyPushConditions(boolean original, @Local(argsOnly = true) Entity entity) {
         return original || entity instanceof AbstractVillager;

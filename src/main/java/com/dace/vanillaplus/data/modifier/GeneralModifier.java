@@ -18,7 +18,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class GeneralModifier {
     /** JSON 코덱 */
     private static final Codec<GeneralModifier> CODEC = RecordCodecBuilder.create(instance -> instance
@@ -31,7 +31,7 @@ public final class GeneralModifier {
     /** 전역 수정자 리소스 이름 */
     private static final String RESOURCE_NAME = "general";
 
-    /** 철 또는 금 도구를 화로에서 녹일 때 내구도 감소 비율 */
+    /** 구리, 철 또는 금 도구를 화로에서 녹일 때 내구도 감소 비율 */
     private final float smeltingToolDamageRatio;
     /** 최대 내구도 : 최대 수리 한도 비율 */
     private final float maxRepairLimitRatio;

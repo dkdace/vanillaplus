@@ -31,8 +31,8 @@ public abstract class BarrelBlockMixin<T extends BarrelBlock, U extends BlockMod
     @ModifyVariable(method = "createBlockStateDefinition", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/state/StateDefinition$Builder;add([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;"),
             argsOnly = true)
-    private StateDefinition.Builder<Block, BlockState> modifyBlockStateDefinition(StateDefinition.Builder<Block, BlockState> value) {
-        return value.add(LOOT, ALWAYS_OPEN);
+    private StateDefinition.Builder<Block, BlockState> modifyBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        return builder.add(LOOT, ALWAYS_OPEN);
     }
 
     @Inject(method = "useWithoutItem", at = @At(value = "INVOKE",

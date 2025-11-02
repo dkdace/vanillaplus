@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -18,6 +19,14 @@ public final class VPTags {
     @NonNull
     private static <T> TagKey<T> create(@NonNull ResourceKey<Registry<T>> registry, @NonNull String name) {
         return TagKey.create(registry, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
+    }
+
+    /**
+     * 아이템 데이터 태그.
+     */
+    @UtilityClass
+    public static final class Items {
+        public static final TagKey<Item> NUGGETS = create(Registries.ITEM, "nuggets");
     }
 
     /**

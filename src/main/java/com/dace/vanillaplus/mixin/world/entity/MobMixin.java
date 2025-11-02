@@ -50,7 +50,7 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     }
 
     @Inject(method = "startRiding", at = @At("HEAD"), cancellable = true)
-    private void preventRidingIfAggressive(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
+    private void preventRidingIfAggressive(Entity vehicle, boolean force, boolean sendGameEvent, CallbackInfoReturnable<Boolean> cir) {
         if (isAggressive() && vehicle instanceof VehicleEntity)
             cir.setReturnValue(false);
     }

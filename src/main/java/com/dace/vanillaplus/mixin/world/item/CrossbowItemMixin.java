@@ -21,7 +21,7 @@ public abstract class CrossbowItemMixin extends ItemMixin<CrossbowItem, ItemModi
     }
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))
-    private double modifyShootProjectileTargetY(double y) {
+    private double modifyShootProjectileTargetYScale(double scale) {
         return -0.25;
     }
 }

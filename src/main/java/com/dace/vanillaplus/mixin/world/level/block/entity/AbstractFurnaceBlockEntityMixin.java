@@ -1,11 +1,11 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
+import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -22,7 +22,7 @@ public abstract class AbstractFurnaceBlockEntityMixin<T extends AbstractFurnaceB
     private void damageBurnedTool(RegistryAccess registryAccess, RecipeHolder<? extends AbstractCookingRecipe> recipeHolder,
                                   SingleRecipeInput recipeInput, NonNullList<ItemStack> itemStacks, int maxStackSize,
                                   CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) ItemStack input, @Local(ordinal = 1) ItemStack output) {
-        if (!input.isDamageableItem() || !output.is(Items.IRON_NUGGET) && !output.is(Items.GOLD_NUGGET))
+        if (!input.isDamageableItem() || !output.is(VPTags.Items.NUGGETS))
             return;
         if (input.getEnchantments().keySet().stream()
                 .anyMatch(enchantmentHolder -> enchantmentHolder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP)))

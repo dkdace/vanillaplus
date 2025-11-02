@@ -47,7 +47,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract void stopRiding();
 
     @Shadow
-    public boolean canAttack(LivingEntity livingEntity) {
+    public boolean canAttack(LivingEntity target) {
         return false;
     }
 

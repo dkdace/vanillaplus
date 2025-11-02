@@ -27,10 +27,10 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Shadow
     private int seeTime;
 
-    @Definition(id = "p_25816_", local = @Local(type = float.class, argsOnly = true))
-    @Expression("p_25816_")
+    @Definition(id = "pAttackRadius", local = @Local(type = float.class, argsOnly = true))
+    @Expression("pAttackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
-    private float modifyAttackRange(float original, @Local(argsOnly = true) T monster) {
+    private float modifyAttackRadius(float original, @Local(argsOnly = true) T monster) {
         return ((EntityModifier.CrossbowAttackMobModifier) EntityModifier.fromEntityTypeOrThrow(monster.getType())).getShootingRange();
     }
 

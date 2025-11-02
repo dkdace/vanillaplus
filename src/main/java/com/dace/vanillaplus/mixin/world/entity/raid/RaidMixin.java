@@ -57,7 +57,7 @@ public abstract class RaidMixin {
     public abstract void setLeader(int wave, Raider raider);
 
     @Shadow
-    public abstract void joinRaid(ServerLevel serverLevel, int wave, Raider raider, @Nullable BlockPos blockPos, boolean isSpawned);
+    public abstract void joinRaid(ServerLevel serverLevel, int wave, Raider raider, @Nullable BlockPos blockPos, boolean isRecruited);
 
     @Shadow
     protected abstract boolean isFinalWave();
