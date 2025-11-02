@@ -66,11 +66,13 @@
     "world.level.storage.loot.functions.SetOminousBottleAmplifierFunctionMixin"
   ],
   "client": [
+    "client.OptionsMixin",
     "client.gui.GuiGraphicsMixin",
     "client.gui.GuiMixin",
     "client.gui.screens.ScreenMixin",
     "client.gui.screens.inventory.AbstractContainerScreenMixin",
     "client.gui.screens.inventory.MerchantScreenMixin",
+    "client.gui.screens.options.controls.ControlsScreenMixin",
     "client.player.LocalPlayerMixin",
     "client.renderer.ScreenEffectRendererMixin"
   ],
