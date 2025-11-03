@@ -19,8 +19,8 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)
-    private Predicate<ItemStack> preventRepair(Predicate<ItemStack> predicate, @Local(argsOnly = true) ServerPlayer serverPlayer) {
-        return predicate.and(itemStack -> {
+    private Predicate<ItemStack> preventRepair(Predicate<ItemStack> filter, @Local(argsOnly = true) ServerPlayer serverPlayer) {
+        return filter.and(itemStack -> {
             VPItemStack vpItemStack = VPItemStack.cast(itemStack);
             if (serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
                 return true;

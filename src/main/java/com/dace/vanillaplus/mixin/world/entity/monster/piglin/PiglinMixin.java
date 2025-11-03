@@ -2,8 +2,6 @@ package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +14,7 @@ public abstract class PiglinMixin extends MonsterMixin<Piglin, EntityModifier.Cr
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
-    private float modifyBulletSpeed(float speed, @Local(argsOnly = true) LivingEntity entity) {
+    private float modifyBulletVelocity(float velocity) {
         return Objects.requireNonNull(dataModifier).getShootingPower();
     }
 }

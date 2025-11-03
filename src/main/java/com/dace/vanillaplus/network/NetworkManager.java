@@ -27,7 +27,7 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class NetworkManager {
     /** 프로토콜 버전 */
-    private static final int PROTOCOL_VERSION = 1;
+    private static final int PROTOCOL_VERSION = 2;
     /** 패킷 전송 채널 */
     private static final SimpleChannel CHANNEL = ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, "main"))

@@ -25,7 +25,7 @@ public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand, Enti
     @Inject(method = "interactAt", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/decoration/ArmorStand;getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;"),
             cancellable = true)
-    private void toggleShowArms(Player player, Vec3 interactPos, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void toggleShowArms(Player player, Vec3 interactVec, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!player.isShiftKeyDown() || hasItemInSlot(EquipmentSlot.MAINHAND) || hasItemInSlot(EquipmentSlot.OFFHAND))
             return;
 

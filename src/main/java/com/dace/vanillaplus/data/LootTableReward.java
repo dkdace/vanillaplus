@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LootTableReward {
     /** 레지스트리 코덱 */
     public static final Codec<Holder<LootTableReward>> CODEC = VPRegistry.LOOT_TABLE_REWARD.createRegistryCodec();
