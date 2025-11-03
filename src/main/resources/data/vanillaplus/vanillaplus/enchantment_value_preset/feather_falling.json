@@ -2,6 +2,7 @@
   "values": {
     "resistance": {
       "description_index": 0,
+      "description_value_multiplier": 4,
       "value": {
         "type": "minecraft:linear",
         "base": 3.0,
