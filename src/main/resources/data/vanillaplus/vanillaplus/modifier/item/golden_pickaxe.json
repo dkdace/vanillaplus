@@ -1,6 +1,22 @@
 {
   "type": "vanillaplus:item",
   "components": {
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:attack_damage",
+        "amount": 1.5,
+        "id": "minecraft:base_attack_damage",
+        "operation": "add_value",
+        "slot": "mainhand"
+      },
+      {
+        "type": "minecraft:attack_speed",
+        "amount": -2.6,
+        "id": "minecraft:base_attack_speed",
+        "operation": "add_value",
+        "slot": "mainhand"
+      }
+    ],
     "minecraft:enchantable": {
       "value": 26
     }
