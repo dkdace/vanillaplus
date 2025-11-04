@@ -39,6 +39,7 @@
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.entity.raid.RaidMixin",
     "world.inventory.AnvilMenuMixin",
+    "world.inventory.EnchantmentMenuMixin",
     "world.inventory.GrindstoneMenuMixin",
     "world.item.BowItemMixin",
     "world.item.CreativeModeTabsMixin",
