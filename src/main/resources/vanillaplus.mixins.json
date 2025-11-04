@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "server.commands.EnchantCommandMixin",
     "world.entity.EntityMixin",
     "world.entity.EntityTypeMixin",
     "world.entity.ExperienceOrbMixin",
@@ -47,7 +48,9 @@
     "world.item.ItemStackMixin",
     "world.item.component.OminousBottleAmplifierMixin",
     "world.item.crafting.RepairItemRecipeMixin",
+    "world.item.enchantment.EnchantmentHelperMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
+    "world.item.enchantment.providers.SingleEnchantmentMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BedBlockMixin",
     "world.level.block.BlockMixin",
@@ -63,6 +66,7 @@
     "world.level.block.entity.RandomizableContainerBlockEntityMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
+    "world.level.storage.loot.functions.EnchantRandomlyFunctionMixin",
     "world.level.storage.loot.functions.SetOminousBottleAmplifierFunctionMixin"
   ],
   "client": [
