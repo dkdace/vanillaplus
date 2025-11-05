@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.mixin.world.inventory;
+package com.dace.vanillaplus.mixin.world.item.enchantment.providers;
 
 import com.dace.vanillaplus.data.EnchantmentExtension;
 import com.dace.vanillaplus.extension.VPMixin;
@@ -6,24 +6,23 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.providers.SingleEnchantment;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(AnvilMenu.class)
-public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
-    @Overwrite
-    public static int calculateIncreasedRepairCost(int cost) {
-        return (int) Math.min(cost + 1L, 2147483647L);
-    }
+@Mixin(SingleEnchantment.class)
+public abstract class SingleEnchantmentMixin implements VPMixin<SingleEnchantment> {
+    @Shadow
+    @Final
+    private Holder<Enchantment> enchantment;
 
-    @ModifyExpressionValue(method = "createResult", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I"))
-    private int modifyMaxLevel(int maxLevel, @Local Holder<Enchantment> enchantmentHolder, @Local(ordinal = 0) ItemStack itemStack) {
-        ResourceKey<Enchantment> enchantmentResourceKey = enchantmentHolder.unwrapKey().orElse(null);
+    @ModifyExpressionValue(method = "enchant", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I"))
+    private int modifyMaxLevel(int maxLevel, @Local(argsOnly = true) ItemStack itemStack) {
+        ResourceKey<Enchantment> enchantmentResourceKey = enchantment.unwrapKey().orElse(null);
 
         if (enchantmentResourceKey != null) {
             EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);

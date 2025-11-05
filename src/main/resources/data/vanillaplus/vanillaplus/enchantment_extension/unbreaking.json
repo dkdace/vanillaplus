@@ -1,0 +1,23 @@
+{
+  "enchantment": "minecraft:unbreaking",
+  "values": {
+    "chance": {
+      "description_index": 0,
+      "description_value_multiplier": 100,
+      "value": {
+        "type": "minecraft:fraction",
+        "denominator": {
+          "type": "minecraft:linear",
+          "base": 3.0,
+          "per_level_above_first": 1.0
+        },
+        "numerator": {
+          "type": "minecraft:linear",
+          "base": 1.0,
+          "per_level_above_first": 1.0
+        }
+      }
+    }
+  },
+  "extended_max_level": 8
+}

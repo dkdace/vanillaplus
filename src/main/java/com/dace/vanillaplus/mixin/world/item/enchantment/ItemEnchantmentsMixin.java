@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.EnchantmentValuePreset;
+import com.dace.vanillaplus.data.EnchantmentExtension;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -36,9 +36,9 @@ import java.util.function.Consumer;
 public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
     private static void applyComponent(@NonNull Consumer<Component> componentConsumer, @NonNull Enchantment enchantment, int level,
-                                       @NonNull EnchantmentValuePreset enchantmentValuePreset) {
+                                       @NonNull EnchantmentExtension enchantmentExtension) {
         if (enchantment.description().getContents() instanceof TranslatableContents translatableContents)
-            enchantmentValuePreset.getValues().forEach(definedValue -> {
+            enchantmentExtension.getValues().forEach(definedValue -> {
                 String key = translatableContents.getKey() + ".description." + definedValue.getDescriptionIndex();
                 String argument = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT
                         .format(definedValue.getLevelBasedValue().calculate(level) * definedValue.getDescriptionValueMultiplier());
@@ -90,9 +90,9 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
         if (enchantmentResourceKey == null)
             return;
 
-        EnchantmentValuePreset enchantmentValuePreset = EnchantmentValuePreset.fromEnchantment(enchantmentResourceKey);
-        if (enchantmentValuePreset != null)
-            applyComponent(componentConsumer, enchantment, level, enchantmentValuePreset);
+        EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
+        if (enchantmentExtension != null)
+            applyComponent(componentConsumer, enchantment, level, enchantmentExtension);
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, level));

@@ -57,8 +57,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
     /** 노획물 테이블 보상 */
     public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
-    /** 마법 부여 수치 프리셋 */
-    public static final VPRegistry<EnchantmentValuePreset> ENCHANTMENT_VALUE_PRESET = new VPRegistry<>("enchantment_value_preset");
+    /** 마법 부여 확장 */
+    public static final VPRegistry<EnchantmentExtension> ENCHANTMENT_EXTENSION = new VPRegistry<>("enchantment_extension");
     /** 습격 웨이브 정보 */
     public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
     /** 습격자 효과 */
