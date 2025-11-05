@@ -29,8 +29,8 @@ public final class GeneralModifier {
                             .forGetter(GeneralModifier::getMaxRepairLimitRatio),
                     ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5)
                             .forGetter(GeneralModifier::getMaxBadOmenLevel),
-                    ExtraCodecs.floatRange(1, 10).optionalFieldOf("unlimited_enchantment_cost_multiplier", 1F)
-                            .forGetter(GeneralModifier::getExtendedEnchantmentCostMultiplier))
+                    ExtraCodecs.floatRange(1, 10).optionalFieldOf("extended_enchantment_max_cost_multiplier", 1F)
+                            .forGetter(GeneralModifier::getExtendedEnchantmentMaxCostMultiplier))
             .apply(instance, GeneralModifier::new));
     /** 전역 수정자 리소스 이름 */
     private static final String RESOURCE_NAME = "general";
@@ -41,8 +41,8 @@ public final class GeneralModifier {
     private final float maxRepairLimitRatio;
     /** 최대 흉조 레벨 */
     private final int maxBadOmenLevel;
-    /** {@link VPTags.Items#EXTENDED_ENCHANTABLE} 아이템의 마법 부여 비용 배수 */
-    private final float extendedEnchantmentCostMultiplier;
+    /** {@link VPTags.Items#EXTENDED_ENCHANTABLE} 아이템의 최대 마법 부여 비용 배수 */
+    private final float extendedEnchantmentMaxCostMultiplier;
 
     /**
      * 전역 수정자를 반환한다.

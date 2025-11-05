@@ -57,7 +57,7 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
     @ModifyExpressionValue(method = "getEnchantmentCost", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private static int modifyMaxPower(int maxPower, @Local(argsOnly = true) ItemStack itemStack) {
         return itemStack.is(VPTags.Items.EXTENDED_ENCHANTABLE)
-                ? (int) (maxPower * GeneralModifier.get().getExtendedEnchantmentCostMultiplier())
+                ? (int) (maxPower * GeneralModifier.get().getExtendedEnchantmentMaxCostMultiplier())
                 : maxPower;
     }
 }
