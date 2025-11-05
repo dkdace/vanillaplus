@@ -27,6 +27,8 @@ public final class VPTags {
     @UtilityClass
     public static final class Items {
         public static final TagKey<Item> NUGGETS = create(Registries.ITEM, "nuggets");
+        public static final TagKey<Item> EXTENDED_ENCHANTABLE = create(Registries.ITEM, "enchantable/extended");
+        public static final TagKey<Item> UNLIMITED_ENCHANTABLE = create(Registries.ITEM, "enchantable/unlimited");
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.data.EnchantmentValuePreset;
+import com.dace.vanillaplus.data.EnchantmentExtension;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -19,9 +19,9 @@ public final class VPEnchantmentLevelBasedValueTypes {
         VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
     }
 
-    private record Preset(@NonNull Holder<EnchantmentValuePreset> enchantmentValuePresetHolder, @NonNull String name) implements LevelBasedValue {
+    private record Preset(@NonNull Holder<EnchantmentExtension> enchantmentValuePresetHolder, @NonNull String name) implements LevelBasedValue {
         public static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(EnchantmentValuePreset.CODEC.fieldOf("value").forGetter(Preset::enchantmentValuePresetHolder),
+                .group(EnchantmentExtension.CODEC.fieldOf("value").forGetter(Preset::enchantmentValuePresetHolder),
                         Codec.STRING.fieldOf("name").forGetter(Preset::name))
                 .apply(instance, Preset::new));
 
