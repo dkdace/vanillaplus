@@ -17,6 +17,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -47,6 +48,9 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
     /** 아이템 데이터 요소 */
     @NonNull
     private final DataComponentMap dataComponentMap;
+    /** 아이템 속성 수정자 목록 */
+    @NonNull
+    private final ItemAttributeModifiers itemAttributeModifiers;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
@@ -80,9 +84,11 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
     }
 
     @NonNull
-    private static <T extends ItemModifier> Products.P1<RecordCodecBuilder.Mu<T>, DataComponentMap> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+    private static <T extends ItemModifier> Products.P2<RecordCodecBuilder.Mu<T>, DataComponentMap, ItemAttributeModifiers> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
         return instance.group(DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY)
-                .forGetter(ItemModifier::getDataComponentMap));
+                        .forGetter(ItemModifier::getDataComponentMap),
+                ItemAttributeModifiers.CODEC.optionalFieldOf("attribute_modifiers", ItemAttributeModifiers.EMPTY)
+                        .forGetter(ItemModifier::getItemAttributeModifiers));
     }
 
     @Override
@@ -108,8 +114,9 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         /** 폭죽의 최종 속도 배수 */
         private final float fireworkFinalSpeedModifier;
 
-        private ElytraModifier(@NonNull DataComponentMap dataComponentMap, float fireworkAddSpeedMultiplier, float fireworkFinalSpeedModifier) {
-            super(dataComponentMap);
+        private ElytraModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
+                               float fireworkAddSpeedMultiplier, float fireworkFinalSpeedModifier) {
+            super(dataComponentMap, itemAttributeModifiers);
 
             this.fireworkAddSpeedMultiplier = fireworkAddSpeedMultiplier;
             this.fireworkFinalSpeedModifier = fireworkFinalSpeedModifier;
@@ -133,13 +140,14 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         /** 화살 발사 속력 */
         private final float shootingPower;
 
-        private ProjectileWeaponModifier(@NonNull DataComponentMap dataComponentMap, float shootingPower) {
-            super(dataComponentMap);
+        private ProjectileWeaponModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
+                                         float shootingPower) {
+            super(dataComponentMap, itemAttributeModifiers);
             this.shootingPower = shootingPower;
         }
 
         @NonNull
-        private static <T extends ProjectileWeaponModifier> Products.P2<RecordCodecBuilder.Mu<T>, DataComponentMap, Float> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+        private static <T extends ProjectileWeaponModifier> Products.P3<RecordCodecBuilder.Mu<T>, DataComponentMap, ItemAttributeModifiers, Float> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
             return ItemModifier.createBaseCodec(instance)
                     .and(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 3.0F)
                             .forGetter(ProjectileWeaponModifier::getShootingPower));
@@ -166,8 +174,9 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         /** 폭죽 발사 속력 */
         private final float shootingPowerFireworkRocket;
 
-        private CrossbowModifier(@NonNull DataComponentMap dataComponentMap, float shootingPower, float shootingPowerFireworkRocket) {
-            super(dataComponentMap, shootingPower);
+        private CrossbowModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
+                                 float shootingPower, float shootingPowerFireworkRocket) {
+            super(dataComponentMap, itemAttributeModifiers, shootingPower);
             this.shootingPowerFireworkRocket = shootingPowerFireworkRocket;
         }
 
