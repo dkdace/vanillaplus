@@ -1,4 +1,6 @@
 {
+  "attribute.name.environmental_damage_resistance": "Environmental Damage Resistance",
+  "attribute.name.generic.environmental_damage_resistance": "Environmental Damage Resistance",
   "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "block.minecraft.bed.no_use": "You cannot sleep here",

@@ -1,0 +1,21 @@
+{
+  "values": [
+    "#minecraft:is_fall",
+    "#minecraft:damages_helmet",
+    "minecraft:on_fire",
+    "minecraft:in_fire",
+    "minecraft:campfire",
+    "minecraft:lava",
+    "minecraft:hot_floor",
+    "minecraft:in_wall",
+    "minecraft:cramming",
+    "minecraft:drown",
+    "minecraft:dry_out",
+    "minecraft:fly_into_wall",
+    "minecraft:starve",
+    "minecraft:freeze",
+    "minecraft:cactus",
+    "minecraft:sweet_berry_bush",
+    "minecraft:lightning_bolt"
+  ]
+}

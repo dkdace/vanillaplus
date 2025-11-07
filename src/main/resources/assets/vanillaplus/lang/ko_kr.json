@@ -1,4 +1,6 @@
 {
+  "attribute.name.environmental_damage_resistance": "환경 피해 저항",
+  "attribute.name.generic.environmental_damage_resistance": "환경 피해 저항",
   "attribute.name.generic.projectile_knockback_resistance": "발사체 밀치기 저항",
   "attribute.name.projectile_knockback_resistance": "발사체 밀치기 저항",
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
