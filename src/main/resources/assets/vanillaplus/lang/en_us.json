@@ -1,7 +1,9 @@
 {
   "attribute.name.environmental_damage_resistance": "Environmental Damage Resistance",
+  "attribute.name.food_exhaustion_multiplier": "Food Exhaustion Multiplier",
   "attribute.name.generic.environmental_damage_resistance": "Environmental Damage Resistance",
   "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
+  "attribute.name.player.food_exhaustion_multiplier": "Food Exhaustion Multiplier",
   "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "block.minecraft.bed.no_use": "You cannot sleep here",
   "consumable.clearAllStatusEffects": "Removes All Status Effects",
