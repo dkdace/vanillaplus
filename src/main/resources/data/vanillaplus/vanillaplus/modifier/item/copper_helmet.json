@@ -1,10 +1,5 @@
 {
   "type": "vanillaplus:item",
-  "components": {
-    "minecraft:enchantable": {
-      "value": 30
-    }
-  },
   "attribute_modifiers": [
     {
       "type": "vanillaplus:food_exhaustion_multiplier",

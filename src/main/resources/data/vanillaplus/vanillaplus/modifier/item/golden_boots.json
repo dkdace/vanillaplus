@@ -4,5 +4,14 @@
     "minecraft:enchantable": {
       "value": 30
     }
-  }
+  },
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:food_exhaustion_multiplier",
+      "amount": 0.01,
+      "id": "minecraft:armor.boots",
+      "operation": "add_multiplied_base",
+      "slot": "feet"
+    }
+  ]
 }
