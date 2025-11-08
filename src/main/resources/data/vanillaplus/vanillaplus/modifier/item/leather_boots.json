@@ -3,7 +3,7 @@
   "attribute_modifiers": [
     {
       "type": "vanillaplus:environmental_damage_resistance",
-      "amount": 0.15,
+      "amount": 0.1,
       "id": "minecraft:armor.boots",
       "operation": "add_value",
       "slot": "feet"
