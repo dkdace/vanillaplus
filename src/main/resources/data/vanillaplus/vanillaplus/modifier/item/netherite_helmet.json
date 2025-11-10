@@ -1,14 +1,9 @@
 {
   "type": "vanillaplus:item",
-  "components": {
-    "minecraft:enchantable": {
-      "value": 30
-    }
-  },
   "attribute_modifiers": [
     {
       "type": "vanillaplus:food_exhaustion_multiplier",
-      "amount": 0.01,
+      "amount": 0.03,
       "id": "minecraft:armor.helmet",
       "operation": "add_multiplied_base",
       "slot": "head"

@@ -38,6 +38,7 @@
     "world.entity.projectile.AbstractArrowMixin",
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.entity.raid.RaidMixin",
+    "world.food.FoodDataMixin",
     "world.inventory.AnvilMenuMixin",
     "world.inventory.EnchantmentMenuMixin",
     "world.inventory.GrindstoneMenuMixin",

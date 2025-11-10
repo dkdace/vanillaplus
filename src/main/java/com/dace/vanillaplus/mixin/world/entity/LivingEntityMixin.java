@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -7,13 +8,14 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.level.ClipContext;
@@ -38,11 +40,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
 
-    @ModifyReturnValue(method = "createLivingAttributes", at = @At("RETURN"))
-    private static AttributeSupplier.Builder modifyDefaultAttributes(AttributeSupplier.Builder builder) {
-        return builder.add(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
-    }
-
     @Shadow
     public abstract void stopRiding();
 
@@ -56,6 +53,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     public abstract boolean hasItemInSlot(EquipmentSlot equipmentSlot);
+
+    @Shadow
+    public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
+
+    @Unique
+    private double getEnvironmentalDamageResistanceValue() {
+        return getAttributeValue(VPAttributes.ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
+    }
 
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
@@ -96,6 +101,11 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double original) {
         return VPAttributes.getFinalKnockbackResistance(getThis(), lastDamageSourceForKnockback);
+    }
+
+    @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))
+    private float modifyDamageAfterArmorAbsorb(float damage, @Local(argsOnly = true) DamageSource damageSource) {
+        return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - getEnvironmentalDamageResistanceValue()) : damage);
     }
 
     @Override

@@ -1,11 +1,13 @@
 {
   "type": "vanillaplus:item",
-  "components": {
-    "minecraft:enchantable": {
-      "value": 30
-    }
-  },
   "attribute_modifiers": [
+    {
+      "type": "minecraft:armor",
+      "amount": 5.0,
+      "id": "minecraft:armor.chestplate",
+      "operation": "add_value",
+      "slot": "chest"
+    },
     {
       "type": "vanillaplus:food_exhaustion_multiplier",
       "amount": 0.02,

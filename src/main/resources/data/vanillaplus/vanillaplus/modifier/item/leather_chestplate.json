@@ -1,14 +1,9 @@
 {
   "type": "vanillaplus:item",
-  "components": {
-    "minecraft:enchantable": {
-      "value": 18
-    }
-  },
   "attribute_modifiers": [
     {
-      "type": "minecraft:armor",
-      "amount": 6.0,
+      "type": "vanillaplus:environmental_damage_resistance",
+      "amount": 0.25,
       "id": "minecraft:armor.chestplate",
       "operation": "add_value",
       "slot": "chest"
