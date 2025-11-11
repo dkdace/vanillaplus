@@ -20,7 +20,7 @@ public abstract class EnchantCommandMixin implements VPMixin<EnchantCommand> {
         if (enchantmentResourceKey != null) {
             EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
             if (enchantmentExtension != null)
-                return enchantmentExtension.getExtendedMaxLevel();
+                return enchantmentExtension.getMaxLevel();
         }
 
         return maxLevel;
