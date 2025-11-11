@@ -4,6 +4,7 @@ import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.network.packet.PacketHandler;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
+import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -41,6 +42,7 @@ public final class NetworkManager {
             registerPacket(PacketFlow.SERVERBOUND, PronePacketHandler.class, PronePacketHandler::new);
             registerPacket(PacketFlow.CLIENTBOUND, RecoveryCompassTeleportPacketHandler.class,
                     buf -> new RecoveryCompassTeleportPacketHandler());
+            registerPacket(PacketFlow.CLIENTBOUND, ShowHeadOnLocatorBarPacketHandler.class, ShowHeadOnLocatorBarPacketHandler::new);
 
             CHANNEL.build();
         });

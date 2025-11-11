@@ -75,6 +75,7 @@
     "client.OptionsMixin",
     "client.gui.GuiGraphicsMixin",
     "client.gui.GuiMixin",
+    "client.gui.contextualbar.LocatorBarRendererMixin",
     "client.gui.screens.ScreenMixin",
     "client.gui.screens.inventory.AbstractContainerScreenMixin",
     "client.gui.screens.inventory.MerchantScreenMixin",
