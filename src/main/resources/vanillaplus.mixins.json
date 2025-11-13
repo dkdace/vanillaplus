@@ -66,6 +66,8 @@
     "world.level.block.entity.BlockEntityMixin",
     "world.level.block.entity.ChestBlockEntityMixin",
     "world.level.block.entity.RandomizableContainerBlockEntityMixin",
+    "world.level.levelgen.feature.SpikeFeatureMixin",
+    "world.level.levelgen.feature.SpikeFeatureMixin$SpikeCacheLoaderMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
     "world.level.storage.loot.functions.EnchantRandomlyFunctionMixin",
