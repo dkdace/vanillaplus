@@ -52,6 +52,7 @@
   "food.nutrition": "+%s 배고픔 회복",
   "food.saturation": "+%s 포만감",
   "food.whenEat": "섭취 시:",
+  "gamerule.disableMobsInBossFight": "엔더 드래곤 전투 중 몹 비활성화",
   "gamerule.showHeadOnLocatorBar": "위치 표시 바에 플레이어 머리 표시",
   "gamerule.showHeadOnLocatorBar.description": "켜져 있으면 플레이어의 머리가 위치 표시 바에 표시됩니다. '플레이어 위치 표시 바 켜기'가 켜져 있을 때만 작동합니다.",
   "item.minecraft.recovery_compass.teleport_not_valid": "마지막으로 죽은 위치가 유효하지 않거나 다른 차원에 있습니다",

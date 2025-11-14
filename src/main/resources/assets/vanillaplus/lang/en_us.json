@@ -52,6 +52,7 @@
   "food.nutrition": "+%s Hunger Restore",
   "food.saturation": "+%s Saturation",
   "food.whenEat": "When Eat:",
+  "gamerule.disableMobsInBossFight": "Disable mobs during Ender Dragon fight",
   "gamerule.showHeadOnLocatorBar": "Show player head on the Locator Bar",
   "gamerule.showHeadOnLocatorBar.description": "When enabled, player's head is shown on the Locator Bar. Works only when locatorBar is enabled.",
   "item.minecraft.recovery_compass.teleport_not_valid": "Your last death location was invalid or in different dimension",
