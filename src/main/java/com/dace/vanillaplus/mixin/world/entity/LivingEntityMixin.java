@@ -121,6 +121,11 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - getEnvironmentalDamageResistanceValue()) : damage);
     }
 
+    @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
+    protected float modifyWaterSlowDown(float value) {
+        return value;
+    }
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
