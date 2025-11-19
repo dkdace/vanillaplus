@@ -52,6 +52,7 @@
   "food.nutrition": "+%s Hunger Restore",
   "food.saturation": "+%s Saturation",
   "food.whenEat": "When Eat:",
+  "gamerule.disableMobsInBossFight": "Disable mobs during Ender Dragon fight",
   "gamerule.showHeadOnLocatorBar": "Show player head on the Locator Bar",
   "gamerule.showHeadOnLocatorBar.description": "When enabled, player's head is shown on the Locator Bar. Works only when locatorBar is enabled.",
   "item.minecraft.recovery_compass.teleport_not_valid": "Your last death location was invalid or in different dimension",
@@ -66,6 +67,9 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
+  "subtitles.entity.ender_dragon.drop_pearl": "Dragon drops Ender Pearl",
+  "subtitles.entity.ender_dragon.spawn_meteor": "End Meteor appears",
+  "subtitles.entity.ender_dragon.fall_meteor": "End Meteor falls",
   "subtitles.item.recovery_compass.teleport": "Recovery Compass activates",
   "tool.when_breaking": "When breaking correct Blocks:"
 }

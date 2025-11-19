@@ -12,7 +12,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -86,13 +85,10 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
     private static void applyExtraDescrption(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<Enchantment> enchantmentHolder,
                                              int level) {
         Enchantment enchantment = enchantmentHolder.value();
-        ResourceKey<Enchantment> enchantmentResourceKey = enchantmentHolder.unwrapKey().orElse(null);
-        if (enchantmentResourceKey == null)
-            return;
 
-        EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
-        if (enchantmentExtension != null)
-            applyComponent(componentConsumer, enchantment, level, enchantmentExtension);
+        enchantmentHolder.unwrapKey()
+                .map(EnchantmentExtension::fromEnchantment)
+                .ifPresent(enchantmentExtension -> applyComponent(componentConsumer, enchantment, level, enchantmentExtension));
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, level));

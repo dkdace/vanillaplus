@@ -52,6 +52,7 @@
   "food.nutrition": "+%s 배고픔 회복",
   "food.saturation": "+%s 포만감",
   "food.whenEat": "섭취 시:",
+  "gamerule.disableMobsInBossFight": "엔더 드래곤 전투 중 몹 비활성화",
   "gamerule.showHeadOnLocatorBar": "위치 표시 바에 플레이어 머리 표시",
   "gamerule.showHeadOnLocatorBar.description": "켜져 있으면 플레이어의 머리가 위치 표시 바에 표시됩니다. '플레이어 위치 표시 바 켜기'가 켜져 있을 때만 작동합니다.",
   "item.minecraft.recovery_compass.teleport_not_valid": "마지막으로 죽은 위치가 유효하지 않거나 다른 차원에 있습니다",
@@ -66,6 +67,9 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
+  "subtitles.entity.ender_dragon.drop_pearl": "드래곤이 엔더 진주를 떨어뜨림",
+  "subtitles.entity.ender_dragon.spawn_meteor": "엔드 운석이 나타남",
+  "subtitles.entity.ender_dragon.fall_meteor": "엔드 운석이 떨어짐",
   "subtitles.item.recovery_compass.teleport": "만회 나침반이 작동함",
   "tool.when_breaking": "알맞은 블록을 부술 때:"
 }

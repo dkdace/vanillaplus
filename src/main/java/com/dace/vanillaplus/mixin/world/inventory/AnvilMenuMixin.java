@@ -5,7 +5,6 @@ import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -23,14 +22,9 @@ public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
     @ModifyExpressionValue(method = "createResult", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I"))
     private int modifyMaxLevel(int maxLevel, @Local Holder<Enchantment> enchantmentHolder, @Local(ordinal = 0) ItemStack itemStack) {
-        ResourceKey<Enchantment> enchantmentResourceKey = enchantmentHolder.unwrapKey().orElse(null);
-
-        if (enchantmentResourceKey != null) {
-            EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
-            if (enchantmentExtension != null)
-                return enchantmentExtension.getMaxLevel(itemStack);
-        }
-
-        return maxLevel;
+        return enchantmentHolder.unwrapKey()
+                .map(EnchantmentExtension::fromEnchantment)
+                .map(enchantmentExtension -> enchantmentExtension.getMaxLevel(itemStack))
+                .orElse(maxLevel);
     }
 }

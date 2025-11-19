@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
+public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier> extends EntityMixin<T, U> {
     @ModifyExpressionValue(method = "doKnockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackStrength(double original, @Local(argsOnly = true) LivingEntity livingEntity,

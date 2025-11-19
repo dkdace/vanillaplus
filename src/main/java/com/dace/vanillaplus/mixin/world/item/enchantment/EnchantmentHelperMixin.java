@@ -9,7 +9,6 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -32,15 +31,12 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
 
         possibleEnchantments.filter(enchantmentHolder -> itemStack.canApplyAtEnchantingTable(enchantmentHolder) || flag)
                 .forEach(enchantmentHolder -> {
-                    ResourceKey<Enchantment> enchantmentResourceKey = enchantmentHolder.unwrapKey().orElse(null);
                     Enchantment enchantment = enchantmentHolder.value();
-                    int maxLevel = enchantment.getMaxLevel();
 
-                    if (enchantmentResourceKey != null) {
-                        EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
-                        if (enchantmentExtension != null)
-                            maxLevel = enchantmentExtension.getMaxLevel(itemStack);
-                    }
+                    int maxLevel = enchantmentHolder.unwrapKey()
+                            .map(EnchantmentExtension::fromEnchantment)
+                            .map(enchantmentExtension -> enchantmentExtension.getMaxLevel(itemStack))
+                            .orElse(enchantment.getMaxLevel());
 
                     for (int i = maxLevel; i >= enchantment.getMinLevel(); i--) {
                         if (level >= enchantment.getMinCost(i) && level <= enchantment.getMaxCost(i)) {

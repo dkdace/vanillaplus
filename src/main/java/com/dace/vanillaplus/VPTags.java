@@ -10,6 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 /**
@@ -30,6 +31,14 @@ public final class VPTags {
         public static final TagKey<Item> NUGGETS = create(Registries.ITEM, "nuggets");
         public static final TagKey<Item> EXTENDED_ENCHANTABLE = create(Registries.ITEM, "enchantable/extended");
         public static final TagKey<Item> UNLIMITED_ENCHANTABLE = create(Registries.ITEM, "enchantable/unlimited");
+    }
+
+    /**
+     * 블록 데이터 태그.
+     */
+    @UtilityClass
+    public static final class Blocks {
+        public static final TagKey<Block> DRAGON_EXPLOSION_IMMUNE = create(Registries.BLOCK, "dragon_explosion_immune");
     }
 
     /**

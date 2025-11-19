@@ -14,6 +14,9 @@ import net.minecraftforge.registries.RegistryObject;
 @UtilityClass
 public final class VPSoundEvents {
     public static final RegistryObject<SoundEvent> RECOVERY_COMPASS_TELEPORT = create("item.recovery_compass.teleport");
+    public static final RegistryObject<SoundEvent> ENDER_DRAGON_DROP_PEARL = create("entity.ender_dragon.drop_pearl");
+    public static final RegistryObject<SoundEvent> ENDER_DRAGON_SPAWN_METEOR = create("entity.ender_dragon.spawn_meteor");
+    public static final RegistryObject<SoundEvent> ENDER_DRAGON_FALL_METEOR = create("entity.ender_dragon.fall_meteor");
 
     @NonNull
     private static RegistryObject<SoundEvent> create(@NonNull String name) {
