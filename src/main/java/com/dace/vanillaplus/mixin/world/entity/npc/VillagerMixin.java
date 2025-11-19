@@ -4,13 +4,11 @@ import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
@@ -48,11 +46,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
 
     @Unique
     private void addOffers(int level) {
-        ResourceKey<VillagerProfession> villagerProfessionResourceKey = getVillagerData().profession().unwrapKey().orElse(null);
-        if (villagerProfessionResourceKey == null)
-            return;
-
-        Trade trade = Trade.fromVillagerProfession(villagerProfessionResourceKey);
+        Trade trade = getVillagerData().profession().unwrapKey().map(Trade::fromVillagerProfession).orElse(null);
         if (trade == null)
             return;
 
