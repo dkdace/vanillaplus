@@ -15,6 +15,15 @@
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",
     "world.entity.animal.IronGolemMixin",
+    "world.entity.boss.enderdragon.EnderDragonMixin",
+    "world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstanceMixin",
+    "world.entity.boss.enderdragon.phases.DragonChargePlayerPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonHoldingPatternPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonSittingAttackingPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonSittingFlamingPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonSittingScanningPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonStrafePlayerPhaseMixin",
+    "world.entity.boss.enderdragon.phases.DragonTakeoffPhaseMixin",
     "world.entity.decoration.ArmorStandMixin",
     "world.entity.monster.AbstractIllagerMixin",
     "world.entity.monster.AbstractSkeletonMixin",
@@ -36,6 +45,7 @@
     "world.entity.npc.WanderingTraderMixin",
     "world.entity.player.PlayerMixin",
     "world.entity.projectile.AbstractArrowMixin",
+    "world.entity.projectile.DragonFireballMixin",
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.entity.raid.RaidMixin",
     "world.food.FoodDataMixin",
@@ -83,7 +93,9 @@
     "client.gui.screens.inventory.MerchantScreenMixin",
     "client.gui.screens.options.controls.ControlsScreenMixin",
     "client.player.LocalPlayerMixin",
-    "client.renderer.ScreenEffectRendererMixin"
+    "client.renderer.ScreenEffectRendererMixin",
+    "client.renderer.entity.EnderDragonRendererMixin",
+    "client.renderer.entity.state.EnderDragonRenderStateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

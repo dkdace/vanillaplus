@@ -23,9 +23,9 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 public final class GeneralModifier {
     /** JSON 코덱 */
     private static final Codec<GeneralModifier> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Codec.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
+            .group(ExtraCodecs.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
                             .forGetter(GeneralModifier::getSmeltingToolDamageRatio),
-                    Codec.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
+                    ExtraCodecs.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
                             .forGetter(GeneralModifier::getMaxRepairLimitRatio),
                     ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5)
                             .forGetter(GeneralModifier::getMaxBadOmenLevel),

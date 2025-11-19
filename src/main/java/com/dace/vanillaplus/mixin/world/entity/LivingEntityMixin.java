@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -49,6 +50,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Shadow
+    public abstract boolean hasLineOfSight(Entity target);
+
+    @Shadow
     public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
 
     @Shadow
@@ -56,6 +60,15 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
+
+    @Shadow
+    protected abstract boolean shouldDropLoot(ServerLevel serverLevel);
+
+    @Shadow
+    public abstract float getHealth();
+
+    @Shadow
+    public abstract float getMaxHealth();
 
     @Unique
     private double getEnvironmentalDamageResistanceValue() {

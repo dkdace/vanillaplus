@@ -5,6 +5,7 @@ import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
 import com.dace.vanillaplus.registryobject.VPSoundEvents;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -40,9 +41,9 @@ public final class RecoveryCompassItem extends Item {
      * @param pos         위치
      */
     private static void playUseEffects(@NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
-        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), VPSoundEvents.RECOVERY_COMPASS_TELEPORT.get(), SoundSource.PLAYERS,
-                2.0F, 1.0F);
-        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2.0F, 0.5F);
+        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), VPSoundEvents.RECOVERY_COMPASS_TELEPORT.get(), SoundSource.PLAYERS, 2,
+                1);
+        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2, 0.5F);
 
         serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
     }
@@ -65,8 +66,8 @@ public final class RecoveryCompassItem extends Item {
 
         Vec3 oldPos = player.position();
 
-        player.teleport(new TeleportTransition(serverLevel, pos, Vec3.ZERO, 0, 0,
-                Relative.union(Relative.ROTATION, Relative.DELTA), TeleportTransition.DO_NOTHING));
+        player.teleport(new TeleportTransition(serverLevel, pos, Vec3.ZERO, 0, 0, Relative.union(Relative.ROTATION, Relative.DELTA),
+                TeleportTransition.DO_NOTHING));
 
         playUseEffects(serverLevel, oldPos);
         playUseEffects(serverLevel, pos);
@@ -98,14 +99,10 @@ public final class RecoveryCompassItem extends Item {
         if (globalPos.dimension() != serverLevel.dimension())
             return null;
 
-        BlockPos blockPos = globalPos.pos();
-        while (blockPos.getY() > serverLevel.getMinY()) {
-            BlockPos belowBlockPos = blockPos.below();
-            if (serverLevel.getBlockState(belowBlockPos).blocksMotion())
-                return blockPos.getBottomCenter();
-
-            blockPos = belowBlockPos;
-        }
+        BlockPos.MutableBlockPos blockPos = globalPos.pos().mutable();
+        while (blockPos.getY() > serverLevel.getMinY())
+            if (serverLevel.getBlockState(blockPos.move(Direction.DOWN)).blocksMotion())
+                return blockPos.move(Direction.UP).getBottomCenter();
 
         return null;
     }
