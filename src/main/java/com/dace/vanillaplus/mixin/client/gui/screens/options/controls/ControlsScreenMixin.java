@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.gui.screens.options.controls;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPOptions;
+import com.dace.vanillaplus.extension.client.VPOptions;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.OptionInstance;

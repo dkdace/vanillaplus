@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEnderDragon;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -29,8 +28,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=25"))
     private int modifyScanDuration(int duration) {
-        return ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getSitting()
-                .getScanDuration();
+        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getScanDuration();
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "floatValue=0.8"))
@@ -40,8 +38,8 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=100"))
     private int modifyScanningIdleTime(int time) {
-        float scanIdleDurationSeconds = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo()
-                .getSitting().getScanIdleDurationSeconds().get(dragon);
+        double scanIdleDurationSeconds = VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getScanIdleDurationSeconds()
+                .get(dragon);
 
         return (int) (scanIdleDurationSeconds * 20.0);
     }

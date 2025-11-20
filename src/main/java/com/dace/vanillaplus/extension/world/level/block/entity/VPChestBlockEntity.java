@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.world.level.block.entity;
 
 import lombok.NonNull;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;

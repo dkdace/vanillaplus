@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.client;
 
-import com.dace.vanillaplus.extension.VPOptions;
+import com.dace.vanillaplus.extension.client.VPOptions;
 import lombok.Getter;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;

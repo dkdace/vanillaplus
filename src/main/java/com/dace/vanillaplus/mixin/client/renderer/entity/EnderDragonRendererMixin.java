@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
-import com.dace.vanillaplus.extension.VPEnderDragon;
-import com.dace.vanillaplus.extension.VPEnderDragonRenderState;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.client.renderer.entity.state.VPEnderDragonRenderState;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;

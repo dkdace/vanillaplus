@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.crafting;
 
-import com.dace.vanillaplus.extension.VPItemStack;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;

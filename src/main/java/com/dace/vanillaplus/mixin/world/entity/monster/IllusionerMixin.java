@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Illusioner.class)
-public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.CrossbowAttackMobModifier> {
+public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.LivingEntityModifier> {
     @Inject(method = "registerGoals", at = @At(value = "NEW",
             target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;"))
     private void addOpenDoorGoal(CallbackInfo ci) {

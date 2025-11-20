@@ -1,6 +1,7 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.world.level.block.entity;
 
 import com.dace.vanillaplus.data.LootTableReward;
+import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;

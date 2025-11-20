@@ -23,7 +23,6 @@ import net.minecraft.world.entity.monster.Ravager;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -41,15 +40,19 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
     /** 유형별 코덱 */
     private static final Codec<EntityModifier> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
     /** JSON 코덱 */
-    private static final MapCodec<EntityModifier> CODEC = MapCodec.unit(new EntityModifier());
+    private static final MapCodec<EntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+            .apply(instance, EntityModifier::new));
 
     static {
         CODEC_REGISTRY.register("entity", () -> CODEC);
         CODEC_REGISTRY.register("living_entity", () -> LivingEntityModifier.CODEC);
-        CODEC_REGISTRY.register("crossbow_attack_mob", () -> CrossbowAttackMobModifier.CODEC);
         CODEC_REGISTRY.register("ravager", () -> RavagerModifier.CODEC);
         CODEC_REGISTRY.register("ender_dragon", () -> EnderDragonModifier.CODEC);
     }
+
+    /** 인터페이스 정보 */
+    @NonNull
+    private final InterfaceInfo interfaceInfo;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
@@ -80,6 +83,12 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
     @SuppressWarnings("unchecked")
     public static <T extends EntityModifier> T fromEntityTypeOrThrow(@NonNull EntityType<?> entityType) {
         return (T) VPRegistry.ENTITY_MODIFIER.getValueOrThrow(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath());
+    }
+
+    @NonNull
+    private static <T extends EntityModifier> Products.P1<RecordCodecBuilder.Mu<T>, InterfaceInfo> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+        return instance.group(InterfaceInfo.CODEC.optionalFieldOf("interfaces", InterfaceInfo.DEFAULT)
+                .forGetter(EntityModifier::getInterfaceInfo));
     }
 
     @Override
@@ -132,7 +141,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
          * @return {@link HealthBasedValue#min} + ({@link LivingEntity#getHealth()} / {@link LivingEntity#getMaxHealth()}) ×
          * ({@link HealthBasedValue#max} - {@link HealthBasedValue#min})
          */
-        public T get(@NonNull LivingEntity entity) {
+        public double get(@NonNull LivingEntity entity) {
             double value = 0;
             if (isDifficultyBased)
                 value = switch (entity.level().getDifficulty()) {
@@ -141,15 +150,55 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                     default -> 1;
                 };
 
-            return ObjectUtils.getClass(min)
-                    .cast(Mth.clampedLerp(min.doubleValue(), max.doubleValue(), Math.max(value, entity.getHealth() / entity.getMaxHealth())));
+
+            return Mth.clampedLerp(min.doubleValue(), max.doubleValue(), Math.max(value, entity.getHealth() / entity.getMaxHealth()));
+        }
+    }
+
+    /**
+     * 엔티티의 인터페이스 정보를 관리하는 클래스.
+     */
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
+    public static final class InterfaceInfo {
+        /** 기본값 */
+        private static final InterfaceInfo DEFAULT = new InterfaceInfo(CrossbowAttackMobInfo.DEFAULT);
+        /** JSON 코덱 */
+        private static final Codec<InterfaceInfo> CODEC = RecordCodecBuilder.create(instance -> instance
+                .group(CrossbowAttackMobInfo.CODEC.optionalFieldOf("crossbow_attack_mob", DEFAULT.crossbowAttackMobInfo)
+                        .forGetter(InterfaceInfo::getCrossbowAttackMobInfo))
+                .apply(instance, InterfaceInfo::new));
+
+        /** {@link CrossbowAttackMob}의 추가 정보 */
+        @NonNull
+        private final CrossbowAttackMobInfo crossbowAttackMobInfo;
+
+        /**
+         * {@link CrossbowAttackMob}의 추가 정보 클래스.
+         */
+        @AllArgsConstructor(access = AccessLevel.PRIVATE)
+        @Getter
+        public static final class CrossbowAttackMobInfo {
+            /** 기본값 */
+            private static final CrossbowAttackMobInfo DEFAULT = new CrossbowAttackMobInfo(1.6F, 8);
+            /** JSON 코덱 */
+            private static final Codec<CrossbowAttackMobInfo> CODEC = RecordCodecBuilder.create(instance ->
+                    instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", DEFAULT.shootingPower)
+                                            .forGetter(CrossbowAttackMobInfo::getShootingPower),
+                                    ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("shooting_range", DEFAULT.shootingRange)
+                                            .forGetter(CrossbowAttackMobInfo::getShootingRange))
+                            .apply(instance, CrossbowAttackMobInfo::new));
+
+            /** 화살 발사 속력 */
+            private final float shootingPower;
+            /** 공격 거리 */
+            private final int shootingRange;
         }
     }
 
     /**
      * {@link LivingEntity}의 엔티티 수정자 클래스.
      */
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class LivingEntityModifier extends EntityModifier {
         private static final MapCodec<LivingEntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -159,10 +208,16 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         @NonNull
         private final List<AttributeInstance.Packed> packedAttributes;
 
+        private LivingEntityModifier(@NonNull InterfaceInfo interfaceInfo, @NonNull List<AttributeInstance.Packed> packedAttributes) {
+            super(interfaceInfo);
+            this.packedAttributes = packedAttributes;
+        }
+
         @NonNull
-        private static <T extends LivingEntityModifier> Products.P1<RecordCodecBuilder.Mu<T>, List<AttributeInstance.Packed>> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
-            return instance.group(AttributeInstance.Packed.LIST_CODEC.optionalFieldOf("attributes", Collections.emptyList())
-                    .forGetter(LivingEntityModifier::getPackedAttributes));
+        private static <T extends LivingEntityModifier> Products.P2<RecordCodecBuilder.Mu<T>, InterfaceInfo, List<AttributeInstance.Packed>> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+            return EntityModifier.createBaseCodec(instance)
+                    .and(AttributeInstance.Packed.LIST_CODEC.optionalFieldOf("attributes", Collections.emptyList())
+                            .forGetter(LivingEntityModifier::getPackedAttributes));
         }
 
         @Override
@@ -170,38 +225,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         public MapCodec<? extends EntityModifier> getCodec() {
             return CODEC;
         }
-    }
 
-    /**
-     * {@link CrossbowAttackMob}의 엔티티 수정자 클래스.
-     */
-    @Getter
-    public static final class CrossbowAttackMobModifier extends LivingEntityModifier {
-        private static final MapCodec<CrossbowAttackMobModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                LivingEntityModifier.createBaseCodec(instance)
-                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 1.6F)
-                                        .forGetter(CrossbowAttackMobModifier::getShootingPower),
-                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("shooting_range", 8)
-                                        .forGetter(CrossbowAttackMobModifier::getShootingRange)))
-                        .apply(instance, CrossbowAttackMobModifier::new));
-
-        /** 화살 발사 속력 */
-        private final float shootingPower;
-        /** 공격 거리 */
-        private final int shootingRange;
-
-        private CrossbowAttackMobModifier(@NonNull List<AttributeInstance.Packed> packedAttributes, float shootingPower, int shootingRange) {
-            super(packedAttributes);
-
-            this.shootingPower = shootingPower;
-            this.shootingRange = shootingRange;
-        }
-
-        @Override
-        @NonNull
-        public MapCodec<? extends EntityModifier> getCodec() {
-            return CODEC;
-        }
     }
 
     /**
@@ -217,8 +241,9 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         /** 포효 쿨타임 (초) */
         private final float roarCooldownSeconds;
 
-        private RavagerModifier(@NonNull List<AttributeInstance.Packed> packedAttributes, float roarCooldownSeconds) {
-            super(packedAttributes);
+        private RavagerModifier(@NonNull InterfaceInfo interfaceInfo, @NonNull List<AttributeInstance.Packed> packedAttributes,
+                                float roarCooldownSeconds) {
+            super(interfaceInfo, packedAttributes);
             this.roarCooldownSeconds = roarCooldownSeconds;
         }
 
@@ -268,10 +293,10 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         /** 최대 엔더 진주 드롭 횟수 */
         private final int maxEnderPearlDrops;
 
-        private EnderDragonModifier(@NonNull List<AttributeInstance.Packed> packedAttributes, @NonNull Experience experience,
-                                    @NonNull HealthBasedValue<Float> movementSpeedMultiplier, @NonNull PhaseInfo phaseInfo, float enderPearlDropChance,
-                                    int maxEnderPearlDrops) {
-            super(packedAttributes);
+        private EnderDragonModifier(@NonNull InterfaceInfo interfaceInfo, @NonNull List<AttributeInstance.Packed> packedAttributes,
+                                    @NonNull Experience experience, @NonNull HealthBasedValue<Float> movementSpeedMultiplier,
+                                    @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops) {
+            super(interfaceInfo, packedAttributes);
 
             this.experience = experience;
             this.movementSpeedMultiplier = movementSpeedMultiplier;

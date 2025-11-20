@@ -31,12 +31,12 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Expression("pAttackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyAttackRadius(float original, @Local(argsOnly = true) T monster) {
-        return ((EntityModifier.CrossbowAttackMobModifier) EntityModifier.fromEntityTypeOrThrow(monster.getType())).getShootingRange();
+        return EntityModifier.fromEntityTypeOrThrow(monster.getType()).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingRange();
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
-    private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target, @Local(ordinal = 2) boolean flag2) {
+    private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target) {
         if (mob.getControlledVehicle() != null || seeTime < 20 || !target.closerThan(mob, 7))
             return;
 

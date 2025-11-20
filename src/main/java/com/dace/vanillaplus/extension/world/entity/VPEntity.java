@@ -1,6 +1,7 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,12 @@ public interface VPEntity<T extends Entity, U extends EntityModifier> extends VP
     static <T extends Entity, U extends EntityModifier> VPEntity<T, U> cast(@NonNull T object) {
         return (VPEntity<T, U>) object;
     }
+
+    /**
+     * @return 엔티티 수정자
+     */
+    @Nullable
+    U getDataModifier();
 
     /**
      * @param dataModifier 엔티티 수정자

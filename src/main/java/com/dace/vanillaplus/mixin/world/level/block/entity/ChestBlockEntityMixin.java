@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.extension.VPChestBlockEntity;
-import com.dace.vanillaplus.extension.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.entity.VPChestBlockEntity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

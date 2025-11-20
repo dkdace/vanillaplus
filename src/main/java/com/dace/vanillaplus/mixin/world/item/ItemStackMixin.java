@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.VPItemStack;
+import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;

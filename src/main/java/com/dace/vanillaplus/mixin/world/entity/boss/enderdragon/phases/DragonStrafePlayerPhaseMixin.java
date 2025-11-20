@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -32,8 +32,7 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private void applyFireballVelocity(ServerLevel serverLevel, CallbackInfo ci, @Local DragonFireball dragonFireball) {
-        dragonFireball.accelerationPower *= ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType()))
-                .getPhaseInfo().getFireball().getVelocityMultiplier();
+        dragonFireball.accelerationPower *= VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getFireball().getVelocityMultiplier();
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getX()D",
@@ -51,7 +50,6 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
     @Inject(method = "begin", at = @At("TAIL"))
     private void resetFireCount(CallbackInfo ci) {
         fireCount = 0;
-        maxFireCount = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getFireball()
-                .getMaxShots().get(dragon);
+        maxFireCount = (int) VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getFireball().getMaxShots().get(dragon);
     }
 }

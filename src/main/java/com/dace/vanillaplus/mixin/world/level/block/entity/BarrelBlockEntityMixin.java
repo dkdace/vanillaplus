@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.extension.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;

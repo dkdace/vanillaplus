@@ -2,8 +2,7 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.world.item.VPItem;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -17,7 +16,7 @@ import org.spongepowered.asm.mixin.*;
 import java.util.HashSet;
 
 @Mixin(Item.class)
-public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPModifiableData<Item, U>, VPMixin<T> {
+public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPItem<T, U> {
     @Unique
     @Nullable
     protected U dataModifier;

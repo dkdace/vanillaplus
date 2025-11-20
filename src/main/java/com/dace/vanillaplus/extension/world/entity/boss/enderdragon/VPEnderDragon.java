@@ -1,5 +1,7 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.world.entity.boss.enderdragon;
 
+import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -10,12 +12,18 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link EnderDragon}를 확장하는 인터페이스.
+ *
+ * @see EntityModifier.EnderDragonModifier
  */
-public interface VPEnderDragon extends VPMixin<EnderDragon> {
+public interface VPEnderDragon extends VPEntity<EnderDragon, EntityModifier.EnderDragonModifier> {
     @NonNull
     static VPEnderDragon cast(@NonNull EnderDragon object) {
         return (VPEnderDragon) object;
     }
+
+    @Override
+    @NonNull
+    EntityModifier.EnderDragonModifier getDataModifier();
 
     /**
      * 기본 대상 탐지 조건을 반환한다.

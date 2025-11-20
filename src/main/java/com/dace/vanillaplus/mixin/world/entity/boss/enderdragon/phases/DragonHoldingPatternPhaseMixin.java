@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEnderDragon;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -41,10 +40,10 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
         } else
             strafePlayer(target);
 
-        float attackCooldownSeconds = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo()
-                .getAttackCooldownSeconds().get(dragon);
+        VPEnderDragon vpEnderDragon = VPEnderDragon.cast(dragon);
 
-        VPEnderDragon.cast(dragon).setAttackCooldown((int) (attackCooldownSeconds * 20.0));
+        double attackCooldownSeconds = vpEnderDragon.getDataModifier().getPhaseInfo().getAttackCooldownSeconds().get(dragon);
+        vpEnderDragon.setAttackCooldown((int) (attackCooldownSeconds * 20.0));
     }
 
     @Unique
@@ -53,9 +52,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
         if (!vpEnderDragon.dropMeteor(target.position()))
             return;
 
-        float cooldownSeconds = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo()
-                .getMeteor().getCooldownSeconds().get(dragon);
-
+        double cooldownSeconds = vpEnderDragon.getDataModifier().getPhaseInfo().getMeteor().getCooldownSeconds().get(dragon);
         vpEnderDragon.setMeteorAttackCooldown((int) (cooldownSeconds * 20.0));
     }
 
@@ -72,8 +69,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
     @Expression("this.dragon.getRandom().nextInt(?) == 0")
     @ModifyExpressionValue(method = "findNewTarget", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private boolean modifyLandingCondition(boolean original) {
-        return ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getLandingChance()
-                .get(dragon) > dragon.getRandom().nextDouble();
+        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getLandingChance().get(dragon) > dragon.getRandom().nextDouble();
     }
 
     @Inject(method = "doServerTick", at = @At("TAIL"))

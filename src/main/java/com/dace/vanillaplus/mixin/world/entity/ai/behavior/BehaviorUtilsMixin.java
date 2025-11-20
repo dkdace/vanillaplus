@@ -18,6 +18,6 @@ public abstract class BehaviorUtilsMixin implements VPMixin<BehaviorUtils> {
         if (!(mob instanceof CrossbowAttackMob))
             return attackRange;
 
-        return ((EntityModifier.CrossbowAttackMobModifier) EntityModifier.fromEntityTypeOrThrow(mob.getType())).getShootingRange();
+        return EntityModifier.fromEntityTypeOrThrow(mob.getType()).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingRange();
     }
 }

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(Pillager.class)
-public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.CrossbowAttackMobModifier> {
+public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.LivingEntityModifier> {
     @Inject(method = "registerGoals", at = @At(value = "NEW",
             target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;"))
     private void addOpenDoorGoal(CallbackInfo ci) {
@@ -32,7 +32,7 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"), index = 1)
     private float modifyBulletVelocity(float velocity) {
-        return Objects.requireNonNull(dataModifier).getShootingPower();
+        return Objects.requireNonNull(dataModifier).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingPower();
     }
 
     @Overwrite

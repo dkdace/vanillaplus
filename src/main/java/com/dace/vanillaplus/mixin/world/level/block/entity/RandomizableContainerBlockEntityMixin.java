@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.data.LootTableReward;
-import com.dace.vanillaplus.extension.VPLootContainerBlock;
-import com.dace.vanillaplus.extension.VPRandomizableContainerBlockEntity;
+import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;

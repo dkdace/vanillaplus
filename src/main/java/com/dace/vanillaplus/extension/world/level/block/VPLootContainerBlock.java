@@ -1,6 +1,8 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.world.level.block;
 
 import com.dace.vanillaplus.data.LootTableReward;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  *
  * @param <T> {@link BaseEntityBlock}를 상속받는 타입
  */
-public interface VPLootContainerBlock<T extends BaseEntityBlock> extends VPMixin<T> {
+public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends BlockModifier> extends VPBlock<T, U> {
     /** 전리품 보관함 여부 */
     BooleanProperty LOOT = BooleanProperty.create("loot");
     /** 항상 열려 있는지 여부 */
@@ -25,8 +27,8 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock> extends VPMixin
 
     @NonNull
     @SuppressWarnings("unchecked")
-    static <T extends BaseEntityBlock> VPLootContainerBlock<T> cast(@NonNull T object) {
-        return (VPLootContainerBlock<T>) object;
+    static <T extends BaseEntityBlock, U extends BlockModifier> VPLootContainerBlock<T, U> cast(@NonNull T object) {
+        return (VPLootContainerBlock<T, U>) object;
     }
 
     /**

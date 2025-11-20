@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.Objects;
 
 @Mixin(Piglin.class)
-public abstract class PiglinMixin extends MonsterMixin<Piglin, EntityModifier.CrossbowAttackMobModifier> {
+public abstract class PiglinMixin extends MonsterMixin<Piglin, EntityModifier.LivingEntityModifier> {
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float velocity) {
-        return Objects.requireNonNull(dataModifier).getShootingPower();
+        return Objects.requireNonNull(dataModifier).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingPower();
     }
 }

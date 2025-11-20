@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEnderDragon;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -46,14 +45,15 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Unique
     private void createFlame(ServerLevel serverLevel, Vec3 pos, float radius) {
+        VPEnderDragon vpEnderDragon = VPEnderDragon.cast(dragon);
+
         AreaEffectCloud flame = new AreaEffectCloud(serverLevel, pos.x(), pos.y(), pos.z());
         flame.setOwner(dragon);
         flame.setRadius(radius);
-        flame.setDuration(((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getCharge()
-                .getFlameDuration());
+        flame.setDuration(vpEnderDragon.getDataModifier().getPhaseInfo().getCharge().getFlameDuration());
         flame.setCustomParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
         flame.setPotionDurationScale(0.25F);
-        flame.addEffect(VPEnderDragon.cast(dragon).getFlameMobEffectInstance());
+        flame.addEffect(vpEnderDragon.getFlameMobEffectInstance());
 
         serverLevel.addFreshEntity(flame);
     }
@@ -78,8 +78,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
             return;
 
         Vec3 pos = new Vec3(dragon.head.getX() - dragon.getX(), 0, dragon.head.getZ() - dragon.getZ()).normalize();
-        float radius = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getCharge()
-                .getFlameRadius();
+        float radius = VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getCharge().getFlameRadius();
 
         double x = dragon.head.getX() + pos.x * radius / 2;
         double y = dragon.head.getY();

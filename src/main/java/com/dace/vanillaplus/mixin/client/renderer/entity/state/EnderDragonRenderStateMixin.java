@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity.state;
 
-import com.dace.vanillaplus.extension.VPEnderDragonRenderState;
+import com.dace.vanillaplus.extension.client.renderer.entity.state.VPEnderDragonRenderState;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;

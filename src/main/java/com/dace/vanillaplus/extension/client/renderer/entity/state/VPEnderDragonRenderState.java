@@ -1,5 +1,6 @@
-package com.dace.vanillaplus.extension;
+package com.dace.vanillaplus.extension.client.renderer.entity.state;
 
+import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
 import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;
 import net.minecraft.core.BlockPos;

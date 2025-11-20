@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.network.packet;
 
-import com.dace.vanillaplus.extension.VPPlayer;
+import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.network.FriendlyByteBuf;
