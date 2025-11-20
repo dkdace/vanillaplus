@@ -226,8 +226,7 @@ public final class VPRegistry<T> {
      */
     @Nullable
     public T getValue(@NonNull String name) {
-        Holder.Reference<T> reference = getResource(name, HolderGetter::get).orElse(null);
-        return reference == null ? null : reference.value();
+        return getResource(name, HolderGetter::get).map(Holder.Reference::value).orElse(null);
     }
 
     /**

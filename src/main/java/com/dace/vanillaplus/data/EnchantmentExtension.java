@@ -37,7 +37,7 @@ public final class EnchantmentExtension {
                     Codec.unboundedMap(Codec.STRING, DefinedValue.CODEC).optionalFieldOf("values", Collections.emptyMap())
                             .forGetter(enchantmentExtension -> enchantmentExtension.definedValueMap),
                     ExtraCodecs.intRange(0, 255).optionalFieldOf("extended_max_level", 0)
-                            .forGetter(EnchantmentExtension::getExtendedMaxLevel))
+                            .forGetter(EnchantmentExtension::getMaxLevel))
             .apply(instance, EnchantmentExtension::new));
 
     /** 마법 부여 홀더 인스턴스 */
@@ -45,7 +45,6 @@ public final class EnchantmentExtension {
     /** 이름별 사전 정의된 값 목록 (이름 : 사전 정의된 값) */
     private final TreeMap<String, DefinedValue> definedValueMap;
     /** 확장된 최대 마법 부여 레벨 */
-    @Getter
     private final int extendedMaxLevel;
 
     private EnchantmentExtension(@NonNull Holder<Enchantment> enchantmentHolder, @NonNull Map<String, DefinedValue> definedValueMap,
@@ -102,6 +101,15 @@ public final class EnchantmentExtension {
     public int getMaxLevel(@NonNull ItemStack itemStack) {
         int originalMaxLevel = enchantmentHolder.value().getMaxLevel();
         return extendedMaxLevel > originalMaxLevel && itemStack.is(VPTags.Items.UNLIMITED_ENCHANTABLE) ? extendedMaxLevel : originalMaxLevel;
+    }
+
+    /**
+     * 마법 부여의 최대 레벨을 반환한다.
+     *
+     * @return 최대 마법 부여 레벨
+     */
+    public int getMaxLevel() {
+        return Math.max(extendedMaxLevel, enchantmentHolder.value().getMaxLevel());
     }
 
     /**

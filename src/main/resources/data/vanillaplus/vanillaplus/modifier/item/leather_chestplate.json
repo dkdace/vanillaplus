@@ -1,0 +1,12 @@
+{
+  "type": "vanillaplus:item",
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:environmental_damage_resistance",
+      "amount": 0.25,
+      "id": "minecraft:armor.chestplate",
+      "operation": "add_value",
+      "slot": "chest"
+    }
+  ]
+}

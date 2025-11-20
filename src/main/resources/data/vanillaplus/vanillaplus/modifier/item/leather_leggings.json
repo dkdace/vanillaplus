@@ -1,0 +1,12 @@
+{
+  "type": "vanillaplus:item",
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:environmental_damage_resistance",
+      "amount": 0.2,
+      "id": "minecraft:armor.leggings",
+      "operation": "add_value",
+      "slot": "legs"
+    }
+  ]
+}

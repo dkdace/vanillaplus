@@ -1,0 +1,12 @@
+{
+  "type": "vanillaplus:item",
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:food_exhaustion_multiplier",
+      "amount": 0.05,
+      "id": "minecraft:armor.chestplate",
+      "operation": "add_multiplied_base",
+      "slot": "chest"
+    }
+  ]
+}

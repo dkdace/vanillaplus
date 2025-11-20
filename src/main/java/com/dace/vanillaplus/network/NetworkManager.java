@@ -4,6 +4,7 @@ import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.network.packet.PacketHandler;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
+import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -27,7 +28,7 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class NetworkManager {
     /** 프로토콜 버전 */
-    private static final int PROTOCOL_VERSION = 2;
+    private static final int PROTOCOL_VERSION = 3;
     /** 패킷 전송 채널 */
     private static final SimpleChannel CHANNEL = ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, "main"))
@@ -41,6 +42,7 @@ public final class NetworkManager {
             registerPacket(PacketFlow.SERVERBOUND, PronePacketHandler.class, PronePacketHandler::new);
             registerPacket(PacketFlow.CLIENTBOUND, RecoveryCompassTeleportPacketHandler.class,
                     buf -> new RecoveryCompassTeleportPacketHandler());
+            registerPacket(PacketFlow.CLIENTBOUND, ShowHeadOnLocatorBarPacketHandler.class, ShowHeadOnLocatorBarPacketHandler::new);
 
             CHANNEL.build();
         });

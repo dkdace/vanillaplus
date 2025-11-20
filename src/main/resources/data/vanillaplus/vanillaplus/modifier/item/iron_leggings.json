@@ -1,0 +1,12 @@
+{
+  "type": "vanillaplus:item",
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:food_exhaustion_multiplier",
+      "amount": 0.03,
+      "id": "minecraft:armor.leggings",
+      "operation": "add_multiplied_base",
+      "slot": "legs"
+    }
+  ]
+}

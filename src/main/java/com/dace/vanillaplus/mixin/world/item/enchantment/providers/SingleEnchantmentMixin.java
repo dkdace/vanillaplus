@@ -5,7 +5,6 @@ import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.providers.SingleEnchantment;
@@ -22,14 +21,9 @@ public abstract class SingleEnchantmentMixin implements VPMixin<SingleEnchantmen
 
     @ModifyExpressionValue(method = "enchant", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I"))
     private int modifyMaxLevel(int maxLevel, @Local(argsOnly = true) ItemStack itemStack) {
-        ResourceKey<Enchantment> enchantmentResourceKey = enchantment.unwrapKey().orElse(null);
-
-        if (enchantmentResourceKey != null) {
-            EnchantmentExtension enchantmentExtension = EnchantmentExtension.fromEnchantment(enchantmentResourceKey);
-            if (enchantmentExtension != null)
-                return enchantmentExtension.getMaxLevel(itemStack);
-        }
-
-        return maxLevel;
+        return enchantment.unwrapKey()
+                .map(EnchantmentExtension::fromEnchantment)
+                .map(enchantmentExtension -> enchantmentExtension.getMaxLevel(itemStack))
+                .orElse(maxLevel);
     }
 }

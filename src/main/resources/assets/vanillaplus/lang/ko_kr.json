@@ -1,5 +1,9 @@
 {
+  "attribute.name.environmental_damage_resistance": "환경 피해 저항",
+  "attribute.name.food_exhaustion_multiplier": "배고픔 소진 배수",
+  "attribute.name.generic.environmental_damage_resistance": "환경 피해 저항",
   "attribute.name.generic.projectile_knockback_resistance": "발사체 밀치기 저항",
+  "attribute.name.player.food_exhaustion_multiplier": "배고픔 소진 배수",
   "attribute.name.projectile_knockback_resistance": "발사체 밀치기 저항",
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
   "consumable.clearAllStatusEffects": "모든 상태 효과 제거",
@@ -48,6 +52,9 @@
   "food.nutrition": "+%s 배고픔 회복",
   "food.saturation": "+%s 포만감",
   "food.whenEat": "섭취 시:",
+  "gamerule.disableMobsInBossFight": "엔더 드래곤 전투 중 몹 비활성화",
+  "gamerule.showHeadOnLocatorBar": "위치 표시 바에 플레이어 머리 표시",
+  "gamerule.showHeadOnLocatorBar.description": "켜져 있으면 플레이어의 머리가 위치 표시 바에 표시됩니다. '플레이어 위치 표시 바 켜기'가 켜져 있을 때만 작동합니다.",
   "item.minecraft.recovery_compass.teleport_not_valid": "마지막으로 죽은 위치가 유효하지 않거나 다른 차원에 있습니다",
   "item.projectileWeapon.damage": "%s 발사체 피해",
   "item.projectileWeapon.when_shoot": "발사 시:",
@@ -60,6 +67,9 @@
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
   "potion.potency.9": "X",
+  "subtitles.entity.ender_dragon.drop_pearl": "드래곤이 엔더 진주를 떨어뜨림",
+  "subtitles.entity.ender_dragon.spawn_meteor": "엔드 운석이 나타남",
+  "subtitles.entity.ender_dragon.fall_meteor": "엔드 운석이 떨어짐",
   "subtitles.item.recovery_compass.teleport": "만회 나침반이 작동함",
   "tool.when_breaking": "알맞은 블록을 부술 때:"
 }

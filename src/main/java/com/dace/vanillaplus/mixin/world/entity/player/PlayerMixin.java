@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.player;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
+import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
@@ -50,5 +52,10 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
         UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null)
             useCooldown.apply(itemStack, getThis());
+    }
+
+    @ModifyArg(method = "causeFoodExhaustion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"))
+    private float modifyFoodExhaustion(float exhaustion) {
+        return (float) (exhaustion * getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
     }
 }

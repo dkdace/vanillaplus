@@ -1,14 +1,19 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
+import com.dace.vanillaplus.VanillaPlus;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,9 +21,28 @@ import org.jetbrains.annotations.Nullable;
  * 모드에서 사용하는 엔티티 속성을 관리하는 클래스.
  */
 @UtilityClass
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class VPAttributes {
     public static final RegistryObject<Attribute> PROJECTILE_KNOCKBACK_RESISTANCE = create("projectile_knockback_resistance",
-            new RangedAttribute("attribute.name.projectile_knockback_resistance", 0, 0, 1).setSyncable(true));
+            new RangedAttribute("attribute.name.projectile_knockback_resistance", 0, 0, 1)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> ENVIRONMENTAL_DAMAGE_RESISTANCE = create("environmental_damage_resistance",
+            new RangedAttribute("attribute.name.environmental_damage_resistance", 0, 0, 1)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> FOOD_EXHAUSTION_MULTIPLIER = create("food_exhaustion_multiplier",
+            new RangedAttribute("attribute.name.food_exhaustion_multiplier", 1, 0, 1024)
+                    .setSyncable(true)
+                    .setSentiment(Attribute.Sentiment.NEGATIVE));
+
+    @SubscribeEvent
+    private static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+        for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
+            event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
+            event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
+        }
+
+        event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
+    }
 
     @NonNull
     private static RegistryObject<Attribute> create(@NonNull String name, @NonNull Attribute attribute) {

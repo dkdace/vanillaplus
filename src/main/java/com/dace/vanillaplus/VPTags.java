@@ -7,8 +7,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 /**
@@ -32,6 +34,14 @@ public final class VPTags {
     }
 
     /**
+     * 블록 데이터 태그.
+     */
+    @UtilityClass
+    public static final class Blocks {
+        public static final TagKey<Block> DRAGON_EXPLOSION_IMMUNE = create(Registries.BLOCK, "dragon_explosion_immune");
+    }
+
+    /**
      * 마법 부여 데이터 태그.
      */
     @UtilityClass
@@ -52,5 +62,13 @@ public final class VPTags {
         public static final TagKey<Structure> ON_DESERT_EXPLORER_MAPS = create(Registries.STRUCTURE, "on_desert_explorer_maps");
         public static final TagKey<Structure> ON_SNOWY_EXPLORER_MAPS = create(Registries.STRUCTURE, "on_snowy_explorer_maps");
         public static final TagKey<Structure> PILLAGER_OUTPOST = create(Registries.STRUCTURE, "pillager_outpost");
+    }
+
+    /**
+     * 피해 타입 데이터 태그.
+     */
+    @UtilityClass
+    public static final class DamageTypes {
+        public static final TagKey<DamageType> ENVIRONMENTAL = create(Registries.DAMAGE_TYPE, "environmental");
     }
 }

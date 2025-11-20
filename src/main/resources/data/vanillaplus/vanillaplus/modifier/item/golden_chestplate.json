@@ -4,5 +4,14 @@
     "minecraft:enchantable": {
       "value": 30
     }
-  }
+  },
+  "attribute_modifiers": [
+    {
+      "type": "vanillaplus:food_exhaustion_multiplier",
+      "amount": 0.02,
+      "id": "minecraft:armor.chestplate",
+      "operation": "add_multiplied_base",
+      "slot": "chest"
+    }
+  ]
 }
