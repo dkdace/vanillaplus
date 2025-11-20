@@ -23,6 +23,7 @@ import net.minecraft.world.entity.monster.Ravager;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -88,20 +89,20 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
     }
 
     /**
-     * 엔티티의 체력 비례 {@code int} 값을 나타내는 클래스.
+     * 엔티티의 체력 비례 수치를 나타내는 클래스.
      *
-     * @see HealthBasedFloat
+     * @param <T> 숫자 타입
      */
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class HealthBasedInt {
+    public static final class HealthBasedValue<T extends Number> {
         /** 최솟값 */
-        private final int min;
+        private final T min;
         /** 최댓값 */
-        private final int max;
+        private final T max;
         /** 난이도 기반 여부 */
         private final boolean isDifficultyBased;
 
-        private HealthBasedInt(int value) {
+        private HealthBasedValue(T value) {
             this.min = value;
             this.max = value;
             this.isDifficultyBased = true;
@@ -110,84 +111,29 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         /**
          * JSON 코덱을 생성하여 반환한다.
          *
-         * @param intCodec 사용할 {@code int} 형식 코덱
+         * @param floatCodec 사용할 숫자 형식 코덱
+         * @param <T>        숫자 타입
          * @return JSON 코덱
          */
         @NonNull
-        private static Codec<HealthBasedInt> codec(@NonNull Codec<Integer> intCodec) {
-            return RecordCodecBuilder.create(instance -> instance
-                    .group(intCodec.fieldOf("min").forGetter(healthBasedValue -> healthBasedValue.min),
-                            intCodec.fieldOf("max").forGetter(healthBasedValue -> healthBasedValue.max),
-                            Codec.BOOL.optionalFieldOf("difficulty_based", true)
-                                    .forGetter(healthBasedInt -> healthBasedInt.isDifficultyBased))
-                    .apply(instance, HealthBasedInt::new));
-        }
-
-        /**
-         * 체력 비례 값을 반환한다.
-         *
-         * @param entity 대상 엔티티
-         * @return {@link HealthBasedInt#min} + ({@link LivingEntity#getHealth()} / {@link LivingEntity#getMaxHealth()}) ×
-         * ({@link HealthBasedInt#max} - {@link HealthBasedInt#min})
-         */
-        public int get(@NonNull LivingEntity entity) {
-            float value = 0;
-            if (isDifficultyBased)
-                value = switch (entity.level().getDifficulty()) {
-                    case NORMAL -> 0.5F;
-                    case HARD -> 0;
-                    default -> 1;
-                };
-
-            return (int) Mth.clampedLerp(this.min, this.max, Math.max(value, entity.getHealth() / entity.getMaxHealth()));
-        }
-    }
-
-    /**
-     * 엔티티의 체력 비례 {@code float} 값을 나타내는 클래스.
-     *
-     * @see HealthBasedInt
-     */
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class HealthBasedFloat {
-        /** 최솟값 */
-        private final float min;
-        /** 최댓값 */
-        private final float max;
-        /** 난이도 기반 여부 */
-        private final boolean isDifficultyBased;
-
-        private HealthBasedFloat(float value) {
-            this.min = value;
-            this.max = value;
-            this.isDifficultyBased = true;
-        }
-
-        /**
-         * JSON 코덱을 생성하여 반환한다.
-         *
-         * @param floatCodec 사용할 {@code float} 형식 코덱
-         * @return JSON 코덱
-         */
-        @NonNull
-        private static Codec<HealthBasedFloat> codec(@NonNull Codec<Float> floatCodec) {
+        private static <T extends Number> Codec<HealthBasedValue<T>> codec(@NonNull Codec<T> floatCodec) {
             return RecordCodecBuilder.create(instance -> instance
                     .group(floatCodec.fieldOf("min").forGetter(healthBasedValue -> healthBasedValue.min),
                             floatCodec.fieldOf("max").forGetter(healthBasedValue -> healthBasedValue.max),
                             Codec.BOOL.optionalFieldOf("difficulty_based", true)
                                     .forGetter(healthBasedInt -> healthBasedInt.isDifficultyBased))
-                    .apply(instance, HealthBasedFloat::new));
+                    .apply(instance, HealthBasedValue::new));
         }
 
         /**
          * 체력 비례 값을 반환한다.
          *
          * @param entity 대상 엔티티
-         * @return {@link HealthBasedFloat#min} + ({@link LivingEntity#getHealth()} / {@link LivingEntity#getMaxHealth()}) ×
-         * ({@link HealthBasedFloat#max} - {@link HealthBasedFloat#min})
+         * @return {@link HealthBasedValue#min} + ({@link LivingEntity#getHealth()} / {@link LivingEntity#getMaxHealth()}) ×
+         * ({@link HealthBasedValue#max} - {@link HealthBasedValue#min})
          */
-        public float get(@NonNull LivingEntity entity) {
-            float value = 0;
+        public T get(@NonNull LivingEntity entity) {
+            double value = 0;
             if (isDifficultyBased)
                 value = switch (entity.level().getDifficulty()) {
                     case NORMAL -> 0.5F;
@@ -195,7 +141,8 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                     default -> 1;
                 };
 
-            return Mth.clampedLerp(min, max, Math.max(value, entity.getHealth() / entity.getMaxHealth()));
+            return ObjectUtils.getClass(min)
+                    .cast(Mth.clampedLerp(min.doubleValue(), max.doubleValue(), Math.max(value, entity.getHealth() / entity.getMaxHealth())));
         }
     }
 
@@ -297,8 +244,8 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         private static final MapCodec<EnderDragonModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 LivingEntityModifier.createBaseCodec(instance)
                         .and(instance.group(Experience.CODEC.fieldOf("experience").forGetter(EnderDragonModifier::getExperience),
-                                HealthBasedFloat.codec(ExtraCodecs.NON_NEGATIVE_FLOAT)
-                                        .optionalFieldOf("movement_speed_multiplier", new HealthBasedFloat(1))
+                                HealthBasedValue.codec(ExtraCodecs.NON_NEGATIVE_FLOAT)
+                                        .optionalFieldOf("movement_speed_multiplier", new HealthBasedValue<>(1F))
                                         .forGetter(EnderDragonModifier::getMovementSpeedMultiplier),
                                 PhaseInfo.CODEC.fieldOf("phases").forGetter(EnderDragonModifier::getPhaseInfo),
                                 ExtraCodecs.floatRange(0, 1).optionalFieldOf("ender_pearl_drop_chance", 0.1F)
@@ -312,7 +259,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         private final Experience experience;
         /** 이동속도 배수 */
         @NonNull
-        private final HealthBasedFloat movementSpeedMultiplier;
+        private final HealthBasedValue<Float> movementSpeedMultiplier;
         /** 페이즈 정보 */
         @NonNull
         private final PhaseInfo phaseInfo;
@@ -322,7 +269,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         private final int maxEnderPearlDrops;
 
         private EnderDragonModifier(@NonNull List<AttributeInstance.Packed> packedAttributes, @NonNull Experience experience,
-                                    @NonNull HealthBasedFloat movementSpeedMultiplier, @NonNull PhaseInfo phaseInfo, float enderPearlDropChance,
+                                    @NonNull HealthBasedValue<Float> movementSpeedMultiplier, @NonNull PhaseInfo phaseInfo, float enderPearlDropChance,
                                     int maxEnderPearlDrops) {
             super(packedAttributes);
 
@@ -365,11 +312,11 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         public static final class PhaseInfo {
             /** JSON 코덱 */
             private static final Codec<PhaseInfo> CODEC = RecordCodecBuilder.create(instance -> instance
-                    .group(HealthBasedFloat.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                    .optionalFieldOf("attack_cooldown_seconds", new HealthBasedFloat(16))
+                    .group(HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
+                                    .optionalFieldOf("attack_cooldown_seconds", new HealthBasedValue<>(16F))
                                     .forGetter(PhaseInfo::getAttackCooldownSeconds),
-                            HealthBasedFloat.codec(ExtraCodecs.floatRange(0, 1))
-                                    .optionalFieldOf("landing_chance", new HealthBasedFloat(0.3F)).forGetter(PhaseInfo::getLandingChance),
+                            HealthBasedValue.codec(ExtraCodecs.floatRange(0, 1))
+                                    .optionalFieldOf("landing_chance", new HealthBasedValue<>(0.3F)).forGetter(PhaseInfo::getLandingChance),
                             Charge.CODEC.fieldOf("charge").forGetter(PhaseInfo::getCharge),
                             Fireball.CODEC.fieldOf("fireball").forGetter(PhaseInfo::getFireball),
                             Sitting.CODEC.fieldOf("sitting").forGetter(PhaseInfo::getSitting),
@@ -378,10 +325,10 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
 
             /** 공격 쿨타임 (초) */
             @NonNull
-            private final HealthBasedFloat attackCooldownSeconds;
+            private final HealthBasedValue<Float> attackCooldownSeconds;
             /** 순환을 마친 후 착지할 확률 */
             @NonNull
-            private final HealthBasedFloat landingChance;
+            private final HealthBasedValue<Float> landingChance;
             /** 돌진 공격 정보 */
             @NonNull
             private final Charge charge;
@@ -434,7 +381,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                                         .forGetter(Fireball::getExplosionRadius),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_duration_seconds", 10F)
                                         .forGetter(target -> target.flameDurationSeconds),
-                                HealthBasedInt.codec(ExtraCodecs.POSITIVE_INT).optionalFieldOf("max_shots", new HealthBasedInt(1))
+                                HealthBasedValue.codec(ExtraCodecs.POSITIVE_INT).optionalFieldOf("max_shots", new HealthBasedValue<>(1))
                                         .forGetter(Fireball::getMaxShots))
                         .apply(instance, Fireball::new));
 
@@ -449,7 +396,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 /** 최대 발사 횟수 */
                 @NonNull
                 @Getter
-                private final HealthBasedInt maxShots;
+                private final HealthBasedValue<Integer> maxShots;
 
                 /**
                  * @return 브레스 잔류 시간 (tick)
@@ -468,25 +415,25 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 private static final Codec<Sitting> CODEC = RecordCodecBuilder.create(instance -> instance
                         .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("scan_duration", 0.7F)
                                         .forGetter(target -> target.scanDurationSeconds),
-                                HealthBasedFloat.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                        .optionalFieldOf("scan_idle_duration_seconds", new HealthBasedFloat(3))
+                                HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
+                                        .optionalFieldOf("scan_idle_duration_seconds", new HealthBasedValue<>(3F))
                                         .forGetter(Sitting::getScanIdleDurationSeconds),
                                 ExtraCodecs.floatRange(0, 1).optionalFieldOf("allowed_damage_ratio", 0.15F)
                                         .forGetter(Sitting::getAllowedDamageRatio),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("spin_attack_duration_seconds", 0.8F)
                                         .forGetter(target -> target.spinAttackDurationSeconds),
-                                HealthBasedFloat.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                        .optionalFieldOf("flaming_duration_seconds", new HealthBasedFloat(3))
+                                HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
+                                        .optionalFieldOf("flaming_duration_seconds", new HealthBasedValue<>(3F))
                                         .forGetter(Sitting::getFlamingDurationSeconds),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_radius", 6F).forGetter(Sitting::getFlameRadius))
                         .apply(instance, Sitting::new));
 
                 /** 대상 탐지 시간 (초) */
                 private final float scanDurationSeconds;
-                /** 대상 탐지 중 정지 시간 */
+                /** 대상 탐지 중 정지 시간 (초) */
                 @NonNull
                 @Getter
-                private final HealthBasedFloat scanIdleDurationSeconds;
+                private final HealthBasedValue<Float> scanIdleDurationSeconds;
                 /** 받을 수 있는 최대 피해 비율 */
                 @Getter
                 private final float allowedDamageRatio;
@@ -495,7 +442,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 /** 브레스 사용 시간 (초) */
                 @NonNull
                 @Getter
-                private final HealthBasedFloat flamingDurationSeconds;
+                private final HealthBasedValue<Float> flamingDurationSeconds;
                 @Getter
                 private final float flameRadius;
 
@@ -525,8 +472,8 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                         .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("velocity", 3).forGetter(Meteor::getVelocity),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("explosion_radius", 3.5F)
                                         .forGetter(Meteor::getExplosionRadius),
-                                HealthBasedFloat.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                        .optionalFieldOf("cooldown_seconds", new HealthBasedFloat(30))
+                                HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
+                                        .optionalFieldOf("cooldown_seconds", new HealthBasedValue<>(30F))
                                         .forGetter(Meteor::getCooldownSeconds))
                         .apply(instance, Meteor::new));
 
@@ -536,7 +483,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 private final float explosionRadius;
                 /** 쿨타임 (초) */
                 @NonNull
-                private final HealthBasedFloat cooldownSeconds;
+                private final HealthBasedValue<Float> cooldownSeconds;
             }
         }
     }
