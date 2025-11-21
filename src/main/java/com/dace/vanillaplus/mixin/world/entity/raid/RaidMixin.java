@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
+import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.RaidWave;
-import com.dace.vanillaplus.data.modifier.GeneralModifier;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -64,7 +64,7 @@ public abstract class RaidMixin {
 
     @Overwrite
     public int getMaxRaidOmenLevel() {
-        return GeneralModifier.get().getMaxBadOmenLevel();
+        return GeneralConfig.get().getMaxBadOmenLevel();
     }
 
     @Overwrite

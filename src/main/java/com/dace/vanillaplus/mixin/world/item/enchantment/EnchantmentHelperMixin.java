@@ -2,7 +2,7 @@ package com.dace.vanillaplus.mixin.world.item.enchantment;
 
 import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.EnchantmentExtension;
-import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.google.common.collect.Lists;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -53,7 +53,7 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
     @ModifyExpressionValue(method = "getEnchantmentCost", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private static int modifyMaxPower(int maxPower, @Local(argsOnly = true) ItemStack itemStack) {
         return itemStack.is(VPTags.Items.EXTENDED_ENCHANTABLE)
-                ? (int) (maxPower * GeneralModifier.get().getExtendedEnchantmentMaxCostMultiplier())
+                ? (int) (maxPower * GeneralConfig.get().getExtendedEnchantmentMaxCostMultiplier())
                 : maxPower;
     }
 }

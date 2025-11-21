@@ -1,7 +1,10 @@
 package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.*;
-import com.dace.vanillaplus.data.modifier.*;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.DataModifier;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
@@ -51,6 +54,8 @@ public final class VPRegistry<T> {
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
 
+    /** 설정 */
+    public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
@@ -63,14 +68,12 @@ public final class VPRegistry<T> {
     public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
     /** 습격자 효과 */
     public static final VPRegistry<RaiderEffect> RAIDER_EFFECT = new VPRegistry<>("raider_effect");
-    /** 전역 수정자 */
-    public static final VPRegistry<GeneralModifier> MODIFIER = new VPRegistry<>("modifier");
     /** 아이템 수정자 */
-    public static final VPRegistry<ItemModifier> ITEM_MODIFIER = MODIFIER.createRegistry("item");
+    public static final VPRegistry<ItemModifier> ITEM_MODIFIER = new VPRegistry<>("modifier/item");
     /** 블록 수정자 */
-    public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = MODIFIER.createRegistry("block");
+    public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = new VPRegistry<>("modifier/block");
     /** 엔티티 수정자 */
-    public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = MODIFIER.createRegistry("entity");
+    public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
 
     @Nullable
     private static HolderLookup.Provider provider;

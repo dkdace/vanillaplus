@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItem;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
@@ -68,10 +68,8 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
         Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
         if (maxDamage != null) {
-            float maxRepairLimitRatio = GeneralModifier.get().getMaxRepairLimitRatio();
-
             map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
-            map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * maxRepairLimitRatio));
+            map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * GeneralConfig.get().getMaxRepairLimitRatio()));
         }
     }
 }
