@@ -49,6 +49,7 @@ public final class VPTags {
         public static final TagKey<Enchantment> DURABILITY = create(Registries.ENCHANTMENT, "durability");
         public static final TagKey<Enchantment> TOOL = create(Registries.ENCHANTMENT, "tool");
         public static final TagKey<Enchantment> WEAPON = create(Registries.ENCHANTMENT, "weapon");
+        public static final TagKey<Enchantment> GENERAL_DAMAGE_EXCLUSIVE = create(Registries.ENCHANTMENT, "exclusive_set/general_damage");
     }
 
     /**
