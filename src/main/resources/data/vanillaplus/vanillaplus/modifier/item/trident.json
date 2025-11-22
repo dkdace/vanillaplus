@@ -1,0 +1,8 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "minecraft:repairable": {
+      "items": "minecraft:prismarine_shard"
+    }
+  }
+}
