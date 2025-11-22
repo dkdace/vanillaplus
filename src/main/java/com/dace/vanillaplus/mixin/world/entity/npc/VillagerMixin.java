@@ -2,7 +2,10 @@ package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -12,6 +15,8 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
@@ -74,6 +79,21 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
             addOffers(i);
 
         resendOffersToTradingPlayer();
+    }
+
+    @Definition(id = "random", field = "Lnet/minecraft/world/entity/npc/Villager;random:Lnet/minecraft/util/RandomSource;")
+    @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
+    @Expression("3 + this.random.nextInt(4)")
+    @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private int modifyRewardBaseXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {
+        ItemCost itemCost = merchantOffer.getItemCostA();
+
+        if (itemCost.itemStack().is(Items.EMERALD)) {
+            int count = itemCost.count();
+            return 3 * count + random.nextInt(4 * count);
+        }
+
+        return xp;
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
