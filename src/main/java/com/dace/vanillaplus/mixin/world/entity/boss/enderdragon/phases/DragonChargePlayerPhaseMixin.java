@@ -22,9 +22,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(DragonChargePlayerPhase.class)
 public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @Unique
+    private static final int ROAR_DURATION = 40;
+    @Unique
+    private static final int BREATH_START_DISTANCE = 10;
+
+    @Unique
     private int flameTicks;
     @Unique
     private boolean isFlaming;
+
+    @Override
+    protected void onClientTick(CallbackInfo ci) {
+        if (flameTicks++ < ROAR_DURATION)
+            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
+                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
+
+        playParticles();
+    }
+
+    @Override
+    protected float modifyTurnSpeed(float speed) {
+        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
+        return Math.min(distance, 40) / distance;
+    }
 
     @Unique
     private void playParticles() {
@@ -58,20 +78,11 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         serverLevel.addFreshEntity(flame);
     }
 
-    @Override
-    protected void onClientTick(CallbackInfo ci) {
-        if (flameTicks++ < 40)
-            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
-                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
-
-        playParticles();
-    }
-
     @Definition(id = "d0", local = @Local(type = double.class))
     @Expression("d0 < ?")
     @Inject(method = "doServerTick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private void performBreathAttack(ServerLevel serverLevel, CallbackInfo ci, @Local double distanceToSqr) {
-        if (distanceToSqr < 100)
+        if (distanceToSqr < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
             isFlaming = true;
 
         if (!isFlaming || flameTicks++ % 4 != 0)
@@ -99,12 +110,6 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         }
 
         createFlame(serverLevel, blockPos.getBottomCenter(), radius);
-    }
-
-    @Override
-    protected float modifyTurnSpeed(float speed) {
-        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
-        return Math.min(distance, 40) / distance;
     }
 
     @Inject(method = "begin", at = @At("TAIL"))

@@ -5,7 +5,6 @@ import com.dace.vanillaplus.data.EnchantmentExtension;
 import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.google.common.collect.Lists;
-import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
@@ -49,8 +48,7 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
         return list;
     }
 
-    @Expression("15")
-    @ModifyExpressionValue(method = "getEnchantmentCost", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
+    @ModifyExpressionValue(method = "getEnchantmentCost", at = @At(value = "CONSTANT", args = "intValue=15"))
     private static int modifyMaxPower(int maxPower, @Local(argsOnly = true) ItemStack itemStack) {
         return itemStack.is(VPTags.Items.EXTENDED_ENCHANTABLE)
                 ? (int) (maxPower * GeneralConfig.get().getExtendedEnchantmentMaxCostMultiplier())

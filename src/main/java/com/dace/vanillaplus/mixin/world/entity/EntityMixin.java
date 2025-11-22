@@ -78,15 +78,14 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     @Nullable
     public abstract ItemEntity spawnAtLocation(ServerLevel serverLevel, ItemLike item);
 
-    @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
-    protected float modifyBlockExplosionResistance(float resistance, @Local(argsOnly = true) BlockState blockState,
-                                                   @Local(argsOnly = true) float explosionPower) {
-        return resistance;
-    }
-
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
+    }
+
+    @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
+    protected float modifyBlockExplosionResistance(float resistance, @Local(argsOnly = true) BlockState blockState) {
+        return resistance;
     }
 }

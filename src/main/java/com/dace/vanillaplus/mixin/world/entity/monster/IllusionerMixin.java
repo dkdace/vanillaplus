@@ -15,8 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Illusioner.class)
 public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.LivingEntityModifier> {
-    @Inject(method = "registerGoals", at = @At(value = "NEW",
-            target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;"))
+    @Override
+    public ItemStack modifyProjectileItem(ItemStack itemStack) {
+        return ((RaiderEffect.IllusionerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
+                .applyArrowPotionEffect(getThis(), itemStack);
+    }
+
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
         targetSelector.addGoal(2, getThis().new RaiderOpenDoorGoal(getThis()));
     }
@@ -30,11 +35,5 @@ public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, E
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
         RaiderEffect.IllusionerEffect illusionerEffect = RaiderEffect.fromEntityType(getType());
         illusionerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
-    }
-
-    @Override
-    public ItemStack modifyProjectileItem(ItemStack itemStack) {
-        return ((RaiderEffect.IllusionerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
-                .applyArrowPotionEffect(getThis(), itemStack);
     }
 }

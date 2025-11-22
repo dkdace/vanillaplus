@@ -15,9 +15,10 @@ public abstract class BehaviorUtilsMixin implements VPMixin<BehaviorUtils> {
     @ModifyExpressionValue(method = "isWithinAttackRange", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getDefaultProjectileRange()I"))
     private static int modifyAttackRange(int attackRange, @Local(argsOnly = true) Mob mob) {
-        if (!(mob instanceof CrossbowAttackMob))
-            return attackRange;
+        if (mob instanceof CrossbowAttackMob)
+            return EntityModifier.fromEntityTypeOrThrow(mob.getType()).getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB)
+                    .getShootingRange();
 
-        return EntityModifier.fromEntityTypeOrThrow(mob.getType()).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingRange();
+        return attackRange;
     }
 }

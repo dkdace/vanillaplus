@@ -16,9 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Evoker.class)
 public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityModifier.LivingEntityModifier> {
-    @Inject(method = "registerGoals", at = @At(value = "NEW",
-            target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;",
-            ordinal = 0))
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
         targetSelector.addGoal(1, getThis().new RaiderOpenDoorGoal(getThis()));
     }
@@ -33,7 +31,6 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
         RaiderEffect.EvokerEffect evokerEffect = RaiderEffect.fromEntityType(getType());
         evokerEffect.getEquipItemInfos().forEach(itemInfo -> itemInfo.equipItem(getThis()));
     }
-
 
     @Mixin(targets = "net.minecraft.world.entity.monster.Evoker$EvokerSummonSpellGoal")
     public abstract static class EvokerSummonSpellGoal {

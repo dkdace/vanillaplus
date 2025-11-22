@@ -5,6 +5,7 @@ import com.dace.vanillaplus.data.RaidWave;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,10 +17,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -31,6 +30,10 @@ import java.util.Optional;
 
 @Mixin(Raid.class)
 public abstract class RaidMixin {
+    @Unique
+    private static final String COMPONENT_RAID_WAVES = "event.minecraft.raid.waves";
+    @Unique
+    private static final String COMPONENT_RAID_TIME_REMAINING = "event.minecraft.raid.time_remaining";
     @Shadow
     @Final
     private static final int RAID_TIMEOUT_TICKS = 3 * 60 * 20;
@@ -62,6 +65,48 @@ public abstract class RaidMixin {
     @Shadow
     protected abstract boolean isFinalWave();
 
+    @Unique
+    private void spawnRaiders(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull RaidWave raidWave, int wave) {
+        boolean hasLeader = false;
+
+        for (Map.Entry<RaidWave.RaiderType, Integer> entry : raidWave.getRaiderCountMap(wave).entrySet()) {
+            for (int j = 0; j < entry.getValue(); j++) {
+                RaidWave.RaiderType raiderType = entry.getKey();
+                Raider raider = raiderType.getEntityType().create(serverLevel, EntitySpawnReason.EVENT);
+
+                if (raider == null)
+                    break;
+
+                joinRaid(serverLevel, wave, raider, blockPos, false);
+
+                if (!hasLeader && raider.canBeLeader()) {
+                    raider.setPatrolLeader(true);
+                    setLeader(wave, raider);
+                    hasLeader = true;
+                }
+
+                spawnRidingRaider(serverLevel, blockPos, wave, raiderType, raider);
+            }
+        }
+    }
+
+    @Unique
+    private void spawnRidingRaider(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, int wave, @NonNull RaidWave.RaiderType raiderType,
+                                   @NonNull Raider raider) {
+        EntityType<? extends Raider> ridingEntityType = raiderType.getRidingEntityType();
+        if (ridingEntityType == null)
+            return;
+
+        Raider ridingRaider = ridingEntityType.create(serverLevel, EntitySpawnReason.EVENT);
+        if (ridingRaider == null)
+            return;
+
+        joinRaid(serverLevel, wave, ridingRaider, blockPos, false);
+
+        ridingRaider.snapTo(blockPos, 0, 0);
+        ridingRaider.startRiding(raider);
+    }
+
     @Overwrite
     public int getMaxRaidOmenLevel() {
         return GeneralConfig.get().getMaxBadOmenLevel();
@@ -79,15 +124,15 @@ public abstract class RaidMixin {
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;"))
+            target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC))
     private Component modifyRaidBarName(Component originalComponent, @Local(argsOnly = true) ServerLevel serverLevel, @Local int raiderCount) {
         int wave = groupsSpawned;
         if (raiderCount == 0 && !isFinalWave())
             wave++;
 
-        MutableComponent component = Component.translatable("event.minecraft.raid.waves", wave, numGroups);
+        MutableComponent component = Component.translatable(COMPONENT_RAID_WAVES, wave, numGroups);
         if (ticksActive > 20) {
-            MutableComponent timeComponent = Component.translatable("event.minecraft.raid.time_remaining",
+            MutableComponent timeComponent = Component.translatable(COMPONENT_RAID_TIME_REMAINING,
                     StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), serverLevel.tickRateManager().tickrate()));
 
             component.append(" - ").append(timeComponent);
@@ -96,8 +141,7 @@ public abstract class RaidMixin {
         return component;
     }
 
-    @Expression("48000")
-    @ModifyExpressionValue(method = "tick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
+    @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "longValue=48000"))
     private long modifyTimeoutCondition(long original) {
         return RAID_TIMEOUT_TICKS;
     }
@@ -108,7 +152,7 @@ public abstract class RaidMixin {
     }
 
     @Inject(method = "updateRaiders", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raider;isRemoved()Z"))
-    private void resetTimeoutIfRaiderIsInVillage(ServerLevel serverLevel, CallbackInfo ci, @Local Raider raider, @Local BlockPos raiderBlockPos) {
+    private void resetTimeoutIfRaiderIsInVillage(ServerLevel serverLevel, CallbackInfo ci, @Local BlockPos raiderBlockPos) {
         if (serverLevel.isVillage(raiderBlockPos))
             ticksActive = 0;
     }
@@ -137,37 +181,7 @@ public abstract class RaidMixin {
         if (raidWave == null)
             return;
 
-        boolean hasLeader = false;
-        int wave = groupsSpawned + 1;
-        Map<RaidWave.RaiderType, Integer> raiderCountMap = raidWave.getRaiderCountMap(wave);
-
-        for (Map.Entry<RaidWave.RaiderType, Integer> entry : raiderCountMap.entrySet()) {
-            for (int j = 0; j < entry.getValue(); j++) {
-                Raider raider = entry.getKey().getEntityType().create(serverLevel, EntitySpawnReason.EVENT);
-                if (raider == null)
-                    break;
-
-                joinRaid(serverLevel, wave, raider, blockPos, false);
-
-                if (!hasLeader && raider.canBeLeader()) {
-                    raider.setPatrolLeader(true);
-                    setLeader(wave, raider);
-                    hasLeader = true;
-                }
-
-                EntityType<? extends Raider> ridingEntityType = entry.getKey().getRidingEntityType();
-                if (ridingEntityType != null) {
-                    Raider ridingRaider = ridingEntityType.create(serverLevel, EntitySpawnReason.EVENT);
-
-                    if (ridingRaider != null) {
-                        joinRaid(serverLevel, wave, ridingRaider, blockPos, false);
-
-                        ridingRaider.snapTo(blockPos, 0, 0);
-                        ridingRaider.startRiding(raider);
-                    }
-                }
-            }
-        }
+        spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1);
 
         waveSpawnPos = Optional.empty();
         groupsSpawned++;

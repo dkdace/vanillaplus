@@ -32,6 +32,11 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
         return null;
     }
 
+    @Override
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return getXp(state, level, randomSource, pos);
+    }
+
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/ChestBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private BlockState modifyBlockState(BlockState blockState) {
@@ -56,10 +61,5 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
 
         BlockPos connectedBlockPos = blockPos.relative(getConnectedDirection(blockState));
         popOpenXP(level.getBlockState(connectedBlockPos), level, connectedBlockPos);
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return getXp(state, level, randomSource, pos);
     }
 }

@@ -13,12 +13,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DragonSittingAttackingPhase.class)
 public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPhaseInstanceMixin {
+    @Unique
+    private static final int SPIN_TIMES = 2;
+
     @Shadow
     private int attackingTicks;
     @Unique
     private float yRot;
     @Unique
-    private boolean spinClockwise;
+    private boolean isSpinClockwise;
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=40"))
     private int modifyRoaringDuration(int duration) {
@@ -32,8 +35,8 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
         if (attackingTicks >= spinAttackDuration)
             return;
 
-        float angle = 360F / spinAttackDuration * 2;
-        dragon.setYRot(dragon.getYRot() + (spinClockwise ? angle : -angle));
+        float angle = 360F / spinAttackDuration * SPIN_TIMES;
+        dragon.setYRot(dragon.getYRot() + (isSpinClockwise ? angle : -angle));
     }
 
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
@@ -45,6 +48,6 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
     @Inject(method = "begin", at = @At("TAIL"))
     private void setSpinClockwise(CallbackInfo ci) {
         yRot = dragon.getYRot();
-        spinClockwise = dragon.getRandom().nextBoolean();
+        isSpinClockwise = dragon.getRandom().nextBoolean();
     }
 }

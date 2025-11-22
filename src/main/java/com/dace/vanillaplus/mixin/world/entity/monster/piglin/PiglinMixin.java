@@ -15,6 +15,6 @@ public abstract class PiglinMixin extends MonsterMixin<Piglin, EntityModifier.Li
             target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float velocity) {
-        return Objects.requireNonNull(dataModifier).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingPower();
+        return Objects.requireNonNull(dataModifier).getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingPower();
     }
 }

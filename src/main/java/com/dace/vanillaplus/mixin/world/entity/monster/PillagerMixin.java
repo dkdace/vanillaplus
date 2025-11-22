@@ -18,8 +18,13 @@ import java.util.Objects;
 
 @Mixin(Pillager.class)
 public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.LivingEntityModifier> {
-    @Inject(method = "registerGoals", at = @At(value = "NEW",
-            target = "(Lnet/minecraft/world/entity/PathfinderMob;Ljava/lang/Class;FDD)Lnet/minecraft/world/entity/ai/goal/AvoidEntityGoal;"))
+    @Override
+    public ItemStack modifyProjectileItem(ItemStack itemStack) {
+        return ((RaiderEffect.PillagerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
+                .applyArrowPotionEffect(getThis(), itemStack);
+    }
+
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
         targetSelector.addGoal(1, getThis().new RaiderOpenDoorGoal(getThis()));
     }
@@ -32,18 +37,12 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"), index = 1)
     private float modifyBulletVelocity(float velocity) {
-        return Objects.requireNonNull(dataModifier).getInterfaceInfo().getCrossbowAttackMobInfo().getShootingPower();
+        return Objects.requireNonNull(dataModifier).getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingPower();
     }
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
         RaiderEffect.PillagerEffect pillagerEffect = RaiderEffect.fromEntityType(getType());
         pillagerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
-    }
-
-    @Override
-    public ItemStack modifyProjectileItem(ItemStack itemStack) {
-        return ((RaiderEffect.PillagerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
-                .applyArrowPotionEffect(getThis(), itemStack);
     }
 }

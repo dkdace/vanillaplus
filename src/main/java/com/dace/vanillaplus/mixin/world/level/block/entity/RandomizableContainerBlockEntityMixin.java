@@ -22,12 +22,6 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Unique
     private boolean hasReward = false;
 
-    @Inject(method = "setLootTable", at = @At("TAIL"))
-    private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
-        if (lootTableResourceKey != null && !hasReward)
-            onLoad();
-    }
-
     @Override
     public void onLoad() {
         if (hasReward || level == null || getLootTableReward() == null || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
@@ -41,5 +35,11 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Nullable
     public LootTableReward getLootTableReward() {
         return lootTable == null ? null : LootTableReward.fromLootTable(lootTable);
+    }
+
+    @Inject(method = "setLootTable", at = @At("TAIL"))
+    private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
+        if (lootTableResourceKey != null && !hasReward)
+            onLoad();
     }
 }

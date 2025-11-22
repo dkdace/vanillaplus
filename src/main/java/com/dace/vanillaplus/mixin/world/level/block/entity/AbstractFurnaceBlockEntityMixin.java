@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class AbstractFurnaceBlockEntityMixin<T extends AbstractFurnaceBlockEntity> extends BlockEntityMixin<T> {
     @Inject(method = "burn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"), cancellable = true)
-    private void damageBurnedTool(RegistryAccess registryAccess, RecipeHolder<? extends AbstractCookingRecipe> recipeHolder,
+    private void damageBurnedItem(RegistryAccess registryAccess, RecipeHolder<? extends AbstractCookingRecipe> recipeHolder,
                                   SingleRecipeInput recipeInput, NonNullList<ItemStack> itemStacks, int maxStackSize,
                                   CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) ItemStack input, @Local(ordinal = 1) ItemStack output) {
         if (!input.isDamageableItem() || !output.is(VPTags.Items.NUGGETS))
             return;
-        if (input.getEnchantments().keySet().stream()
-                .anyMatch(enchantmentHolder -> enchantmentHolder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP)))
+        if (input.getEnchantments().keySet().stream().anyMatch(enchantmentHolder ->
+                enchantmentHolder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP)))
             return;
 
         int damage = (int) (input.getDamageValue() + input.getMaxDamage() * GeneralConfig.get().getSmeltingToolDamageRatio());

@@ -33,13 +33,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @Shadow
     protected Brain<?> brain;
+    @Unique
+    @Nullable
+    private DamageSource lastDamageSourceForKnockback;
     @Mutable
     @Shadow
     @Final
     private AttributeMap attributes;
-    @Unique
-    @Nullable
-    private DamageSource lastDamageSourceForKnockback;
 
     @Shadow
     public abstract void stopRiding();
@@ -69,6 +69,15 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     public abstract float getMaxHealth();
+
+    @Override
+    @MustBeInvokedByOverriders
+    public void setDataModifier(@Nullable U dataModifier) {
+        super.setDataModifier(dataModifier);
+
+        if (dataModifier != null)
+            attributes.apply(dataModifier.getPackedAttributes());
+    }
 
     @Unique
     private double getEnvironmentalDamageResistanceValue() {
@@ -100,13 +109,15 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void setPreLastDamageSource(ServerLevel serverLevel, DamageSource damageSource, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void setLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
+                                                 CallbackInfoReturnable<Boolean> cir) {
         lastDamageSourceForKnockback = damageSource;
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V",
             shift = At.Shift.AFTER))
-    private void removePreLastDamageSource(ServerLevel serverLevel, DamageSource damageSource, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void removeLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
+                                                    CallbackInfoReturnable<Boolean> cir) {
         lastDamageSourceForKnockback = null;
     }
 
@@ -124,14 +135,5 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
     protected float modifyWaterSlowDown(float value) {
         return value;
-    }
-
-    @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
-        super.setDataModifier(dataModifier);
-
-        if (dataModifier != null)
-            attributes.apply(dataModifier.getPackedAttributes());
     }
 }

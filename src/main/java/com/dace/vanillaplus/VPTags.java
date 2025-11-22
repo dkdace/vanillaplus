@@ -48,8 +48,6 @@ public final class VPTags {
     public static final class Enchantments {
         public static final TagKey<Enchantment> DURABILITY = create(Registries.ENCHANTMENT, "durability");
         public static final TagKey<Enchantment> TOOL = create(Registries.ENCHANTMENT, "tool");
-        public static final TagKey<Enchantment> TRADEABLE = create(Registries.ENCHANTMENT, "tradeable");
-        public static final TagKey<Enchantment> TRADEABLE_TREASURE = create(Registries.ENCHANTMENT, "tradeable_treasure");
         public static final TagKey<Enchantment> WEAPON = create(Registries.ENCHANTMENT, "weapon");
     }
 

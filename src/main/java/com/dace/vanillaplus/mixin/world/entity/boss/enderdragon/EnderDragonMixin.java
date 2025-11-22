@@ -56,7 +56,11 @@ import java.util.Optional;
 @Mixin(EnderDragon.class)
 public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModifier.EnderDragonModifier> implements VPEnderDragon {
     @Unique
+    private static final int MAX_EXPLOSION_RESISTANCE = 3;
+    @Unique
     private static final int COLOR_METEOR = ARGB.color(223, 0, 249);
+    @Unique
+    private static final int METEOR_POS_SPREAD = 20;
     @Unique
     private static final EntityDataAccessor<Optional<BlockPos>> METEOR_POS = SynchedEntityData.defineId(EnderDragon.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
@@ -83,11 +87,32 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @Shadow
     public abstract SoundSource getSoundSource();
 
-    @Unique
-    private double getMovementSpeedMultiplier(@NonNull DragonPhaseInstance dragonPhaseInstance) {
-        return dragonPhaseInstance.getPhase() == EnderDragonPhase.DYING
-                ? 1
-                : Objects.requireNonNull(dataModifier).getMovementSpeedMultiplier().get(getThis());
+    @Override
+    @NonNull
+    public EntityModifier.EnderDragonModifier getDataModifier() {
+        return Objects.requireNonNull(super.getDataModifier());
+    }
+
+    @Override
+    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState) {
+        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
+    }
+
+    @Override
+    @NonNull
+    public TargetingConditions getDefaultTargetingConditions() {
+        return TargetingConditions.forCombat().range(getAttributeValue(Attributes.FOLLOW_RANGE)).ignoreLineOfSight().ignoreInvisibilityTesting()
+                .selector((entity, level) -> entity instanceof ServerPlayer && targets.contains(entity));
+    }
+
+    @Override
+    @NonNull
+    public MobEffectInstance getFlameMobEffectInstance() {
+        Difficulty difficulty = level().getDifficulty();
+
+        return difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD
+                ? new MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 1)
+                : new MobEffectInstance(MobEffects.INSTANT_DAMAGE);
     }
 
     @Override
@@ -96,8 +121,25 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     }
 
     @Unique
-    public void setMeteorPos(@Nullable BlockPos blockPos) {
+    private void setMeteorPos(@Nullable BlockPos blockPos) {
         getEntityData().set(METEOR_POS, Optional.ofNullable(blockPos));
+    }
+
+    @Override
+    public boolean dropMeteor(@NonNull Vec3 pos) {
+        if (level().getDifficulty() != Difficulty.HARD || getHealth() >= getMaxHealth() || getMeteorPos() != null)
+            return false;
+
+        pos = pos.offsetRandom(random, METEOR_POS_SPREAD);
+        setMeteorPos(BlockPos.containing(pos).atY(level().getMaxY()));
+
+        level().playSound(null, pos.x(), pos.y(), pos.z(), VPSoundEvents.ENDER_DRAGON_SPAWN_METEOR.get(), getSoundSource(), 5, 1);
+        return true;
+    }
+
+    @Unique
+    private double getMovementSpeedMultiplier(@NonNull DragonPhaseInstance dragonPhaseInstance) {
+        return dragonPhaseInstance.getPhase() == EnderDragonPhase.DYING ? 1 : getDataModifier().getMovementSpeedMultiplier().get(getThis());
     }
 
     @Unique
@@ -123,8 +165,8 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         if (!isMeteorExploding)
             return;
 
-        float explosionRadius = Objects.requireNonNull(dataModifier).getPhaseInfo().getMeteor().getExplosionRadius();
-        level().explode(getThis(), blockPos.getX(), blockPos.getY() + 1.0, blockPos.getZ(), explosionRadius, Level.ExplosionInteraction.MOB);
+        level().explode(getThis(), blockPos.getX(), blockPos.getY() + 1.0, blockPos.getZ(),
+                getDataModifier().getPhaseInfo().getMeteor().getExplosionRadius(), Level.ExplosionInteraction.MOB);
     }
 
     @ModifyArg(method = "onCrystalDestroyed", at = @At(value = "INVOKE",
@@ -203,17 +245,15 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @ModifyExpressionValue(method = "hurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/boss/EnderDragonPart;Lnet/minecraft/world/damagesource/DamageSource;F)Z",
             at = @At(value = "CONSTANT", args = "floatValue=0.25"))
     private float modifySittingAllowedDamage(float allowedDamage) {
-        return Objects.requireNonNull(dataModifier).getPhaseInfo().getSitting().getAllowedDamageRatio();
+        return getDataModifier().getPhaseInfo().getSitting().getAllowedDamageRatio();
     }
 
     @Inject(method = "reallyHurt", at = @At("TAIL"))
     private void dropEnderPearlOnHurt(ServerLevel serverLevel, DamageSource damageSource, float damage, CallbackInfo ci) {
-        Objects.requireNonNull(dataModifier);
-
-        if (!shouldDropLoot(serverLevel) || enderPearlDropCount >= dataModifier.getMaxEnderPearlDrops())
+        if (!shouldDropLoot(serverLevel) || enderPearlDropCount >= getDataModifier().getMaxEnderPearlDrops())
             return;
 
-        enderPearlDropRate += dataModifier.getEnderPearlDropChance();
+        enderPearlDropRate += getDataModifier().getEnderPearlDropChance();
         if (enderPearlDropRate <= random.nextDouble())
             return;
 
@@ -242,7 +282,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         if (meteorPos == null)
             return;
 
-        int velocity = Objects.requireNonNull(dataModifier).getPhaseInfo().getMeteor().getVelocity();
+        int velocity = getDataModifier().getPhaseInfo().getMeteor().getVelocity();
 
         for (int i = 0; i < velocity; i++) {
             if (meteorPos.getY() > serverLevel.getMinY() && serverLevel.isEmptyBlock(meteorPos)) {
@@ -261,45 +301,11 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=12000"))
     private int modifyDropXPFirst(int xp) {
-        return Objects.requireNonNull(dataModifier).getExperience().getFirst();
+        return getDataModifier().getExperience().getFirst();
     }
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=500"))
     private int modifyDropXPSecond(int xp) {
-        return Objects.requireNonNull(dataModifier).getExperience().getSecond();
-    }
-
-    @Override
-    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState, float explosionPower) {
-        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? explosionPower : Math.min(3F, explosionPower);
-    }
-
-    @Override
-    @NonNull
-    public TargetingConditions getDefaultTargetingConditions() {
-        return TargetingConditions.forCombat().range(getAttributeValue(Attributes.FOLLOW_RANGE)).ignoreLineOfSight().ignoreInvisibilityTesting()
-                .selector((entity, level) -> entity instanceof ServerPlayer && targets.contains(entity));
-    }
-
-    @Override
-    public boolean dropMeteor(@NonNull Vec3 pos) {
-        if (level().getDifficulty() != Difficulty.HARD || getHealth() >= getMaxHealth() || getMeteorPos() != null)
-            return false;
-
-        pos = pos.offsetRandom(random, 20);
-        setMeteorPos(BlockPos.containing(pos).atY(level().getMaxY()));
-
-        level().playSound(null, pos.x(), pos.y(), pos.z(), VPSoundEvents.ENDER_DRAGON_SPAWN_METEOR.get(), getSoundSource(), 5, 1);
-        return true;
-    }
-
-    @Override
-    @NonNull
-    public MobEffectInstance getFlameMobEffectInstance() {
-        Difficulty difficulty = level().getDifficulty();
-
-        return difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD
-                ? new MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 1)
-                : new MobEffectInstance(MobEffects.INSTANT_DAMAGE);
+        return getDataModifier().getExperience().getSecond();
     }
 }

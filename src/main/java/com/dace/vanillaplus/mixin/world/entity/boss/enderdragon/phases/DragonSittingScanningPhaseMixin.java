@@ -9,21 +9,27 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingScanningPhase;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(DragonSittingScanningPhase.class)
 public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhaseInstanceMixin {
+    @Unique
+    private static final int SCAN_DISTANCE_MIN = 6;
+    @Unique
+    private static final int SCAN_DISTANCE_MAX = 14;
+
     @ModifyReturnValue(method = "lambda$new$0", at = @At("RETURN"))
     private static boolean modifyScanTargetingConditionsSelector(boolean original, @Local(argsOnly = true) EnderDragon enderDragon,
                                                                  @Local(argsOnly = true) LivingEntity entity) {
-        return original && enderDragon.distanceToSqr(entity) > 36;
+        return original && enderDragon.distanceToSqr(entity) > SCAN_DISTANCE_MIN * SCAN_DISTANCE_MIN;
     }
 
     @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;selector(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions$Selector;)Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;"))
     private static TargetingConditions modifyScanTargetingConditions(TargetingConditions targetingConditions) {
-        return targetingConditions.range(14).ignoreLineOfSight().ignoreInvisibilityTesting();
+        return targetingConditions.range(SCAN_DISTANCE_MAX).ignoreLineOfSight().ignoreInvisibilityTesting();
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=25"))

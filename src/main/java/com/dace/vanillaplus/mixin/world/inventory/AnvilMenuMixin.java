@@ -9,14 +9,14 @@ import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
-    @Overwrite
-    public static int calculateIncreasedRepairCost(int cost) {
-        return (int) Math.min(cost + 1L, 2147483647L);
+    @ModifyArg(method = "calculateIncreasedRepairCost", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(JJ)J"), index = 0)
+    private static long modifyIncreasedRepairCost(long cost, @Local(argsOnly = true) int oldCost) {
+        return oldCost + 1L;
     }
 
     @ModifyExpressionValue(method = "createResult", at = @At(value = "INVOKE",

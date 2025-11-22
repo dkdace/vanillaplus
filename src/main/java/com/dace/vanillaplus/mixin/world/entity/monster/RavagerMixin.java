@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +24,9 @@ import java.util.Objects;
 
 @Mixin(Ravager.class)
 public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.RavagerModifier> {
+    @Unique
+    private static final int ROAR_DISTANCE = 5;
+
     @Unique
     private int roarCooldown = 0;
     @Shadow
@@ -43,12 +47,12 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void addRoarCooldownData(ValueOutput valueOutput, CallbackInfo ci) {
+    private void addAdditionalSaveData(ValueOutput valueOutput, CallbackInfo ci) {
         valueOutput.putInt("RoarCooldown", roarCooldown);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void readRoarCooldownData(ValueInput valueInput, CallbackInfo ci) {
+    private void readAdditionalSaveData(ValueInput valueInput, CallbackInfo ci) {
         roarCooldown = valueInput.getIntOr("RoarCooldown", 0);
     }
 
@@ -59,15 +63,17 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
             roarCooldown--;
     }
 
-    @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 4))
+    @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 1,
+            opcode = Opcodes.PUTFIELD))
     private void setRoarCooldown(CallbackInfo ci) {
         roarCooldown = Objects.requireNonNull(dataModifier).getRoarCooldown();
     }
 
-    @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0))
+    @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0,
+            opcode = Opcodes.GETFIELD))
     private void performRoar(CallbackInfo ci) {
         LivingEntity target = getTarget();
-        if (target == null || roarCooldown > 0 || !closerThan(target, 5) || !hasLineOfSight(target))
+        if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
             return;
 
         playSound(SoundEvents.RAVAGER_ROAR, 1, 1);

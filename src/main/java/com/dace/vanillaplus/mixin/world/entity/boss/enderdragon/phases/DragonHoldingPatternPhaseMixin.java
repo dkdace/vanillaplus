@@ -22,18 +22,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DragonHoldingPatternPhase.class)
 public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhaseInstanceMixin {
+    @Unique
+    private static final double CHARGE_CHANCE_MIN = 0.3;
+    @Unique
+    private static final double CHARGE_CHANCE_MAX = 0.7;
+    @Unique
+    private static final double CHARGE_CHANCE_MAX_DISTANCE = 60;
+
     @Shadow
     protected abstract void strafePlayer(Player player);
 
     @Unique
-    @NonNull
-    private TargetingConditions getTargetingConditions() {
-        return VPEnderDragon.cast(dragon).getDefaultTargetingConditions();
-    }
-
-    @Unique
     private void performStrafeOrCharge(@NonNull Player target) {
-        double chargeChance = Mth.clampedLerp(0.3, 0.7, dragon.distanceTo(target) / 60);
+        double chargeChance = Mth.clampedLerp(CHARGE_CHANCE_MIN, CHARGE_CHANCE_MAX, dragon.distanceTo(target) / CHARGE_CHANCE_MAX_DISTANCE);
         if (chargeChance > dragon.getRandom().nextDouble()) {
             dragon.getPhaseManager().setPhase(EnderDragonPhase.CHARGING_PLAYER);
             dragon.getPhaseManager().getPhase(EnderDragonPhase.CHARGING_PLAYER).setTarget(target.position());
@@ -78,7 +79,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
         if (vpEnderDragon.getAttackCooldown() > 0 && vpEnderDragon.getMeteorAttackCooldown() > 0)
             return;
 
-        Player target = serverLevel.getNearestPlayer(getTargetingConditions(), dragon);
+        Player target = serverLevel.getNearestPlayer(vpEnderDragon.getDefaultTargetingConditions(), dragon);
         if (target == null)
             return;
 
@@ -90,7 +91,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @Redirect(method = "onCrystalDestroyed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonHoldingPatternPhase;strafePlayer(Lnet/minecraft/world/entity/player/Player;)V"))
-    private void performAttackOnCrystalDestroyed(DragonHoldingPatternPhase dragonHoldingPatternPhase, Player player) {
+    private void resetCooldownOnCrystalDestroyed(DragonHoldingPatternPhase dragonHoldingPatternPhase, Player player) {
         VPEnderDragon.cast(dragon).setAttackCooldown(0);
     }
 }

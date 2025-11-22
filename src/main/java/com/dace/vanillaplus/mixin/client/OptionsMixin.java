@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +30,7 @@ public abstract class OptionsMixin implements VPOptions {
     });
 
     @Inject(method = "processOptions", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/client/Options;toggleSprint:Lnet/minecraft/client/OptionInstance;"))
+            target = "Lnet/minecraft/client/Options;toggleSprint:Lnet/minecraft/client/OptionInstance;", opcode = Opcodes.GETFIELD))
     private void addExtraOptions(Options.FieldAccess fieldAccess, CallbackInfo ci) {
         fieldAccess.process("toggleProne", toggleProne);
     }

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Spider.class)
 public abstract class SpiderMixin<T extends Spider, U extends EntityModifier.LivingEntityModifier> extends MonsterMixin<T, U> {
-    @Inject(method = "registerGoals", at = @At(value = "CONSTANT", args = "classValue=net/minecraft/world/entity/animal/IronGolem"))
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
         targetSelector.addGoal(3, new Spider.SpiderTargetGoal<>(getThis(), AbstractVillager.class));
     }

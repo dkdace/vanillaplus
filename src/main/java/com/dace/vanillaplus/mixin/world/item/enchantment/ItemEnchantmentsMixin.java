@@ -34,11 +34,18 @@ import java.util.function.Consumer;
 @Mixin(ItemEnchantments.class)
 public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
+    private static final String COMPONENT_ENCHANTMENT_DESCRIPTION = ".description.";
+    @Unique
+    private static final String COMPONENT_ATTRIBUTE_MODIFIER_PLUS = "attribute.modifier.plus.";
+    @Unique
+    private static final String COMPONENT_ATTRIBUTE_MODIFIER_TAKE = "attribute.modifier.take.";
+
+    @Unique
     private static void applyComponent(@NonNull Consumer<Component> componentConsumer, @NonNull Enchantment enchantment, int level,
                                        @NonNull EnchantmentExtension enchantmentExtension) {
         if (enchantment.description().getContents() instanceof TranslatableContents translatableContents)
             enchantmentExtension.getValues().forEach(definedValue -> {
-                String key = translatableContents.getKey() + ".description." + definedValue.getDescriptionIndex();
+                String key = translatableContents.getKey() + COMPONENT_ENCHANTMENT_DESCRIPTION + definedValue.getDescriptionIndex();
                 String argument = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT
                         .format(definedValue.getLevelBasedValue().calculate(level) * definedValue.getDescriptionValueMultiplier());
 
@@ -58,17 +65,17 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
         Holder<Attribute> attributeHolder = enchantmentAttributeEffect.attribute();
 
         if (operation == AttributeModifier.Operation.ADD_MULTIPLIED_BASE || operation == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            amount *= 100.0;
+            amount *= 100;
         else if (attributeHolder == Attributes.KNOCKBACK_RESISTANCE)
-            amount *= 10.0;
+            amount *= 10;
 
         String key;
         boolean style;
         if (amount > 0) {
-            key = "attribute.modifier.plus.";
+            key = COMPONENT_ATTRIBUTE_MODIFIER_PLUS;
             style = true;
         } else {
-            key = "attribute.modifier.take.";
+            key = COMPONENT_ATTRIBUTE_MODIFIER_TAKE;
             style = false;
             amount = -amount;
         }

@@ -198,7 +198,9 @@ public final class VPRegistry<T> {
     @NonNull
     public Codec<T> createByNameCodec() {
         Validate.validState(vanillaRegistry != null || forgeRegistryHolder != null);
-        return vanillaRegistry != null ? vanillaRegistry.byNameCodec() : forgeRegistryHolder.get().getCodec();
+
+        Supplier<Codec<T>> onCodec = vanillaRegistry != null ? vanillaRegistry::byNameCodec : () -> forgeRegistryHolder.get().getCodec();
+        return Codec.lazyInitialized(onCodec);
     }
 
     /**

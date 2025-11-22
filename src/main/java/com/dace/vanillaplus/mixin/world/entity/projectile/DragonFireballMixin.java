@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -22,6 +23,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DragonFireball.class)
 public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, EntityModifier> {
+    @Unique
+    private static final int MAX_EXPLOSION_RESISTANCE = 1;
+
+    @Override
+    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState) {
+        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
+    }
+
     @ModifyExpressionValue(method = "onHit", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/projectile/DragonFireball;ownedBy(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean modifyHitCondition(boolean original) {
@@ -46,10 +55,5 @@ public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, En
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
     private MobEffectInstance modifyFlameEffect(MobEffectInstance mobEffectInstance, @Local Entity owner) {
         return owner instanceof EnderDragon enderDragon ? VPEnderDragon.cast(enderDragon).getFlameMobEffectInstance() : mobEffectInstance;
-    }
-
-    @Override
-    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState, float explosionPower) {
-        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? explosionPower : Math.min(1, explosionPower);
     }
 }

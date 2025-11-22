@@ -37,8 +37,10 @@ public abstract class EnderDragonRendererMixin implements VPMixin<EnderDragonRen
         Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
         meteorPoseStack.translate(meteorPos.getX() - cameraPos.x(), meteorPos.getY() - cameraPos.y(), meteorPos.getZ() - cameraPos.z());
 
+        int height = BeaconRenderer.MAX_RENDER_Y;
+
         BeaconRenderer.submitBeaconBeam(meteorPoseStack, submitNodeCollector, BeaconRenderer.BEAM_LOCATION, 1,
-                vpEnderDragonRenderState.getMeteorBeamAnimationTime(), -1024, 2048, DyeColor.PURPLE.getTextureDiffuseColor(),
+                vpEnderDragonRenderState.getMeteorBeamAnimationTime(), -height / 2, height, DyeColor.PURPLE.getTextureDiffuseColor(),
                 vpEnderDragonRenderState.getMeteorBeamRadius(), vpEnderDragonRenderState.getMeteorBeamGlowRadius());
 
         meteorPoseStack.popPose();
