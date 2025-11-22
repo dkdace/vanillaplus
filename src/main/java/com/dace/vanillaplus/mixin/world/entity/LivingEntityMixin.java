@@ -70,6 +70,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Shadow
     public abstract float getMaxHealth();
 
+    @Shadow
+    public abstract boolean isAutoSpinAttack();
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
@@ -135,5 +138,13 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
     protected float modifyWaterSlowDown(float value) {
         return value;
+    }
+
+
+    @ModifyExpressionValue(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D",
+                    ordinal = 0))
+    private double modifyWaterMovementEfficiencyValue(double value) {
+        return isAutoSpinAttack() ? 0 : value;
     }
 }
