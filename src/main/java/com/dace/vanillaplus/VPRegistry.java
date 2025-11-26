@@ -1,21 +1,18 @@
 package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.*;
-import com.dace.vanillaplus.data.modifier.BlockModifier;
-import com.dace.vanillaplus.data.modifier.DataModifier;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.registryobject.VPAttributes;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
-import com.dace.vanillaplus.registryobject.VPEnchantmentLevelBasedValueTypes;
-import com.dace.vanillaplus.registryobject.VPSoundEvents;
+import com.dace.vanillaplus.registryobject.*;
 import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -144,13 +141,13 @@ public final class VPRegistry<T> {
     private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
         provider = providerFunction.get();
 
-        applyDataModifiers(ItemModifier::fromItem, BuiltInRegistries.ITEM);
-        applyDataModifiers(BlockModifier::fromBlock, BuiltInRegistries.BLOCK);
-        applyDataModifiers(EntityModifier::fromEntityType, BuiltInRegistries.ENTITY_TYPE);
+        applyDataModifiers(DataModifierInfo.ITEM_MODIFIER::get, BuiltInRegistries.ITEM);
+        applyDataModifiers(DataModifierInfo.BLOCK_MODIFIER::get, BuiltInRegistries.BLOCK);
+        applyDataModifiers(DataModifierInfo.ENTITY_MODIFIER::get, BuiltInRegistries.ENTITY_TYPE);
     }
 
     private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Function<T, U> dataModifierFunction,
-                                                                          @NonNull DefaultedRegistry<T> registry) {
+                                                                          @NonNull Registry<T> registry) {
         registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataModifierFunction.apply(element)));
     }
 
@@ -198,9 +195,7 @@ public final class VPRegistry<T> {
     @NonNull
     public Codec<T> createByNameCodec() {
         Validate.validState(vanillaRegistry != null || forgeRegistryHolder != null);
-
-        Supplier<Codec<T>> onCodec = vanillaRegistry != null ? vanillaRegistry::byNameCodec : () -> forgeRegistryHolder.get().getCodec();
-        return Codec.lazyInitialized(onCodec);
+        return Codec.lazyInitialized(vanillaRegistry != null ? vanillaRegistry::byNameCodec : () -> forgeRegistryHolder.get().getCodec());
     }
 
     /**

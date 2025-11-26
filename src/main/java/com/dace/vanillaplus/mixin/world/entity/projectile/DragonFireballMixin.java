@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
 import com.dace.vanillaplus.VPTags;
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
@@ -39,14 +40,14 @@ public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, En
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setDuration(I)V"))
     private int modifyFlameDuration(int duration) {
-        return ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(EntityType.ENDER_DRAGON)).getPhaseInfo().getFireball()
-                .getFlameDuration();
+        return ((EntityModifier.EnderDragonModifier) DataModifierInfo.ENTITY_MODIFIER.getOrThrow(EntityType.ENDER_DRAGON)).getPhaseInfo()
+                .getFireball().getFlameDuration();
     }
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/DragonFireball;discard()V"))
     private void explode(HitResult hitResult, CallbackInfo ci) {
-        float explosionRadius = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(EntityType.ENDER_DRAGON)).getPhaseInfo()
-                .getFireball().getExplosionRadius();
+        float explosionRadius = ((EntityModifier.EnderDragonModifier) DataModifierInfo.ENTITY_MODIFIER.getOrThrow(EntityType.ENDER_DRAGON))
+                .getPhaseInfo().getFireball().getExplosionRadius();
 
         level().explode(getThis(), getX(), getY(), getZ(), explosionRadius, Level.ExplosionInteraction.MOB);
     }

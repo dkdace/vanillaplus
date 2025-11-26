@@ -11,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * 블록의 요소를 수정하는 블록 수정자 클래스.
@@ -52,32 +50,6 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.BLOCK_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
-
-    /**
-     * 지정한 블록에 해당하는 블록 수정자를 반환한다.
-     *
-     * @param block 블록
-     * @param <T>   {@link BlockModifier}를 상속받는 블록 수정자
-     * @return 블록 수정자. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    @SuppressWarnings("unchecked")
-    public static <T extends BlockModifier> T fromBlock(@NonNull Block block) {
-        return (T) VPRegistry.BLOCK_MODIFIER.getValue(BuiltInRegistries.BLOCK.getKey(block).getPath());
-    }
-
-    /**
-     * 지정한 블록에 해당하는 블록 수정자를 반환한다.
-     *
-     * @param block 블록
-     * @return 블록 수정자
-     * @throws IllegalStateException 해당하는 블록 수정자가 존재하지 않으면 발생
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    public static <T extends BlockModifier> T fromBlockOrThrow(@NonNull Block block) {
-        return (T) VPRegistry.BLOCK_MODIFIER.getValueOrThrow(BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
     @NonNull

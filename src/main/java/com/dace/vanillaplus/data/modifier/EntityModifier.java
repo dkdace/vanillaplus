@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -28,7 +27,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,32 +62,6 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.ENTITY_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
-
-    /**
-     * 지정한 엔티티 타입에 해당하는 엔티티 수정자를 반환한다.
-     *
-     * @param entityType 엔티티 타입
-     * @param <T>        {@link EntityModifier}를 상속받는 엔티티 수정자
-     * @return 엔티티 수정자. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    @SuppressWarnings("unchecked")
-    public static <T extends EntityModifier> T fromEntityType(@NonNull EntityType<?> entityType) {
-        return (T) VPRegistry.ENTITY_MODIFIER.getValue(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath());
-    }
-
-    /**
-     * 지정한 엔티티 타입에 해당하는 엔티티 수정자를 반환한다.
-     *
-     * @param entityType 엔티티 타입
-     * @return 엔티티 수정자
-     * @throws IllegalStateException 해당하는 엔티티 수정자가 존재하지 않으면 발생
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    public static <T extends EntityModifier> T fromEntityTypeOrThrow(@NonNull EntityType<?> entityType) {
-        return (T) VPRegistry.ENTITY_MODIFIER.getValueOrThrow(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath());
     }
 
     @NonNull

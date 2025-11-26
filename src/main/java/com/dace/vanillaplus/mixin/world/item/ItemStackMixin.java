@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
@@ -138,7 +139,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (!(getItem() instanceof ProjectileWeaponItem projectileWeaponItem))
             return;
 
-        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = ItemModifier.fromItem(projectileWeaponItem);
+        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = DataModifierInfo.ITEM_MODIFIER.get(projectileWeaponItem);
         if (projectileWeaponModifier == null)
             return;
 

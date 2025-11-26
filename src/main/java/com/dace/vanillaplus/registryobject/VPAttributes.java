@@ -35,7 +35,7 @@ public final class VPAttributes {
                     .setSentiment(Attribute.Sentiment.NEGATIVE));
 
     @SubscribeEvent
-    private static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+    private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());

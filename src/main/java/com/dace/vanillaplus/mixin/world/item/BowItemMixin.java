@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.item.BowItem;
@@ -13,7 +14,7 @@ import java.util.Objects;
 public abstract class BowItemMixin extends ItemMixin<BowItem, ItemModifier.ProjectileWeaponModifier> {
     @ModifyExpressionValue(method = "getPowerForTime", at = @At(value = "CONSTANT", args = "floatValue=3.0"))
     private static float modifyMaxPower(float original) {
-        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = ItemModifier.fromItemOrThrow(Items.BOW);
+        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = DataModifierInfo.ITEM_MODIFIER.getOrThrow(Items.BOW);
         return projectileWeaponModifier.getShootingPower();
     }
 
