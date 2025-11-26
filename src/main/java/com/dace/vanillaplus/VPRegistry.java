@@ -85,6 +85,7 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPAttributes.class);
         ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
         ReflectionUtil.loadClass(VPDataComponentTypes.class);
+        ReflectionUtil.loadClass(VPPotions.class);
     }
 
     /** 레지스트리 리소스 키 */

@@ -1,0 +1,51 @@
+{
+  "color": 15423784,
+  "glistering": true,
+  "effects": [
+    {
+      "id": "minecraft:night_vision",
+      "duration": 6000
+    },
+    {
+      "id": "minecraft:fire_resistance",
+      "duration": 6000
+    },
+    {
+      "id": "minecraft:haste",
+      "duration": 6000,
+      "amplifier": 1
+    }
+  ],
+  "upgrades": {
+    "long": [
+      {
+        "id": "minecraft:night_vision",
+        "duration": 14400
+      },
+      {
+        "id": "minecraft:fire_resistance",
+        "duration": 14400
+      },
+      {
+        "id": "minecraft:haste",
+        "duration": 14400,
+        "amplifier": 1
+      }
+    ],
+    "strong": [
+      {
+        "id": "minecraft:night_vision",
+        "duration": 3000
+      },
+      {
+        "id": "minecraft:fire_resistance",
+        "duration": 3000
+      },
+      {
+        "id": "minecraft:haste",
+        "duration": 3000,
+        "amplifier": 3
+      }
+    ]
+  }
+}
