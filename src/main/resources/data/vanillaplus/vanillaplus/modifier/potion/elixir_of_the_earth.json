@@ -1,0 +1,51 @@
+{
+  "color": 760891,
+  "glistering": true,
+  "effects": [
+    {
+      "id": "minecraft:health_boost",
+      "duration": 2400
+    },
+    {
+      "id": "minecraft:regeneration",
+      "duration": 2400
+    },
+    {
+      "id": "minecraft:resistance",
+      "duration": 2400
+    }
+  ],
+  "upgrades": {
+    "long": [
+      {
+        "id": "minecraft:health_boost",
+        "duration": 4800
+      },
+      {
+        "id": "minecraft:regeneration",
+        "duration": 4800
+      },
+      {
+        "id": "minecraft:resistance",
+        "duration": 4800
+      }
+    ],
+    "strong": [
+      {
+        "id": "minecraft:health_boost",
+        "duration": 1200,
+        "amplifier": 1
+      },
+      {
+        "id": "minecraft:regeneration",
+        "duration": 1200,
+        "amplifier": 1
+      },
+      {
+        "id": "minecraft:resistance",
+        "duration": 1200,
+        "amplifier": 1
+      }
+    ]
+  }
+}

@@ -37,14 +37,35 @@ public final class VPPotions {
             new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3000),
             new MobEffectInstance(MobEffects.HASTE, 3000, 3));
 
+    private static final String NAME_ELIXIR_OF_THE_EARTH = "elixir_of_the_earth";
+    public static final RegistryObject<Potion> ELIXIR_OF_THE_EARTH = create(NAME_ELIXIR_OF_THE_EARTH, Type.NORMAL,
+            new MobEffectInstance(MobEffects.HEALTH_BOOST, 2400),
+            new MobEffectInstance(MobEffects.REGENERATION, 2400),
+            new MobEffectInstance(MobEffects.RESISTANCE, 2400));
+    public static final RegistryObject<Potion> LONG_ELIXIR_OF_THE_EARTH = create(NAME_ELIXIR_OF_THE_EARTH, Type.LONG,
+            new MobEffectInstance(MobEffects.HEALTH_BOOST, 4800),
+            new MobEffectInstance(MobEffects.REGENERATION, 4800),
+            new MobEffectInstance(MobEffects.RESISTANCE, 4800));
+    public static final RegistryObject<Potion> STRONG_ELIXIR_OF_THE_EARTH = create(NAME_ELIXIR_OF_THE_EARTH, Type.STRONG,
+            new MobEffectInstance(MobEffects.HEALTH_BOOST, 1200, 1),
+            new MobEffectInstance(MobEffects.REGENERATION, 1200, 1),
+            new MobEffectInstance(MobEffects.RESISTANCE, 1200, 1));
+
     @SubscribeEvent
     private static void onBrewingRecipeRegister(@NonNull BrewingRecipeRegisterEvent event) {
+        PotionBrewing.Builder builder = event.getBuilder();
+
         Holder<Potion> elixirOfTheSun = ELIXIR_OF_THE_SUN.getHolder().orElseThrow();
 
-        PotionBrewing.Builder builder = event.getBuilder();
         builder.addMix(Potions.AWKWARD, Items.TORCHFLOWER, elixirOfTheSun);
         builder.addMix(elixirOfTheSun, Items.REDSTONE, LONG_ELIXIR_OF_THE_SUN.getHolder().orElseThrow());
         builder.addMix(elixirOfTheSun, Items.GLOWSTONE_DUST, STRONG_ELIXIR_OF_THE_SUN.getHolder().orElseThrow());
+
+        Holder<Potion> elixirOfTheEarth = ELIXIR_OF_THE_EARTH.getHolder().orElseThrow();
+
+        builder.addMix(Potions.AWKWARD, Items.PITCHER_PLANT, elixirOfTheEarth);
+        builder.addMix(elixirOfTheEarth, Items.REDSTONE, LONG_ELIXIR_OF_THE_EARTH.getHolder().orElseThrow());
+        builder.addMix(elixirOfTheEarth, Items.GLOWSTONE_DUST, STRONG_ELIXIR_OF_THE_EARTH.getHolder().orElseThrow());
     }
 
     @NonNull
