@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -50,6 +51,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    /** 물약 */
+    public static final VPRegistry<Potion> POTION = new VPRegistry<>(BuiltInRegistries.POTION);
 
     /** 설정 */
     public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
@@ -71,6 +74,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = new VPRegistry<>("modifier/block");
     /** 엔티티 수정자 */
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
+    /** 물약 수정자 */
+    public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
 
     @Nullable
     private static HolderLookup.Provider provider;
@@ -144,6 +149,7 @@ public final class VPRegistry<T> {
         applyDataModifiers(DataModifierInfo.ITEM_MODIFIER::get, BuiltInRegistries.ITEM);
         applyDataModifiers(DataModifierInfo.BLOCK_MODIFIER::get, BuiltInRegistries.BLOCK);
         applyDataModifiers(DataModifierInfo.ENTITY_MODIFIER::get, BuiltInRegistries.ENTITY_TYPE);
+        applyDataModifiers(DataModifierInfo.POTION_MODIFIER::get, BuiltInRegistries.POTION);
     }
 
     private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Function<T, U> dataModifierFunction,

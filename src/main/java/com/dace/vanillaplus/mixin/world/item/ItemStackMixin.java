@@ -3,7 +3,9 @@ package com.dace.vanillaplus.mixin.world.item;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
+import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
@@ -176,6 +178,16 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Overwrite
     public Rarity getRarity() {
         return getThis().getOrDefault(DataComponents.RARITY, Rarity.COMMON);
+    }
+
+    @ModifyExpressionValue(method = "hasFoil", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;isFoil(Lnet/minecraft/world/item/ItemStack;)Z"))
+    private boolean modifyFoilState(boolean hasFoil) {
+        PotionContents potionContents = getThis().get(DataComponents.POTION_CONTENTS);
+
+        return potionContents == null
+                ? hasFoil
+                : potionContents.potion().map(potionHolder -> VPPotion.cast(potionHolder.value()).isGlistering()).orElse(hasFoil);
     }
 
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",

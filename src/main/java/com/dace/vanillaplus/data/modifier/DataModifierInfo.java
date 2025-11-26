@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,8 @@ public final class DataModifierInfo<T extends DataModifier<U>, U> {
     public static final DataModifierInfo<BlockModifier, Block> BLOCK_MODIFIER = new DataModifierInfo<>(VPRegistry.BLOCK_MODIFIER, BuiltInRegistries.BLOCK);
     /** 엔티티 수정자 */
     public static final DataModifierInfo<EntityModifier, EntityType<?>> ENTITY_MODIFIER = new DataModifierInfo<>(VPRegistry.ENTITY_MODIFIER, BuiltInRegistries.ENTITY_TYPE);
+    /** 물약 수정자 */
+    public static final DataModifierInfo<PotionModifier, Potion> POTION_MODIFIER = new DataModifierInfo<>(VPRegistry.POTION_MODIFIER, BuiltInRegistries.POTION);
 
     /** 데이터 수정자 레지스트리 */
     @NonNull

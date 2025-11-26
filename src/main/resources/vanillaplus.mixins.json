@@ -59,6 +59,8 @@
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
     "world.item.ItemStackMixin",
+    "world.item.alchemy.PotionContentsMixin",
+    "world.item.alchemy.PotionMixin",
     "world.item.component.OminousBottleAmplifierMixin",
     "world.item.crafting.RepairItemRecipeMixin",
     "world.item.enchantment.EnchantmentHelperMixin",
