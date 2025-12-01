@@ -43,6 +43,6 @@ public final class PotionModifier implements DataModifier<Potion> {
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.POTION_MODIFIER.getRegistryKey(), DIRECT_CODEC);
+        event.dataPackRegistry(VPRegistry.POTION_MODIFIER.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
     }
 }
