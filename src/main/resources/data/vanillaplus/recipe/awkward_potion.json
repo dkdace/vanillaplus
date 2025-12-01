@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:water",
+  "ingredient": "minecraft:nether_wart",
+  "result": "minecraft:awkward"
+}

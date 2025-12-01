@@ -15,9 +15,7 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,9 +29,7 @@ public final class PotionModifier implements DataModifier<Potion> {
     private static final Codec<PotionModifier> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.RGB_COLOR_CODEC.optionalFieldOf("color").forGetter(PotionModifier::getColor),
                     Codec.BOOL.optionalFieldOf("glistering", false).forGetter(PotionModifier::isGlistering),
-                    MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(PotionModifier::getBaseEffects),
-                    Codec.unboundedMap(Codec.STRING, MobEffectInstance.CODEC.listOf()).optionalFieldOf("upgrades", Collections.emptyMap())
-                            .forGetter(PotionModifier::getUpgradeEffectsMap))
+                    MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(PotionModifier::getEffects))
             .apply(instance, PotionModifier::new));
 
     /** 물약 색상 */
@@ -41,12 +37,9 @@ public final class PotionModifier implements DataModifier<Potion> {
     private final Optional<Integer> color;
     /** 반짝임 여부 */
     private final boolean isGlistering;
-    /** 기본 효과 */
+    /** 효과 목록 */
     @NonNull
-    private final List<MobEffectInstance> baseEffects;
-    /** 강화 물약의 이름별 효과 목록 (이름 : 효과 목록) */
-    @NonNull
-    private final Map<String, List<MobEffectInstance>> upgradeEffectsMap;
+    private final List<MobEffectInstance> effects;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {

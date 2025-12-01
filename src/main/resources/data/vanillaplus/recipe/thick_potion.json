@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:water",
+  "ingredient": "minecraft:glowstone_dust",
+  "result": "minecraft:thick"
+}

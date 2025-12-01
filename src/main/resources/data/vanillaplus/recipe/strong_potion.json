@@ -1,0 +1,17 @@
+{
+  "type": "vanillaplus:brewing_mapped",
+  "ingredient": "minecraft:glowstone_dust",
+  "result_map": {
+    "minecraft:swiftness": "minecraft:strong_swiftness",
+    "minecraft:slowness": "minecraft:strong_slowness",
+    "minecraft:leaping": "minecraft:strong_leaping",
+    "minecraft:strength": "minecraft:strong_strength",
+    "minecraft:healing": "minecraft:strong_healing",
+    "minecraft:harming": "minecraft:strong_harming",
+    "minecraft:poison": "minecraft:strong_poison",
+    "minecraft:regeneration": "minecraft:strong_regeneration",
+    "minecraft:turtle_master": "minecraft:strong_turtle_master",
+    "vanillaplus:elixir_of_the_sun": "vanillaplus:strong_elixir_of_the_sun",
+    "vanillaplus:elixir_of_the_earth": "vanillaplus:strong_elixir_of_the_earth"
+  }
+}

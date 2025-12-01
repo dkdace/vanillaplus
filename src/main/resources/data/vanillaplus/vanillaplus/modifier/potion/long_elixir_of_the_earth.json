@@ -4,15 +4,15 @@
   "effects": [
     {
       "id": "minecraft:health_boost",
-      "duration": 2400
+      "duration": 4800
     },
     {
       "id": "minecraft:regeneration",
-      "duration": 2400
+      "duration": 4800
     },
     {
       "id": "minecraft:resistance",
-      "duration": 2400
+      "duration": 4800
     }
   ]
 }

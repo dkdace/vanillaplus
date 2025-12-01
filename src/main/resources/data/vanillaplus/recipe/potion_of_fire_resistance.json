@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:magma_cream",
+  "result": "minecraft:fire_resistance"
+}

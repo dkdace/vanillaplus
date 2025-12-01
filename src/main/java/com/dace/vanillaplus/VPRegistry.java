@@ -21,6 +21,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -51,6 +55,14 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    /** 제작법 타입 */
+    public static final VPRegistry<RecipeType<?>> RECIPE_TYPE = new VPRegistry<>(BuiltInRegistries.RECIPE_TYPE);
+    /** 제작법 직렬화 처리기 */
+    public static final VPRegistry<RecipeSerializer<?>> RECIPE_SERIALIZER = new VPRegistry<>(BuiltInRegistries.RECIPE_SERIALIZER);
+    /** 제작법 책 분류 */
+    public static final VPRegistry<RecipeBookCategory> RECIPE_BOOK_CATEGORY = new VPRegistry<>(BuiltInRegistries.RECIPE_BOOK_CATEGORY);
+    /** 제작법 디스플레이 */
+    public static final VPRegistry<RecipeDisplay.Type<?>> RECIPE_DISPLAY = new VPRegistry<>(BuiltInRegistries.RECIPE_DISPLAY);
     /** 물약 */
     public static final VPRegistry<Potion> POTION = new VPRegistry<>(BuiltInRegistries.POTION);
 
@@ -85,6 +97,10 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPAttributes.class);
         ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
         ReflectionUtil.loadClass(VPDataComponentTypes.class);
+        ReflectionUtil.loadClass(VPRecipeTypes.class);
+        ReflectionUtil.loadClass(VPRecipeSerializers.class);
+        ReflectionUtil.loadClass(VPRecipeBookCategories.class);
+        ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
         ReflectionUtil.loadClass(VPPotions.class);
     }
 
