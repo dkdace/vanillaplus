@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "#vanillaplus:infested",
+  "result": "minecraft:infested"
+}

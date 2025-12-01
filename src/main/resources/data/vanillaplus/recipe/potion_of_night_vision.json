@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:golden_carrot",
+  "result": "minecraft:night_vision"
+}

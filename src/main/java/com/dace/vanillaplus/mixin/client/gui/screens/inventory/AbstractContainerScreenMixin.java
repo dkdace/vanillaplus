@@ -3,11 +3,15 @@ package com.dace.vanillaplus.mixin.client.gui.screens.inventory;
 import com.dace.vanillaplus.mixin.client.gui.screens.ScreenMixin;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerScreen<U>, U extends AbstractContainerMenu> extends ScreenMixin<T> {
+    @Shadow
+    @Final
+    protected U menu;
     @Shadow
     protected int topPos;
     @Shadow

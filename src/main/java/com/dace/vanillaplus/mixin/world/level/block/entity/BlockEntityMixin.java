@@ -10,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeBlockEntity, VPMixin<T> {
@@ -22,4 +25,9 @@ public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeB
 
     @Shadow
     public abstract BlockState getBlockState();
+
+    @Inject(method = "preRemoveSideEffects", at = @At("TAIL"))
+    protected void onPreRemoveSideEffects(BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
+        // 미사용
+    }
 }

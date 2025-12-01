@@ -1,0 +1,18 @@
+{
+  "color": 760891,
+  "glistering": true,
+  "effects": [
+    {
+      "id": "minecraft:health_boost",
+      "duration": 4800
+    },
+    {
+      "id": "minecraft:regeneration",
+      "duration": 4800
+    },
+    {
+      "id": "minecraft:resistance",
+      "duration": 4800
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "brewingtime": 1200,
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:torchflower",
+  "result": "vanillaplus:elixir_of_the_sun"
+}

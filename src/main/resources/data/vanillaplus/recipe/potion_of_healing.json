@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:glistering_melon_slice",
+  "result": "minecraft:healing"
+}

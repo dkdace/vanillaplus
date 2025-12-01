@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:slime_block",
+  "result": "minecraft:oozing"
+}
