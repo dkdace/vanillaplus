@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Silverfish.class)
 public abstract class SilverfishMixin extends MonsterMixin<Silverfish, EntityModifier.LivingEntityModifier> {
-    @Inject(method = "registerGoals", at = @At(value = "CONSTANT", args = "classValue=net/minecraft/world/entity/player/Player"))
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(getThis(), IronGolem.class, true));

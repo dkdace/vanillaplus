@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.player;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPPlayer;
+import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -33,16 +33,6 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     private ItemCooldowns cooldowns;
 
     @Override
-    public void setProneKeyDown(boolean isProneKeyDown) {
-        this.isProneKeyDown = isProneKeyDown;
-    }
-
-    @ModifyReturnValue(method = "getDesiredPose", at = @At(value = "RETURN", ordinal = 4))
-    private Pose modifyDesiredPose(Pose pose) {
-        return isProneKeyDown && !abilities.flying && onGround() ? Pose.SWIMMING : pose;
-    }
-
-    @Override
     protected boolean canUseTotem(boolean canUse, ItemStack itemStack) {
         return canUse && !cooldowns.isOnCooldown(itemStack);
     }
@@ -52,6 +42,16 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
         UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null)
             useCooldown.apply(itemStack, getThis());
+    }
+
+    @Override
+    public void setProneKeyDown(boolean isProneKeyDown) {
+        this.isProneKeyDown = isProneKeyDown;
+    }
+
+    @ModifyReturnValue(method = "getDesiredPose", at = @At(value = "RETURN", ordinal = 4))
+    private Pose modifyDesiredPose(Pose pose) {
+        return isProneKeyDown && !abilities.flying && onGround() ? Pose.SWIMMING : pose;
     }
 
     @ModifyArg(method = "causeFoodExhaustion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"))

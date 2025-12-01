@@ -1,0 +1,18 @@
+{
+  "type": "vanillaplus:brewing_mapped",
+  "ingredient": "minecraft:fermented_spider_eye",
+  "result_map": {
+    "minecraft:swiftness": "minecraft:slowness",
+    "minecraft:long_swiftness": "minecraft:long_slowness",
+    "minecraft:leaping": "minecraft:slowness",
+    "minecraft:long_leaping": "minecraft:long_slowness",
+    "minecraft:strength": "minecraft:weakness",
+    "minecraft:long_strength": "minecraft:long_weakness",
+    "minecraft:healing": "minecraft:harming",
+    "minecraft:strong_healing": "minecraft:strong_harming",
+    "minecraft:poison": "minecraft:harming",
+    "minecraft:strong_poison": "minecraft:strong_harming",
+    "minecraft:night_vision": "minecraft:invisibility",
+    "minecraft:long_night_vision": "minecraft:long_invisibility"
+  }
+}

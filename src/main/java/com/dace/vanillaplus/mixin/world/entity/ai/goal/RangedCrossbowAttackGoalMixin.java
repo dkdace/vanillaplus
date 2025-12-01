@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -15,12 +16,18 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RangedCrossbowAttackGoal.class)
 public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAttackMob & CrossbowAttackMob> implements VPMixin<RangedCrossbowAttackGoal<T>> {
+    @Unique
+    private static final int BACKUP_SEE_TIME = 20;
+    @Unique
+    private static final int BACKUP_DISTANCE = 7;
+
     @Shadow
     @Final
     private T mob;
@@ -31,13 +38,14 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Expression("pAttackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyAttackRadius(float original, @Local(argsOnly = true) T monster) {
-        return ((EntityModifier.CrossbowAttackMobModifier) EntityModifier.fromEntityTypeOrThrow(monster.getType())).getShootingRange();
+        return DataModifierInfo.ENTITY_MODIFIER.getOrThrow(monster.getType()).getInterfaceInfoMap()
+                .get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingRange();
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
-    private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target, @Local(ordinal = 2) boolean flag2) {
-        if (mob.getControlledVehicle() != null || seeTime < 20 || !target.closerThan(mob, 7))
+    private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target) {
+        if (mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME || !target.closerThan(mob, BACKUP_DISTANCE))
             return;
 
         mob.getMoveControl().strafe(-0.75F, 0);

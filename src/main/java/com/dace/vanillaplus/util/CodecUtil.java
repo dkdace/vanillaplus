@@ -36,7 +36,7 @@ public final class CodecUtil {
      */
     @NonNull
     public <T extends CodecComponent<T>> Codec<T> fromCodecRegistry(@NonNull VPRegistry<MapCodec<? extends T>> vpRegistry) {
-        return Codec.lazyInitialized(() -> vpRegistry.createByNameCodec().dispatch(CodecComponent::getCodec, Function.identity()));
+        return vpRegistry.createByNameCodec().dispatch(CodecComponent::getCodec, Function.identity());
     }
 
     /**

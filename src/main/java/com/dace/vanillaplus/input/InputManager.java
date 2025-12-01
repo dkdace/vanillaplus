@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.input;
 
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.extension.VPOptions;
-import com.dace.vanillaplus.extension.VPPlayer;
+import com.dace.vanillaplus.extension.client.VPOptions;
+import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import lombok.NonNull;

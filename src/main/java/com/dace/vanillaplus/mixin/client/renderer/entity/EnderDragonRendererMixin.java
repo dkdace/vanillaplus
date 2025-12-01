@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
-import com.dace.vanillaplus.extension.VPEnderDragon;
-import com.dace.vanillaplus.extension.VPEnderDragonRenderState;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.client.renderer.entity.state.VPEnderDragonRenderState;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -37,8 +37,10 @@ public abstract class EnderDragonRendererMixin implements VPMixin<EnderDragonRen
         Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
         meteorPoseStack.translate(meteorPos.getX() - cameraPos.x(), meteorPos.getY() - cameraPos.y(), meteorPos.getZ() - cameraPos.z());
 
+        int height = BeaconRenderer.MAX_RENDER_Y;
+
         BeaconRenderer.submitBeaconBeam(meteorPoseStack, submitNodeCollector, BeaconRenderer.BEAM_LOCATION, 1,
-                vpEnderDragonRenderState.getMeteorBeamAnimationTime(), -1024, 2048, DyeColor.PURPLE.getTextureDiffuseColor(),
+                vpEnderDragonRenderState.getMeteorBeamAnimationTime(), -height / 2, height, DyeColor.PURPLE.getTextureDiffuseColor(),
                 vpEnderDragonRenderState.getMeteorBeamRadius(), vpEnderDragonRenderState.getMeteorBeamGlowRadius());
 
         meteorPoseStack.popPose();

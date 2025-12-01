@@ -25,6 +25,8 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
     private static final int COLOR_FULL = ARGB.color(128, 255, 32);
     @Unique
     private static final int COLOR_USED = ARGB.color(255, 255, 255);
+    @Unique
+    private static final String COMPONENT_MERCHANT_STOCK = "merchant.stock";
 
     @Shadow
     @Final
@@ -45,8 +47,6 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
     private void renderStock(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci, @Local(ordinal = 2) int x,
                              @Local(ordinal = 7) int y, @Local MerchantOffer merchantOffer) {
         int remainingUses = merchantOffer.getMaxUses() - merchantOffer.getUses();
-        Component stockComponent = Component.literal(Integer.toString(remainingUses));
-
         int stockTextX = x + SELL_ITEM_1_X + SELL_ITEM_2_X + 25;
         int stockTextY = y + 1;
         int stockTextColor;
@@ -55,14 +55,14 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
         else
             stockTextColor = merchantOffer.getUses() == 0 ? COLOR_FULL : COLOR_USED;
 
-        guiGraphics.drawCenteredString(font, stockComponent, stockTextX, stockTextY, stockTextColor);
+        guiGraphics.drawCenteredString(font, Integer.toString(remainingUses), stockTextX, stockTextY, stockTextColor);
 
         int hoverX = x + SELL_ITEM_1_X + SELL_ITEM_2_X + 18 - leftPos;
         int hoverY = y - topPos;
         if (!isHovering(hoverX, hoverY, 12, 18, mouseX, mouseY))
             return;
 
-        MutableComponent tooltipComponent = Component.translatable("merchant.stock", remainingUses, merchantOffer.getMaxUses());
+        MutableComponent tooltipComponent = Component.translatable(COMPONENT_MERCHANT_STOCK, remainingUses, merchantOffer.getMaxUses());
         guiGraphics.setTooltipForNextFrame(font, tooltipComponent, mouseX, mouseY);
     }
 }

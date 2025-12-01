@@ -1,0 +1,21 @@
+{
+  "type": "vanillaplus:brewing_mapped",
+  "ingredient": "minecraft:redstone",
+  "result_map": {
+    "minecraft:swiftness": "minecraft:long_swiftness",
+    "minecraft:slowness": "minecraft:long_slowness",
+    "minecraft:leaping": "minecraft:long_leaping",
+    "minecraft:strength": "minecraft:long_strength",
+    "minecraft:poison": "minecraft:long_poison",
+    "minecraft:regeneration": "minecraft:long_regeneration",
+    "minecraft:fire_resistance": "minecraft:long_fire_resistance",
+    "minecraft:water_breathing": "minecraft:long_water_breathing",
+    "minecraft:night_vision": "minecraft:long_night_vision",
+    "minecraft:invisibility": "minecraft:long_invisibility",
+    "minecraft:turtle_master": "minecraft:long_turtle_master",
+    "minecraft:slow_falling": "minecraft:long_slow_falling",
+    "minecraft:weakness": "minecraft:long_weakness",
+    "vanillaplus:elixir_of_the_sun": "vanillaplus:long_elixir_of_the_sun",
+    "vanillaplus:elixir_of_the_earth": "vanillaplus:long_elixir_of_the_earth"
+  }
+}

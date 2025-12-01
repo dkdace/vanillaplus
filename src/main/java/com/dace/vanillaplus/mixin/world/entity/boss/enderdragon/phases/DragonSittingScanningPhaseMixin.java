@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEnderDragon;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,27 +9,32 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingScanningPhase;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(DragonSittingScanningPhase.class)
 public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhaseInstanceMixin {
+    @Unique
+    private static final int SCAN_DISTANCE_MIN = 6;
+    @Unique
+    private static final int SCAN_DISTANCE_MAX = 14;
+
     @ModifyReturnValue(method = "lambda$new$0", at = @At("RETURN"))
     private static boolean modifyScanTargetingConditionsSelector(boolean original, @Local(argsOnly = true) EnderDragon enderDragon,
                                                                  @Local(argsOnly = true) LivingEntity entity) {
-        return original && enderDragon.distanceToSqr(entity) > 36;
+        return original && enderDragon.distanceToSqr(entity) > SCAN_DISTANCE_MIN * SCAN_DISTANCE_MIN;
     }
 
     @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;selector(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions$Selector;)Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;"))
     private static TargetingConditions modifyScanTargetingConditions(TargetingConditions targetingConditions) {
-        return targetingConditions.range(14).ignoreLineOfSight().ignoreInvisibilityTesting();
+        return targetingConditions.range(SCAN_DISTANCE_MAX).ignoreLineOfSight().ignoreInvisibilityTesting();
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=25"))
     private int modifyScanDuration(int duration) {
-        return ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getSitting()
-                .getScanDuration();
+        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getScanDuration();
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "floatValue=0.8"))
@@ -40,8 +44,8 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=100"))
     private int modifyScanningIdleTime(int time) {
-        float scanIdleDurationSeconds = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo()
-                .getSitting().getScanIdleDurationSeconds().get(dragon);
+        double scanIdleDurationSeconds = VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getScanIdleDurationSeconds()
+                .get(dragon);
 
         return (int) (scanIdleDurationSeconds * 20.0);
     }

@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.waypoints.PartialTickSupplier;
 import net.minecraft.world.waypoints.TrackedWaypoint;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,10 +33,11 @@ public abstract class LocatorBarRendererMixin implements VPMixin<LocatorBarRende
     private Minecraft minecraft;
 
     @Inject(method = "lambda$render$5", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;NONE:Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;"))
-    private void addPlayerIcon(Entity entity, Level level, PartialTickSupplier partialTickSupplier, GuiGraphics guiGraphics, int i,
-                               TrackedWaypoint trackedWaypoint, CallbackInfo ci, @Local(ordinal = 1) int j, @Local(ordinal = 3) int l,
-                               @Local TrackedWaypoint.PitchDirection pitchDirection) {
+            target = "Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;NONE:Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;",
+            opcode = Opcodes.GETSTATIC))
+    private void drawPlayerHead(Entity entity, Level level, PartialTickSupplier partialTickSupplier, GuiGraphics guiGraphics, int i,
+                                TrackedWaypoint trackedWaypoint, CallbackInfo ci, @Local(ordinal = 1) int j, @Local(ordinal = 3) int l,
+                                @Local TrackedWaypoint.PitchDirection pitchDirection) {
         if (!VPGameRules.ClientState.getInstance().isShowHeadOnLocatorBar()
                 || !(trackedWaypoint.id().left().map(level::getEntity).orElse(null) instanceof Avatar avatar))
             return;

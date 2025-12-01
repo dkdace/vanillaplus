@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.google.common.collect.ImmutableList;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -258,21 +256,21 @@ public final class Trade {
         @AllArgsConstructor
         private enum EnchantmentLevel {
             /** 낮음 */
-            LOW(IntegerRange.of(5, 12), VPTags.Enchantments.TRADEABLE),
+            LOW(IntegerRange.of(5, 12), false),
             /** 중간 */
-            MEDIUM(IntegerRange.of(12, 20), VPTags.Enchantments.TRADEABLE),
+            MEDIUM(IntegerRange.of(12, 20), false),
             /** 높음 */
-            HIGH(IntegerRange.of(20, 30), VPTags.Enchantments.TRADEABLE),
+            HIGH(IntegerRange.of(20, 30), false),
             /** 최고 */
-            HIGHEST(IntegerRange.of(30, 40), VPTags.Enchantments.TRADEABLE_TREASURE);
+            HIGHEST(IntegerRange.of(30, 40), true);
 
             /** JSON 코덱 */
             private static final Codec<EnchantmentLevel> CODEC = CodecUtil.fromEnum(EnchantmentLevel.class);
 
             /** 마법 부여 레벨 값 */
             private final IntegerRange value;
-            /** 마법 부여 데이터 태그 */
-            private final TagKey<Enchantment> enchantmentTagKey;
+            /** 보물 마법부여 포함 여부 */
+            private final boolean hasTreasure;
         }
 
         /**
@@ -366,8 +364,8 @@ public final class Trade {
                         ItemStack requiredItemStack = required.create(entity, randomSource);
 
                         return new MerchantOffer(getItemCost(new ItemStack(Items.EMERALD, price)),
-                                requiredItemStack == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStack)), productItemStack,
-                                supply.maxTradeCount, offerList.level.sellXP * price, priceMultiplier.value);
+                                Optional.ofNullable(requiredItemStack).map(OfferItem::getItemCost), productItemStack, supply.maxTradeCount,
+                                offerList.level.sellXP * price, priceMultiplier.value);
                     };
                 }
             }
@@ -387,7 +385,8 @@ public final class Trade {
              */
             record SellEnchanted(@NonNull Supply supply, float priceModifier, @NonNull ItemStackGenerator required,
                                  @NonNull ItemStackGenerator product, @NonNull EnchantmentLevel enchantmentLevel,
-                                 @NonNull TagKey<Enchantment> enchantmentTagKey, @NonNull PriceMultiplier priceMultiplier) implements OfferItem {
+                                 @NonNull Optional<TagKey<Enchantment>> enchantmentTagKey,
+                                 @NonNull PriceMultiplier priceMultiplier) implements OfferItem {
                 private static final MapCodec<SellEnchanted> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                         .group(Supply.CODEC.fieldOf("supply").forGetter(SellEnchanted::supply),
                                 ExtraCodecs.POSITIVE_FLOAT.fieldOf("price_modifier").forGetter(SellEnchanted::priceModifier),
@@ -395,7 +394,7 @@ public final class Trade {
                                         .forGetter(SellEnchanted::required),
                                 ItemStackGenerator.CODEC.fieldOf("product").forGetter(SellEnchanted::product),
                                 EnchantmentLevel.CODEC.fieldOf("enchantment_level").forGetter(SellEnchanted::enchantmentLevel),
-                                TagKey.hashedCodec(Registries.ENCHANTMENT).optionalFieldOf("enchantment_tag", VPTags.Enchantments.TRADEABLE)
+                                TagKey.hashedCodec(Registries.ENCHANTMENT).optionalFieldOf("enchantment_tag")
                                         .forGetter(SellEnchanted::enchantmentTagKey),
                                 PriceMultiplier.CODEC.optionalFieldOf("price_multiplier", PriceMultiplier.HIGH)
                                         .forGetter(SellEnchanted::priceMultiplier))
@@ -417,12 +416,8 @@ public final class Trade {
 
                         IntegerRange value = enchantmentLevel.value;
                         int enchantLevel = randomSource.nextIntBetweenInclusive(value.getMinimum(), value.getMaximum());
-
-                        Registry<Enchantment> enchantmentRegistry = entity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-                        Stream<Holder<Enchantment>> enchantments = enchantmentRegistry.getOrThrow(enchantmentLevel.enchantmentTagKey).stream()
-                                .filter(enchantmentHolder -> enchantmentHolder.is(enchantmentTagKey));
-
-                        ItemStack enchantedItem = EnchantmentHelper.enchantItem(randomSource, productItemStack, enchantLevel, enchantments);
+                        ItemStack enchantedItem = EnchantmentHelper.enchantItem(randomSource, productItemStack, enchantLevel,
+                                getEnchantmentCandidates(entity));
 
                         double price = enchantLevel * priceModifier;
                         if (enchantedItem.getEnchantments().keySet().stream()
@@ -433,9 +428,22 @@ public final class Trade {
                         ItemStack requiredItemStack = required.create(entity, randomSource);
 
                         return new MerchantOffer(getItemCost(new ItemStack(Items.EMERALD, finalPrice)),
-                                requiredItemStack == null ? Optional.empty() : Optional.of(getItemCost(requiredItemStack)), enchantedItem,
-                                supply.maxTradeCount, offerList.level.sellXP * finalPrice, priceMultiplier.value);
+                                Optional.ofNullable(requiredItemStack).map(OfferItem::getItemCost), enchantedItem, supply.maxTradeCount,
+                                offerList.level.sellXP * finalPrice, priceMultiplier.value);
                     };
+                }
+
+                @NonNull
+                private Stream<Holder<Enchantment>> getEnchantmentCandidates(@NonNull Entity entity) {
+                    return entity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements()
+                            .map(enchantmentReference -> (Holder<Enchantment>) enchantmentReference)
+                            .filter(enchantmentHolder -> {
+                                if (enchantmentHolder.is(EnchantmentTags.CURSE) || !enchantmentLevel.hasTreasure
+                                        && enchantmentHolder.is(EnchantmentTags.TREASURE))
+                                    return false;
+
+                                return enchantmentTagKey.map(enchantmentHolder::is).orElse(true);
+                            });
                 }
             }
 

@@ -43,6 +43,14 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     @Nullable
     public abstract LivingEntity getTarget();
 
+    @Override
+    protected void onDie(DamageSource damageSource, CallbackInfo ci) {
+        targetSelector.getAvailableGoals().forEach(wrappedGoal -> {
+            if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal)
+                hurtByTargetGoal.start();
+        });
+    }
+
     @Inject(method = "setAggressive", at = @At("HEAD"))
     private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
         if (isAggressive && getVehicle() instanceof VehicleEntity)
@@ -75,13 +83,5 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     @ModifyReturnValue(method = "getAttackBoundingBox", at = @At("RETURN"))
     protected AABB modifyAttackBoundingBox(AABB aabb) {
         return aabb;
-    }
-
-    @Override
-    protected void onDie(DamageSource damageSource, CallbackInfo ci) {
-        targetSelector.getAvailableGoals().forEach(wrappedGoal -> {
-            if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal)
-                hurtByTargetGoal.start();
-        });
     }
 }

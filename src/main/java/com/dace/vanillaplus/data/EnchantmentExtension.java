@@ -12,9 +12,11 @@ import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -58,6 +60,13 @@ public final class EnchantmentExtension {
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.ENCHANTMENT_EXTENSION.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
+    }
+
+    @SubscribeEvent
+    private static void onLootingLevel(@NonNull LootingLevelEvent event) {
+        DamageSource damageSource = event.getDamageSource();
+        if (damageSource != null && !damageSource.isDirect())
+            event.setLootingLevel(0);
     }
 
     /**

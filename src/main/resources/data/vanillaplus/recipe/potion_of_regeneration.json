@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:awkward",
+  "ingredient": "minecraft:ghast_tear",
+  "result": "minecraft:regeneration"
+}

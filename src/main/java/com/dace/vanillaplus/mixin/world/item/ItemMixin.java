@@ -1,23 +1,22 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.GeneralModifier;
+import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.world.item.VPItem;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 import java.util.HashSet;
 
 @Mixin(Item.class)
-public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPModifiableData<Item, U>, VPMixin<T> {
+public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPItem<T, U> {
     @Unique
     @Nullable
     protected U dataModifier;
@@ -27,7 +26,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     private DataComponentMap components;
 
     @Unique
-    private static <T extends ItemModifier> void applyModifier(@NotNull T dataModifier, DataComponentMap.Builder.SimpleMap map) {
+    private static <T extends ItemModifier> void applyModifier(@NonNull T dataModifier, @NonNull DataComponentMap.Builder.SimpleMap map) {
         dataModifier.getDataComponentMap().forEach(typedDataComponent ->
                 map.map().put(typedDataComponent.type(), typedDataComponent.value()));
 
@@ -68,11 +67,10 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
             applyModifier(dataModifier, map);
 
         Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
-        if (maxDamage != null) {
-            float maxRepairLimitRatio = GeneralModifier.get().getMaxRepairLimitRatio();
+        if (maxDamage == null)
+            return;
 
-            map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
-            map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * maxRepairLimitRatio));
-        }
+        map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
+        map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * GeneralConfig.get().getMaxRepairLimitRatio()));
     }
 }

@@ -1,8 +1,11 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.VPItemStack;
+import com.dace.vanillaplus.extension.world.item.VPItemStack;
+import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
@@ -15,6 +18,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -29,6 +33,7 @@ import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,17 +50,55 @@ import java.util.function.Consumer;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements VPItemStack {
     @Unique
+    private static final String TAG_MINING = "mineable";
+    @Unique
+    private static final String COMPONENT_TOOL_WHEN_BREAKING = "tool.when_breaking";
+    @Unique
+    private static final String COMPONENT_ATTRIBUTE_MODIFIER = "attribute.modifier.equals.0";
+    @Unique
+    private static final String COMPONENT_FOOD_WHEN_EAT = "food.whenEat";
+    @Unique
+    private static final String COMPONENT_FOOD_NUTRITION = "food.nutrition";
+    @Unique
+    private static final String COMPONENT_FOOD_SATURATION = "food.saturation";
+    @Unique
+    private static final String COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT = "consumable.removeStatusEffect";
+    @Unique
+    private static final String COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS = "consumable.clearAllStatusEffects";
+    @Unique
+    private static final String COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = "item.projectileWeapon.when_shoot";
+    @Unique
+    private static final String COMPONENT_PROJECTILE_WEAPON_DAMAGE = "item.projectileWeapon.damage";
+    @Unique
+    private static final String COMPONENT_REPAIR_LIMIT = "item.repairLimit";
+
+    @Override
+    public int getRepairLimit() {
+        return Math.clamp(getThis().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
+    }
+
+    @Override
+    public void setRepairLimit(int repairLimit) {
+        set(VPDataComponentTypes.REPAIR_LIMIT.get(), Math.clamp(repairLimit, 0, getMaxRepairLimit()));
+    }
+
+    @Override
+    public int getMaxRepairLimit() {
+        return getThis().getOrDefault(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), 0);
+    }
+
+    @Unique
     private void addToolTooltip(@NonNull Tool tool, @NonNull Consumer<Component> componentConsumer) {
         tool.rules().forEach(rule -> rule.blocks().unwrapKey().ifPresent(blockTagKey -> {
-            if (!blockTagKey.location().getPath().startsWith("mineable"))
+            if (!blockTagKey.location().getPath().startsWith(TAG_MINING))
                 return;
 
             componentConsumer.accept(Component.empty());
-            componentConsumer.accept(Component.translatable("tool.when_breaking").withStyle(ChatFormatting.GRAY));
+            componentConsumer.accept(Component.translatable(COMPONENT_TOOL_WHEN_BREAKING).withStyle(ChatFormatting.GRAY));
 
-            MutableComponent component = Component.translatable("attribute.modifier.equals.0",
+            MutableComponent component = Component.translatable(COMPONENT_ATTRIBUTE_MODIFIER,
                     ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(rule.speed().orElse(tool.defaultMiningSpeed())),
-                    Component.translatable("attribute.name.mining_efficiency"));
+                    Component.translatable(Attributes.MINING_EFFICIENCY.value().getDescriptionId()));
 
             componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
         }));
@@ -65,10 +108,10 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addFoodTooltip(@NonNull FoodProperties foodProperties, @NonNull Consumer<Component> componentConsumer) {
         componentConsumer.accept(Component.empty());
 
-        componentConsumer.accept(Component.translatable("food.whenEat").withStyle(ChatFormatting.DARK_PURPLE));
-        componentConsumer.accept(Component.translatable("food.nutrition",
+        componentConsumer.accept(Component.translatable(COMPONENT_FOOD_WHEN_EAT).withStyle(ChatFormatting.DARK_PURPLE));
+        componentConsumer.accept(Component.translatable(COMPONENT_FOOD_NUTRITION,
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(foodProperties.nutrition())).withStyle(ChatFormatting.BLUE));
-        componentConsumer.accept(Component.translatable("food.saturation",
+        componentConsumer.accept(Component.translatable(COMPONENT_FOOD_SATURATION,
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(foodProperties.saturation())).withStyle(ChatFormatting.BLUE));
     }
 
@@ -79,10 +122,10 @@ public abstract class ItemStackMixin implements VPItemStack {
             switch (consumeEffect) {
                 case RemoveStatusEffectsConsumeEffect removeStatusEffectsConsumeEffect ->
                         removeStatusEffectsConsumeEffect.effects().forEach(mobEffectHolder ->
-                                componentConsumer.accept(Component.translatable("consumable.removeStatusEffect",
+                                componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT,
                                         mobEffectHolder.value().getDisplayName()).withStyle(ChatFormatting.BLUE)));
-                case ClearAllStatusEffectsConsumeEffect clearAllStatusEffectsConsumeEffect ->
-                        componentConsumer.accept(Component.translatable("consumable.clearAllStatusEffects").withStyle(ChatFormatting.BLUE));
+                case ClearAllStatusEffectsConsumeEffect ignored ->
+                        componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS).withStyle(ChatFormatting.BLUE));
                 case ApplyStatusEffectsConsumeEffect applyStatusEffectsConsumeEffect when applyStatusEffectsConsumeEffect.probability() == 1 ->
                         PotionContents.addPotionTooltip(applyStatusEffectsConsumeEffect.effects(), componentConsumer, 1,
                                 tooltipContext.tickRate());
@@ -98,14 +141,14 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (!(getItem() instanceof ProjectileWeaponItem projectileWeaponItem))
             return;
 
-        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = ItemModifier.fromItem(projectileWeaponItem);
+        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = DataModifierInfo.ITEM_MODIFIER.get(projectileWeaponItem);
         if (projectileWeaponModifier == null)
             return;
 
         componentConsumer.accept(Component.empty());
-        componentConsumer.accept(Component.translatable("item.projectileWeapon.when_shoot").withStyle(ChatFormatting.GRAY));
+        componentConsumer.accept(Component.translatable(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT).withStyle(ChatFormatting.GRAY));
 
-        MutableComponent component = Component.translatable("item.projectileWeapon.damage",
+        MutableComponent component = Component.translatable(COMPONENT_PROJECTILE_WEAPON_DAMAGE,
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower() * 2));
 
         componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
@@ -137,6 +180,16 @@ public abstract class ItemStackMixin implements VPItemStack {
         return getThis().getOrDefault(DataComponents.RARITY, Rarity.COMMON);
     }
 
+    @ModifyExpressionValue(method = "hasFoil", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;isFoil(Lnet/minecraft/world/item/ItemStack;)Z"))
+    private boolean modifyFoilState(boolean hasFoil) {
+        PotionContents potionContents = getThis().get(DataComponents.POTION_CONTENTS);
+
+        return potionContents == null
+                ? hasFoil
+                : potionContents.potion().map(potionHolder -> VPPotion.cast(potionHolder.value()).isGlistering()).orElse(hasFoil);
+    }
+
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"))
     private void applyEnchantmentStyle(CallbackInfoReturnable<Component> cir, @Local MutableComponent mutableComponent) {
@@ -153,7 +206,8 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/core/component/DataComponents;POTION_CONTENTS:Lnet/minecraft/core/component/DataComponentType;"))
+            target = "Lnet/minecraft/core/component/DataComponents;POTION_CONTENTS:Lnet/minecraft/core/component/DataComponentType;",
+            opcode = Opcodes.GETSTATIC))
     private void addExtraTooltips0(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player, TooltipFlag tooltipFlag,
                                    Consumer<Component> componentConsumer, CallbackInfo ci) {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
@@ -175,23 +229,8 @@ public abstract class ItemStackMixin implements VPItemStack {
                                        TooltipFlag tooltipFlag, Consumer<Component> componentConsumer, CallbackInfo ci) {
         if (EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP)
                 && tooltipDisplay.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
-            componentConsumer.accept(Component.translatable("item.repairLimit",
+            componentConsumer.accept(Component.translatable(COMPONENT_REPAIR_LIMIT,
                     getMaxRepairLimit() - getRepairLimit(),
                     getMaxRepairLimit()));
-    }
-
-    @Override
-    public int getRepairLimit() {
-        return Math.clamp(getThis().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
-    }
-
-    @Override
-    public void setRepairLimit(int repairLimit) {
-        set(VPDataComponentTypes.REPAIR_LIMIT.get(), Math.clamp(repairLimit, 0, getMaxRepairLimit()));
-    }
-
-    @Override
-    public int getMaxRepairLimit() {
-        return getThis().getOrDefault(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), 0);
     }
 }

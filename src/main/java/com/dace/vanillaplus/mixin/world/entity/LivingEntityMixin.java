@@ -33,13 +33,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @Shadow
     protected Brain<?> brain;
+    @Unique
+    @Nullable
+    private DamageSource lastDamageSourceForKnockback;
     @Mutable
     @Shadow
     @Final
     private AttributeMap attributes;
-    @Unique
-    @Nullable
-    private DamageSource lastDamageSourceForKnockback;
 
     @Shadow
     public abstract void stopRiding();
@@ -69,6 +69,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     public abstract float getMaxHealth();
+
+    @Shadow
+    public abstract boolean isAutoSpinAttack();
+
+    @Override
+    @MustBeInvokedByOverriders
+    public void setDataModifier(@Nullable U dataModifier) {
+        super.setDataModifier(dataModifier);
+
+        if (dataModifier != null)
+            attributes.apply(dataModifier.getPackedAttributes());
+    }
 
     @Unique
     private double getEnvironmentalDamageResistanceValue() {
@@ -100,13 +112,15 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void setPreLastDamageSource(ServerLevel serverLevel, DamageSource damageSource, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void setLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
+                                                 CallbackInfoReturnable<Boolean> cir) {
         lastDamageSourceForKnockback = damageSource;
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V",
             shift = At.Shift.AFTER))
-    private void removePreLastDamageSource(ServerLevel serverLevel, DamageSource damageSource, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void removeLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
+                                                    CallbackInfoReturnable<Boolean> cir) {
         lastDamageSourceForKnockback = null;
     }
 
@@ -126,12 +140,11 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return value;
     }
 
-    @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
-        super.setDataModifier(dataModifier);
 
-        if (dataModifier != null)
-            attributes.apply(dataModifier.getPackedAttributes());
+    @ModifyExpressionValue(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D",
+                    ordinal = 0))
+    private double modifyWaterMovementEfficiencyValue(double value) {
+        return isAutoSpinAttack() ? 0 : value;
     }
 }

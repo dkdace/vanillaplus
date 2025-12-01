@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
 import com.dace.vanillaplus.data.modifier.BlockModifier;
-import com.dace.vanillaplus.extension.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -25,11 +25,16 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T> {
+public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T, U> {
     @Shadow
     @UnknownNullability
     public static Direction getConnectedDirection(BlockState blockState) {
         return null;
+    }
+
+    @Override
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return getXp(state, level, randomSource, pos);
     }
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
@@ -56,10 +61,5 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
 
         BlockPos connectedBlockPos = blockPos.relative(getConnectedDirection(blockState));
         popOpenXP(level.getBlockState(connectedBlockPos), level, connectedBlockPos);
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return getXp(state, level, randomSource, pos);
     }
 }

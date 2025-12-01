@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_transmute",
+  "base": "minecraft:splash_potion",
+  "ingredient": "minecraft:dragon_breath",
+  "result": "minecraft:lingering_potion"
+}

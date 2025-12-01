@@ -1,9 +1,10 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEntity;
+import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.Getter;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
     @Unique
     @Nullable
+    @Getter
     protected U dataModifier;
     @Shadow
     @Final
@@ -76,15 +78,14 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     @Nullable
     public abstract ItemEntity spawnAtLocation(ServerLevel serverLevel, ItemLike item);
 
-    @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
-    protected float modifyBlockExplosionResistance(float resistance, @Local(argsOnly = true) BlockState blockState,
-                                                   @Local(argsOnly = true) float explosionPower) {
-        return resistance;
-    }
-
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
+    }
+
+    @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
+    protected float modifyBlockExplosionResistance(float resistance, @Local(argsOnly = true) BlockState blockState) {
+        return resistance;
     }
 }

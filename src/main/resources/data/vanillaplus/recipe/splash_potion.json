@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_transmute",
+  "base": "minecraft:potion",
+  "ingredient": "minecraft:gunpowder",
+  "result": "minecraft:splash_potion"
+}

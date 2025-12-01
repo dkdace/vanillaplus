@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.data.LootTableReward;
-import com.dace.vanillaplus.extension.VPLootContainerBlock;
-import com.dace.vanillaplus.extension.VPRandomizableContainerBlockEntity;
+import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
+import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -22,12 +22,6 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Unique
     private boolean hasReward = false;
 
-    @Inject(method = "setLootTable", at = @At("TAIL"))
-    private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
-        if (lootTableResourceKey != null && !hasReward)
-            onLoad();
-    }
-
     @Override
     public void onLoad() {
         if (hasReward || level == null || getLootTableReward() == null || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
@@ -41,5 +35,11 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Nullable
     public LootTableReward getLootTableReward() {
         return lootTable == null ? null : LootTableReward.fromLootTable(lootTable);
+    }
+
+    @Inject(method = "setLootTable", at = @At("TAIL"))
+    private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
+        if (lootTableResourceKey != null && !hasReward)
+            onLoad();
     }
 }

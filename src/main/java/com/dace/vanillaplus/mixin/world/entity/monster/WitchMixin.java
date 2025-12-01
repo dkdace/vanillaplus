@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.entity.monster;
 import com.dace.vanillaplus.data.RaiderEffect;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
-import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
@@ -18,6 +17,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,9 +32,7 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
     @Unique
     private NearestAttackableWitchTargetGoal<AbstractVillager> attackVillagersGoal;
 
-    @Inject(method = "registerGoals", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/world/entity/monster/Witch;attackPlayersGoal:Lnet/minecraft/world/entity/ai/goal/target/NearestAttackableWitchTargetGoal;",
-            ordinal = 1))
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
         attackVillagersGoal = new NearestAttackableWitchTargetGoal<>(getThis(), AbstractVillager.class, 10, true, false,
                 null);
@@ -69,21 +67,20 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
         return new RangedAttackGoal(mob, speedModifier, attackIntervalMin, attackInterval, attackRadius);
     }
 
-    @Expression("4.0")
-    @ModifyExpressionValue(method = "performRangedAttack", at = @At("MIXINEXTRAS:EXPRESSION"))
+    @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "CONSTANT", args = "floatValue=4.0"))
     private float modifySupportHealthCondition(float health) {
-        return 8F;
+        return 8;
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/world/item/alchemy/Potions;REGENERATION:Lnet/minecraft/core/Holder;"))
+            target = "Lnet/minecraft/world/item/alchemy/Potions;REGENERATION:Lnet/minecraft/core/Holder;", opcode = Opcodes.GETSTATIC))
     private Holder<Potion> modifySupportPotion(Holder<Potion> potionHolder) {
         return random.nextBoolean() ? Potions.SWIFTNESS : potionHolder;
     }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
-    public ItemStack upgradePotionSelf(ItemStack itemStack) {
+    private ItemStack upgradePotionSelf(ItemStack itemStack) {
         RaiderEffect.WitchEffect witchEffect = RaiderEffect.fromEntityType(getType());
         itemStack = witchEffect.getUpgradePotionForSelfInfo().upgradePotion(getThis(), itemStack);
 
@@ -92,7 +89,7 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
-    public ItemStack upgradePotionThrow(ItemStack itemStack, @Local(argsOnly = true) LivingEntity target) {
+    private ItemStack upgradePotionThrow(ItemStack itemStack, @Local(argsOnly = true) LivingEntity target) {
         RaiderEffect.WitchEffect witchEffect = RaiderEffect.fromEntityType(getType());
 
         return (target instanceof Raider ? witchEffect.getUpgradePotionForSupportInfo() : witchEffect.getUpgradePotionForAttackInfo())

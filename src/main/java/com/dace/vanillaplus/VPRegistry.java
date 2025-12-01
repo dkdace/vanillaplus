@@ -3,16 +3,16 @@ package com.dace.vanillaplus;
 import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.registryobject.VPAttributes;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
-import com.dace.vanillaplus.registryobject.VPEnchantmentLevelBasedValueTypes;
-import com.dace.vanillaplus.registryobject.VPSoundEvents;
+import com.dace.vanillaplus.registryobject.*;
 import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -20,6 +20,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -50,7 +55,19 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    /** 제작법 타입 */
+    public static final VPRegistry<RecipeType<?>> RECIPE_TYPE = new VPRegistry<>(BuiltInRegistries.RECIPE_TYPE);
+    /** 제작법 직렬화 처리기 */
+    public static final VPRegistry<RecipeSerializer<?>> RECIPE_SERIALIZER = new VPRegistry<>(BuiltInRegistries.RECIPE_SERIALIZER);
+    /** 제작법 책 분류 */
+    public static final VPRegistry<RecipeBookCategory> RECIPE_BOOK_CATEGORY = new VPRegistry<>(BuiltInRegistries.RECIPE_BOOK_CATEGORY);
+    /** 제작법 디스플레이 */
+    public static final VPRegistry<RecipeDisplay.Type<?>> RECIPE_DISPLAY = new VPRegistry<>(BuiltInRegistries.RECIPE_DISPLAY);
+    /** 물약 */
+    public static final VPRegistry<Potion> POTION = new VPRegistry<>(BuiltInRegistries.POTION);
 
+    /** 설정 */
+    public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
@@ -63,14 +80,14 @@ public final class VPRegistry<T> {
     public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
     /** 습격자 효과 */
     public static final VPRegistry<RaiderEffect> RAIDER_EFFECT = new VPRegistry<>("raider_effect");
-    /** 전역 수정자 */
-    public static final VPRegistry<GeneralModifier> MODIFIER = new VPRegistry<>("modifier");
     /** 아이템 수정자 */
-    public static final VPRegistry<ItemModifier> ITEM_MODIFIER = MODIFIER.createRegistry("item");
+    public static final VPRegistry<ItemModifier> ITEM_MODIFIER = new VPRegistry<>("modifier/item");
     /** 블록 수정자 */
-    public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = MODIFIER.createRegistry("block");
+    public static final VPRegistry<BlockModifier> BLOCK_MODIFIER = new VPRegistry<>("modifier/block");
     /** 엔티티 수정자 */
-    public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = MODIFIER.createRegistry("entity");
+    public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
+    /** 물약 수정자 */
+    public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
 
     @Nullable
     private static HolderLookup.Provider provider;
@@ -80,6 +97,11 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPAttributes.class);
         ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
         ReflectionUtil.loadClass(VPDataComponentTypes.class);
+        ReflectionUtil.loadClass(VPRecipeTypes.class);
+        ReflectionUtil.loadClass(VPRecipeSerializers.class);
+        ReflectionUtil.loadClass(VPRecipeBookCategories.class);
+        ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
+        ReflectionUtil.loadClass(VPPotions.class);
     }
 
     /** 레지스트리 리소스 키 */
@@ -141,13 +163,14 @@ public final class VPRegistry<T> {
     private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
         provider = providerFunction.get();
 
-        applyDataModifiers(ItemModifier::fromItem, BuiltInRegistries.ITEM);
-        applyDataModifiers(BlockModifier::fromBlock, BuiltInRegistries.BLOCK);
-        applyDataModifiers(EntityModifier::fromEntityType, BuiltInRegistries.ENTITY_TYPE);
+        applyDataModifiers(DataModifierInfo.ITEM_MODIFIER::get, BuiltInRegistries.ITEM);
+        applyDataModifiers(DataModifierInfo.BLOCK_MODIFIER::get, BuiltInRegistries.BLOCK);
+        applyDataModifiers(DataModifierInfo.ENTITY_MODIFIER::get, BuiltInRegistries.ENTITY_TYPE);
+        applyDataModifiers(DataModifierInfo.POTION_MODIFIER::get, BuiltInRegistries.POTION);
     }
 
     private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Function<T, U> dataModifierFunction,
-                                                                          @NonNull DefaultedRegistry<T> registry) {
+                                                                          @NonNull Registry<T> registry) {
         registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataModifierFunction.apply(element)));
     }
 
@@ -195,7 +218,7 @@ public final class VPRegistry<T> {
     @NonNull
     public Codec<T> createByNameCodec() {
         Validate.validState(vanillaRegistry != null || forgeRegistryHolder != null);
-        return vanillaRegistry != null ? vanillaRegistry.byNameCodec() : forgeRegistryHolder.get().getCodec();
+        return Codec.lazyInitialized(vanillaRegistry != null ? vanillaRegistry::byNameCodec : () -> forgeRegistryHolder.get().getCodec());
     }
 
     /**

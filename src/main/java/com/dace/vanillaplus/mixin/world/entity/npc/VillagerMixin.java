@@ -2,7 +2,10 @@ package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -12,6 +15,8 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,12 +40,12 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     protected abstract void stopTrading();
 
     @Unique
-    private boolean isStoreClosed() {
+    private boolean isTradingClosed() {
         return !getOffers().isEmpty() && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
     }
 
     @Unique
-    private boolean isStoreOutOfStock() {
+    private boolean isTradingOutOfStock() {
         return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
@@ -76,22 +81,37 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
         resendOffersToTradingPlayer();
     }
 
+    @Definition(id = "random", field = "Lnet/minecraft/world/entity/npc/Villager;random:Lnet/minecraft/util/RandomSource;")
+    @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
+    @Expression("3 + this.random.nextInt(4)")
+    @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private int modifyRewardBaseXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {
+        ItemCost itemCost = merchantOffer.getItemCostA();
+
+        if (itemCost.itemStack().is(Items.EMERALD)) {
+            int count = itemCost.count();
+            return 3 * count + random.nextInt(4 * count);
+        }
+
+        return xp;
+    }
+
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
     private boolean preventTradingIfClosed(boolean flag) {
-        return flag || isStoreClosed() || isStoreOutOfStock();
+        return flag || isTradingClosed() || isTradingOutOfStock();
     }
 
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
     private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (isStoreClosed())
+        if (isTradingClosed())
             player.displayClientMessage(Component.translatable("merchant.closed"), true);
-        else if (isStoreOutOfStock())
+        else if (isTradingOutOfStock())
             player.displayClientMessage(Component.translatable("merchant.out_of_stock"), true);
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))
-    private void closeStore(ServerLevel serverLevel, CallbackInfo ci) {
-        if (!isStoreClosed())
+    private void closeTrading(ServerLevel serverLevel, CallbackInfo ci) {
+        if (!isTradingClosed())
             return;
 
         getOffers().forEach(MerchantOffer::setToOutOfStock);

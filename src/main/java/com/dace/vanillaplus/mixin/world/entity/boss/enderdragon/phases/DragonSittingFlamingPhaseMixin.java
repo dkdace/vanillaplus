@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.extension.VPEnderDragon;
+import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingFlamingPhase;
@@ -13,16 +12,15 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=200"))
     private int modifyFlamingDuration(int duration) {
-        float flamingDurationSeconds = ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType()))
-                .getPhaseInfo().getSitting().getFlamingDurationSeconds().get(dragon);
+        double flamingDurationSeconds = VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getFlamingDurationSeconds()
+                .get(dragon);
 
         return (int) (flamingDurationSeconds * 20.0);
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setRadius(F)V"))
     private float modifyFlameRadius(float radius) {
-        return ((EntityModifier.EnderDragonModifier) EntityModifier.fromEntityTypeOrThrow(dragon.getType())).getPhaseInfo().getSitting()
-                .getFlameRadius();
+        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getFlameRadius();
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE",
