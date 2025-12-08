@@ -1,18 +1,28 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
+import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 모드에서 사용하는 물약을 관리하는 클래스.
  */
 @UtilityClass
+@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class VPPotions {
     private static final String NAME_ELIXIR_OF_THE_SUN = "elixir_of_the_sun";
     public static final RegistryObject<Potion> ELIXIR_OF_THE_SUN = create(NAME_ELIXIR_OF_THE_SUN, Type.NORMAL,
@@ -45,6 +55,30 @@ public final class VPPotions {
     @NonNull
     private static RegistryObject<Potion> create(@NonNull String name, @NonNull Type type, @NonNull MobEffectInstance @NonNull ... mobEffectInstances) {
         return VPRegistry.POTION.register(type.prefix + name, () -> new Potion(name, mobEffectInstances));
+    }
+
+    @SubscribeEvent
+    private static void onRegisterColorHandlersBlock(@NonNull RegisterColorHandlersEvent.Block event) {
+        event.register((blockState, level, blockPos, index) -> {
+            if (level == null || blockPos == null
+                    || !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity))
+                return -1;
+
+            int color = BiomeColors.getAverageWaterColor(level, blockPos);
+            int targetColor = layeredCauldronBlockEntity.getColor();
+            float alpha = ARGB.alphaFloat(targetColor);
+
+            int red = ARGB.red(color);
+            red += (int) ((ARGB.red(targetColor) - red) * alpha);
+
+            int green = ARGB.green(color);
+            green += (int) ((ARGB.green(targetColor) - green) * alpha);
+
+            int blue = ARGB.blue(color);
+            blue += (int) ((ARGB.blue(targetColor) - blue) * alpha);
+
+            return ARGB.color(red, green, blue);
+        }, Blocks.WATER_CAULDRON);
     }
 
     @AllArgsConstructor

@@ -26,6 +26,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -65,6 +66,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<RecipeDisplay.Type<?>> RECIPE_DISPLAY = new VPRegistry<>(BuiltInRegistries.RECIPE_DISPLAY);
     /** 물약 */
     public static final VPRegistry<Potion> POTION = new VPRegistry<>(BuiltInRegistries.POTION);
+    /** 블록 엔티티 타입 */
+    public static final VPRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = new VPRegistry<>(BuiltInRegistries.BLOCK_ENTITY_TYPE);
 
     /** 설정 */
     public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
@@ -102,6 +105,7 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPRecipeBookCategories.class);
         ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
         ReflectionUtil.loadClass(VPPotions.class);
+        ReflectionUtil.loadClass(VPBlockEntityTypes.class);
     }
 
     /** 레지스트리 리소스 키 */

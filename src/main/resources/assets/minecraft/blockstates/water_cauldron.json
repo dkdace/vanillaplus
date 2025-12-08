@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "level=1,opacity=1": {
+      "model": "minecraft:block/water_cauldron_level1_opacity1"
+    },
+    "level=2,opacity=1": {
+      "model": "minecraft:block/water_cauldron_level2_opacity1"
+    },
+    "level=3,opacity=1": {
+      "model": "minecraft:block/water_cauldron_full_opacity1"
+    },
+    "level=1,opacity=2": {
+      "model": "minecraft:block/water_cauldron_level1_opacity2"
+    },
+    "level=2,opacity=2": {
+      "model": "minecraft:block/water_cauldron_level2_opacity2"
+    },
+    "level=3,opacity=2": {
+      "model": "minecraft:block/water_cauldron_full_opacity2"
+    },
+    "level=1,opacity=3": {
+      "model": "minecraft:block/water_cauldron_level1_opacity3"
+    },
+    "level=2,opacity=3": {
+      "model": "minecraft:block/water_cauldron_level2_opacity3"
+    },
+    "level=3,opacity=3": {
+      "model": "minecraft:block/water_cauldron_full_opacity3"
+    }
+  }
+}
