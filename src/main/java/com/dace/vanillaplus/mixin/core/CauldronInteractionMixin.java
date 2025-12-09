@@ -2,6 +2,8 @@ package com.dace.vanillaplus.mixin.core;
 
 import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
@@ -97,5 +99,38 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
                                                                         @Local(argsOnly = true) BlockPos blockPos) {
         return predicate.and(blockState -> !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
                 || layeredCauldronBlockEntity.hasPureWater());
+    }
+
+    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
+    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
+    @Expression("pLevel.isClientSide() == false")
+    @ModifyExpressionValue(method = "dyedItemIteration", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private static boolean modifyDyedItemWashCondition(boolean condition, @Local(argsOnly = true) Level level,
+                                                       @Local(argsOnly = true) BlockPos blockPos) {
+        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                ? condition && layeredCauldronBlockEntity.hasPureWater()
+                : condition;
+    }
+
+    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
+    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
+    @Expression("pLevel.isClientSide() == false")
+    @ModifyExpressionValue(method = "bannerInteraction", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private static boolean modifyBannerWashCondition(boolean condition, @Local(argsOnly = true) Level level,
+                                                     @Local(argsOnly = true) BlockPos blockPos) {
+        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                ? condition && layeredCauldronBlockEntity.hasPureWater()
+                : condition;
+    }
+
+    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
+    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
+    @Expression("pLevel.isClientSide() == false")
+    @ModifyExpressionValue(method = "shulkerBoxInteraction", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private static boolean modifyShulkerBoxWashCondition(boolean condition, @Local(argsOnly = true) Level level,
+                                                         @Local(argsOnly = true) BlockPos blockPos) {
+        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                ? condition && layeredCauldronBlockEntity.hasPureWater()
+                : condition;
     }
 }
