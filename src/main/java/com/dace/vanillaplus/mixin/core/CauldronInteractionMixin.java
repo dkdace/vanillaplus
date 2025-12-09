@@ -10,24 +10,29 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Map;
 import java.util.function.Predicate;
 
 @Mixin(CauldronInteraction.class)
@@ -132,5 +137,35 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
         return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
                 ? condition && layeredCauldronBlockEntity.hasPureWater()
                 : condition;
+    }
+
+    @Inject(method = "bootStrap", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/core/cauldron/CauldronInteraction;LAVA:Lnet/minecraft/core/cauldron/CauldronInteraction$InteractionMap;",
+            opcode = Opcodes.GETSTATIC))
+    private static void addArrowInteraction(CallbackInfo ci, @Local(ordinal = 1) Map<Item, CauldronInteraction> map1) {
+        map1.put(Items.ARROW, (blockState, level, blockPos, player, interactionHand, itemStack) -> {
+            if (!level.isClientSide() && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity) {
+                int count = Math.min(itemStack.getCount(), 8);
+                itemStack.consume(count, player);
+
+                ItemStack tippedArrow = new ItemStack(Items.TIPPED_ARROW, count);
+                tippedArrow.set(DataComponents.POTION_CONTENTS, layeredCauldronBlockEntity.getPotionContents());
+
+                if (itemStack.isEmpty())
+                    player.setItemInHand(interactionHand, tippedArrow);
+                else {
+                    if (!player.getInventory().add(tippedArrow))
+                        player.drop(tippedArrow, false);
+
+                    player.setItemInHand(interactionHand, itemStack);
+                }
+
+                player.awardStat(Stats.USE_CAULDRON);
+
+                LayeredCauldronBlock.lowerFillLevel(blockState, level, blockPos);
+            }
+
+            return InteractionResult.SUCCESS;
+        });
     }
 }
