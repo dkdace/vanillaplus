@@ -17,15 +17,18 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,12 +40,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LayeredCauldronBlock.class)
 public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldronBlock, BlockModifier> implements VPLayeredCauldronBlock {
     @Shadow
+    @Final
+    public static IntegerProperty LEVEL;
+
+    @Inject(method = "lowerFillLevel", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
+    private static void onLowerFillLevel(BlockState blockState, Level level, BlockPos blockPos, CallbackInfo ci) {
+        if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
+            layeredCauldronBlockEntity.onLowerFillLevel();
+    }
+
+    @Shadow
     protected abstract double getContentHeight(BlockState blockState);
+
+    @Override
+    public boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluidState) {
+        return true;
+    }
 
     @Override
     @Nullable
     public BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
-        return new LayeredCauldronBlockEntity(blockPos, blockState);
+        return getThis() == Blocks.WATER_CAULDRON ? new LayeredCauldronBlockEntity(blockPos, blockState) : null;
     }
 
     @Override
@@ -81,11 +100,6 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
                 0.2, 0);
     }
 
-    @Override
-    public boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluidState) {
-        return true;
-    }
-
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/LayeredCauldronBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private BlockState modifyBlockState(BlockState blockState) {
@@ -100,16 +114,25 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
     }
 
     @Inject(method = "handlePrecipitation", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
+            target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
     private void addWaterOnRain(BlockState blockState, Level level, BlockPos blockPos, Biome.Precipitation precipitation, CallbackInfo ci) {
         if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
             layeredCauldronBlockEntity.addPotionContents(null);
     }
 
     @Inject(method = "receiveStalactiteDrip", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
+            target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
     private void addWaterOnStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid, CallbackInfo ci) {
         if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
             layeredCauldronBlockEntity.addPotionContents(null);
+    }
+
+    @Inject(method = "handleEntityOnFireInside", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/level/block/LayeredCauldronBlock;lowerFillLevel(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V",
+            ordinal = 0, shift = At.Shift.AFTER))
+    private void addWaterOnPowderSnowMelt(BlockState blockState, Level level, BlockPos blockPos, CallbackInfo ci) {
+        for (int i = 0; i < level.getBlockState(blockPos).getValue(LEVEL); i++)
+            if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
+                layeredCauldronBlockEntity.addPotionContents(null);
     }
 }

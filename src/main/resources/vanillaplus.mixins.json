@@ -96,6 +96,7 @@
   ],
   "client": [
     "client.OptionsMixin",
+    "client.color.item.PotionMixin",
     "client.gui.GuiGraphicsMixin",
     "client.gui.GuiMixin",
     "client.gui.contextualbar.LocatorBarRendererMixin",

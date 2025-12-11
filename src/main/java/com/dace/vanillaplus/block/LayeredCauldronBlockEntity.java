@@ -1,5 +1,7 @@
 package com.dace.vanillaplus.block;
 
+import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.Getter;
@@ -19,6 +21,8 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
@@ -30,6 +34,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
@@ -37,28 +42,14 @@ import java.util.*;
  * 물이 담긴 가마솥 블록 엔티티 클래스.
  */
 public final class LayeredCauldronBlockEntity extends BlockEntity {
-    /** 담을 수 있는 물약 종류 최대치 */
-    private static final int MAX_POTIONS = 3;
-
     /** 물약 내용물 */
     @Nullable
-    @Getter
     private PotionContents potionContents;
     /** 현재 색상 */
     @Getter
     private int color = 0;
-    /** 색상 혼합 횟수 */
-    private int colorCount = 0;
-    /** 투명도 혼합 횟수 */
-    private int colorAlphaCount = 0;
-    /** 투명도 합계 */
-    private float colorAlpha = 0;
-    /** 빨간색 합계 */
-    private float colorRed = 0;
-    /** 초록색 합계 */
-    private float colorGreen = 0;
-    /** 파란색 합계 */
-    private float colorBlue = 0;
+    /** 누적 색상 가중치 */
+    private double colorWeightSum;
 
     public LayeredCauldronBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
         super(VPBlockEntityTypes.LAYERED_CAULDRON.get(), blockPos, blockState);
@@ -78,17 +69,46 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
             serverLevel.setBlockAndUpdate(blockPos, blockState.setValue(VPLayeredCauldronBlock.UPDATE_COLOR, false));
     }
 
+    /**
+     * 지정한 물약 내용물의 정확한 색상을 반환한다.
+     *
+     * @param potionContents 물약 내용물
+     * @return 색상
+     */
+    private static int getPotionColor(@NonNull PotionContents potionContents) {
+        return potionContents.getColor() == PotionContents.BASE_POTION_COLOR ? 0 : potionContents.getColor();
+    }
+
+    /**
+     * 지정한 목록에서 중복된 상태 효과를 합쳐서 반환한다.
+     *
+     * @param mobEffectInstances 상태 효과 목록
+     * @return 상태 효과 목록
+     */
+    @NonNull
+    @UnmodifiableView
+    private static List<MobEffectInstance> combineMobEffects(@NonNull List<MobEffectInstance> mobEffectInstances) {
+        HashMap<Pair<Holder<MobEffect>, Integer>, MobEffectInstance> mobEffectInstanceMap = new HashMap<>();
+
+        mobEffectInstances.forEach(mobEffectInstance ->
+                mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
+                        (k, v) -> {
+                            if (v == null)
+                                return mobEffectInstance;
+
+                            return new MobEffectInstance(v.getEffect(), v.getDuration() + mobEffectInstance.getDuration(),
+                                    v.getAmplifier(), v.isAmbient(), v.isVisible(), v.showIcon());
+                        }));
+
+        return List.copyOf(mobEffectInstanceMap.values());
+    }
+
     @Override
     protected void loadAdditional(@NonNull ValueInput valueInput) {
         super.loadAdditional(valueInput);
 
         color = valueInput.getIntOr("Color", 0);
-        colorCount = valueInput.getIntOr("ColorCount", 0);
-        colorAlphaCount = valueInput.getIntOr("ColorAlphaCount", 0);
-        colorAlpha = valueInput.getFloatOr("ColorAlpha", 0);
-        colorRed = valueInput.getFloatOr("ColorRed", 0);
-        colorGreen = valueInput.getFloatOr("ColorGreen", 0);
-        colorBlue = valueInput.getFloatOr("ColorBlue", 0);
+        colorWeightSum = valueInput.getDoubleOr("ColorWeightSum", 0);
         potionContents = valueInput.read("PotionContents", PotionContents.CODEC).orElse(null);
     }
 
@@ -97,12 +117,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
         super.saveAdditional(valueOutput);
 
         valueOutput.putInt("Color", color);
-        valueOutput.putInt("ColorCount", colorCount);
-        valueOutput.putInt("ColorAlphaCount", colorAlphaCount);
-        valueOutput.putFloat("ColorAlpha", colorAlpha);
-        valueOutput.putFloat("ColorRed", colorRed);
-        valueOutput.putFloat("ColorGreen", colorGreen);
-        valueOutput.putFloat("ColorBlue", colorBlue);
+        valueOutput.putDouble("ColorWeightSum", colorWeightSum);
         valueOutput.storeNullable("PotionContents", PotionContents.CODEC, potionContents);
     }
 
@@ -119,7 +134,15 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     }
 
     /**
-     * 지정한 물약 내용물을 추가한다.
+     * 내용물이 줄었을 때 실행할 작업.
+     */
+    public void onLowerFillLevel() {
+        colorWeightSum -= colorWeightSum / (1 + getBlockState().getValue(LayeredCauldronBlock.LEVEL));
+        setChanged();
+    }
+
+    /**
+     * 물약 내용물을 추가한다.
      *
      * @param potionContents 물약 내용물
      */
@@ -127,69 +150,49 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
         if (potionContents == null)
             potionContents = new PotionContents(Potions.WATER);
 
-        addColor(potionContents.hasEffects() ? potionContents.getColor() : 0);
-        if (!mixPotionContents(potionContents))
-            return;
-
-        setChanged();
-
-        float alpha = ARGB.alphaFloat(color);
-        int opacity = 1;
-        if (alpha > 0.66)
-            opacity = 3;
-        else if (alpha > 0.33)
-            opacity = 2;
-
-        Objects.requireNonNull(level).setBlockAndUpdate(getBlockPos(), getBlockState().setValue(VPLayeredCauldronBlock.UPDATE_COLOR, true)
-                .setValue(VPLayeredCauldronBlock.OPACITY, opacity));
+        addColor(getPotionColor(potionContents), 1);
+        if (mixPotionContents(potionContents))
+            setChanged();
     }
 
     /**
-     * 지정한 물약 내용물을 혼합한다.
+     * 물약 내용물을 혼합한다.
      *
      * @param potionContents 물약 내용물
      * @return 성공 여부
      */
     private boolean mixPotionContents(@NonNull PotionContents potionContents) {
-        if (this.potionContents == null || this.potionContents.equals(potionContents)) {
-            this.potionContents = potionContents;
-            return true;
+        Optional<Holder<Potion>> potion = potionContents.potion();
+        List<MobEffectInstance> customEffects = potionContents.customEffects();
+
+        if (this.potionContents != null && (!this.potionContents.potion().equals(potion)
+                || !this.potionContents.customEffects().equals(customEffects))) {
+            ArrayList<MobEffectInstance> mobEffectInstances = new ArrayList<>();
+            float scale = 1F / getBlockState().getValue(LayeredCauldronBlock.LEVEL);
+
+            this.potionContents.getAllEffects().forEach(mobEffectInstance ->
+                    mobEffectInstances.add(mobEffectInstance.withScaledDuration(1 - scale)));
+
+            for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects())
+                mobEffectInstances.add(mobEffectInstance.withScaledDuration(scale));
+
+            if (mobEffectInstances.isEmpty())
+                potion = Optional.of(Potions.WATER);
+            else {
+                potion = Optional.empty();
+                customEffects = combineMobEffects(mobEffectInstances);
+
+                int maxPotionTypes = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
+                        .getMaxPotionTypes();
+
+                if (customEffects.size() > maxPotionTypes) {
+                    explode();
+                    return false;
+                }
+            }
         }
 
-        ArrayList<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        float scale = 1F / getBlockState().getValue(LayeredCauldronBlock.LEVEL);
-
-        this.potionContents.getAllEffects().forEach(mobEffectInstance ->
-                mobEffectInstances.add(mobEffectInstance.withScaledDuration(1 - scale)));
-
-        for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects())
-            mobEffectInstances.add(mobEffectInstance.withScaledDuration(scale));
-
-        if (mobEffectInstances.isEmpty()) {
-            this.potionContents = new PotionContents(Potions.WATER);
-            return true;
-        }
-
-        HashMap<Pair<Holder<MobEffect>, Integer>, MobEffectInstance> mobEffectInstanceMap = new HashMap<>();
-
-        mobEffectInstances.forEach(mobEffectInstance ->
-                mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
-                        (k, v) -> {
-                            if (v == null)
-                                return mobEffectInstance;
-
-                            return new MobEffectInstance(v.getEffect(), v.getDuration() + mobEffectInstance.getDuration(),
-                                    v.getAmplifier(), v.isAmbient(), v.isVisible(), v.showIcon());
-                        }));
-
-        if (mobEffectInstanceMap.size() > MAX_POTIONS) {
-            explode();
-            return false;
-        }
-
-        this.potionContents = new PotionContents(Optional.empty(), Optional.of(color), List.copyOf(mobEffectInstanceMap.values()),
-                Optional.empty());
-
+        this.potionContents = new PotionContents(potion, Optional.empty(), customEffects, Optional.empty());
         return true;
     }
 
@@ -208,14 +211,34 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     }
 
     /**
-     * 물약 내용물이 효과가 없는 순수한 물인지 확인한다.
+     * 물약 내용물을 반환한다.
+     *
+     * @return 물약 내용물
+     */
+    @NonNull
+    public PotionContents getPotionContents() {
+        if (potionContents == null)
+            return new PotionContents(Potions.WATER);
+
+        return new PotionContents(potionContents.potion(), color == getPotionColor(potionContents) ? Optional.empty() : Optional.of(color),
+                potionContents.customEffects(), Optional.empty());
+    }
+
+    /**
+     * 내용물이 염료와 물약이 없는 순수한 물인지 확인한다.
      *
      * @return 순수한 물이면 {@code true} 반환
      */
     public boolean hasPureWater() {
-        return potionContents != null && potionContents.is(Potions.WATER);
+        return color == 0 && potionContents != null && potionContents.is(Potions.WATER);
     }
 
+    /**
+     * 물약 내용물에서 무작위 상태 효과를 반환한다.
+     *
+     * @param randomSource 랜덤 소스
+     * @return 무작위 상태 효과
+     */
     @Nullable
     public Holder<MobEffect> getRandomMobEffect(@NonNull RandomSource randomSource) {
         if (potionContents == null || !potionContents.hasEffects())
@@ -228,25 +251,50 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     }
 
     /**
+     * 염료 색상을 추가한다.
+     *
+     * @param dyeColor 염료 색상
+     */
+    public void addDyeColor(@NonNull DyeColor dyeColor) {
+        int diffuseColor = dyeColor.getTextureDiffuseColor();
+
+        addColor(ARGB.opaque(diffuseColor), 3);
+        setChanged();
+    }
+
+    /**
      * 색상을 추가한다.
      *
-     * @param color 색상
+     * @param color  색상
+     * @param weight 가중치
      */
-    private void addColor(int color) {
-        colorAlphaCount += 1;
+    private void addColor(int color, int weight) {
+        colorWeightSum += weight;
+        double scale = 1.0 / colorWeightSum * weight;
 
-        if (color != 0) {
-            colorAlpha += ARGB.alphaFloat(color);
-            colorRed += ARGB.redFloat(color);
-            colorGreen += ARGB.greenFloat(color);
-            colorBlue += ARGB.blueFloat(color);
-            colorCount += 1;
+        int alpha = ARGB.alpha(this.color);
+        alpha += (int) ((ARGB.alpha(color) - alpha) * scale);
+
+        int red = ARGB.red(this.color);
+        int green = ARGB.green(this.color);
+        int blue = ARGB.blue(this.color);
+
+        if (alpha > 0) {
+            red += (int) ((ARGB.red(color) - red) * scale);
+            green += (int) ((ARGB.green(color) - green) * scale);
+            blue += (int) ((ARGB.blue(color) - blue) * scale);
         }
 
-        if (colorCount == 0)
-            this.color = 0;
-        else
-            this.color = ARGB.colorFromFloat(colorAlpha / colorAlphaCount, colorRed / colorCount, colorGreen / colorCount,
-                    colorBlue / colorCount);
+        this.color = ARGB.color(Math.min(alpha, 0xFF), Math.min(red, 0xFF), Math.min(green, 0xFF), Math.min(blue, 0xFF));
+
+        float floatAlpha = ARGB.alphaFloat(this.color);
+        int opacity = 1;
+        if (floatAlpha >= 0.66)
+            opacity = 3;
+        else if (floatAlpha >= 0.33)
+            opacity = 2;
+
+        Objects.requireNonNull(level).setBlockAndUpdate(getBlockPos(), getBlockState().setValue(VPLayeredCauldronBlock.UPDATE_COLOR, true)
+                .setValue(VPLayeredCauldronBlock.OPACITY, opacity));
     }
 }

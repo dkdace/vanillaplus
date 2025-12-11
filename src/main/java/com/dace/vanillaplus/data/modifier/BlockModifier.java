@@ -17,6 +17,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +42,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         CODEC_REGISTRY.register("block", () -> CODEC);
         CODEC_REGISTRY.register("drop_experience", () -> DropExperienceModifier.CODEC);
         CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
+        CODEC_REGISTRY.register("water_cauldron", () -> WaterCauldronModifier.CODEC);
     }
 
     /** 블록 속성 */
@@ -127,6 +129,38 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
          */
         public int getGlowDuration() {
             return (int) (glowDurationSeconds * 20.0);
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends BlockModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link LayeredCauldronBlock}의 블록 수정자 클래스.
+     */
+    @Getter
+    public static final class WaterCauldronModifier extends BlockModifier {
+        private static final MapCodec<WaterCauldronModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(instance.group(ExtraCodecs.POSITIVE_INT.optionalFieldOf("max_potion_types", 3)
+                                        .forGetter(WaterCauldronModifier::getMaxPotionTypes),
+                                ExtraCodecs.POSITIVE_INT.optionalFieldOf("tipped_arrow_max_count", 8)
+                                        .forGetter(WaterCauldronModifier::getMaxTippedArrowCount)))
+                        .apply(instance, WaterCauldronModifier::new));
+
+        /** 담을 수 있는 최대 물약 종류 수 */
+        private final int maxPotionTypes;
+        /** 제작 가능한 물약이 묻은 화살의 최대 개수 */
+        private final int maxTippedArrowCount;
+
+        private WaterCauldronModifier(@NonNull BlockBehaviour.Properties properties, int maxPotionTypes, int maxTippedArrowCount) {
+            super(properties);
+
+            this.maxPotionTypes = maxPotionTypes;
+            this.maxTippedArrowCount = maxTippedArrowCount;
         }
 
         @Override

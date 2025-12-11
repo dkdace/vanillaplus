@@ -59,26 +59,32 @@ public final class VPPotions {
 
     @SubscribeEvent
     private static void onRegisterColorHandlersBlock(@NonNull RegisterColorHandlersEvent.Block event) {
-        event.register((blockState, level, blockPos, index) -> {
-            if (level == null || blockPos == null
-                    || !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity))
-                return -1;
+        event.register((blockState, level, blockPos, index) ->
+                level != null && blockPos != null && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                        ? getMixedColor(BiomeColors.getAverageWaterColor(level, blockPos), layeredCauldronBlockEntity.getColor())
+                        : -1, Blocks.WATER_CAULDRON);
+    }
 
-            int color = BiomeColors.getAverageWaterColor(level, blockPos);
-            int targetColor = layeredCauldronBlockEntity.getColor();
-            float alpha = ARGB.alphaFloat(targetColor);
+    /**
+     * 투명도를 기준으로 지정한 두 색상을 혼합한 색상을 반환한다.
+     *
+     * @param baseColor  기반 색상
+     * @param addedColor 투명도가 포함된 추가 색상
+     * @return 최종 색상
+     */
+    public static int getMixedColor(int baseColor, int addedColor) {
+        float alpha = ARGB.alphaFloat(addedColor);
 
-            int red = ARGB.red(color);
-            red += (int) ((ARGB.red(targetColor) - red) * alpha);
+        float red = ARGB.redFloat(baseColor);
+        red += (ARGB.redFloat(addedColor) - red) * alpha;
 
-            int green = ARGB.green(color);
-            green += (int) ((ARGB.green(targetColor) - green) * alpha);
+        float green = ARGB.greenFloat(baseColor);
+        green += (ARGB.greenFloat(addedColor) - green) * alpha;
 
-            int blue = ARGB.blue(color);
-            blue += (int) ((ARGB.blue(targetColor) - blue) * alpha);
+        float blue = ARGB.blueFloat(baseColor);
+        blue += (ARGB.blueFloat(addedColor) - blue) * alpha;
 
-            return ARGB.color(red, green, blue);
-        }, Blocks.WATER_CAULDRON);
+        return ARGB.colorFromFloat(1, red, green, blue);
     }
 
     @AllArgsConstructor
