@@ -4,6 +4,7 @@ import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.registryobject.VPSoundEvents;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -79,7 +80,7 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
             }
 
             player.awardStat(Stats.USE_CAULDRON);
-            level.playSound(null, blockPos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1, 1);
+            level.playSound(null, blockPos, VPSoundEvents.ARROW_TIPPED.get(), SoundSource.BLOCKS, 1, 1);
 
             LayeredCauldronBlock.lowerFillLevel(blockState, level, blockPos);
         }

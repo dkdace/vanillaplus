@@ -78,6 +78,7 @@
   "subtitles.entity.ender_dragon.drop_pearl": "드래곤이 엔더 진주를 떨어뜨림",
   "subtitles.entity.ender_dragon.fall_meteor": "엔드 운석이 떨어짐",
   "subtitles.entity.ender_dragon.spawn_meteor": "엔드 운석이 나타남",
+  "subtitles.item.arrow.tipped": "화살에 물약을 묻힘",
   "subtitles.item.recovery_compass.teleport": "만회 나침반이 작동함",
   "tool.when_breaking": "알맞은 블록을 부술 때:"
 }
