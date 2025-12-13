@@ -22,8 +22,10 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
     private Predicate<ItemStack> modifyRepairFilter(Predicate<ItemStack> filter, @Local(argsOnly = true) ServerPlayer serverPlayer) {
         return filter.and(itemStack -> {
             VPItemStack vpItemStack = VPItemStack.cast(itemStack);
+            if (serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
+                return true;
 
-            boolean hasLapis = serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
+            return serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
                 if (targetItemStack.is(Items.LAPIS_LAZULI)) {
                     targetItemStack.shrink(1);
                     vpItemStack.setRepairLimit(0);
@@ -33,8 +35,6 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
 
                 return false;
             });
-
-            return serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit() || hasLapis;
         });
     }
 
