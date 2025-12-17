@@ -90,15 +90,16 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     private static List<MobEffectInstance> combineMobEffects(@NonNull List<MobEffectInstance> mobEffectInstances) {
         HashMap<Pair<Holder<MobEffect>, Integer>, MobEffectInstance> mobEffectInstanceMap = new HashMap<>();
 
-        mobEffectInstances.forEach(mobEffectInstance ->
-                mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
-                        (k, v) -> {
-                            if (v == null)
-                                return mobEffectInstance;
+        mobEffectInstances.forEach(mobEffectInstance -> {
+            mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
+                    (k, v) -> {
+                        if (v == null)
+                            return mobEffectInstance;
 
-                            return new MobEffectInstance(v.getEffect(), v.getDuration() + mobEffectInstance.getDuration(),
-                                    v.getAmplifier(), v.isAmbient(), v.isVisible(), v.showIcon());
-                        }));
+                        return new MobEffectInstance(v.getEffect(), v.getDuration() + mobEffectInstance.getDuration(),
+                                v.getAmplifier(), v.isAmbient(), v.isVisible(), v.showIcon());
+                    });
+        });
 
         return List.copyOf(mobEffectInstanceMap.values());
     }
@@ -185,7 +186,8 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
                 int maxPotionTypes = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
                         .getMaxPotionTypes();
 
-                if (customEffects.size() > maxPotionTypes) {
+                if (customEffects.stream().anyMatch(mobEffectInstance -> mobEffectInstance.getEffect().value().isInstantenous())
+                        || customEffects.size() > maxPotionTypes) {
                     explode();
                     return false;
                 }
