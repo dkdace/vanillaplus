@@ -82,6 +82,8 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     /**
      * 지정한 목록에서 중복된 상태 효과를 합쳐서 반환한다.
      *
+     * <p>호환되지 않는 상태 효과가 존재하면 빈 목록을 반환한다.</p>
+     *
      * @param mobEffectInstances 상태 효과 목록
      * @return 상태 효과 목록
      */
@@ -90,7 +92,10 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     private static List<MobEffectInstance> combineMobEffects(@NonNull List<MobEffectInstance> mobEffectInstances) {
         HashMap<Pair<Holder<MobEffect>, Integer>, MobEffectInstance> mobEffectInstanceMap = new HashMap<>();
 
-        mobEffectInstances.forEach(mobEffectInstance -> {
+        int maxPotionTypes = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
+                .getMaxPotionTypes();
+
+        for (MobEffectInstance mobEffectInstance : mobEffectInstances) {
             mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
                     (k, v) -> {
                         if (v == null)
@@ -99,7 +104,10 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
                         return new MobEffectInstance(v.getEffect(), v.getDuration() + mobEffectInstance.getDuration(),
                                 v.getAmplifier(), v.isAmbient(), v.isVisible(), v.showIcon());
                     });
-        });
+
+            if (mobEffectInstance.getEffect().value().isInstantenous() || mobEffectInstanceMap.size() > maxPotionTypes)
+                return Collections.emptyList();
+        }
 
         return List.copyOf(mobEffectInstanceMap.values());
     }
@@ -183,11 +191,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
                 potion = Optional.empty();
                 customEffects = combineMobEffects(mobEffectInstances);
 
-                int maxPotionTypes = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
-                        .getMaxPotionTypes();
-
-                if (customEffects.stream().anyMatch(mobEffectInstance -> mobEffectInstance.getEffect().value().isInstantenous())
-                        || customEffects.size() > maxPotionTypes) {
+                if (customEffects.isEmpty()) {
                     explode();
                     return false;
                 }
