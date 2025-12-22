@@ -70,6 +70,7 @@
     "world.item.enchantment.EnchantmentHelperMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
     "world.item.enchantment.providers.SingleEnchantmentMixin",
+    "world.item.equipment.trim.ArmorTrimMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BedBlockMixin",
     "world.level.block.BlockMixin",
