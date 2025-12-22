@@ -1,5 +1,4 @@
 {
-  "enchantment": "minecraft:quick_charge",
   "values": {
     "time_reduction": {
       "description_index": 0,

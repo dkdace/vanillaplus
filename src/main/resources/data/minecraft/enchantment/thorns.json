@@ -12,12 +12,12 @@
           "damage_type": "minecraft:thorns",
           "max_damage": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:thorns",
+            "value": "vanillaplus:enchantment/thorns",
             "name": "damage"
           },
           "min_damage": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:thorns",
+            "value": "vanillaplus:enchantment/thorns",
             "name": "damage"
           }
         },
@@ -30,7 +30,7 @@
                 "type": "minecraft:enchantment_level",
                 "amount": {
                   "type": "vanillaplus:preset",
-                  "value": "vanillaplus:thorns",
+                  "value": "vanillaplus:enchantment/thorns",
                   "name": "chance"
                 }
               },

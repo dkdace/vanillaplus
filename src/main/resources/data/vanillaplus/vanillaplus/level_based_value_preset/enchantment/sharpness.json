@@ -1,12 +1,11 @@
 {
-  "enchantment": "minecraft:piercing",
   "values": {
-    "piercing_count": {
+    "damage": {
       "description_index": 0,
       "value": {
         "type": "minecraft:linear",
         "base": 1.0,
-        "per_level_above_first": 1.0
+        "per_level_above_first": 0.5
       }
     }
   }

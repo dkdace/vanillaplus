@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:loyalty",
+            "value": "vanillaplus:enchantment/loyalty",
             "name": "speed_multiplier"
           }
         }

@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:multishot",
+            "value": "vanillaplus:enchantment/multishot",
             "name": "count"
           }
         }

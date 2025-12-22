@@ -70,7 +70,7 @@
           },
           "radius": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:frost_walker",
+            "value": "vanillaplus:enchantment/frost_walker",
             "name": "radius"
           },
           "trigger_game_event": "minecraft:block_place"

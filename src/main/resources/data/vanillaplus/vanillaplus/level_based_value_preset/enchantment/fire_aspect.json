@@ -1,12 +1,11 @@
 {
-  "enchantment": "minecraft:riptide",
   "values": {
-    "power": {
+    "ignite_duration": {
       "description_index": 0,
       "value": {
         "type": "minecraft:linear",
-        "base": 1.5,
-        "per_level_above_first": 0.75
+        "base": 4.0,
+        "per_level_above_first": 4.0
       }
     }
   }

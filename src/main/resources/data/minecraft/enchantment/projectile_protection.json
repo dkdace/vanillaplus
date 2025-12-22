@@ -22,7 +22,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:projectile_protection",
+            "value": "vanillaplus:enchantment/projectile_protection",
             "name": "resistance"
           }
         },

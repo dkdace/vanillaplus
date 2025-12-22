@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:feather_falling",
+            "value": "vanillaplus:enchantment/feather_falling",
             "name": "resistance"
           }
         },

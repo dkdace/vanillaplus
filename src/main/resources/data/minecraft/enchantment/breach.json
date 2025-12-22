@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:breach",
+            "value": "vanillaplus:enchantment/breach",
             "name": "armor_ignore"
           }
         }

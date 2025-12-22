@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:punch",
+            "value": "vanillaplus:enchantment/punch",
             "name": "power"
           }
         },

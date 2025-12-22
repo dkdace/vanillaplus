@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:piercing",
+            "value": "vanillaplus:enchantment/piercing",
             "name": "piercing_count"
           }
         }

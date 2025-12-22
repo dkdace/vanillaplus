@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:power",
+            "value": "vanillaplus:enchantment/power",
             "name": "damage"
           }
         },

@@ -10,7 +10,7 @@
           "type": "minecraft:ignite",
           "duration": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:flame",
+            "value": "vanillaplus:enchantment/flame",
             "name": "ignite_duration"
           }
         }

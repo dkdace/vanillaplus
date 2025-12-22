@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.EnchantmentExtension;
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -42,9 +42,9 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
 
     @Unique
     private static void applyComponent(@NonNull Consumer<Component> componentConsumer, @NonNull Enchantment enchantment, int level,
-                                       @NonNull EnchantmentExtension enchantmentExtension) {
+                                       @NonNull LevelBasedValuePreset levelBasedValuePreset) {
         if (enchantment.description().getContents() instanceof TranslatableContents translatableContents)
-            enchantmentExtension.getValues().forEach(definedValue -> {
+            levelBasedValuePreset.getValues().forEach(definedValue -> {
                 String key = translatableContents.getKey() + COMPONENT_ENCHANTMENT_DESCRIPTION + definedValue.getDescriptionIndex();
                 String argument = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT
                         .format(definedValue.getLevelBasedValue().calculate(level) * definedValue.getDescriptionValueMultiplier());
@@ -94,8 +94,8 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
         Enchantment enchantment = enchantmentHolder.value();
 
         enchantmentHolder.unwrapKey()
-                .map(EnchantmentExtension::fromEnchantment)
-                .ifPresent(enchantmentExtension -> applyComponent(componentConsumer, enchantment, level, enchantmentExtension));
+                .map(LevelBasedValuePreset::fromResourceKey)
+                .ifPresent(levelBasedValuePreset -> applyComponent(componentConsumer, enchantment, level, levelBasedValuePreset));
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, level));

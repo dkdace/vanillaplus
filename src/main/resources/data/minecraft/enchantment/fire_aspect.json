@@ -11,7 +11,7 @@
           "type": "minecraft:ignite",
           "duration": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:fire_aspect",
+            "value": "vanillaplus:enchantment/fire_aspect",
             "name": "ignite_duration"
           }
         },

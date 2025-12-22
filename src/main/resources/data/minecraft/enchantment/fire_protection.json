@@ -22,7 +22,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:fire_protection",
+            "value": "vanillaplus:enchantment/fire_protection",
             "name": "resistance"
           }
         },
