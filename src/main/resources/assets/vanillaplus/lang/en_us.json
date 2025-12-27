@@ -75,6 +75,7 @@
   "item.projectileWeapon.damage": "%s Projectile Damage",
   "item.projectileWeapon.when_shoot": "When shoot:",
   "item.repairLimit": "Repair Limit : %s / %s",
+  "item.trim_material": "Trim Material",
   "key.prone": "Prone",
   "merchant.closed": "Villager closed the store. Please come back later.",
   "merchant.out_of_stock": "Currently out of stock. Please come back later.",

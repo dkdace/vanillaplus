@@ -1,9 +1,12 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.TrimMaterialEffect;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
+import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -23,15 +26,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.component.Consumable;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -69,6 +70,8 @@ public abstract class ItemStackMixin implements VPItemStack {
     private static final String COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = "item.projectileWeapon.when_shoot";
     @Unique
     private static final String COMPONENT_PROJECTILE_WEAPON_DAMAGE = "item.projectileWeapon.damage";
+    @Unique
+    private static final String COMPONENT_TRIM_MATERIAL = "item.trim_material";
     @Unique
     private static final String COMPONENT_REPAIR_LIMIT = "item.repairLimit";
 
@@ -155,6 +158,30 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
+    private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Player player,
+                                        @NonNull Consumer<Component> componentConsumer) {
+        providesTrimMaterial.unwrap(player.registryAccess()).ifPresent(trimMaterialHolder -> {
+            TrimMaterial trimMaterial = trimMaterialHolder.value();
+
+            componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));
+            componentConsumer.accept(CommonComponents.EMPTY);
+            componentConsumer.accept(trimMaterial.description());
+
+            trimMaterialHolder.unwrapKey().ifPresent(trimMaterialResourceKey -> {
+                LevelBasedValuePreset levelBasedValuePreset = LevelBasedValuePreset.fromResourceKey(trimMaterialResourceKey);
+                if (levelBasedValuePreset != null)
+                    VPTooltipProvider.applyComponent(componentConsumer, trimMaterial.description(), levelBasedValuePreset, 1);
+
+                TrimMaterialEffect trimMaterialEffect = TrimMaterialEffect.fromTrimMaterial(trimMaterialResourceKey);
+                if (trimMaterialEffect != null)
+                    trimMaterialEffect.getEnchantmentHolder().value().getEffects(EnchantmentEffectComponents.ATTRIBUTES)
+                            .forEach(enchantmentAttributeEffect ->
+                                    VPTooltipProvider.applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, 1));
+            });
+        });
+    }
+
+    @Unique
     private <T> void addTooltip(@NonNull DataComponentType<T> dataComponentType, @NonNull TooltipDisplay tooltipDisplay,
                                 @NonNull Consumer<T> onAdd) {
         if (!tooltipDisplay.shows(dataComponentType))
@@ -212,6 +239,10 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
                 addConsumableTooltip(consumable, tooltipContext, componentConsumer));
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
+
+        if (player != null)
+            addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
+                    addTrimMaterialTooltip(providesTrimMaterial, player, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE",

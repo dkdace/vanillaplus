@@ -75,6 +75,7 @@
   "item.projectileWeapon.damage": "%s 발사체 피해",
   "item.projectileWeapon.when_shoot": "발사 시:",
   "item.repairLimit": "수리 한도 : %s / %s",
+  "item.trim_material": "갑옷 장식 재료",
   "key.prone": "엎드리기",
   "merchant.closed": "주민이 상점을 마감했습니다. 나중에 다시 오세요.",
   "merchant.out_of_stock": "현재 재고가 없습니다. 나중에 다시 오세요.",
