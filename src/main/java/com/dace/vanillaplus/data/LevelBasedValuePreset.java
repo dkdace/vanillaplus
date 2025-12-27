@@ -25,14 +25,14 @@ import java.util.*;
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LevelBasedValuePreset {
+    /** 레지스트리 코덱 */
+    public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<LevelBasedValuePreset> DIRECT_CODEC = Codec.lazyInitialized(() ->
             RecordCodecBuilder.create(instance -> instance
                     .group(Codec.unboundedMap(Codec.STRING, DefinedValue.CODEC).fieldOf("values")
                             .forGetter(levelBasedValuePreset -> levelBasedValuePreset.definedValueMap))
                     .apply(instance, LevelBasedValuePreset::new)));
-    /** 레지스트리 코덱 */
-    public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
 
     /** 이름별 사전 정의된 값 목록 (이름 : 사전 정의된 값) */
     private final TreeMap<String, DefinedValue> definedValueMap;

@@ -4,6 +4,7 @@ import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.EnchantmentExtension;
 import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.TrimMaterialEffect;
+import com.dace.vanillaplus.data.TrimPatternEffect;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.google.common.collect.Lists;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -37,6 +38,9 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(itemEnchantments);
 
+        armorTrim.pattern().unwrapKey()
+                .map(TrimPatternEffect::fromTrimPattern)
+                .ifPresent(trimPatternEffect -> mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
         armorTrim.material().unwrapKey()
                 .map(TrimMaterialEffect::fromTrimMaterial)
                 .ifPresent(trimMaterialEffect -> mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
