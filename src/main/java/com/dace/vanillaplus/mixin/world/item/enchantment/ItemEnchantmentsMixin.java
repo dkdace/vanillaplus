@@ -101,16 +101,16 @@ public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments>
                 applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, level));
     }
 
-    @Inject(method = "addToTooltip", at = @At(value = "INVOKE",
-            target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0, shift = At.Shift.AFTER))
+    @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0,
+            shift = At.Shift.AFTER))
     private void addDescriptionToolTip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                         DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
                                         @Local int level) {
         applyExtraDescrption(componentConsumer, enchantmentHolder, level);
     }
 
-    @Inject(method = "addToTooltip", at = @At(value = "INVOKE",
-            target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1, shift = At.Shift.AFTER))
+    @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
+            shift = At.Shift.AFTER))
     private void addDescriptionToolTip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                         DataComponentGetter dataComponentGetter, CallbackInfo ci,
                                         @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {

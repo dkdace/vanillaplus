@@ -1,9 +1,17 @@
 {
+  "attribute.name.beacon_effect_range": "Beacon Effect Range",
   "attribute.name.environmental_damage_resistance": "Environmental Damage Resistance",
+  "attribute.name.fog_distance": "Fog Distance",
   "attribute.name.food_exhaustion_multiplier": "Food Exhaustion Multiplier",
   "attribute.name.generic.environmental_damage_resistance": "Environmental Damage Resistance",
+  "attribute.name.generic.fog_distance": "Fog Distance",
   "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
+  "attribute.name.hearing_range": "Hearing Range",
+  "attribute.name.item_pickup_range": "Item Pickup Range",
+  "attribute.name.player.beacon_effect_range": "Beacon Effect Range",
   "attribute.name.player.food_exhaustion_multiplier": "Food Exhaustion Multiplier",
+  "attribute.name.player.hearing_range": "Hearing Range",
+  "attribute.name.player.item_pickup_range": "Item Pickup Range",
   "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
   "block.minecraft.bed.no_use": "You cannot sleep here",
   "consumable.clearAllStatusEffects": "Removes All Status Effects",
@@ -80,5 +88,9 @@
   "subtitles.entity.ender_dragon.spawn_meteor": "End Meteor appears",
   "subtitles.item.arrow.tipped": "Arrow tipped",
   "subtitles.item.recovery_compass.teleport": "Recovery Compass activates",
-  "tool.when_breaking": "When breaking correct Blocks:"
+  "tool.when_breaking": "When breaking correct Blocks:",
+  "trim_material.minecraft.emerald.description.0": "%s%% Villager Trading Cost",
+  "trim_material.minecraft.gold.description.0": "+%s%% Extra Piglin Bartering Chance",
+  "trim_material.minecraft.iron.description.0": "+%s%% Iron Golem Repair Bonus",
+  "trim_material.minecraft.lapis.description.0": "+%s%% Experience Gain"
 }

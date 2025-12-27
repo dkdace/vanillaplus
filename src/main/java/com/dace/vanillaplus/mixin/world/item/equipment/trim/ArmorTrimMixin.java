@@ -4,6 +4,7 @@ import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.dace.vanillaplus.data.TrimMaterialEffect;
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
@@ -53,12 +54,12 @@ public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
                         .format(definedValue.getLevelBasedValue().calculate(1) * definedValue.getDescriptionValueMultiplier());
 
                 MutableComponent component = Component.translatable(key, argument);
-                componentConsumer.accept(Component.literal("  ").append(component).withStyle(trimMaterial.description().getStyle()));
+                componentConsumer.accept(Component.literal("  ").append(component).withStyle(ChatFormatting.BLUE));
             });
     }
 
     @Unique
-    private static void applyAttributeComponent(@NonNull Consumer<Component> componentConsumer, @NonNull TrimMaterial trimMaterial,
+    private static void applyAttributeComponent(@NonNull Consumer<Component> componentConsumer,
                                                 @NonNull EnchantmentAttributeEffect enchantmentAttributeEffect) {
         double amount = enchantmentAttributeEffect.getModifier(1, EquipmentSlotGroup.ANY).amount();
         if (amount == 0)
@@ -73,10 +74,13 @@ public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
             amount *= 10;
 
         String key;
-        if (amount > 0)
+        boolean style;
+        if (amount > 0) {
             key = COMPONENT_ATTRIBUTE_MODIFIER_PLUS;
-        else {
+            style = true;
+        } else {
             key = COMPONENT_ATTRIBUTE_MODIFIER_TAKE;
+            style = false;
             amount = -amount;
         }
 
@@ -85,7 +89,7 @@ public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(amount),
                 Component.translatable(attribute.getDescriptionId()));
 
-        componentConsumer.accept(Component.literal("  ").append(component).withStyle(trimMaterial.description().getStyle()));
+        componentConsumer.accept(Component.literal("  ").append(component).withStyle(attribute.getStyle(style)));
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 2,
@@ -103,7 +107,7 @@ public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
             if (trimMaterialEffect != null)
                 trimMaterialEffect.getEnchantmentHolder().value().getEffects(EnchantmentEffectComponents.ATTRIBUTES)
                         .forEach(enchantmentAttributeEffect ->
-                                applyAttributeComponent(componentConsumer, trimMaterial, enchantmentAttributeEffect));
+                                applyAttributeComponent(componentConsumer, enchantmentAttributeEffect));
         });
     }
 }

@@ -1,0 +1,17 @@
+{
+  "material": "minecraft:lapis",
+  "effects": {
+    "vanillaplus:xp_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_material/lapis",
+            "name": "amount"
+          }
+        }
+      }
+    ]
+  }
+}

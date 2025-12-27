@@ -1,0 +1,13 @@
+{
+  "material": "minecraft:diamond",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.05,
+        "attribute": "minecraft:block_break_speed",
+        "id": "vanillaplus:trim_material_effect.diamond",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

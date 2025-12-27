@@ -20,7 +20,7 @@ public final class VPEnchantmentLevelBasedValueTypes {
     }
 
     private record Preset(@NonNull Holder<LevelBasedValuePreset> levelBasedValuePresetHolder, @NonNull String name) implements LevelBasedValue {
-        public static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        private static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(LevelBasedValuePreset.CODEC.fieldOf("value").forGetter(Preset::levelBasedValuePresetHolder),
                         Codec.STRING.fieldOf("name").forGetter(Preset::name))
                 .apply(instance, Preset::new));

@@ -318,7 +318,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
                     PotionBrewing potionBrewing = mob.level().potionBrewing();
 
                     while (!ingredients.isEmpty()) {
-                        ItemStack ingredient = ingredients.remove(mob.level().random.nextInt(ingredients.size()));
+                        ItemStack ingredient = ingredients.remove(mob.level().getRandom().nextInt(ingredients.size()));
 
                         if (potionBrewing.hasMix(itemStack, ingredient))
                             return potionBrewing.mix(ingredient, itemStack);

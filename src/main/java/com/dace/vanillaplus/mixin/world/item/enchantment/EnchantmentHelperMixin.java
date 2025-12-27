@@ -78,15 +78,13 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
     }
 
     @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
     private static Object modifyEnchantments0(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }
 
     @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"))
     private static Object modifyEnchantments1(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }

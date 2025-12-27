@@ -1,9 +1,17 @@
 {
+  "attribute.name.beacon_effect_range": "신호기 효과 범위",
   "attribute.name.environmental_damage_resistance": "환경 피해 저항",
+  "attribute.name.fog_distance": "안개 거리",
   "attribute.name.food_exhaustion_multiplier": "배고픔 소진 배수",
   "attribute.name.generic.environmental_damage_resistance": "환경 피해 저항",
+  "attribute.name.generic.fog_distance": "안개 거리",
   "attribute.name.generic.projectile_knockback_resistance": "발사체 밀치기 저항",
+  "attribute.name.hearing_range": "소리 청취 범위",
+  "attribute.name.item_pickup_range": "아이템 획득 범위",
+  "attribute.name.player.beacon_effect_range": "신호기 효과 범위",
   "attribute.name.player.food_exhaustion_multiplier": "배고픔 소진 배수",
+  "attribute.name.player.hearing_range": "소리 청취 범위",
+  "attribute.name.player.item_pickup_range": "아이템 획득 범위",
   "attribute.name.projectile_knockback_resistance": "발사체 밀치기 저항",
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
   "consumable.clearAllStatusEffects": "모든 상태 효과 제거",
@@ -80,5 +88,9 @@
   "subtitles.entity.ender_dragon.spawn_meteor": "엔드 운석이 나타남",
   "subtitles.item.arrow.tipped": "화살에 물약을 묻힘",
   "subtitles.item.recovery_compass.teleport": "만회 나침반이 작동함",
-  "tool.when_breaking": "알맞은 블록을 부술 때:"
+  "tool.when_breaking": "알맞은 블록을 부술 때:",
+  "trim_material.minecraft.emerald.description.0": "%s%% 주민 거래 가격",
+  "trim_material.minecraft.gold.description.0": "+%s%% 추가 피글린 거래 확률",
+  "trim_material.minecraft.iron.description.0": "+%s%% 철 골렘 수리 보너스",
+  "trim_material.minecraft.lapis.description.0": "+%s%% 획득 경험치"
 }

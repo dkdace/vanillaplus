@@ -1,0 +1,13 @@
+{
+  "material": "minecraft:iron",
+  "effects": {
+    "vanillaplus:iron_golem_heal_multiplier": {
+      "type": "minecraft:add",
+      "value": {
+        "type": "vanillaplus:preset",
+        "value": "vanillaplus:trim_material/iron",
+        "name": "amount"
+      }
+    }
+  }
+}

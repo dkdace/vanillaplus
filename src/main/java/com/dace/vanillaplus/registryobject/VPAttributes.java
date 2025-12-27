@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,15 +34,41 @@ public final class VPAttributes {
             new RangedAttribute("attribute.name.food_exhaustion_multiplier", 1, 0, 1024)
                     .setSyncable(true)
                     .setSentiment(Attribute.Sentiment.NEGATIVE));
+    public static final RegistryObject<Attribute> HEARING_RANGE = create("hearing_range",
+            new RangedAttribute("attribute.name.hearing_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> ITEM_PICKUP_RANGE = create("item_pickup_range",
+            new RangedAttribute("attribute.name.item_pickup_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> BEACON_EFFECT_RANGE = create("beacon_effect_range",
+            new RangedAttribute("attribute.name.beacon_effect_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> FOG_DISTANCE = create("fog_distance",
+            new RangedAttribute("attribute.name.fog_distance", 1, 0, 10)
+                    .setSyncable(true));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
+            event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, HEARING_RANGE.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, ITEM_PICKUP_RANGE.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, BEACON_EFFECT_RANGE.getHolder().orElseThrow());
+    }
+
+    @SubscribeEvent
+    private static void onViewportRenderFog(@NonNull ViewportEvent.RenderFog event) {
+        if (!(event.getCamera().getEntity() instanceof LivingEntity livingEntity))
+            return;
+
+        float fogDistance = (float) livingEntity.getAttributeValue(VPAttributes.FOG_DISTANCE.getHolder().orElseThrow());
+        event.getData().environmentalStart *= fogDistance;
+        event.getData().environmentalEnd *= fogDistance;
     }
 
     @NonNull

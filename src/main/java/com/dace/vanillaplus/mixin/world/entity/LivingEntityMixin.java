@@ -140,7 +140,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return value;
     }
 
-
     @ModifyExpressionValue(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D",
                     ordinal = 0))
