@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
- * 클라이언트 이벤트를 관리하는 클래스.
+ * 클라이언트의 {@link Mod.EventBusSubscriber.Bus#MOD} 이벤트를 관리하는 클래스.
  */
 @UtilityClass
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public final class ClientManager {
+public final class ClientModEventManager {
     @SubscribeEvent
     private static void onFMLClientSetup(@NonNull FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(Blocks.WATER_CAULDRON, ChunkSectionLayer.TRANSLUCENT);

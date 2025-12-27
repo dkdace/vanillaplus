@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,16 +58,6 @@ public final class VPAttributes {
         event.add(EntityType.PLAYER, HEARING_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, ITEM_PICKUP_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, BEACON_EFFECT_RANGE.getHolder().orElseThrow());
-    }
-
-    @SubscribeEvent
-    private static void onViewportRenderFog(@NonNull ViewportEvent.RenderFog event) {
-        if (!(event.getCamera().getEntity() instanceof LivingEntity livingEntity))
-            return;
-
-        float fogDistance = (float) livingEntity.getAttributeValue(VPAttributes.FOG_DISTANCE.getHolder().orElseThrow());
-        event.getData().environmentalStart *= fogDistance;
-        event.getData().environmentalEnd *= fogDistance;
     }
 
     @NonNull

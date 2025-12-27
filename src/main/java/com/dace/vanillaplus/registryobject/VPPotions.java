@@ -1,28 +1,18 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 모드에서 사용하는 물약을 관리하는 클래스.
  */
 @UtilityClass
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class VPPotions {
     private static final String NAME_ELIXIR_OF_THE_SUN = "elixir_of_the_sun";
     public static final RegistryObject<Potion> ELIXIR_OF_THE_SUN = create(NAME_ELIXIR_OF_THE_SUN, Type.NORMAL,
@@ -55,36 +45,6 @@ public final class VPPotions {
     @NonNull
     private static RegistryObject<Potion> create(@NonNull String name, @NonNull Type type, @NonNull MobEffectInstance @NonNull ... mobEffectInstances) {
         return VPRegistry.POTION.register(type.prefix + name, () -> new Potion(name, mobEffectInstances));
-    }
-
-    @SubscribeEvent
-    private static void onRegisterColorHandlersBlock(@NonNull RegisterColorHandlersEvent.Block event) {
-        event.register((blockState, level, blockPos, index) ->
-                level != null && blockPos != null && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
-                        ? getMixedColor(BiomeColors.getAverageWaterColor(level, blockPos), layeredCauldronBlockEntity.getColor())
-                        : -1, Blocks.WATER_CAULDRON);
-    }
-
-    /**
-     * 투명도를 기준으로 지정한 두 색상을 혼합한 색상을 반환한다.
-     *
-     * @param baseColor  기반 색상
-     * @param addedColor 투명도가 포함된 추가 색상
-     * @return 최종 색상
-     */
-    public static int getMixedColor(int baseColor, int addedColor) {
-        float alpha = ARGB.alphaFloat(addedColor);
-
-        float red = ARGB.redFloat(baseColor);
-        red += (ARGB.redFloat(addedColor) - red) * alpha;
-
-        float green = ARGB.greenFloat(baseColor);
-        green += (ARGB.greenFloat(addedColor) - green) * alpha;
-
-        float blue = ARGB.blueFloat(baseColor);
-        blue += (ARGB.blueFloat(addedColor) - blue) * alpha;
-
-        return ARGB.colorFromFloat(1, red, green, blue);
     }
 
     @AllArgsConstructor
