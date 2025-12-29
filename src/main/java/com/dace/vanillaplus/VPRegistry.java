@@ -88,9 +88,9 @@ public final class VPRegistry<T> {
     /** 습격자 효과 */
     public static final VPRegistry<RaiderEffect> RAIDER_EFFECT = new VPRegistry<>("raider_effect");
     /** 갑옷 장식 재료 효과 */
-    public static final VPRegistry<TrimMaterialEffect> TRIM_MATERIAL_EFFECT = new VPRegistry<>("trim_material_effect");
+    public static final VPRegistry<ArmorTrimEffect.TrimMaterialEffect> TRIM_MATERIAL_EFFECT = new VPRegistry<>("trim_material_effect");
     /** 갑옷 장식 형판 효과 */
-    public static final VPRegistry<TrimPatternEffect> TRIM_PATTERN_EFFECT = new VPRegistry<>("trim_pattern_effect");
+    public static final VPRegistry<ArmorTrimEffect.TrimPatternEffect> TRIM_PATTERN_EFFECT = new VPRegistry<>("trim_pattern_effect");
     /** 아이템 수정자 */
     public static final VPRegistry<ItemModifier> ITEM_MODIFIER = new VPRegistry<>("modifier/item");
     /** 블록 수정자 */

@@ -1,7 +1,5 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
-import com.dace.vanillaplus.data.TrimMaterialEffect;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
@@ -167,17 +165,7 @@ public abstract class ItemStackMixin implements VPItemStack {
             componentConsumer.accept(CommonComponents.EMPTY);
             componentConsumer.accept(trimMaterial.description());
 
-            trimMaterialHolder.unwrapKey().ifPresent(trimMaterialResourceKey -> {
-                LevelBasedValuePreset levelBasedValuePreset = LevelBasedValuePreset.fromResourceKey(trimMaterialResourceKey);
-                if (levelBasedValuePreset != null)
-                    VPTooltipProvider.applyComponent(componentConsumer, trimMaterial.description(), levelBasedValuePreset, 1);
-
-                TrimMaterialEffect trimMaterialEffect = TrimMaterialEffect.fromTrimMaterial(trimMaterialResourceKey);
-                if (trimMaterialEffect != null)
-                    trimMaterialEffect.getEnchantmentHolder().value().getEffects(EnchantmentEffectComponents.ATTRIBUTES)
-                            .forEach(enchantmentAttributeEffect ->
-                                    VPTooltipProvider.applyAttributeComponent(componentConsumer, enchantmentAttributeEffect, 1));
-            });
+            VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, trimMaterialHolder);
         });
     }
 
@@ -250,8 +238,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addExtraTooltips1(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player, TooltipFlag tooltipFlag,
                                    Consumer<Component> componentConsumer, CallbackInfo ci) {
         addTooltip(DataComponents.TOOL, tooltipDisplay, tool -> addToolTooltip(tool, componentConsumer));
-        addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, itemAttributeModifiers ->
-                addProjectileWeaponTooltip(componentConsumer));
+        addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, ignored -> addProjectileWeaponTooltip(componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))

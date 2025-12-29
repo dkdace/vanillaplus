@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/protection",
+            "value": "vanillaplus:protection",
             "name": "resistance"
           }
         },

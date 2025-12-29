@@ -22,7 +22,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/blast_protection",
+            "value": "vanillaplus:blast_protection",
             "name": "resistance"
           }
         },

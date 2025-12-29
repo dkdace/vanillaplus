@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/luck_of_the_sea",
+            "value": "vanillaplus:luck_of_the_sea",
             "name": "bonus"
           }
         }

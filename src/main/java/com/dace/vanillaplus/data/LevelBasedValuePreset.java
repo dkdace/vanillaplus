@@ -11,6 +11,7 @@ import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,14 +49,14 @@ public final class LevelBasedValuePreset {
     }
 
     /**
-     * 지정한 리소스 키에 해당하는 레벨 기반 값 프리셋을 반환한다.
+     * 지정한 마법 부여에 해당하는 레벨 기반 값 프리셋을 반환한다.
      *
-     * @param resourceKey 리소스 키
+     * @param enchantmentResourceKey 마법 부여 리소스 키
      * @return 레벨 기반 값 프리셋. 존재하지 않으면 {@code null} 반환
      */
     @Nullable
-    public static LevelBasedValuePreset fromResourceKey(@NonNull ResourceKey<?> resourceKey) {
-        return VPRegistry.LEVEL_BASED_VALUE_PRESET.getValue(resourceKey.registry().getPath() + "/" + resourceKey.location().getPath());
+    public static LevelBasedValuePreset fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
+        return VPRegistry.LEVEL_BASED_VALUE_PRESET.getValue(enchantmentResourceKey.location().getPath());
     }
 
     /**

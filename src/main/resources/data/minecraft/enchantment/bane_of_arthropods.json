@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/bane_of_arthropods",
+            "value": "vanillaplus:bane_of_arthropods",
             "name": "damage"
           }
         },
@@ -31,13 +31,13 @@
           "max_amplifier": 3.0,
           "max_duration": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/bane_of_arthropods",
+            "value": "vanillaplus:bane_of_arthropods",
             "name": "slowness_duration"
           },
           "min_amplifier": 3.0,
           "min_duration": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/bane_of_arthropods",
+            "value": "vanillaplus:bane_of_arthropods",
             "name": "slowness_duration"
           },
           "to_apply": "minecraft:slowness"

@@ -8,7 +8,7 @@
       "type": "minecraft:add",
       "value": {
         "type": "vanillaplus:preset",
-        "value": "vanillaplus:enchantment/quick_charge",
+        "value": "vanillaplus:quick_charge",
         "name": "time_reduction"
       }
     },

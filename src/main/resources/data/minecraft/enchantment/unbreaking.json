@@ -10,7 +10,7 @@
           "type": "minecraft:remove_binomial",
           "chance": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/unbreaking",
+            "value": "vanillaplus:unbreaking",
             "name": "chance"
           }
         }

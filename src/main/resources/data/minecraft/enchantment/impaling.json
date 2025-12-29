@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/impaling",
+            "value": "vanillaplus:impaling",
             "name": "damage"
           }
         },

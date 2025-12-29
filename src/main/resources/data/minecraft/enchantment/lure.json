@@ -10,7 +10,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/lure",
+            "value": "vanillaplus:lure",
             "name": "time_reduction"
           }
         }

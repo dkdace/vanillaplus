@@ -13,7 +13,7 @@
       "type": "minecraft:add",
       "value": {
         "type": "vanillaplus:preset",
-        "value": "vanillaplus:enchantment/riptide",
+        "value": "vanillaplus:riptide",
         "name": "power"
       }
     }
