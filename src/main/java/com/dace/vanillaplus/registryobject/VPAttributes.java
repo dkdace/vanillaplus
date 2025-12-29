@@ -45,6 +45,9 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> FOG_DISTANCE = create("fog_distance",
             new RangedAttribute("attribute.name.fog_distance", 1, 0, 10)
                     .setSyncable(true));
+    public static final RegistryObject<Attribute> SPRINTING_SPEED_MULTIPLIER = create("sprinting_speed_multiplier",
+            new RangedAttribute("attribute.name.sprinting_speed_multiplier", 0.3, 0, 1024)
+                    .setSyncable(true));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
@@ -52,6 +55,7 @@ public final class VPAttributes {
             event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
+            event.add(entityType, SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());

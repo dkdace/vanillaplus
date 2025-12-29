@@ -28,6 +28,9 @@ public final class VPEnchantmentEffectComponentTypes {
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> TRADING_COST_MULTIPLIER = create("trading_cost_multiplier",
             builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
                     .listOf()));
+    public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> FINAL_INCOMING_DAMAGE_MULTIPLIER = create("final_incoming_damage_multiplier",
+            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_DAMAGE)
+                    .listOf()));
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

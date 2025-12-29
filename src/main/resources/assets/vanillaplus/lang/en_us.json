@@ -6,6 +6,7 @@
   "attribute.name.generic.environmental_damage_resistance": "Environmental Damage Resistance",
   "attribute.name.generic.fog_distance": "Fog Distance",
   "attribute.name.generic.projectile_knockback_resistance": "Projectile Knockback Resistance",
+  "attribute.name.generic.sprinting_speed_multiplier": "Sprinting Speed Multiplier",
   "attribute.name.hearing_range": "Hearing Range",
   "attribute.name.item_pickup_range": "Item Pickup Range",
   "attribute.name.player.beacon_effect_range": "Beacon Effect Range",
@@ -13,6 +14,7 @@
   "attribute.name.player.hearing_range": "Hearing Range",
   "attribute.name.player.item_pickup_range": "Item Pickup Range",
   "attribute.name.projectile_knockback_resistance": "Projectile Knockback Resistance",
+  "attribute.name.sprinting_speed_multiplier": "Sprinting Speed Multiplier",
   "block.minecraft.bed.no_use": "You cannot sleep here",
   "consumable.clearAllStatusEffects": "Removes All Status Effects",
   "consumable.removeStatusEffect": "Removes %s",
@@ -93,5 +95,9 @@
   "trim_material.minecraft.emerald.description.0": "%s%% Villager Trading Cost",
   "trim_material.minecraft.gold.description.0": "+%s%% Extra Piglin Bartering Chance",
   "trim_material.minecraft.iron.description.0": "+%s%% Iron Golem Repair Bonus",
-  "trim_material.minecraft.lapis.description.0": "+%s%% Experience Gain"
+  "trim_material.minecraft.lapis.description.0": "+%s%% Experience Gain",
+  "trim_pattern.minecraft.dune.description.0": "+%s%% Speed on Sand",
+  "trim_pattern.minecraft.rib.description.0": "%s%% Damage from Undead Mobs",
+  "trim_pattern.minecraft.snout.description.0": "%s%% Damage from Piglins and Hoglins",
+  "trim_pattern.minecraft.tide.description.0": "+%s%% Speed when in contact with Water"
 }

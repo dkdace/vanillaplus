@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -9,6 +10,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -17,9 +19,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DeathProtection;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -31,6 +36,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
+    @Shadow
+    @Final
+    private static ResourceLocation SPRINTING_MODIFIER_ID;
+
     @Shadow
     protected Brain<?> brain;
     @Unique
@@ -82,11 +91,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             attributes.apply(dataModifier.getPackedAttributes());
     }
 
-    @Unique
-    private double getEnvironmentalDamageResistanceValue() {
-        return getAttributeValue(VPAttributes.ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
-    }
-
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
@@ -132,7 +136,22 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))
     private float modifyDamageAfterArmorAbsorb(float damage, @Local(argsOnly = true) DamageSource damageSource) {
-        return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - getEnvironmentalDamageResistanceValue()) : damage);
+        double damageResistance = getAttributeValue(VPAttributes.ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
+        return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - damageResistance) : damage);
+    }
+
+    @ModifyReturnValue(method = "getDamageAfterMagicAbsorb", at = @At(value = "RETURN", ordinal = 3))
+    private float modifyFinalDamage(float damage, @Local(argsOnly = true) DamageSource damageSource) {
+        if (!(level() instanceof ServerLevel serverLevel))
+            return damage;
+
+        MutableFloat value = new MutableFloat(1);
+
+        EnchantmentHelper.runIterationOnEquipment(getThis(), (enchantmentHolder, level, enchantedItemInUse) ->
+                VPEnchantment.cast(enchantmentHolder.value()).modifyFinalIncomingDamageMultiplier(serverLevel, level, enchantedItemInUse.itemStack(),
+                        getThis(), damageSource, value));
+
+        return damage * value.floatValue();
     }
 
     @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
@@ -145,5 +164,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
                     ordinal = 0))
     private double modifyWaterMovementEfficiencyValue(double value) {
         return isAutoSpinAttack() ? 0 : value;
+    }
+
+    @ModifyArg(method = "setSprinting", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
+    private AttributeModifier modifySprintingSpeed(AttributeModifier attributeModifier) {
+        double sprintingSpeed = getAttributeValue(VPAttributes.SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+        return new AttributeModifier(SPRINTING_MODIFIER_ID, sprintingSpeed, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 }

@@ -1,0 +1,24 @@
+{
+  "pattern": "minecraft:rib",
+  "effects": {
+    "vanillaplus:final_incoming_damage_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/rib",
+            "name": "damage_reduction"
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "attacker",
+          "predicate": {
+            "type": "#minecraft:undead"
+          }
+        }
+      }
+    ]
+  }
+}

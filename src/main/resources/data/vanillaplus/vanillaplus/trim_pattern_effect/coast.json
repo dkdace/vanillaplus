@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:coast",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.25,
+        "attribute": "forge:swim_speed",
+        "id": "vanillaplus:trim_pattern_effect.coast",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

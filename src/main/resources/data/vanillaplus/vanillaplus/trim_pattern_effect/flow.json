@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:flow",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.07,
+        "attribute": "vanillaplus:sprinting_speed_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.flow",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

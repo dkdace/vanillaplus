@@ -5,6 +5,7 @@ import lombok.NonNull;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -42,4 +43,10 @@ public interface VPEnchantment extends VPMixin<Enchantment> {
      */
     void modifyTradingCostMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
                                      @NonNull MutableFloat multiplier);
+
+    /**
+     * @see Enchantment#modifyDamageProtection(ServerLevel, int, ItemStack, Entity, DamageSource, MutableFloat)
+     */
+    void modifyFinalIncomingDamageMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack,
+                                             @NonNull Entity entity, @NonNull DamageSource damageSource, @NonNull MutableFloat multiplier);
 }
