@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -30,7 +31,6 @@ import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffe
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -156,17 +156,14 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
-    private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Player player,
+    private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Item.TooltipContext tooltipContext,
                                         @NonNull Consumer<Component> componentConsumer) {
-        providesTrimMaterial.unwrap(player.registryAccess()).ifPresent(trimMaterialHolder -> {
-            TrimMaterial trimMaterial = trimMaterialHolder.value();
-
-            componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));
-            componentConsumer.accept(CommonComponents.EMPTY);
-            componentConsumer.accept(trimMaterial.description());
-
-            VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, trimMaterialHolder);
-        });
+        HolderLookup.Provider registries = tooltipContext.registries();
+        if (registries != null)
+            providesTrimMaterial.unwrap(registries).ifPresent(trimMaterialHolder -> {
+                componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));
+                VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, trimMaterialHolder);
+            });
     }
 
     @Unique
@@ -227,10 +224,8 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
                 addConsumableTooltip(consumable, tooltipContext, componentConsumer));
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
-
-        if (player != null)
-            addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
-                    addTrimMaterialTooltip(providesTrimMaterial, player, componentConsumer));
+        addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
+                addTrimMaterialTooltip(providesTrimMaterial, tooltipContext, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE",
