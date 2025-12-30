@@ -25,7 +25,7 @@ public abstract class IronGolemMixin extends MobMixin<IronGolem, EntityModifier.
         MutableFloat value = new MutableFloat(1);
 
         EnchantmentHelper.runIterationOnEquipment(player, (enchantmentHolder, level, enchantedItemInUse) ->
-                VPEnchantment.cast(enchantmentHolder.value()).modifyIronGolemHealMultiplier(level, enchantedItemInUse.itemStack(), player, value));
+                VPEnchantment.cast(enchantmentHolder.value()).modifyIronGolemHealMultiplier(level, player, value));
 
         return amount * value.floatValue();
     }

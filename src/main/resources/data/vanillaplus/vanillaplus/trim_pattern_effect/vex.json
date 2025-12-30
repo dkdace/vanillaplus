@@ -1,0 +1,35 @@
+{
+  "pattern": "minecraft:vex",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": -0.15,
+        "attribute": "minecraft:fall_damage_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.vex",
+        "operation": "add_value"
+      }
+    ],
+    "vanillaplus:final_incoming_damage_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/vex",
+            "name": "damage_reduction"
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "attacker",
+          "predicate": {
+            "type": [
+              "minecraft:vex",
+              "minecraft:evoker"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
@@ -48,6 +49,16 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> SPRINTING_SPEED_MULTIPLIER = create("sprinting_speed_multiplier",
             new RangedAttribute("attribute.name.sprinting_speed_multiplier", 0.3, 0, 1024)
                     .setSyncable(true));
+    public static final RegistryObject<Attribute> HEAL_MULTIPLIER = create("heal_multiplier",
+            new RangedAttribute("attribute.name.heal_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> VIBRATION_TRANSMIT_RANGE_MULTIPLIER = create("vibration_transmit_range_multiplier",
+            new RangedAttribute("attribute.name.vibration_transmit_range_multiplier", 1, 0, 4)
+                    .setSyncable(true)
+                    .setSentiment(Attribute.Sentiment.NEGATIVE));
+    public static final RegistryObject<Attribute> ELYTRA_FLYING_SPEED_MULTIPLIER = create("elytra_flying_speed_multiplier",
+            new RangedAttribute("attribute.name.elytra_flying_speed_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
@@ -56,12 +67,21 @@ public final class VPAttributes {
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
             event.add(entityType, SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, HEAL_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, HEARING_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, ITEM_PICKUP_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, BEACON_EFFECT_RANGE.getHolder().orElseThrow());
+    }
+
+    @SubscribeEvent
+    private static void onLivingHeal(@NonNull LivingHealEvent event) {
+        double healMultiplier = event.getEntity().getAttributeValue(VPAttributes.HEAL_MULTIPLIER.getHolder().orElseThrow());
+        event.setAmount((float) (event.getAmount() * healMultiplier));
     }
 
     @NonNull

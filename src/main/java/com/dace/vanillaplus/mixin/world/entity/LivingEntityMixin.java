@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
@@ -148,10 +149,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         MutableFloat value = new MutableFloat(1);
 
         EnchantmentHelper.runIterationOnEquipment(getThis(), (enchantmentHolder, level, enchantedItemInUse) ->
-                VPEnchantment.cast(enchantmentHolder.value()).modifyFinalIncomingDamageMultiplier(serverLevel, level, enchantedItemInUse.itemStack(),
-                        getThis(), damageSource, value));
+                VPEnchantment.cast(enchantmentHolder.value()).modifyFinalIncomingDamageMultiplier(serverLevel, level, getThis(), damageSource, value));
 
-        return damage * value.floatValue();
+        return damage * Math.max(value.floatValue(), 0);
     }
 
     @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
@@ -171,5 +171,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private AttributeModifier modifySprintingSpeed(AttributeModifier attributeModifier) {
         double sprintingSpeed = getAttributeValue(VPAttributes.SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
         return new AttributeModifier(SPRINTING_MODIFIER_ID, sprintingSpeed, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    }
+
+    @ModifyArg(method = "travelFallFlying", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"),
+            index = 1)
+    private Vec3 modifyFallFlyingSpeed(Vec3 speed) {
+        return speed.scale(getAttributeValue(VPAttributes.ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow()));
     }
 }

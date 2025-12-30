@@ -1,12 +1,17 @@
 {
   "attribute.name.beacon_effect_range": "신호기 효과 범위",
+  "attribute.name.elytra_flying_speed_multiplier": "겉날개 비행 속도 배수",
   "attribute.name.environmental_damage_resistance": "환경 피해 저항",
   "attribute.name.fog_distance": "안개 거리",
   "attribute.name.food_exhaustion_multiplier": "배고픔 소진 배수",
+  "attribute.name.generic.elytra_flying_speed_multiplier": "겉날개 비행 속도 배수",
   "attribute.name.generic.environmental_damage_resistance": "환경 피해 저항",
   "attribute.name.generic.fog_distance": "안개 거리",
+  "attribute.name.generic.heal_multiplier": "생명력 회복 배수",
   "attribute.name.generic.projectile_knockback_resistance": "발사체 밀치기 저항",
   "attribute.name.generic.sprinting_speed_multiplier": "달리기 속도 배수",
+  "attribute.name.generic.vibration_transmit_range_multiplier": "진동 전달 범위 배수",
+  "attribute.name.heal_multiplier": "생명력 회복 배수",
   "attribute.name.hearing_range": "소리 청취 범위",
   "attribute.name.item_pickup_range": "아이템 획득 범위",
   "attribute.name.player.beacon_effect_range": "신호기 효과 범위",
@@ -15,6 +20,7 @@
   "attribute.name.player.item_pickup_range": "아이템 획득 범위",
   "attribute.name.projectile_knockback_resistance": "발사체 밀치기 저항",
   "attribute.name.sprinting_speed_multiplier": "달리기 속도 배수",
+  "attribute.name.vibration_transmit_range_multiplier": "진동 전달 범위 배수",
   "block.minecraft.bed.no_use": "여기서 잘 수 없습니다",
   "consumable.clearAllStatusEffects": "모든 상태 효과 제거",
   "consumable.removeStatusEffect": "%s 제거",
@@ -97,7 +103,11 @@
   "trim_material.minecraft.iron.description.0": "+%s%% 철 골렘 수리 보너스",
   "trim_material.minecraft.lapis.description.0": "+%s%% 획득 경험치",
   "trim_pattern.minecraft.dune.description.0": "+%s%% 모래에서의 속도",
+  "trim_pattern.minecraft.eye.description.0": "%s%% 엔더맨에 의한 피해",
+  "trim_pattern.minecraft.eye.description.1": "%s%% 엔더 진주 착지 피해",
   "trim_pattern.minecraft.rib.description.0": "%s%% 언데드 몹에 의한 피해",
+  "trim_pattern.minecraft.silence.description.0": "%s%% 몹 감지 범위",
   "trim_pattern.minecraft.snout.description.0": "%s%% 피글린 및 호글린에 의한 피해",
-  "trim_pattern.minecraft.tide.description.0": "+%s%% 물에 닿았을 때 속도"
+  "trim_pattern.minecraft.tide.description.0": "+%s%% 물에 닿았을 때 속도",
+  "trim_pattern.minecraft.vex.description.0": "%s%% 벡스 및 소환사에 의한 피해"
 }

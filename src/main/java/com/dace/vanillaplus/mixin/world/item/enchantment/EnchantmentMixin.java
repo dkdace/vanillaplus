@@ -13,12 +13,16 @@ import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin implements VPEnchantment {
@@ -26,6 +30,10 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     @UnknownNullability
     public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity entity, DamageSource damageSource) {
         return null;
+    }
+
+    @Shadow
+    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext lootContext, Consumer<T> onApply) {
     }
 
     @Shadow
@@ -48,8 +56,7 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     }
 
     @Override
-    public void modifyIronGolemHealMultiplier(int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
-                                              @NonNull MutableFloat healMultiplier) {
+    public void modifyIronGolemHealMultiplier(int enchantmentLevel, @NonNull Entity entity, @NonNull MutableFloat healMultiplier) {
         modifyUnfilteredValue(VPEnchantmentEffectComponentTypes.IRON_GOLEM_HEAL_MULTIPLIER.get(), entity.getRandom(), enchantmentLevel,
                 healMultiplier);
     }
@@ -68,12 +75,26 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     }
 
     @Override
-    public void modifyFinalIncomingDamageMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack,
-                                                    @NonNull Entity entity, @NonNull DamageSource damageSource, @NonNull MutableFloat multiplier) {
+    public void modifyFinalIncomingDamageMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull Entity entity,
+                                                    @NonNull DamageSource damageSource, @NonNull MutableFloat multiplier) {
         LootContext lootcontext = damageContext(serverLevel, enchantmentLevel, entity, damageSource);
 
         for (ConditionalEffect<EnchantmentValueEffect> conditionalEffect : getEffects(VPEnchantmentEffectComponentTypes.FINAL_INCOMING_DAMAGE_MULTIPLIER.get()))
             if (conditionalEffect.matches(lootcontext))
                 multiplier.setValue(conditionalEffect.effect().process(enchantmentLevel, entity.getRandom(), multiplier.floatValue()));
+    }
+
+    @Override
+    public void modifyMobVisibilityMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull Entity entity,
+                                              @NonNull Entity targetEntity, @NonNull MutableFloat multiplier) {
+        LootContext lootContext = new LootContext.Builder(new LootParams.Builder(serverLevel)
+                .withParameter(LootContextParams.THIS_ENTITY, entity)
+                .withParameter(LootContextParams.TARGET_ENTITY, targetEntity)
+                .withParameter(LootContextParams.ENCHANTMENT_LEVEL, enchantmentLevel)
+                .withParameter(LootContextParams.ORIGIN, entity.position())
+                .create(VPEnchantmentEffectComponentTypes.CONTEXT_KEY_SET_ENCHANTED_ENTITY_TARGET)).create(Optional.empty());
+
+        applyEffects(getEffects(VPEnchantmentEffectComponentTypes.MOB_VISIBILITY_MULTIPLIER.get()), lootContext, effect ->
+                multiplier.setValue(effect.process(enchantmentLevel, entity.getRandom(), multiplier.floatValue())));
     }
 }

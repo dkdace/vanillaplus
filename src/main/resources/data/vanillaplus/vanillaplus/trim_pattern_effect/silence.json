@@ -1,0 +1,31 @@
+{
+  "pattern": "minecraft:silence",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": -0.15,
+        "attribute": "vanillaplus:vibration_diffusion_range_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.silence",
+        "operation": "add_multiplied_base"
+      },
+      {
+        "amount": 2,
+        "attribute": "minecraft:max_health",
+        "id": "vanillaplus:trim_pattern_effect.silence",
+        "operation": "add_value"
+      }
+    ],
+    "vanillaplus:mob_visibility_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/silence",
+            "name": "visibility"
+          }
+        }
+      }
+    ]
+  }
+}

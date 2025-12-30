@@ -1,0 +1,14 @@
+{
+  "values": {
+    "damage_reduction_enderman": {
+      "description_index": 0,
+      "description_value_multiplier": 100,
+      "value": -0.15
+    },
+    "damage_reduction_ender_pearl": {
+      "description_index": 1,
+      "description_value_multiplier": 100,
+      "value": -0.3
+    }
+  }
+}
