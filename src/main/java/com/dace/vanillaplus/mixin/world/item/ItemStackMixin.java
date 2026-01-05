@@ -18,6 +18,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -187,6 +188,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Shadow
     public abstract boolean isEnchanted();
 
+    @Shadow
+    public abstract int getUseDuration(LivingEntity livingEntity);
+
     @Overwrite
     public Rarity getRarity() {
         return getThis().getOrDefault(DataComponents.RARITY, Rarity.COMMON);
@@ -244,5 +248,11 @@ public abstract class ItemStackMixin implements VPItemStack {
             componentConsumer.accept(Component.translatable(COMPONENT_REPAIR_LIMIT,
                     getMaxRepairLimit() - getRepairLimit(),
                     getMaxRepairLimit()));
+    }
+
+    @Redirect(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/component/Consumable;shouldEmitParticlesAndSounds(I)Z"))
+    private boolean redirectEatingEffectCheck(Consumable instance, int remainingDuration, @Local(argsOnly = true) LivingEntity livingEntity) {
+        int duration = getUseDuration(livingEntity);
+        return duration - remainingDuration > duration * 0.21875 && remainingDuration % 4 == 0;
     }
 }

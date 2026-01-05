@@ -62,6 +62,10 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> VEHICLE_SPEED_MULTIPLIER = create("vehicle_speed_multiplier",
             new RangedAttribute("attribute.name.vehicle_speed_multiplier", 1, 0, 1024)
                     .setSyncable(true));
+    public static final RegistryObject<Attribute> EATING_TIME = create("eating_time",
+            new RangedAttribute("attribute.name.eating_time", 1, 0, 1024)
+                    .setSyncable(true)
+                    .setSentiment(Attribute.Sentiment.NEGATIVE));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
@@ -74,6 +78,7 @@ public final class VPAttributes {
             event.add(entityType, VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, EATING_TIME.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());

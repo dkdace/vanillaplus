@@ -1,9 +1,11 @@
 {
   "attribute.name.beacon_effect_range": "Beacon Effect Range",
+  "attribute.name.eating_time": "Eating Time",
   "attribute.name.elytra_flying_speed_multiplier": "Elytra Flying Speed Multiplier",
   "attribute.name.environmental_damage_resistance": "Environmental Damage Resistance",
   "attribute.name.fog_distance": "Fog Distance",
   "attribute.name.food_exhaustion_multiplier": "Food Exhaustion Multiplier",
+  "attribute.name.generic.eating_time": "Eating Time",
   "attribute.name.generic.elytra_flying_speed_multiplier": "Elytra Flying Speed Multiplier",
   "attribute.name.generic.environmental_damage_resistance": "Environmental Damage Resistance",
   "attribute.name.generic.fog_distance": "Fog Distance",
