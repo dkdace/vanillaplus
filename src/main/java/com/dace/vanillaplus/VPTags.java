@@ -72,5 +72,6 @@ public final class VPTags {
     @UtilityClass
     public static final class DamageTypes {
         public static final TagKey<DamageType> ENVIRONMENTAL = create(Registries.DAMAGE_TYPE, "environmental");
+        public static final TagKey<DamageType> IS_ENDER_PEARL = create(Registries.DAMAGE_TYPE, "is_ender_pearl");
     }
 }

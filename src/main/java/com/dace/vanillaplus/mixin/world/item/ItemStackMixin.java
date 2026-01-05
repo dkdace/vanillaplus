@@ -4,18 +4,21 @@ import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
+import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -23,10 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.component.Consumable;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
@@ -69,6 +69,8 @@ public abstract class ItemStackMixin implements VPItemStack {
     private static final String COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = "item.projectileWeapon.when_shoot";
     @Unique
     private static final String COMPONENT_PROJECTILE_WEAPON_DAMAGE = "item.projectileWeapon.damage";
+    @Unique
+    private static final String COMPONENT_TRIM_MATERIAL = "item.trim_material";
     @Unique
     private static final String COMPONENT_REPAIR_LIMIT = "item.repairLimit";
 
@@ -155,6 +157,17 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
+    private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Item.TooltipContext tooltipContext,
+                                        @NonNull Consumer<Component> componentConsumer) {
+        HolderLookup.Provider registries = tooltipContext.registries();
+        if (registries != null)
+            providesTrimMaterial.unwrap(registries).ifPresent(trimMaterialHolder -> {
+                componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));
+                VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, trimMaterialHolder);
+            });
+    }
+
+    @Unique
     private <T> void addTooltip(@NonNull DataComponentType<T> dataComponentType, @NonNull TooltipDisplay tooltipDisplay,
                                 @NonNull Consumer<T> onAdd) {
         if (!tooltipDisplay.shows(dataComponentType))
@@ -174,6 +187,9 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Shadow
     public abstract boolean isEnchanted();
+
+    @Shadow
+    public abstract int getUseDuration(LivingEntity livingEntity);
 
     @Overwrite
     public Rarity getRarity() {
@@ -198,8 +214,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Redirect(method = "forEachModifier(Lnet/minecraft/world/entity/EquipmentSlotGroup;Lorg/apache/commons/lang3/function/TriConsumer;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;forEachModifier(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlotGroup;Ljava/util/function/BiConsumer;)V"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;forEachModifier(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlotGroup;Ljava/util/function/BiConsumer;)V"))
     private void removeEnchantmentAttributeDisplay(ItemStack itemStack, EquipmentSlotGroup equipmentSlotGroup,
                                                    BiConsumer<Holder<Attribute>, AttributeModifier> onApply) {
         // 미사용
@@ -213,6 +228,8 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
                 addConsumableTooltip(consumable, tooltipContext, componentConsumer));
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
+        addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
+                addTrimMaterialTooltip(providesTrimMaterial, tooltipContext, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE",
@@ -220,8 +237,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addExtraTooltips1(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player, TooltipFlag tooltipFlag,
                                    Consumer<Component> componentConsumer, CallbackInfo ci) {
         addTooltip(DataComponents.TOOL, tooltipDisplay, tool -> addToolTooltip(tool, componentConsumer));
-        addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, itemAttributeModifiers ->
-                addProjectileWeaponTooltip(componentConsumer));
+        addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, ignored -> addProjectileWeaponTooltip(componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
@@ -232,5 +248,11 @@ public abstract class ItemStackMixin implements VPItemStack {
             componentConsumer.accept(Component.translatable(COMPONENT_REPAIR_LIMIT,
                     getMaxRepairLimit() - getRepairLimit(),
                     getMaxRepairLimit()));
+    }
+
+    @Redirect(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/component/Consumable;shouldEmitParticlesAndSounds(I)Z"))
+    private boolean redirectEatingEffectCheck(Consumable instance, int remainingDuration, @Local(argsOnly = true) LivingEntity livingEntity) {
+        int duration = getUseDuration(livingEntity);
+        return duration - remainingDuration > duration * 0.21875 && remainingDuration % 4 == 0;
     }
 }

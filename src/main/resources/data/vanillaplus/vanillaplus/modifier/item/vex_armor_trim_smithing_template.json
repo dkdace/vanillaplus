@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "vanillaplus:provides_trim_pattern": "minecraft:vex"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:bolt",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.15,
+        "attribute": "minecraft:entity_interaction_range",
+        "id": "vanillaplus:trim_pattern_effect.bolt",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

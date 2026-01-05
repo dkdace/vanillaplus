@@ -1,0 +1,17 @@
+{
+  "material": "minecraft:emerald",
+  "effects": {
+    "vanillaplus:trading_cost_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_material/emerald",
+            "name": "cost"
+          }
+        }
+      }
+    ]
+  }
+}

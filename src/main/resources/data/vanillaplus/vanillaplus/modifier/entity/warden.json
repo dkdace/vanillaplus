@@ -1,0 +1,9 @@
+{
+  "type": "vanillaplus:living_entity",
+  "attributes": [
+    {
+      "id": "vanillaplus:fog_distance",
+      "base": 0
+    }
+  ]
+}

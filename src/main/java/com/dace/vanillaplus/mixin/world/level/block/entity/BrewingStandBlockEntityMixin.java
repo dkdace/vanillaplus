@@ -98,7 +98,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
                 duration = Math.max(duration, recipeHolder.value().getBrewingTime());
         }
 
-        ((BrewingStandBlockEntityMixin) (Object) brewingStandBlockEntity).totalBrewTime = duration;
+        VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).setTotalBrewTime(duration);
         return duration;
     }
 

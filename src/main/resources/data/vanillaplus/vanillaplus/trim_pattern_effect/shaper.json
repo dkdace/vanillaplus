@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:shaper",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.06,
+        "attribute": "minecraft:attack_speed",
+        "id": "vanillaplus:trim_pattern_effect.shaper",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

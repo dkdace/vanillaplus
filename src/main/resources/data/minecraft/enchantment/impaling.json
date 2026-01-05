@@ -18,22 +18,10 @@
           "condition": "minecraft:any_of",
           "terms": [
             {
-              "condition": "minecraft:all_of",
-              "terms": [
-                {
-                  "condition": "minecraft:weather_check",
-                  "raining": true
-                },
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "location": {
-                      "can_see_sky": true
-                    }
-                  }
-                }
-              ]
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "precipitation": "rain"
+              }
             },
             {
               "condition": "minecraft:entity_properties",

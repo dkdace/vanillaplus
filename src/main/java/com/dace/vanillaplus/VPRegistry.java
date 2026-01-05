@@ -26,6 +26,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -68,6 +70,12 @@ public final class VPRegistry<T> {
     public static final VPRegistry<Potion> POTION = new VPRegistry<>(BuiltInRegistries.POTION);
     /** 블록 엔티티 타입 */
     public static final VPRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = new VPRegistry<>(BuiltInRegistries.BLOCK_ENTITY_TYPE);
+    /** 마법 부여의 효과 데이터 요소 타입 */
+    public static final VPRegistry<DataComponentType<?>> ENCHANTMENT_EFFECT_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE);
+    /** 마법 부여의 위치 기반 효과 타입 */
+    public static final VPRegistry<MapCodec<? extends EnchantmentLocationBasedEffect>> ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE);
+    /** 마법 부여의 엔티티 효과 타입 */
+    public static final VPRegistry<MapCodec<? extends EnchantmentEntityEffect>> ENCHANTMENT_ENTITY_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE);
 
     /** 설정 */
     public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
@@ -79,10 +87,16 @@ public final class VPRegistry<T> {
     public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
     /** 마법 부여 확장 */
     public static final VPRegistry<EnchantmentExtension> ENCHANTMENT_EXTENSION = new VPRegistry<>("enchantment_extension");
+    /** 레벨 기반 값 프리셋 */
+    public static final VPRegistry<LevelBasedValuePreset> LEVEL_BASED_VALUE_PRESET = new VPRegistry<>("level_based_value_preset");
     /** 습격 웨이브 정보 */
     public static final VPRegistry<RaidWave> RAID_WAVE = new VPRegistry<>("raid_wave");
     /** 습격자 효과 */
     public static final VPRegistry<RaiderEffect> RAIDER_EFFECT = new VPRegistry<>("raider_effect");
+    /** 갑옷 장식 재료 효과 */
+    public static final VPRegistry<ArmorTrimEffect.TrimMaterialEffect> TRIM_MATERIAL_EFFECT = new VPRegistry<>("trim_material_effect");
+    /** 갑옷 장식 형판 효과 */
+    public static final VPRegistry<ArmorTrimEffect.TrimPatternEffect> TRIM_PATTERN_EFFECT = new VPRegistry<>("trim_pattern_effect");
     /** 아이템 수정자 */
     public static final VPRegistry<ItemModifier> ITEM_MODIFIER = new VPRegistry<>("modifier/item");
     /** 블록 수정자 */
@@ -106,6 +120,8 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
         ReflectionUtil.loadClass(VPPotions.class);
         ReflectionUtil.loadClass(VPBlockEntityTypes.class);
+        ReflectionUtil.loadClass(VPEnchantmentEffectComponentTypes.class);
+        ReflectionUtil.loadClass(VPEnchantmentEntityEffectTypes.class);
     }
 
     /** 레지스트리 리소스 키 */

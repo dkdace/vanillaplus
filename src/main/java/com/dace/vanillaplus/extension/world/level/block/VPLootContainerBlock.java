@@ -60,6 +60,6 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
             return;
 
         level.setBlockAndUpdate(blockPos, blockState.setValue(ALWAYS_OPEN, true));
-        getThis().popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.random));
+        getThis().popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.getRandom()));
     }
 }

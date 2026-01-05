@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:raiser",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": -0.12,
+        "attribute": "vanillaplus:food_exhaustion_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.raiser",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}
