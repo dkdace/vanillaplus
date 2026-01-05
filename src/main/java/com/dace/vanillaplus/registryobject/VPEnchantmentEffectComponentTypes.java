@@ -12,9 +12,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -40,6 +42,9 @@ public final class VPEnchantmentEffectComponentTypes {
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> XP_MULTIPLIER = create("xp_multiplier",
             builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
                     .listOf()));
+    public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> HEAL_PER_XP = create("heal_per_xp",
+            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
+                    .listOf()));
     public static final RegistryObject<DataComponentType<EnchantmentValueEffect>> IRON_GOLEM_HEAL_MULTIPLIER = create("iron_golem_heal_multiplier",
             builder -> builder.persistent(EnchantmentValueEffect.CODEC));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> BARTERING_ROLLS = create("bartering_rolls",
@@ -53,6 +58,9 @@ public final class VPEnchantmentEffectComponentTypes {
                     .listOf()));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> MOB_VISIBILITY_MULTIPLIER = create("mob_visibility_multiplier",
             builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, CONTEXT_KEY_SET_ENCHANTED_ENTITY_TARGET)
+                    .listOf()));
+    public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> POST_DAMAGE = create("post_damage",
+            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, LootContextParamSets.ENCHANTED_DAMAGE)
                     .listOf()));
 
     @NonNull
@@ -74,5 +82,14 @@ public final class VPEnchantmentEffectComponentTypes {
                         entity, targetEntity, value));
 
         event.modifyVisibility(value.floatValue());
+    }
+
+    @SubscribeEvent
+    private static void onLivingDamage(@NonNull LivingDamageEvent event) {
+        LivingEntity entity = event.getEntity();
+
+        EnchantmentHelper.runIterationOnEquipment(entity, (enchantmentHolder, level, enchantedItemInUse) ->
+                VPEnchantment.cast(enchantmentHolder.value()).runPostDamageEffects((ServerLevel) entity.level(), level, enchantedItemInUse, entity,
+                        event.getSource()));
     }
 }

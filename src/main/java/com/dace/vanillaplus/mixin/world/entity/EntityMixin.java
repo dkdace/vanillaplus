@@ -81,6 +81,10 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     @Nullable
     public abstract ItemEntity spawnAtLocation(ServerLevel serverLevel, ItemLike item);
 
+    @Shadow
+    @Nullable
+    public abstract LivingEntity getControllingPassenger();
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {

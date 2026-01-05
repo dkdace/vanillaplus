@@ -14,13 +14,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
 public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, EntityModifier.LivingEntityModifier> {
+    @Shadow
+    protected abstract int repairPlayerItems(ServerPlayer serverPlayer, int xp);
+
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)
@@ -70,5 +75,20 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             finalXp++;
 
         return finalXp;
+    }
+
+    @Redirect(method = "playerTouch", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ExperienceOrb;repairPlayerItems(Lnet/minecraft/server/level/ServerPlayer;I)I"))
+    private int healWithXPBeforeRepair(ExperienceOrb experienceOrb, ServerPlayer serverPlayer, int xp) {
+        MutableFloat value = new MutableFloat(0);
+
+        EnchantmentHelper.runIterationOnEquipment(serverPlayer, (enchantmentHolder, level, enchantedItemInUse) ->
+                VPEnchantment.cast(enchantmentHolder.value()).modifyHealPerXp(serverPlayer.level(), level, enchantedItemInUse.itemStack(),
+                        serverPlayer, value));
+
+        float amount = Math.min(xp * value.floatValue(), serverPlayer.getMaxHealth() - serverPlayer.getHealth());
+        serverPlayer.heal(amount);
+
+        return repairPlayerItems(serverPlayer, (int) (xp - amount * xp));
     }
 }

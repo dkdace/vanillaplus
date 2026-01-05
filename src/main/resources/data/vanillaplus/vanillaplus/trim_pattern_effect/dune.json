@@ -34,6 +34,10 @@
                   "condition": "minecraft:all_of",
                   "terms": [
                     {
+                      "condition": "minecraft:enchantment_active_check",
+                      "active": true
+                    },
+                    {
                       "condition": "minecraft:entity_properties",
                       "entity": "this",
                       "predicate": {
@@ -70,18 +74,27 @@
                   ]
                 },
                 {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "flags": {
-                      "is_flying": false
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:enchantment_active_check",
+                      "active": false
                     },
-                    "movement_affected_by": {
-                      "block": {
-                        "blocks": "#minecraft:sand"
+                    {
+                      "condition": "minecraft:entity_properties",
+                      "entity": "this",
+                      "predicate": {
+                        "flags": {
+                          "is_flying": false
+                        },
+                        "movement_affected_by": {
+                          "block": {
+                            "blocks": "#minecraft:sand"
+                          }
+                        }
                       }
                     }
-                  }
+                  ]
                 }
               ]
             }

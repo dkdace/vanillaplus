@@ -8,7 +8,7 @@
           "value": {
             "type": "vanillaplus:preset",
             "value": "vanillaplus:trim_pattern/eye",
-            "name": "damage_reduction_enderman"
+            "name": "damage_reduction"
           }
         },
         "requirements": {
@@ -18,14 +18,21 @@
             "type": "minecraft:enderman"
           }
         }
-      },
+      }
+    ],
+    "vanillaplus:post_damage": [
       {
         "effect": {
-          "type": "minecraft:add",
-          "value": {
+          "type": "vanillaplus:heal_entity",
+          "min_amount": {
             "type": "vanillaplus:preset",
             "value": "vanillaplus:trim_pattern/eye",
-            "name": "damage_reduction_ender_pearl"
+            "name": "heal"
+          },
+          "max_amount": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/eye",
+            "name": "heal"
           }
         },
         "requirements": {

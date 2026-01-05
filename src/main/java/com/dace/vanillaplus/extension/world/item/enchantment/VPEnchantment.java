@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
@@ -31,6 +32,19 @@ public interface VPEnchantment extends VPMixin<Enchantment> {
      */
     void modifyXpMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
                             @NonNull MutableFloat multiplier);
+
+    /**
+     * 획득 경험치당 회복량 수치를 적용한다.
+     *
+     * @param serverLevel      월드
+     * @param enchantmentLevel 마법 부여 레벨
+     * @param itemStack        대상 아이템
+     * @param entity           대상 엔티티
+     * @param amount           회복량
+     * @see VPEnchantmentEffectComponentTypes#HEAL_PER_XP
+     */
+    void modifyHealPerXp(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
+                         @NonNull MutableFloat amount);
 
     /**
      * 철 골렘 회복 배수 수치를 적용한다.
@@ -93,4 +107,17 @@ public interface VPEnchantment extends VPMixin<Enchantment> {
      */
     void modifyMobVisibilityMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull Entity entity, @NonNull Entity targetEntity,
                                        @NonNull MutableFloat multiplier);
+
+    /**
+     * 엔티티가 피해를 입었을 때 효과를 실행한다.
+     *
+     * @param serverLevel        월드
+     * @param enchantmentLevel   마법 부여 레벨
+     * @param enchantedItemInUse 대상 마법 부여 아이템
+     * @param entity             대상 엔티티
+     * @param damageSource       피해 근원
+     * @see VPEnchantmentEffectComponentTypes#POST_DAMAGE
+     */
+    void runPostDamageEffects(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull EnchantedItemInUse enchantedItemInUse,
+                              @NonNull Entity entity, @NonNull DamageSource damageSource);
 }

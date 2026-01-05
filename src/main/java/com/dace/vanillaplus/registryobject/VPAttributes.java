@@ -59,6 +59,9 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> ELYTRA_FLYING_SPEED_MULTIPLIER = create("elytra_flying_speed_multiplier",
             new RangedAttribute("attribute.name.elytra_flying_speed_multiplier", 1, 0, 1024)
                     .setSyncable(true));
+    public static final RegistryObject<Attribute> VEHICLE_SPEED_MULTIPLIER = create("vehicle_speed_multiplier",
+            new RangedAttribute("attribute.name.vehicle_speed_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
@@ -70,6 +73,7 @@ public final class VPAttributes {
             event.add(entityType, HEAL_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
@@ -80,8 +84,7 @@ public final class VPAttributes {
 
     @SubscribeEvent
     private static void onLivingHeal(@NonNull LivingHealEvent event) {
-        double healMultiplier = event.getEntity().getAttributeValue(VPAttributes.HEAL_MULTIPLIER.getHolder().orElseThrow());
-        event.setAmount((float) (event.getAmount() * healMultiplier));
+        event.setAmount((float) (event.getAmount() * event.getEntity().getAttributeValue(VPAttributes.HEAL_MULTIPLIER.getHolder().orElseThrow())));
     }
 
     @NonNull

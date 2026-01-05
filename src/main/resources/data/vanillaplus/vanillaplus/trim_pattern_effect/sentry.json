@@ -1,0 +1,24 @@
+{
+  "pattern": "minecraft:sentry",
+  "effects": {
+    "vanillaplus:final_incoming_damage_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/sentry",
+            "name": "damage_reduction"
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "attacker",
+          "predicate": {
+            "type": "#minecraft:illager"
+          }
+        }
+      }
+    ]
+  }
+}

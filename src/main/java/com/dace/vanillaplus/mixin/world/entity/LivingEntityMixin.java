@@ -92,6 +92,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             attributes.apply(dataModifier.getPackedAttributes());
     }
 
+    @Unique
+    private float getFinalSpeed(float speed) {
+        LivingEntity controller = getControllingPassenger();
+        return controller == null
+                ? speed
+                : (float) (speed * controller.getAttributeValue(VPAttributes.VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow()));
+    }
+
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
@@ -178,5 +186,29 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             index = 1)
     private Vec3 modifyFallFlyingSpeed(Vec3 speed) {
         return speed.scale(getAttributeValue(VPAttributes.ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow()));
+    }
+
+    @ModifyArg(method = "travelFlying(Lnet/minecraft/world/phys/Vec3;FFF)V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
+    private float modifyFinalFlyingSpeed(float original) {
+        return getFinalSpeed(original);
+    }
+
+    @ModifyExpressionValue(method = "getFrictionInfluencedSpeed", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;getSpeed()F"))
+    private float modifyFinalAirSpeed0(float original) {
+        return getFinalSpeed(original);
+    }
+
+    @ModifyExpressionValue(method = "getFrictionInfluencedSpeed", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;getFlyingSpeed()F"))
+    private float modifyFinalAirSpeed1(float original) {
+        return getFinalSpeed(original);
+    }
+
+    @ModifyArg(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
+    private float modifyFinalFluidSpeed(float original) {
+        return getFinalSpeed(original);
     }
 }

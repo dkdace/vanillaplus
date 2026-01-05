@@ -26,6 +26,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -70,6 +72,10 @@ public final class VPRegistry<T> {
     public static final VPRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = new VPRegistry<>(BuiltInRegistries.BLOCK_ENTITY_TYPE);
     /** 마법 부여의 효과 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> ENCHANTMENT_EFFECT_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE);
+    /** 마법 부여의 위치 기반 효과 타입 */
+    public static final VPRegistry<MapCodec<? extends EnchantmentLocationBasedEffect>> ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE);
+    /** 마법 부여의 엔티티 효과 타입 */
+    public static final VPRegistry<MapCodec<? extends EnchantmentEntityEffect>> ENCHANTMENT_ENTITY_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE);
 
     /** 설정 */
     public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
@@ -115,6 +121,7 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPPotions.class);
         ReflectionUtil.loadClass(VPBlockEntityTypes.class);
         ReflectionUtil.loadClass(VPEnchantmentEffectComponentTypes.class);
+        ReflectionUtil.loadClass(VPEnchantmentEntityEffectTypes.class);
     }
 
     /** 레지스트리 리소스 키 */

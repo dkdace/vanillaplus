@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "advancements.critereon.PlayerPredicateMixin",
     "core.CauldronInteractionMixin",
     "server.commands.EnchantCommandMixin",
     "server.level.ServerLevelMixin",
@@ -52,6 +53,7 @@
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.entity.raid.RaiderMixin",
     "world.entity.raid.RaidMixin",
+    "world.entity.vehicle.AbstractBoatMixin",
     "world.food.FoodDataMixin",
     "world.inventory.AnvilMenuMixin",
     "world.inventory.BrewingStandMenuMixin",

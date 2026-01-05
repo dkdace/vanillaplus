@@ -10,7 +10,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -51,8 +53,13 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     @Override
     public void modifyXpMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
                                    @NonNull MutableFloat multiplier) {
-        modifyEntityFilteredValue(VPEnchantmentEffectComponentTypes.XP_MULTIPLIER.get(), serverLevel, enchantmentLevel, itemStack, entity,
-                multiplier);
+        modifyEntityFilteredValue(VPEnchantmentEffectComponentTypes.XP_MULTIPLIER.get(), serverLevel, enchantmentLevel, itemStack, entity, multiplier);
+    }
+
+    @Override
+    public void modifyHealPerXp(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,
+                                @NonNull MutableFloat amount) {
+        modifyEntityFilteredValue(VPEnchantmentEffectComponentTypes.HEAL_PER_XP.get(), serverLevel, enchantmentLevel, itemStack, entity, amount);
     }
 
     @Override
@@ -77,10 +84,10 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     @Override
     public void modifyFinalIncomingDamageMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull Entity entity,
                                                     @NonNull DamageSource damageSource, @NonNull MutableFloat multiplier) {
-        LootContext lootcontext = damageContext(serverLevel, enchantmentLevel, entity, damageSource);
+        LootContext lootContext = damageContext(serverLevel, enchantmentLevel, entity, damageSource);
 
         for (ConditionalEffect<EnchantmentValueEffect> conditionalEffect : getEffects(VPEnchantmentEffectComponentTypes.FINAL_INCOMING_DAMAGE_MULTIPLIER.get()))
-            if (conditionalEffect.matches(lootcontext))
+            if (conditionalEffect.matches(lootContext))
                 multiplier.setValue(conditionalEffect.effect().process(enchantmentLevel, entity.getRandom(), multiplier.floatValue()));
     }
 
@@ -96,5 +103,15 @@ public abstract class EnchantmentMixin implements VPEnchantment {
 
         applyEffects(getEffects(VPEnchantmentEffectComponentTypes.MOB_VISIBILITY_MULTIPLIER.get()), lootContext, effect ->
                 multiplier.setValue(effect.process(enchantmentLevel, entity.getRandom(), multiplier.floatValue())));
+    }
+
+    @Override
+    public void runPostDamageEffects(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull EnchantedItemInUse enchantedItemInUse,
+                                     @NonNull Entity entity, @NonNull DamageSource damageSource) {
+        LootContext lootContext = damageContext(serverLevel, enchantmentLevel, entity, damageSource);
+
+        for (ConditionalEffect<EnchantmentEntityEffect> conditionalEffect : getEffects(VPEnchantmentEffectComponentTypes.POST_DAMAGE.get()))
+            if (conditionalEffect.matches(lootContext))
+                conditionalEffect.effect().apply(serverLevel, enchantmentLevel, enchantedItemInUse, entity, entity.position());
     }
 }
