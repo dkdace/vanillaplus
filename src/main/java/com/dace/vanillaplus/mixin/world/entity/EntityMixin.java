@@ -94,7 +94,7 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     @Unique
     private float getFinalFootstepVolume(float volume) {
         return getThis() instanceof LivingEntity livingEntity
-                ? (float) (volume * livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow()))
+                ? (float) (volume * livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow()))
                 : volume;
     }
 

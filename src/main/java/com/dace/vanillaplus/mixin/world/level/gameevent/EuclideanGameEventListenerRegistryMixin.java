@@ -28,7 +28,7 @@ public abstract class EuclideanGameEventListenerRegistryMixin implements VPMixin
 
             Entity entity = context.sourceEntity();
             if (entity instanceof LivingEntity livingEntity)
-                range *= livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow());
+                range *= livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow());
 
             double distance = BlockPos.containing(targetPos).distSqr(BlockPos.containing(pos));
             return distance > range * range ? null : targetPos;

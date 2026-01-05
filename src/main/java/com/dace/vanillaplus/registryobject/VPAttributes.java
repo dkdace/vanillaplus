@@ -52,8 +52,8 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> HEAL_MULTIPLIER = create("heal_multiplier",
             new RangedAttribute("attribute.name.heal_multiplier", 1, 0, 1024)
                     .setSyncable(true));
-    public static final RegistryObject<Attribute> VIBRATION_TRANSMIT_RANGE_MULTIPLIER = create("vibration_transmit_range_multiplier",
-            new RangedAttribute("attribute.name.vibration_transmit_range_multiplier", 1, 0, 4)
+    public static final RegistryObject<Attribute> VIBRATION_TRANSMIT_RANGE = create("vibration_transmit_range",
+            new RangedAttribute("attribute.name.vibration_transmit_range", 1, 0, 4)
                     .setSyncable(true)
                     .setSentiment(Attribute.Sentiment.NEGATIVE));
     public static final RegistryObject<Attribute> ELYTRA_FLYING_SPEED_MULTIPLIER = create("elytra_flying_speed_multiplier",
@@ -75,7 +75,7 @@ public final class VPAttributes {
             event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
             event.add(entityType, SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, HEAL_MULTIPLIER.getHolder().orElseThrow());
-            event.add(entityType, VIBRATION_TRANSMIT_RANGE_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow());
             event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, EATING_TIME.getHolder().orElseThrow());

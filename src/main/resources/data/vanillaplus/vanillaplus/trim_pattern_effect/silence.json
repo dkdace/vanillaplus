@@ -4,7 +4,7 @@
     "minecraft:attributes": [
       {
         "amount": -0.15,
-        "attribute": "vanillaplus:vibration_transmit_range_multiplier",
+        "attribute": "vanillaplus:vibration_transmit_range",
         "id": "vanillaplus:trim_pattern_effect.silence",
         "operation": "add_multiplied_base"
       }
