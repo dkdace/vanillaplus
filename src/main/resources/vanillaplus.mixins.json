@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "advancements.critereon.LocationPredicateMixin",
     "advancements.critereon.PlayerPredicateMixin",
     "core.CauldronInteractionMixin",
     "server.commands.EnchantCommandMixin",
