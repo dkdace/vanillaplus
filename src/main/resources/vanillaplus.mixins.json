@@ -64,6 +64,7 @@
     "world.item.BowItemMixin",
     "world.item.CreativeModeTabsMixin",
     "world.item.CrossbowItemMixin",
+    "world.item.FireChargeItemMixin",
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
     "world.item.ItemStackMixin",

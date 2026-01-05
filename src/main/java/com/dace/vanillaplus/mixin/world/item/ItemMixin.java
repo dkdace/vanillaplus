@@ -10,9 +10,13 @@ import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -59,6 +63,9 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
         map.map().put(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
+
+    @Shadow
+    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
 
     @Override
     @MustBeInvokedByOverriders
