@@ -11,14 +11,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 
@@ -31,8 +28,6 @@ import java.util.function.Consumer;
  */
 public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T> {
     String COMPONENT_EFFECT_DESCRIPTION = ".description.";
-    String COMPONENT_ATTRIBUTE_MODIFIER_PLUS = "attribute.modifier.plus.";
-    String COMPONENT_ATTRIBUTE_MODIFIER_TAKE = "attribute.modifier.take.";
 
     /**
      * 마법 부여의 레벨 기반 값에 대한 아이템 툴팁을 추가한다.
@@ -56,46 +51,6 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
     }
 
     /**
-     * 엔티티 속성 마법 부여 효과에 대한 아이템 툴팁을 추가한다.
-     *
-     * @param componentConsumer          {@link TooltipProvider}의 텍스트 요소 Consumer
-     * @param enchantmentAttributeEffect 엔티티 속성 마법 부여 효과
-     * @param level                      마법 부여 레벨
-     */
-    private static void applyAttributeEffectTooltip(@NonNull Consumer<Component> componentConsumer,
-                                                    @NonNull EnchantmentAttributeEffect enchantmentAttributeEffect, int level) {
-        double amount = enchantmentAttributeEffect.amount().calculate(level);
-        if (amount == 0)
-            return;
-
-        AttributeModifier.Operation operation = enchantmentAttributeEffect.operation();
-        Holder<Attribute> attributeHolder = enchantmentAttributeEffect.attribute();
-
-        if (operation == AttributeModifier.Operation.ADD_MULTIPLIED_BASE || operation == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-            amount *= 100;
-        else if (attributeHolder == Attributes.KNOCKBACK_RESISTANCE)
-            amount *= 10;
-
-        String key;
-        boolean style;
-        if (amount > 0) {
-            key = COMPONENT_ATTRIBUTE_MODIFIER_PLUS;
-            style = true;
-        } else {
-            key = COMPONENT_ATTRIBUTE_MODIFIER_TAKE;
-            style = false;
-            amount = -amount;
-        }
-
-        Attribute attribute = attributeHolder.value();
-        MutableComponent component = Component.translatable(key + operation.id(),
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(amount),
-                Component.translatable(attribute.getDescriptionId()));
-
-        componentConsumer.accept(CommonComponents.space().append(component).withStyle(attribute.getStyle(style)));
-    }
-
-    /**
      * 지정한 마법 부여의 효과에 대한 툴팁을 적용한다.
      *
      * @param componentConsumer      {@link TooltipProvider}의 텍스트 요소 Consumer
@@ -111,7 +66,9 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
             applyLevelBasedValueTooltip(componentConsumer, descriptionComponent, levelBasedValuePreset, level);
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
-                applyAttributeEffectTooltip(componentConsumer, enchantmentAttributeEffect, level));
+                ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
+                                componentConsumer.accept(CommonComponents.space().append(component)), null,
+                        enchantmentAttributeEffect.attribute(), enchantmentAttributeEffect.getModifier(level, EquipmentSlotGroup.ANY)));
     }
 
     /**

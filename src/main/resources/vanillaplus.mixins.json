@@ -70,6 +70,8 @@
     "world.item.SmithingTemplateItemMixin",
     "world.item.alchemy.PotionContentsMixin",
     "world.item.alchemy.PotionMixin",
+    "world.item.component.ItemAttributeModifiersMixin",
+    "world.item.component.ItemAttributeModifiersMixin$DefaultDisplayMixin",
     "world.item.component.OminousBottleAmplifierMixin",
     "world.item.crafting.RecipeManagerMixin",
     "world.item.crafting.RepairItemRecipeMixin",
