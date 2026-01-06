@@ -465,14 +465,8 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerListInfo) {
-                    return (entity, randomSource) -> {
-                        MerchantOffer offer = null;
-                        while (offer == null)
-                            offer = offerItems.get(randomSource.nextInt(offerItems.size())).getItemListing(offerListInfo)
-                                    .getOffer(entity, randomSource);
-
-                        return offer;
-                    };
+                    return (entity, randomSource) ->
+                            offerItems.get(randomSource.nextInt(offerItems.size())).getItemListing(offerListInfo).getOffer(entity, randomSource);
                 }
             }
 
