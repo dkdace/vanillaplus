@@ -1,0 +1,10 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "minecraft:consumable": {},
+    "minecraft:food": {
+      "nutrition": 5,
+      "saturation": 12
+    }
+  }
+}
