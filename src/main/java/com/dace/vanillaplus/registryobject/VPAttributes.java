@@ -46,8 +46,8 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> FOG_DISTANCE = create("fog_distance",
             new RangedAttribute("attribute.name.fog_distance", 1, 0, 10)
                     .setSyncable(true));
-    public static final RegistryObject<Attribute> SPRINTING_SPEED_MULTIPLIER = create("sprinting_speed_multiplier",
-            new RangedAttribute("attribute.name.sprinting_speed_multiplier", 0.3, 0, 1024)
+    public static final RegistryObject<Attribute> SPRINTING_SPEED = create("sprinting_speed",
+            new RangedAttribute("attribute.name.sprinting_speed", 0.3, 0, 1024)
                     .setSyncable(true));
     public static final RegistryObject<Attribute> HEAL_MULTIPLIER = create("heal_multiplier",
             new RangedAttribute("attribute.name.heal_multiplier", 1, 0, 1024)
@@ -73,7 +73,7 @@ public final class VPAttributes {
             event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
-            event.add(entityType, SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, SPRINTING_SPEED.getHolder().orElseThrow());
             event.add(entityType, HEAL_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow());
             event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());

@@ -56,7 +56,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static final String COMPONENT_ATTRIBUTE_MODIFIER = "attribute.modifier.equals.0";
     @Unique
-    private static final String COMPONENT_FOOD_WHEN_EAT = "food.whenEat";
+    private static final String COMPONENT_FOOD_WHEN_EATEN = "food.whenEaten";
     @Unique
     private static final String COMPONENT_FOOD_NUTRITION = "food.nutrition";
     @Unique
@@ -110,7 +110,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addFoodTooltip(@NonNull FoodProperties foodProperties, @NonNull Consumer<Component> componentConsumer) {
         componentConsumer.accept(Component.empty());
 
-        componentConsumer.accept(Component.translatable(COMPONENT_FOOD_WHEN_EAT).withStyle(ChatFormatting.DARK_PURPLE));
+        componentConsumer.accept(Component.translatable(COMPONENT_FOOD_WHEN_EATEN).withStyle(ChatFormatting.DARK_PURPLE));
         componentConsumer.accept(Component.translatable(COMPONENT_FOOD_NUTRITION,
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(foodProperties.nutrition())).withStyle(ChatFormatting.BLUE));
         componentConsumer.accept(Component.translatable(COMPONENT_FOOD_SATURATION,

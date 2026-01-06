@@ -177,7 +177,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @ModifyArg(method = "setSprinting", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
     private AttributeModifier modifySprintingSpeed(AttributeModifier attributeModifier) {
-        double sprintingSpeed = getAttributeValue(VPAttributes.SPRINTING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+        double sprintingSpeed = getAttributeValue(VPAttributes.SPRINTING_SPEED.getHolder().orElseThrow());
         return new AttributeModifier(SPRINTING_MODIFIER_ID, sprintingSpeed, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
