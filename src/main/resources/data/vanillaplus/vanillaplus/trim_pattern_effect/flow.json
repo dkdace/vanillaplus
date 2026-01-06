@@ -4,7 +4,7 @@
     "minecraft:attributes": [
       {
         "amount": 0.07,
-        "attribute": "vanillaplus:sprinting_speed_multiplier",
+        "attribute": "vanillaplus:sprinting_speed",
         "id": "vanillaplus:trim_pattern_effect.flow",
         "operation": "add_value"
       }
