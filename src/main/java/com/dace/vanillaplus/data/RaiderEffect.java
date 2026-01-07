@@ -2,6 +2,7 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
@@ -13,6 +14,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffect;
@@ -27,8 +29,9 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -295,10 +298,18 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
         public static final class UpgradePotionInfo extends EffectInfo {
             /** JSON 코덱 */
             private static final Codec<UpgradePotionInfo> CODEC = RecordCodecBuilder.create(instance ->
-                    createBaseCodec(instance).apply(instance, UpgradePotionInfo::new));
+                    createBaseCodec(instance)
+                            .and(Recipe.KEY_CODEC.listOf().fieldOf("recipes")
+                                    .forGetter(upgradePotionInfo -> upgradePotionInfo.recipeResourceKeys))
+                            .apply(instance, UpgradePotionInfo::new));
 
-            private UpgradePotionInfo(@NonNull LevelBasedValue.Clamped levelBasedChance) {
+            /** 물약 조합법 리소스 키 목록 */
+            @NonNull
+            private final List<ResourceKey<Recipe<?>>> recipeResourceKeys;
+
+            private UpgradePotionInfo(@NonNull LevelBasedValue.Clamped levelBasedChance, @NonNull List<ResourceKey<Recipe<?>>> recipeResourceKeys) {
                 super(levelBasedChance);
+                this.recipeResourceKeys = recipeResourceKeys;
             }
 
             /**
@@ -311,17 +322,17 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
             @NonNull
             public ItemStack upgradePotion(@NonNull Mob mob, @NonNull ItemStack itemStack) {
                 if (super.checkChance(mob)) {
-                    List<ItemStack> ingredients = new ArrayList<>();
-                    ingredients.add(new ItemStack(Items.GLOWSTONE_DUST));
-                    ingredients.add(new ItemStack(Items.REDSTONE));
+                    List<ResourceKey<Recipe<?>>> list = new ArrayList<>(recipeResourceKeys);
 
-                    PotionBrewing potionBrewing = mob.level().potionBrewing();
+                    while (!list.isEmpty()) {
+                        ResourceKey<Recipe<?>> recipeResourceKey = list.remove(mob.getRandom().nextInt(list.size()));
+                        RecipeHolder<?> recipeHolder = ((ServerLevel) mob.level()).recipeAccess().byKey(recipeResourceKey).orElse(null);
 
-                    while (!ingredients.isEmpty()) {
-                        ItemStack ingredient = ingredients.remove(mob.level().getRandom().nextInt(ingredients.size()));
-
-                        if (potionBrewing.hasMix(itemStack, ingredient))
-                            return potionBrewing.mix(ingredient, itemStack);
+                        if (recipeHolder != null && recipeHolder.value() instanceof VPRecipeTypes.Brewing.Mapped recipe) {
+                            ItemStack result = recipe.getResult(itemStack);
+                            if (result != null)
+                                return result;
+                        }
                     }
                 }
 

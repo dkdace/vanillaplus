@@ -268,26 +268,30 @@ public final class VPRecipeTypes {
                 if (!super.matches(input, level))
                     return false;
 
-                return getResult(input) != null;
+                return getResult(input.base) != null;
             }
 
             @Override
             @NonNull
             public ItemStack assemble(@NonNull Input input, @NonNull HolderLookup.Provider registries) {
-                Holder<Potion> inputPotion = getResult(input);
-                if (inputPotion == null)
-                    return ItemStack.EMPTY;
-
-                ItemStack itemStack = input.base;
-                itemStack.set(DataComponents.POTION_CONTENTS, new PotionContents(inputPotion));
-
-                return itemStack;
+                ItemStack itemStack = getResult(input.base);
+                return itemStack == null ? input.base : itemStack;
             }
 
             @Nullable
-            private Holder<Potion> getResult(@NonNull Input input) {
-                PotionContents potionContents = input.base.get(DataComponents.POTION_CONTENTS);
-                return potionContents == null ? null : potionContents.potion().map(resultPotionMap::get).orElse(null);
+            public ItemStack getResult(@NonNull ItemStack itemStack) {
+                PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+
+                return potionContents.potion().map(potionHolder -> {
+                    Holder<Potion> resultPotionHolder = resultPotionMap.get(potionHolder);
+                    if (resultPotionHolder == null)
+                        return null;
+
+                    ItemStack resultItemStack = itemStack.copy();
+                    resultItemStack.set(DataComponents.POTION_CONTENTS, new PotionContents(resultPotionHolder));
+
+                    return resultItemStack;
+                }).orElse(null);
             }
 
             @Override
