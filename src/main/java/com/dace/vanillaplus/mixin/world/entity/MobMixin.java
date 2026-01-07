@@ -46,7 +46,7 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     @Override
     protected void onDie(DamageSource damageSource, CallbackInfo ci) {
         targetSelector.getAvailableGoals().forEach(wrappedGoal -> {
-            if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal)
+            if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal && hurtByTargetGoal.canUse())
                 hurtByTargetGoal.start();
         });
     }
