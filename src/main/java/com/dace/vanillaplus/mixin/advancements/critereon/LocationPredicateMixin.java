@@ -64,10 +64,12 @@ public abstract class LocationPredicateMixin implements VPLocationPredicate {
         return locationPredicate;
     }
 
-    @Inject(method = "matches", at = @At(value = "RETURN", ordinal = 4), cancellable = true)
+    @Inject(method = "matches", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;isLoaded(Lnet/minecraft/core/BlockPos;)Z",
+            shift = At.Shift.AFTER), cancellable = true)
     private void checkExtraConditions(ServerLevel serverLevel, double x, double y, double z, CallbackInfoReturnable<Boolean> cir,
                                       @Local BlockPos blockPos) {
-        if (precipitation.map(target -> target != serverLevel.precipitationAt(blockPos)).orElse(false))
+        if (precipitation.map(target -> !serverLevel.isLoaded(blockPos) || target != serverLevel.precipitationAt(blockPos))
+                .orElse(false))
             cir.setReturnValue(false);
     }
 }

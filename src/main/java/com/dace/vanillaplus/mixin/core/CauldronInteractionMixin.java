@@ -129,8 +129,10 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
     @Inject(method = "lambda$bootStrap$5", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
     private static void addPotionOnInteract1(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand,
-                                             ItemStack itemStack, CallbackInfoReturnable<InteractionResult> cir, @Local PotionContents potionContents) {
-        if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
+                                             ItemStack itemStack, CallbackInfoReturnable<InteractionResult> cir) {
+        PotionContents potionContents = itemStack.get(DataComponents.POTION_CONTENTS);
+
+        if (potionContents != null && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
             layeredCauldronBlockEntity.addPotionContents(potionContents);
     }
 

@@ -96,7 +96,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
         return respawnPos;
     }
 
-    @Inject(method = "matches", at = @At(value = "RETURN", ordinal = 8), cancellable = true)
+    @Inject(method = "matches", at = @At(value = "INVOKE", target = "Ljava/util/Optional;isPresent()Z", ordinal = 1), cancellable = true)
     private void checkExtraConditions(Entity entity, ServerLevel serverLevel, Vec3 pos, CallbackInfoReturnable<Boolean> cir,
                                       @Local ServerPlayer serverPlayer) {
         if (distanceToRespawn.map(target -> {
