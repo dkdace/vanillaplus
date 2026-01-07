@@ -68,7 +68,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static final String COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = "item.projectileWeapon.when_shoot";
     @Unique
-    private static final String COMPONENT_PROJECTILE_WEAPON_DAMAGE = "item.projectileWeapon.damage";
+    private static final String COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE = "item.projectileWeapon.baseDamage";
+    @Unique
+    private static final String COMPONENT_PROJECTILE_WEAPON_SPEED = "item.projectileWeapon.speed";
     @Unique
     private static final String COMPONENT_TRIM_MATERIAL = "item.trim_material";
     @Unique
@@ -150,10 +152,13 @@ public abstract class ItemStackMixin implements VPItemStack {
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(Component.translatable(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT).withStyle(ChatFormatting.GRAY));
 
-        MutableComponent component = Component.translatable(COMPONENT_PROJECTILE_WEAPON_DAMAGE,
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower() * 2));
+        String baseDamage = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage());
+        String shootingPower = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower());
 
-        componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
+        componentConsumer.accept(CommonComponents.space().append(Component.translatable(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE, baseDamage))
+                .withStyle(ChatFormatting.DARK_GREEN));
+        componentConsumer.accept(CommonComponents.space().append(Component.translatable(COMPONENT_PROJECTILE_WEAPON_SPEED, shootingPower))
+                .withStyle(ChatFormatting.DARK_GREEN));
     }
 
     @Unique

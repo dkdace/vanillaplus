@@ -1,4 +1,5 @@
 {
   "type": "vanillaplus:projectile_weapon",
-  "shooting_power": 3.0
+  "base_damage": 2.5,
+  "shooting_power": 3
 }
