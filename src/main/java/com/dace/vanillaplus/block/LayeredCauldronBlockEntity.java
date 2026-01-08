@@ -43,8 +43,7 @@ import java.util.*;
  */
 public final class LayeredCauldronBlockEntity extends BlockEntity {
     /** 물약 내용물 */
-    @Nullable
-    private PotionContents potionContents;
+    private PotionContents potionContents = new PotionContents(Potions.WATER);
     /** 현재 색상 */
     @Getter
     private int color = 0;
@@ -118,7 +117,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
 
         color = valueInput.getIntOr("Color", 0);
         colorWeightSum = valueInput.getDoubleOr("ColorWeightSum", 0);
-        potionContents = valueInput.read("PotionContents", PotionContents.CODEC).orElse(null);
+        potionContents = valueInput.read("PotionContents", PotionContents.CODEC).orElse(new PotionContents(Potions.WATER));
     }
 
     @Override
@@ -127,7 +126,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
 
         valueOutput.putInt("Color", color);
         valueOutput.putDouble("ColorWeightSum", colorWeightSum);
-        valueOutput.storeNullable("PotionContents", PotionContents.CODEC, potionContents);
+        valueOutput.store("PotionContents", PotionContents.CODEC, potionContents);
     }
 
     @Override
@@ -159,6 +158,10 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
         if (potionContents == null)
             potionContents = new PotionContents(Potions.WATER);
 
+        int levelValue = getBlockState().getValue(LayeredCauldronBlock.LEVEL);
+        if (levelValue > 1 && colorWeightSum == 0)
+            colorWeightSum = levelValue - 1.0;
+
         addColor(getPotionColor(potionContents), 1);
         if (mixPotionContents(potionContents))
             setChanged();
@@ -173,11 +176,11 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     private boolean mixPotionContents(@NonNull PotionContents potionContents) {
         Optional<Holder<Potion>> potion = potionContents.potion();
         List<MobEffectInstance> customEffects = potionContents.customEffects();
+        int levelValue = getBlockState().getValue(LayeredCauldronBlock.LEVEL);
 
-        if (this.potionContents != null && (!this.potionContents.potion().equals(potion)
-                || !this.potionContents.customEffects().equals(customEffects))) {
+        if (levelValue > 1 && (!this.potionContents.potion().equals(potion) || !this.potionContents.customEffects().equals(customEffects))) {
             ArrayList<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-            float scale = 1F / getBlockState().getValue(LayeredCauldronBlock.LEVEL);
+            float scale = 1F / levelValue;
 
             this.potionContents.getAllEffects().forEach(mobEffectInstance ->
                     mobEffectInstances.add(mobEffectInstance.withScaledDuration(1 - scale)));
@@ -223,9 +226,6 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      */
     @NonNull
     public PotionContents getPotionContents() {
-        if (potionContents == null)
-            return new PotionContents(Potions.WATER);
-
         return new PotionContents(potionContents.potion(), color == getPotionColor(potionContents) ? Optional.empty() : Optional.of(color),
                 potionContents.customEffects(), Optional.empty());
     }
@@ -236,7 +236,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      * @return 순수한 물이면 {@code true} 반환
      */
     public boolean hasPureWater() {
-        return color == 0 && potionContents != null && potionContents.is(Potions.WATER);
+        return color == 0 && potionContents.is(Potions.WATER);
     }
 
     /**
@@ -247,7 +247,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      */
     @Nullable
     public Holder<MobEffect> getRandomMobEffect(@NonNull RandomSource randomSource) {
-        if (potionContents == null || !potionContents.hasEffects())
+        if (!potionContents.hasEffects())
             return null;
 
         ArrayList<MobEffectInstance> mobEffectInstances = new ArrayList<>();
@@ -263,6 +263,10 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      */
     public void addDyeColor(@NonNull DyeColor dyeColor) {
         int diffuseColor = dyeColor.getTextureDiffuseColor();
+
+        int levelValue = getBlockState().getValue(LayeredCauldronBlock.LEVEL);
+        if (colorWeightSum == 0)
+            colorWeightSum = levelValue;
 
         addColor(ARGB.opaque(diffuseColor), 3);
         setChanged();
