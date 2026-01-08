@@ -28,8 +28,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.UnknownNullability;
 import org.objectweb.asm.Opcodes;
@@ -104,6 +106,13 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    @Unique
+    private static boolean getWashFailCondition(boolean condition, @NonNull Level level, @NonNull BlockPos blockPos) {
+        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                ? condition || !layeredCauldronBlockEntity.hasPureWater()
+                : condition;
     }
 
     @ModifyExpressionValue(method = "lambda$bootStrap$1", at = @At(value = "INVOKE",
@@ -181,37 +190,29 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
                 || layeredCauldronBlockEntity.hasPureWater());
     }
 
-    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
-    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
-    @Expression("pLevel.isClientSide() == false")
+    @Definition(id = "pStack", local = @Local(type = ItemStack.class, argsOnly = true))
+    @Definition(id = "has", method = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z")
+    @Definition(id = "DYED_COLOR", field = "Lnet/minecraft/core/component/DataComponents;DYED_COLOR:Lnet/minecraft/core/component/DataComponentType;")
+    @Expression("pStack.has(DYED_COLOR) == false")
     @ModifyExpressionValue(method = "dyedItemIteration", at = @At("MIXINEXTRAS:EXPRESSION"))
     private static boolean modifyDyedItemWashCondition(boolean condition, @Local(argsOnly = true) Level level,
                                                        @Local(argsOnly = true) BlockPos blockPos) {
-        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
-                ? condition && layeredCauldronBlockEntity.hasPureWater()
-                : condition;
+        return getWashFailCondition(condition, level, blockPos);
     }
 
-    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
-    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
-    @Expression("pLevel.isClientSide() == false")
-    @ModifyExpressionValue(method = "bannerInteraction", at = @At("MIXINEXTRAS:EXPRESSION"))
+    @ModifyExpressionValue(method = "bannerInteraction", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z"))
     private static boolean modifyBannerWashCondition(boolean condition, @Local(argsOnly = true) Level level,
                                                      @Local(argsOnly = true) BlockPos blockPos) {
-        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
-                ? condition && layeredCauldronBlockEntity.hasPureWater()
-                : condition;
+        return getWashFailCondition(condition, level, blockPos);
     }
 
-    @Definition(id = "pLevel", local = @Local(type = Level.class, argsOnly = true))
-    @Definition(id = "isClientSide", method = "Lnet/minecraft/world/level/Level;isClientSide()Z")
-    @Expression("pLevel.isClientSide() == false")
+    @Definition(id = "block", local = @Local(type = Block.class))
+    @Definition(id = "ShulkerBoxBlock", type = ShulkerBoxBlock.class)
+    @Expression("block instanceof ShulkerBoxBlock == false")
     @ModifyExpressionValue(method = "shulkerBoxInteraction", at = @At("MIXINEXTRAS:EXPRESSION"))
     private static boolean modifyShulkerBoxWashCondition(boolean condition, @Local(argsOnly = true) Level level,
                                                          @Local(argsOnly = true) BlockPos blockPos) {
-        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
-                ? condition && layeredCauldronBlockEntity.hasPureWater()
-                : condition;
+        return getWashFailCondition(condition, level, blockPos);
     }
 
     @Inject(method = "bootStrap", at = @At(value = "FIELD",
