@@ -17,6 +17,7 @@ public final class VPSoundEvents {
     public static final RegistryObject<SoundEvent> ENDER_DRAGON_DROP_PEARL = create("entity.ender_dragon.drop_pearl");
     public static final RegistryObject<SoundEvent> ENDER_DRAGON_SPAWN_METEOR = create("entity.ender_dragon.spawn_meteor");
     public static final RegistryObject<SoundEvent> ENDER_DRAGON_FALL_METEOR = create("entity.ender_dragon.fall_meteor");
+    public static final RegistryObject<SoundEvent> ARROW_TIPPED = create("item.arrow.tipped");
 
     @NonNull
     private static RegistryObject<SoundEvent> create(@NonNull String name) {

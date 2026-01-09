@@ -1,0 +1,13 @@
+{
+  "pattern": "minecraft:wild",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.15,
+        "attribute": "vanillaplus:heal_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.wild",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

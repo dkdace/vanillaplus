@@ -208,7 +208,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Mob;onSyncedDataUpdated(Lnet/minecraft/network/syncher/EntityDataAccessor;)V"))
     private void onSynchedDataUpdated(EntityDataAccessor<?> entityDataAccessor, CallbackInfo ci) {
-        if (!METEOR_POS.equals(entityDataAccessor) || !this.level().isClientSide())
+        if (!METEOR_POS.equals(entityDataAccessor) || !level().isClientSide())
             return;
 
         BlockPos meteorPos = getMeteorPos();

@@ -31,6 +31,18 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
         return (VPLootContainerBlock<T, U>) object;
     }
 
+    @Override
+    default int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        if (state.getValue(LOOT) && !state.getValue(ALWAYS_OPEN)
+                && level.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
+            LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.cast(randomizableContainerBlockEntity).getLootTableReward();
+            if (lootTableReward != null)
+                return lootTableReward.getXpRange().sample(randomSource);
+        }
+
+        return 0;
+    }
+
     /**
      * 지정한 위치에 경험치를 생성한다.
      *
@@ -48,26 +60,6 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
             return;
 
         level.setBlockAndUpdate(blockPos, blockState.setValue(ALWAYS_OPEN, true));
-        getThis().popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.random));
-    }
-
-    /**
-     * 블록 채굴 시 드롭되는 경험치 양을 반환한다.
-     *
-     * @param blockState   블록 상태
-     * @param levelReader  월드
-     * @param randomSource 랜덤 소스
-     * @param blockPos     블록 위치
-     * @return 드롭되는 경험치 양
-     */
-    default int getXp(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull RandomSource randomSource, @NonNull BlockPos blockPos) {
-        if (blockState.getValue(LOOT) && !blockState.getValue(ALWAYS_OPEN)
-                && levelReader.getBlockEntity(blockPos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
-            LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.cast(randomizableContainerBlockEntity).getLootTableReward();
-            if (lootTableReward != null)
-                return lootTableReward.getXpRange().sample(randomSource);
-        }
-
-        return 0;
+        getThis().popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.getRandom()));
     }
 }

@@ -3,15 +3,24 @@ package com.dace.vanillaplus.mixin.world.item;
 import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItem;
+import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
 
@@ -55,6 +64,9 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         map.map().put(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
 
+    @Shadow
+    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
@@ -72,5 +84,10 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
         map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
         map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * GeneralConfig.get().getMaxRepairLimitRatio()));
+    }
+
+    @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
+    private int modifyEatingTime(int time, @Local(argsOnly = true) LivingEntity livingEntity) {
+        return (int) (time * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
     }
 }

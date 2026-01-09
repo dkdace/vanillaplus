@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
@@ -33,15 +34,62 @@ public final class VPAttributes {
             new RangedAttribute("attribute.name.food_exhaustion_multiplier", 1, 0, 1024)
                     .setSyncable(true)
                     .setSentiment(Attribute.Sentiment.NEGATIVE));
+    public static final RegistryObject<Attribute> HEARING_RANGE = create("hearing_range",
+            new RangedAttribute("attribute.name.hearing_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> ITEM_PICKUP_RANGE = create("item_pickup_range",
+            new RangedAttribute("attribute.name.item_pickup_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> BEACON_EFFECT_RANGE = create("beacon_effect_range",
+            new RangedAttribute("attribute.name.beacon_effect_range", 1, 1, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> FOG_DISTANCE = create("fog_distance",
+            new RangedAttribute("attribute.name.fog_distance", 1, 0, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> SPRINTING_SPEED = create("sprinting_speed",
+            new RangedAttribute("attribute.name.sprinting_speed", 0.3, 0, 1024)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> HEAL_MULTIPLIER = create("heal_multiplier",
+            new RangedAttribute("attribute.name.heal_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> VIBRATION_TRANSMIT_RANGE = create("vibration_transmit_range",
+            new RangedAttribute("attribute.name.vibration_transmit_range", 1, 0, 4)
+                    .setSyncable(true)
+                    .setSentiment(Attribute.Sentiment.NEGATIVE));
+    public static final RegistryObject<Attribute> ELYTRA_FLYING_SPEED_MULTIPLIER = create("elytra_flying_speed_multiplier",
+            new RangedAttribute("attribute.name.elytra_flying_speed_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> VEHICLE_SPEED_MULTIPLIER = create("vehicle_speed_multiplier",
+            new RangedAttribute("attribute.name.vehicle_speed_multiplier", 1, 0, 1024)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> EATING_TIME = create("eating_time",
+            new RangedAttribute("attribute.name.eating_time", 1, 0, 1024)
+                    .setSyncable(true)
+                    .setSentiment(Attribute.Sentiment.NEGATIVE));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             event.add(entityType, PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow());
             event.add(entityType, ENVIRONMENTAL_DAMAGE_RESISTANCE.getHolder().orElseThrow());
+            event.add(entityType, FOG_DISTANCE.getHolder().orElseThrow());
+            event.add(entityType, SPRINTING_SPEED.getHolder().orElseThrow());
+            event.add(entityType, HEAL_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow());
+            event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow());
+            event.add(entityType, EATING_TIME.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, HEARING_RANGE.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, ITEM_PICKUP_RANGE.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, BEACON_EFFECT_RANGE.getHolder().orElseThrow());
+    }
+
+    @SubscribeEvent
+    private static void onLivingHeal(@NonNull LivingHealEvent event) {
+        event.setAmount((float) (event.getAmount() * event.getEntity().getAttributeValue(VPAttributes.HEAL_MULTIPLIER.getHolder().orElseThrow())));
     }
 
     @NonNull

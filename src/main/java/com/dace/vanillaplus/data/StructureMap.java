@@ -71,7 +71,7 @@ public final class StructureMap {
         if (!(entity.level() instanceof ServerLevel serverLevel))
             return null;
 
-        BlockPos blockPos = serverLevel.findNearestMapStructure(structureTagKey, entity.blockPosition(), 100, true);
+        BlockPos blockPos = serverLevel.findNearestMapStructure(structureTagKey, entity.blockPosition(), 100, false);
         if (blockPos == null)
             return null;
 

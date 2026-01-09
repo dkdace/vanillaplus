@@ -5,6 +5,7 @@ import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import lombok.NonNull;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.extensions.IForgeBlock;
 
 /**
  * {@link Block}을 확장하는 인터페이스.
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.Block;
  * @param <U> {@link BlockModifier}를 상속받는 블록 수정자
  * @see BlockModifier
  */
-public interface VPBlock<T extends Block, U extends BlockModifier> extends VPMixin<T>, VPModifiableData<Block, U> {
+public interface VPBlock<T extends Block, U extends BlockModifier> extends VPMixin<T>, VPModifiableData<Block, U>, IForgeBlock {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Block, U extends BlockModifier> VPBlock<T, U> cast(@NonNull T object) {

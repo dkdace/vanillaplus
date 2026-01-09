@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.data.EnchantmentExtension;
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -19,15 +19,15 @@ public final class VPEnchantmentLevelBasedValueTypes {
         VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
     }
 
-    private record Preset(@NonNull Holder<EnchantmentExtension> enchantmentValuePresetHolder, @NonNull String name) implements LevelBasedValue {
-        public static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(EnchantmentExtension.CODEC.fieldOf("value").forGetter(Preset::enchantmentValuePresetHolder),
+    private record Preset(@NonNull Holder<LevelBasedValuePreset> levelBasedValuePresetHolder, @NonNull String name) implements LevelBasedValue {
+        private static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+                .group(LevelBasedValuePreset.CODEC.fieldOf("value").forGetter(Preset::levelBasedValuePresetHolder),
                         Codec.STRING.fieldOf("name").forGetter(Preset::name))
                 .apply(instance, Preset::new));
 
         @Override
         public float calculate(int level) {
-            return enchantmentValuePresetHolder.value().getValue(name).getLevelBasedValue().calculate(level);
+            return levelBasedValuePresetHolder.value().getValue(name).getLevelBasedValue().calculate(level);
         }
 
         @Override

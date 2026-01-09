@@ -1,0 +1,5 @@
+{
+  "type": "vanillaplus:water_cauldron",
+  "max_potion_types": 3,
+  "max_tipped_arrow_count": 8
+}

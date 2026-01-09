@@ -62,5 +62,22 @@
         "pitch": 0.6
       }
     ]
+  },
+  "item.arrow.tipped": {
+    "subtitle": "subtitles.item.arrow.tipped",
+    "sounds": [
+      {
+        "name": "block/cauldron/dye1",
+        "pitch": 1.4
+      },
+      {
+        "name": "block/cauldron/dye2",
+        "pitch": 1.4
+      },
+      {
+        "name": "block/cauldron/dye3",
+        "pitch": 1.4
+      }
+    ]
   }
 }

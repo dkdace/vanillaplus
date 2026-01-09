@@ -109,20 +109,26 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         private static final MapCodec<ProjectileWeaponModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance).apply(instance, ProjectileWeaponModifier::new));
 
+        /** 화살 피해 배수 */
+        private final float baseDamage;
         /** 화살 발사 속력 */
         private final float shootingPower;
 
         private ProjectileWeaponModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
-                                         float shootingPower) {
+                                         float baseDamage, float shootingPower) {
             super(dataComponentMap, itemAttributeModifiers);
+
+            this.baseDamage = baseDamage;
             this.shootingPower = shootingPower;
         }
 
         @NonNull
-        private static <T extends ProjectileWeaponModifier> Products.P3<RecordCodecBuilder.Mu<T>, DataComponentMap, ItemAttributeModifiers, Float> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+        private static <T extends ProjectileWeaponModifier> Products.P4<RecordCodecBuilder.Mu<T>, DataComponentMap, ItemAttributeModifiers, Float, Float> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
             return ItemModifier.createBaseCodec(instance)
-                    .and(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 3.0F)
-                            .forGetter(ProjectileWeaponModifier::getShootingPower));
+                    .and(instance.group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("base_damage", 2.5F)
+                                    .forGetter(ProjectileWeaponModifier::getBaseDamage),
+                            ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 2.5F)
+                                    .forGetter(ProjectileWeaponModifier::getShootingPower)));
         }
 
         @Override
@@ -147,8 +153,8 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         private final float shootingPowerFireworkRocket;
 
         private CrossbowModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
-                                 float shootingPower, float shootingPowerFireworkRocket) {
-            super(dataComponentMap, itemAttributeModifiers, shootingPower);
+                                 float baseDamage, float shootingPower, float shootingPowerFireworkRocket) {
+            super(dataComponentMap, itemAttributeModifiers, baseDamage, shootingPower);
             this.shootingPowerFireworkRocket = shootingPowerFireworkRocket;
         }
 

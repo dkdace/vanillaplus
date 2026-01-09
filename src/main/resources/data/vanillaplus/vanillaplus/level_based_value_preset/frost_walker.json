@@ -1,0 +1,17 @@
+{
+  "values": {
+    "radius": {
+      "description_index": 0,
+      "value": {
+        "type": "minecraft:clamped",
+        "max": 16.0,
+        "min": 0.0,
+        "value": {
+          "type": "minecraft:linear",
+          "base": 3.0,
+          "per_level_above_first": 1.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "minecraft:consumable": {
+      "on_consume_effects": [
+        {
+          "type": "minecraft:teleport_randomly"
+        }
+      ]
+    },
+    "minecraft:food": {
+      "can_always_eat": true,
+      "nutrition": 5,
+      "saturation": 6
+    },
+    "minecraft:use_cooldown": {
+      "seconds": 1.0
+    }
+  }
+}

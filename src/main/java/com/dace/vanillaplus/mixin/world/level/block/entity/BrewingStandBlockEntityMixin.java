@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BrewingStandBlock;
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -75,7 +76,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
         ItemStack ingredient = itemStacks.get(INGREDIENT_SLOT);
 
         if (!ingredient.isEmpty())
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
                 ItemStack potion = itemStacks.get(i);
                 VPRecipeTypes.Brewing.Input input = new VPRecipeTypes.Brewing.Input(potion, ingredient);
 
@@ -89,7 +90,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @ModifyExpressionValue(method = "serverTick", at = @At(value = "CONSTANT", args = "intValue=400"))
     private static int modifyBrewingDuration(int duration, @Local(argsOnly = true) Level level,
                                              @Local(argsOnly = true) BrewingStandBlockEntity brewingStandBlockEntity) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
             ItemStack potion = brewingStandBlockEntity.getItem(i);
             VPRecipeTypes.Brewing.Input input = new VPRecipeTypes.Brewing.Input(potion, brewingStandBlockEntity.getItem(INGREDIENT_SLOT));
 
@@ -98,7 +99,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
                 duration = Math.max(duration, recipeHolder.value().getBrewingTime());
         }
 
-        ((BrewingStandBlockEntityMixin) (Object) brewingStandBlockEntity).totalBrewTime = duration;
+        VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).setTotalBrewTime(duration);
         return duration;
     }
 

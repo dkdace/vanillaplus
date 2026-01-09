@@ -4,11 +4,9 @@ import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,11 +28,6 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
     @UnknownNullability
     public static Direction getConnectedDirection(BlockState blockState) {
         return null;
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return getXp(state, level, randomSource, pos);
     }
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",

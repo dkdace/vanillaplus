@@ -12,7 +12,11 @@
         0.68,
         0.85
       ]
-    }
+    },
+    "recipes": [
+      "vanillaplus:strong_potion",
+      "vanillaplus:long_potion"
+    ]
   },
   "upgrade_potion_for_support": {
     "chance": {
@@ -27,7 +31,11 @@
         0.68,
         0.85
       ]
-    }
+    },
+    "recipes": [
+      "vanillaplus:strong_potion",
+      "vanillaplus:long_potion"
+    ]
   },
   "upgrade_potion_for_attack": {
     "chance": {
@@ -45,7 +53,11 @@
         0.5,
         0.6
       ]
-    }
+    },
+    "recipes": [
+      "vanillaplus:strong_potion",
+      "vanillaplus:long_potion"
+    ]
   },
   "replace_potion_for_self": {
     "chance": {

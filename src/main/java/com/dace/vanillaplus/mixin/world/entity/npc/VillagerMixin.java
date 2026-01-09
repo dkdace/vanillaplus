@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.npc;
 
 import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -16,9 +17,11 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -117,5 +120,18 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
         getOffers().forEach(MerchantOffer::setToOutOfStock);
         if (isTrading())
             stopTrading();
+    }
+
+    @Inject(method = "updateSpecialPrices", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/player/Player;hasEffect(Lnet/minecraft/core/Holder;)Z"))
+    private void applyTradingCostMultiplier(Player player, CallbackInfo ci) {
+        MutableFloat value = new MutableFloat(0);
+
+        EnchantmentHelper.runIterationOnEquipment(player, (enchantmentHolder, level, enchantedItemInUse) ->
+                VPEnchantment.cast(enchantmentHolder.value()).modifyTradingCostMultiplier((ServerLevel) player.level(), level,
+                        enchantedItemInUse.itemStack(), player, value));
+
+        for (MerchantOffer merchantOffer : getOffers())
+            merchantOffer.addToSpecialPriceDiff((int) (merchantOffer.getBaseCostA().getCount() * value.floatValue()));
     }
 }
