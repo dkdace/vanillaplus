@@ -97,6 +97,17 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
         return List.copyOf(mobEffectInstanceMap.values());
     }
 
+    /**
+     * 현재 물약 내용물과 색상을 덮어쓴다.
+     *
+     * @param potionContents 물약 내용물
+     */
+    public void overridePotionContents(@NonNull PotionContents potionContents) {
+        this.potionContents = potionContents;
+        color = getPotionColor(potionContents);
+        colorWeightSum = getBlockState().getValue(LayeredCauldronBlock.LEVEL);
+    }
+
     @Override
     protected void loadAdditional(@NonNull ValueInput valueInput) {
         super.loadAdditional(valueInput);

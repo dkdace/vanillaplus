@@ -103,6 +103,8 @@
     "world.level.gameevent.EuclideanGameEventListenerRegistryMixin",
     "world.level.levelgen.feature.SpikeFeatureMixin",
     "world.level.levelgen.feature.SpikeFeatureMixin$SpikeCacheLoaderMixin",
+    "world.level.levelgen.structure.StructurePieceMixin",
+    "world.level.levelgen.structure.structures.SwampHutPieceMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
     "world.level.storage.loot.functions.EnchantRandomlyFunctionMixin",
