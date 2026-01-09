@@ -2,7 +2,6 @@ package com.dace.vanillaplus.block;
 
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
-import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.Getter;
 import lombok.NonNull;
@@ -25,6 +24,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -52,20 +52,6 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
 
     public LayeredCauldronBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
         super(VPBlockEntityTypes.LAYERED_CAULDRON.get(), blockPos, blockState);
-    }
-
-    /**
-     * 서버에서 매 틱마다 실행할 작업.
-     *
-     * @param serverLevel                월드
-     * @param blockPos                   블록 위치
-     * @param blockState                 블록 상태
-     * @param layeredCauldronBlockEntity 현재 블록 엔티티
-     */
-    public static void serverTick(ServerLevel serverLevel, BlockPos blockPos, BlockState blockState,
-                                  LayeredCauldronBlockEntity layeredCauldronBlockEntity) {
-        if (blockState.getValue(VPLayeredCauldronBlock.UPDATE_COLOR))
-            serverLevel.setBlockAndUpdate(blockPos, blockState.setValue(VPLayeredCauldronBlock.UPDATE_COLOR, false));
     }
 
     /**
@@ -297,14 +283,6 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
 
         this.color = ARGB.color(Math.min(alpha, 0xFF), Math.min(red, 0xFF), Math.min(green, 0xFF), Math.min(blue, 0xFF));
 
-        float floatAlpha = ARGB.alphaFloat(this.color);
-        int opacity = 1;
-        if (floatAlpha >= 0.66)
-            opacity = 3;
-        else if (floatAlpha >= 0.33)
-            opacity = 2;
-
-        Objects.requireNonNull(level).setBlockAndUpdate(getBlockPos(), getBlockState().setValue(VPLayeredCauldronBlock.UPDATE_COLOR, true)
-                .setValue(VPLayeredCauldronBlock.OPACITY, opacity));
+        Objects.requireNonNull(level).sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
     }
 }
