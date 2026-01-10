@@ -1,8 +1,8 @@
-package com.dace.vanillaplus.mixin.world.entity.npc;
+package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

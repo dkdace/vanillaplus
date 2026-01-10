@@ -61,7 +61,7 @@ public final class EnchantmentExtension {
      */
     @Nullable
     public static EnchantmentExtension fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
-        return VPRegistry.ENCHANTMENT_EXTENSION.getValue(enchantmentResourceKey.location().getPath());
+        return VPRegistry.ENCHANTMENT_EXTENSION.getValue(enchantmentResourceKey.identifier().getPath());
     }
 
     /**

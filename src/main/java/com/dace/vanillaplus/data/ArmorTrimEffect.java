@@ -11,8 +11,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -50,11 +50,11 @@ public abstract class ArmorTrimEffect<T> {
                 builder.withSpecialEffect((DataComponentType) typedDataComponent.type(), typedDataComponent.value()));
 
         ResourceKey<T> resourceKey = holder.unwrapKey().orElseThrow();
-        ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID,
-                resourceKey.registry().getPath() + "/" + resourceKey.location().getPath());
+        Identifier identifier = Identifier.fromNamespaceAndPath(VanillaPlus.MODID,
+                resourceKey.registry().getPath() + "/" + resourceKey.identifier().getPath());
 
-        this.enchantmentHolder = Holder.direct(builder.build(resourceLocation));
-        this.enchantmentResourceKey = ResourceKey.create(Registries.ENCHANTMENT, resourceLocation);
+        this.enchantmentHolder = Holder.direct(builder.build(identifier));
+        this.enchantmentResourceKey = ResourceKey.create(Registries.ENCHANTMENT, identifier);
     }
 
     @SubscribeEvent
@@ -88,7 +88,7 @@ public abstract class ArmorTrimEffect<T> {
          */
         @Nullable
         public static TrimMaterialEffect fromTrimMaterial(@NonNull ResourceKey<TrimMaterial> trimMaterialResourceKey) {
-            return VPRegistry.TRIM_MATERIAL_EFFECT.getValue(trimMaterialResourceKey.location().getPath());
+            return VPRegistry.TRIM_MATERIAL_EFFECT.getValue(trimMaterialResourceKey.identifier().getPath());
         }
     }
 
@@ -117,7 +117,7 @@ public abstract class ArmorTrimEffect<T> {
          */
         @Nullable
         public static TrimPatternEffect fromTrimPattern(@NonNull ResourceKey<TrimPattern> trimPatternResourceKey) {
-            return VPRegistry.TRIM_PATTERN_EFFECT.getValue(trimPatternResourceKey.location().getPath());
+            return VPRegistry.TRIM_PATTERN_EFFECT.getValue(trimPatternResourceKey.identifier().getPath());
         }
     }
 }

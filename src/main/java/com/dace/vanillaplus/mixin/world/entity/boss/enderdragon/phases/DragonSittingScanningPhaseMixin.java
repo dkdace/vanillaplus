@@ -43,7 +43,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=100"))
-    private int modifyScanningIdleTime(int time) {
+    private int modifyScanningIdleDuration(int duration) {
         double scanIdleDurationSeconds = VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getSitting().getScanIdleDurationSeconds()
                 .get(dragon);
 

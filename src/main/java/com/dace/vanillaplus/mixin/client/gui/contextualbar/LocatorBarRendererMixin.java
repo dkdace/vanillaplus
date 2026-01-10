@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.gui.contextualbar;
 
-import com.dace.vanillaplus.VPGameRules;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientMannequin;

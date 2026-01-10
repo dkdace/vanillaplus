@@ -82,7 +82,7 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
         }
 
         @Inject(method = "onTake", at = @At(value = "INVOKE",
-                target = "Lnet/minecraft/advancements/critereon/BrewedPotionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/core/Holder;)V"))
+                target = "Lnet/minecraft/advancements/criterion/BrewedPotionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/core/Holder;)V"))
         private void awardUsedRecipes(Player player, ItemStack itemStack, CallbackInfo ci) {
             if (getThis().container instanceof BrewingStandBlockEntity brewingStandBlockEntity)
                 VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).awardUsedRecipes(player);

@@ -8,17 +8,17 @@ import com.mojang.math.Axis;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.data.AtlasIds;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
  * {@link LayeredCauldronBlockEntity}의 렌더러 클래스.
  */
 public final class LayeredCauldronRenderer implements BlockEntityRenderer<LayeredCauldronBlockEntity, LayeredCauldronRenderer.RenderState> {
-    /** 물 텍스쳐 리소스 위치 */
-    private static final ResourceLocation RESOURCE_LOCATION = ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, "water_still_opaque");
+    /** 물 텍스쳐 식별자 */
+    private static final Identifier RESOURCE_LOCATION = Identifier.fromNamespaceAndPath(VanillaPlus.MODID, "water_still_opaque");
     /** 물의 최소 투명도 */
     private static final float MIN_ALPHA = 0.5F;
 
@@ -39,8 +39,8 @@ public final class LayeredCauldronRenderer implements BlockEntityRenderer<Layere
     private final TextureAtlasSprite sprite;
 
     public LayeredCauldronRenderer() {
-        this.sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(Sheets.BLOCKS_MAPPER.apply(RESOURCE_LOCATION)
-                .texture());
+        this.sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS)
+                .getSprite(Sheets.BLOCKS_MAPPER.apply(RESOURCE_LOCATION).texture());
     }
 
     private static void addVertex(@NonNull RenderState renderState, @NonNull PoseStack.Pose pose, @NonNull VertexConsumer vertexConsumer, float x,
@@ -103,13 +103,12 @@ public final class LayeredCauldronRenderer implements BlockEntityRenderer<Layere
         poseStack.translate(0.5, renderState.height, 0.5);
         poseStack.mulPose(Axis.ZP.rotationDegrees(180));
 
-        submitNodeCollector.submitCustomGeometry(poseStack, RenderType.translucentMovingBlock(),
-                (pose, vertexConsumer) -> {
-                    addVertex(renderState, pose, vertexConsumer, -0.5F, -0.5F, sprite.getU1(), sprite.getV1());
-                    addVertex(renderState, pose, vertexConsumer, 0.5F, -0.5F, sprite.getU0(), sprite.getV1());
-                    addVertex(renderState, pose, vertexConsumer, 0.5F, 0.5F, sprite.getU0(), sprite.getV0());
-                    addVertex(renderState, pose, vertexConsumer, -0.5F, 0.5F, sprite.getU1(), sprite.getV0());
-                });
+        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.translucentMovingBlock(), (pose, vertexConsumer) -> {
+            addVertex(renderState, pose, vertexConsumer, -0.5F, -0.5F, sprite.getU1(), sprite.getV1());
+            addVertex(renderState, pose, vertexConsumer, 0.5F, -0.5F, sprite.getU0(), sprite.getV1());
+            addVertex(renderState, pose, vertexConsumer, 0.5F, 0.5F, sprite.getU0(), sprite.getV0());
+            addVertex(renderState, pose, vertexConsumer, -0.5F, 0.5F, sprite.getU1(), sprite.getV0());
+        });
 
         poseStack.popPose();
     }

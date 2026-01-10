@@ -1,6 +1,5 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,8 +28,6 @@ public final class VanillaPlus {
 
         instance = this;
         busGroup = context.getModBusGroup();
-
-        ReflectionUtil.loadClass(VPGameRules.class);
     }
 
     /**

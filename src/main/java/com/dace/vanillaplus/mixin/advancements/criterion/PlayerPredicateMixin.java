@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.mixin.advancements.critereon;
+package com.dace.vanillaplus.mixin.advancements.criterion;
 
 import com.dace.vanillaplus.extension.advancements.critereon.VPPlayerPredicate;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,14 +10,15 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.BedBlock;
@@ -48,7 +49,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
                     PlayerPredicate.StatMatcher.CODEC.listOf().optionalFieldOf("stats", List.of()).forGetter(PlayerPredicate::stats),
                     ExtraCodecs.object2BooleanMap(Recipe.KEY_CODEC).optionalFieldOf("recipes", Object2BooleanMaps.emptyMap())
                             .forGetter(PlayerPredicate::recipes),
-                    Codec.unboundedMap(ResourceLocation.CODEC, PlayerPredicate.AdvancementPredicate.CODEC)
+                    Codec.unboundedMap(Identifier.CODEC, PlayerPredicate.AdvancementPredicate.CODEC)
                             .optionalFieldOf("advancements", Map.of()).forGetter(PlayerPredicate::advancements),
                     EntityPredicate.CODEC.optionalFieldOf("looking_at").forGetter(PlayerPredicate::lookingAt),
                     InputPredicate.CODEC.optionalFieldOf("input").forGetter(PlayerPredicate::input),
@@ -64,7 +65,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
     @NonNull
     private static PlayerPredicate create(MinMaxBounds.Ints level, GameTypePredicate gameType, List<PlayerPredicate.StatMatcher<?>> stats,
                                           Object2BooleanMap<ResourceKey<Recipe<?>>> recipes,
-                                          Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> advancements,
+                                          Map<Identifier, PlayerPredicate.AdvancementPredicate> advancements,
                                           Optional<EntityPredicate> lookingAt, Optional<InputPredicate> input,
                                           Optional<DistancePredicate> distanceToRespawn) {
         PlayerPredicate playerPredicate = new PlayerPredicate(level, gameType, stats, recipes, advancements, lookingAt, input);
@@ -89,8 +90,11 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
         BlockState blockState = serverLevel.getBlockState(respawnPos);
         Block block = blockState.getBlock();
 
-        if ((!(block instanceof BedBlock) || !BedBlock.canSetSpawn(serverLevel)) && (!(block instanceof RespawnAnchorBlock)
-                || !RespawnAnchorBlock.canSetSpawn(serverLevel) || blockState.getValue(RespawnAnchorBlock.CHARGE) == RespawnAnchorBlock.MIN_CHARGES))
+        if ((!(block instanceof BedBlock)
+                || !serverLevel.environmentAttributes().getValue(EnvironmentAttributes.BED_RULE, respawnPos).canSetSpawn(serverLevel))
+                && (!(block instanceof RespawnAnchorBlock)
+                || !RespawnAnchorBlock.canSetSpawn(serverLevel, respawnPos)
+                || blockState.getValue(RespawnAnchorBlock.CHARGE) == RespawnAnchorBlock.MIN_CHARGES))
             return null;
 
         return respawnPos;

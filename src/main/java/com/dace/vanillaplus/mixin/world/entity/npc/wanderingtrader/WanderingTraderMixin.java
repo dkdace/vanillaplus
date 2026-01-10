@@ -1,13 +1,18 @@
-package com.dace.vanillaplus.mixin.world.entity.npc;
+package com.dace.vanillaplus.mixin.world.entity.npc.wanderingtrader;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.mixin.world.entity.npc.villager.AbstractVillagerMixin;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -35,8 +40,8 @@ public abstract class WanderingTraderMixin extends AbstractVillagerMixin<Wanderi
         goalSelector.addGoal(1, new AvoidEntityGoal<>(getThis(), Silverfish.class, DISTANCE_MELEE, 0.5, 0.5));
     }
 
-    @Definition(id = "random", field = "Lnet/minecraft/world/entity/npc/WanderingTrader;random:Lnet/minecraft/util/RandomSource;")
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
+    @Definition(id = "random", field = "Lnet/minecraft/world/entity/npc/wanderingtrader/WanderingTrader;random:Lnet/minecraft/util/RandomSource;")
     @Expression("3 + this.random.nextInt(4)")
     @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyRewardXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {

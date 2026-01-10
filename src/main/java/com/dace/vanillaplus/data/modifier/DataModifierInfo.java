@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
@@ -50,8 +50,8 @@ public final class DataModifierInfo<T extends DataModifier<U>, U> {
     @Nullable
     @SuppressWarnings("unchecked")
     public <V extends T> V get(@NonNull U element) {
-        ResourceLocation resourceLocation = builtInRegistry.getKey(element);
-        return resourceLocation == null ? null : (V) vpRegistry.getValue(resourceLocation.getPath());
+        Identifier identifier = builtInRegistry.getKey(element);
+        return identifier == null ? null : (V) vpRegistry.getValue(identifier.getPath());
     }
 
     /**
@@ -65,9 +65,9 @@ public final class DataModifierInfo<T extends DataModifier<U>, U> {
     @NonNull
     @SuppressWarnings("unchecked")
     public <V extends T> V getOrThrow(@NonNull U element) {
-        ResourceLocation resourceLocation = builtInRegistry.getKey(element);
-        Validate.validState(resourceLocation != null);
+        Identifier identifier = builtInRegistry.getKey(element);
+        Validate.validState(identifier != null);
 
-        return (V) vpRegistry.getValueOrThrow(resourceLocation.getPath());
+        return (V) vpRegistry.getValueOrThrow(identifier.getPath());
     }
 }

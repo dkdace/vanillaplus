@@ -3,9 +3,8 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import com.dace.vanillaplus.registryobject.VPAttributes;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import lombok.Getter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -14,9 +13,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
@@ -85,6 +87,10 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     @Nullable
     public abstract LivingEntity getControllingPassenger();
 
+    @Shadow
+    public abstract float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState,
+                                                      FluidState fluidState, float explosionPower);
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
@@ -96,11 +102,6 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
         return getThis() instanceof LivingEntity livingEntity
                 ? (float) (volume * livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow()))
                 : volume;
-    }
-
-    @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
-    protected float modifyBlockExplosionResistance(float resistance, @Local(argsOnly = true) BlockState blockState) {
-        return resistance;
     }
 
     @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE",

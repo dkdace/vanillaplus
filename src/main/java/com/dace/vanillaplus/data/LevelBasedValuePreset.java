@@ -56,7 +56,7 @@ public final class LevelBasedValuePreset {
      */
     @Nullable
     public static LevelBasedValuePreset fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
-        return VPRegistry.LEVEL_BASED_VALUE_PRESET.getValue(enchantmentResourceKey.location().getPath());
+        return VPRegistry.LEVEL_BASED_VALUE_PRESET.getValue(enchantmentResourceKey.identifier().getPath());
     }
 
     /**

@@ -87,7 +87,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     }
 
     @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
-    private int modifyEatingTime(int time, @Local(argsOnly = true) LivingEntity livingEntity) {
-        return (int) (time * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
+    private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity livingEntity) {
+        return (int) (duration * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
     }
 }

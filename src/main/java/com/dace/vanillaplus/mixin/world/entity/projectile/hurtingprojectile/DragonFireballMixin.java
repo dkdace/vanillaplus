@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.mixin.world.entity.projectile;
+package com.dace.vanillaplus.mixin.world.entity.projectile.hurtingprojectile;
 
 import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.modifier.DataModifierInfo;
@@ -7,13 +7,17 @@ import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDrago
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.projectile.DragonFireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.DragonFireball;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -28,12 +32,13 @@ public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, En
     private static final int MAX_EXPLOSION_RESISTANCE = 1;
 
     @Override
-    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState) {
-        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
+    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
+                                             float explosionPower) {
+        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? explosionPower : Math.min(MAX_EXPLOSION_RESISTANCE, explosionPower);
     }
 
     @ModifyExpressionValue(method = "onHit", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/projectile/DragonFireball;ownedBy(Lnet/minecraft/world/entity/Entity;)Z"))
+            target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;ownedBy(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean modifyHitCondition(boolean original) {
         return true;
     }
@@ -44,7 +49,7 @@ public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, En
                 .getFireball().getFlameDuration();
     }
 
-    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/DragonFireball;discard()V"))
+    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;discard()V"))
     private void explode(HitResult hitResult, CallbackInfo ci) {
         float explosionRadius = ((EntityModifier.EnderDragonModifier) DataModifierInfo.ENTITY_MODIFIER.getOrThrow(EntityType.ENDER_DRAGON))
                 .getPhaseInfo().getFireball().getExplosionRadius();

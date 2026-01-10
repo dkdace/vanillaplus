@@ -22,12 +22,12 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.npc.VillagerDataHolder;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.animal.fish.TropicalFish;
+import net.minecraft.world.entity.npc.villager.VillagerDataHolder;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -123,7 +123,7 @@ public final class Trade {
      */
     @Nullable
     public static Trade fromVillagerProfession(@NonNull ResourceKey<VillagerProfession> villagerProfessionResourceKey) {
-        return VPRegistry.TRADE.getValue(villagerProfessionResourceKey.location().getPath());
+        return VPRegistry.TRADE.getValue(villagerProfessionResourceKey.identifier().getPath());
     }
 
     /**
@@ -316,7 +316,7 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerList) {
-                    return (entity, randomSource) -> {
+                    return (serverLevel, entity, randomSource) -> {
                         ItemStack itemStack = itemStackGenerator.create(entity, randomSource);
                         if (itemStack == null)
                             return null;
@@ -356,7 +356,7 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerList) {
-                    return (entity, randomSource) -> {
+                    return (serverLevel, entity, randomSource) -> {
                         ItemStack productItemStack = product.create(entity, randomSource);
                         if (productItemStack == null)
                             return null;
@@ -409,7 +409,7 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerList) {
-                    return (entity, randomSource) -> {
+                    return (serverLevel, entity, randomSource) -> {
                         ItemStack productItemStack = product.create(entity, randomSource);
                         if (productItemStack == null)
                             return null;
@@ -465,8 +465,9 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerListInfo) {
-                    return (entity, randomSource) ->
-                            offerItems.get(randomSource.nextInt(offerItems.size())).getItemListing(offerListInfo).getOffer(entity, randomSource);
+                    return (serverLevel, entity, randomSource) ->
+                            offerItems.get(randomSource.nextInt(offerItems.size())).getItemListing(offerListInfo)
+                                    .getOffer(serverLevel, entity, randomSource);
                 }
             }
 
@@ -488,7 +489,7 @@ public final class Trade {
                 @Override
                 @NonNull
                 public VillagerTrades.ItemListing getItemListing(@NonNull OfferList offerList) {
-                    return (entity, randomSource) -> {
+                    return (serverLevel, entity, randomSource) -> {
                         if (!(entity instanceof VillagerDataHolder villagerDataHolder))
                             return null;
 
@@ -497,7 +498,7 @@ public final class Trade {
                         if (offerItem == null)
                             return null;
 
-                        return offerItem.getItemListing(offerList).getOffer(entity, randomSource);
+                        return offerItem.getItemListing(offerList).getOffer(serverLevel, entity, randomSource);
                     };
                 }
             }

@@ -10,7 +10,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -32,14 +32,13 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @Shadow
     @Final
-    private static ResourceLocation SPRINTING_MODIFIER_ID;
+    private static Identifier SPRINTING_MODIFIER_ID;
 
     @Shadow
     protected Brain<?> brain;
@@ -83,6 +82,15 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Shadow
     public abstract boolean isAutoSpinAttack();
 
+    @Shadow
+    public void die(DamageSource damageSource) {
+    }
+
+    @Shadow
+    protected float getWaterSlowDown() {
+        return 0;
+    }
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
@@ -105,11 +113,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block block) {
         return ClipContext.Block.VISUAL;
-    }
-
-    @Inject(method = "die", at = @At("TAIL"))
-    protected void onDie(DamageSource damageSource, CallbackInfo ci) {
-        // 미사용
     }
 
     @Definition(id = "deathprotection", local = @Local(type = DeathProtection.class))
@@ -162,14 +165,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return damage * Math.max(value.floatValue(), 0);
     }
 
-    @ModifyReturnValue(method = "getWaterSlowDown", at = @At("RETURN"))
-    protected float modifyWaterSlowDown(float value) {
-        return value;
-    }
-
-    @ModifyExpressionValue(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D",
-                    ordinal = 0))
+    @ModifyExpressionValue(method = "travelInWater", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D", ordinal = 0))
     private double modifyWaterMovementEfficiencyValue(double value) {
         return isAutoSpinAttack() ? 0 : value;
     }
@@ -206,8 +203,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return getFinalSpeed(original);
     }
 
-    @ModifyArg(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
+    @ModifyArg(method = "travelInWater", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
     private float modifyFinalFluidSpeed(float original) {
         return getFinalSpeed(original);
     }

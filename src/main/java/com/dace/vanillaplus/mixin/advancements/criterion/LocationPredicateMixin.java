@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.mixin.advancements.critereon;
+package com.dace.vanillaplus.mixin.advancements.criterion;
 
 import com.dace.vanillaplus.extension.advancements.critereon.VPLocationPredicate;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -7,10 +7,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.minecraft.advancements.critereon.BlockPredicate;
-import net.minecraft.advancements.critereon.FluidPredicate;
-import net.minecraft.advancements.critereon.LightPredicate;
-import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.criterion.BlockPredicate;
+import net.minecraft.advancements.criterion.FluidPredicate;
+import net.minecraft.advancements.criterion.LightPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;

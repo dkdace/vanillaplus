@@ -41,7 +41,7 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
     }
 
     @Shadow
-    protected abstract double getContentHeight(BlockState blockState);
+    public abstract double getContentHeight(BlockState blockState);
 
     @Override
     @Nullable
@@ -50,7 +50,7 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
     }
 
     @Override
-    protected void onAnimateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource, CallbackInfo ci) {
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
         if (!(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity))
             return;
 

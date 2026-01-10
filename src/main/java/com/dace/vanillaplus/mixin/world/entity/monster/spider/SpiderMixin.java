@@ -1,8 +1,9 @@
-package com.dace.vanillaplus.mixin.world.entity.monster;
+package com.dace.vanillaplus.mixin.world.entity.monster.spider;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
-import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.entity.npc.AbstractVillager;
+import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

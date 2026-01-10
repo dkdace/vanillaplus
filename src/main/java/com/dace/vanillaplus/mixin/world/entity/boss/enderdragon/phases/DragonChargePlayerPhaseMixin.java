@@ -25,6 +25,8 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     private static final int ROAR_DURATION = 40;
     @Unique
     private static final int BREATH_START_DISTANCE = 10;
+    @Unique
+    private static final int BREATH_FLAME_LANDING_THRESHOLD = 8;
 
     @Unique
     private int flameTicks;
@@ -95,17 +97,16 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         double y = dragon.head.getY();
         double z = dragon.head.getZ() + pos.z * radius / 2;
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
-        int iterations = 8;
 
         if (serverLevel.isEmptyBlock(blockPos)) {
             for (int i = 0; serverLevel.isEmptyBlock(blockPos.move(Direction.DOWN)); i++)
-                if (i >= iterations)
+                if (i >= BREATH_FLAME_LANDING_THRESHOLD)
                     return;
 
             blockPos.move(Direction.UP);
         } else {
             for (int i = 0; !serverLevel.isEmptyBlock(blockPos.move(Direction.UP)); i++)
-                if (i >= iterations)
+                if (i >= BREATH_FLAME_LANDING_THRESHOLD)
                     return;
         }
 
