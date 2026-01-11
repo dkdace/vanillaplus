@@ -1,4 +1,8 @@
 {
+  "attack_range.max_reach": "%s 최대 공격 거리",
+  "attack_range.min_reach": "%s 최소 공격 거리",
+  "attack_range.range": "%s 공격 범위",
+  "attack_range.when_attacking": "공격 시:",
   "attribute.name.beacon_effect_range": "신호기 효과 범위",
   "attribute.name.eating_time": "섭취 시간",
   "attribute.name.elytra_flying_speed_multiplier": "겉날개 비행 속도 배수",
@@ -92,6 +96,8 @@
   "item.repairLimit": "수리 한도 : %s / %s",
   "item.trim_material": "갑옷 장식 재료",
   "key.prone": "엎드리기",
+  "kinetic_weapon.damage_multiplier": "%s 피해 배수",
+  "kinetic_weapon.when_charging": "돌격 시:",
   "merchant.closed": "주민이 거래를 마감했습니다. 나중에 다시 오세요.",
   "merchant.out_of_stock": "현재 재고가 없습니다. 나중에 다시 오세요.",
   "merchant.stock": "남은 재고: %s / %s",
