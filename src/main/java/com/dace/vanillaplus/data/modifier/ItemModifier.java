@@ -16,6 +16,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +42,7 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
         CODEC_REGISTRY.register("elytra", () -> ElytraModifier.CODEC);
         CODEC_REGISTRY.register("projectile_weapon", () -> ProjectileWeaponModifier.CODEC);
         CODEC_REGISTRY.register("crossbow", () -> CrossbowModifier.CODEC);
+        CODEC_REGISTRY.register("trident", () -> TridentModifier.CODEC);
     }
 
     /** 아이템 데이터 요소 */
@@ -156,6 +158,38 @@ public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponen
                                  float baseDamage, float shootingPower, float shootingPowerFireworkRocket) {
             super(dataComponentMap, itemAttributeModifiers, baseDamage, shootingPower);
             this.shootingPowerFireworkRocket = shootingPowerFireworkRocket;
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends ItemModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link TridentItem}의 아이템 수정자 클래스.
+     */
+    public static final class TridentModifier extends ItemModifier {
+        private static final MapCodec<TridentModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+                .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("riptide_cooldown_seconds", 3F)
+                        .forGetter(target -> target.riptideCooldownSeconds))
+                .apply(instance, TridentModifier::new));
+
+        /** 급류 돌진 시 쿨타임 (초) */
+        private final float riptideCooldownSeconds;
+
+        private TridentModifier(@NonNull DataComponentMap dataComponentMap, @NonNull ItemAttributeModifiers itemAttributeModifiers,
+                                float riptideCooldownSeconds) {
+            super(dataComponentMap, itemAttributeModifiers);
+            this.riptideCooldownSeconds = riptideCooldownSeconds;
+        }
+
+        /**
+         * @return 회전 공격 시간 (tick)
+         */
+        public int getRiptideCooldown() {
+            return (int) (riptideCooldownSeconds * 20.0);
         }
 
         @Override

@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "vanillaplus.refmap.json",
   "mixins": [
+    "advancements.criterion.EntityFlagsPredicateMixin",
     "advancements.criterion.LocationPredicateMixin",
     "advancements.criterion.PlayerPredicateMixin",
     "core.CauldronInteractionMixin",
@@ -53,6 +54,7 @@
     "world.entity.player.PlayerMixin",
     "world.entity.projectile.FireworkRocketEntityMixin",
     "world.entity.projectile.arrow.AbstractArrowMixin",
+    "world.entity.projectile.arrow.ThrownTridentMixin",
     "world.entity.projectile.hurtingprojectile.DragonFireballMixin",
     "world.entity.raid.RaiderMixin",
     "world.entity.raid.RaidMixin",
@@ -71,6 +73,7 @@
     "world.item.ItemsMixin",
     "world.item.ItemStackMixin",
     "world.item.SmithingTemplateItemMixin",
+    "world.item.TridentItemMixin",
     "world.item.alchemy.PotionContentsMixin",
     "world.item.alchemy.PotionMixin",
     "world.item.component.AttackRangeMixin",

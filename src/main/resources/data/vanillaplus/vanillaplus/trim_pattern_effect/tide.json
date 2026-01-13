@@ -43,10 +43,8 @@
               "condition": "minecraft:entity_properties",
               "entity": "this",
               "predicate": {
-                "location": {
-                  "fluid": {
-                    "fluids": "#minecraft:water"
-                  }
+                "flags": {
+                  "is_in_water": true
                 }
               }
             }

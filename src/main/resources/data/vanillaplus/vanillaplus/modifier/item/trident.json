@@ -1,8 +1,36 @@
 {
-  "type": "vanillaplus:item",
+  "type": "vanillaplus:trident",
   "components": {
+    "minecraft:attack_range": {
+      "hitbox_margin": 0,
+      "max_creative_reach": 6,
+      "max_reach": 4,
+      "mob_factor": 0.5
+    },
     "minecraft:repairable": {
       "items": "minecraft:prismarine_shard"
+    },
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 0.4
+    },
+    "minecraft:minimum_attack_charge": 1,
+    "minecraft:swing_animation": {
+      "type": "stab",
+      "duration": 16
+    },
+    "minecraft:piercing_weapon": {
+      "hit_sound": "minecraft:item.trident.hit",
+      "sound": "minecraft:item.trident.throw"
     }
-  }
+  },
+  "attribute_modifiers": [
+    {
+      "type": "minecraft:attack_speed",
+      "amount": -2.7,
+      "id": "minecraft:base_attack_speed",
+      "operation": "add_value",
+      "slot": "mainhand"
+    }
+  ],
+  "riptide_cooldown_seconds": 2
 }

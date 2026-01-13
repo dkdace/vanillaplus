@@ -29,10 +29,12 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -216,5 +218,17 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
     private float modifyFinalFluidSpeed(float original) {
         return getFinalSpeed(original);
+    }
+
+    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
+            ordinal = 0, opcode = Opcodes.PUTFIELD))
+    private void removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
+        // 미사용
+    }
+
+    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
+    private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 speed) {
+        // 미사용
     }
 }

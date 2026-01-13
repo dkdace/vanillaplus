@@ -9,15 +9,20 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -27,6 +32,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier> extends EntityMixin<T, U> {
     @Shadow
     private double baseDamage;
+    @Shadow
+    @Nullable
+    private IntOpenHashSet piercingIgnoreEntityIds;
+
+    @Unique
+    protected void addPiercedEntity(@NonNull Entity entity) {
+        if (piercingIgnoreEntityIds == null)
+            piercingIgnoreEntityIds = new IntOpenHashSet(5);
+
+        piercingIgnoreEntityIds.add(entity.getId());
+    }
 
     @ModifyExpressionValue(method = "doKnockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
