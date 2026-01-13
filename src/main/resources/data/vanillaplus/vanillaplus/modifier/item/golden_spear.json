@@ -1,6 +1,9 @@
 {
   "type": "vanillaplus:item",
   "components": {
+    "minecraft:enchantable": {
+      "value": 26
+    },
     "minecraft:attack_range": {
       "hitbox_margin": 0,
       "max_creative_reach": 6.5,
