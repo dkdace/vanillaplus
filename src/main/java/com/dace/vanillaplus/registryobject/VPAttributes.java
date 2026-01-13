@@ -66,6 +66,12 @@ public final class VPAttributes {
             new RangedAttribute("attribute.name.eating_time", 1, 0, 1024)
                     .setSyncable(true)
                     .setSentiment(Attribute.Sentiment.NEGATIVE));
+    public static final RegistryObject<Attribute> ATTACK_REACH_MULTIPLIER = create("attack_reach_multiplier",
+            new RangedAttribute("attribute.name.attack_reach_multiplier", 1, 0, 10)
+                    .setSyncable(true));
+    public static final RegistryObject<Attribute> SWEEPING_RANGE = create("sweeping_range",
+            new RangedAttribute("attribute.name.sweeping_range", 0, 0, 10)
+                    .setSyncable(true));
 
     @SubscribeEvent
     private static void onEntityAttributeModification(@NonNull EntityAttributeModificationEvent event) {
@@ -79,12 +85,14 @@ public final class VPAttributes {
             event.add(entityType, ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow());
             event.add(entityType, EATING_TIME.getHolder().orElseThrow());
+            event.add(entityType, ATTACK_REACH_MULTIPLIER.getHolder().orElseThrow());
         }
 
         event.add(EntityType.PLAYER, FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, HEARING_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, ITEM_PICKUP_RANGE.getHolder().orElseThrow());
         event.add(EntityType.PLAYER, BEACON_EFFECT_RANGE.getHolder().orElseThrow());
+        event.add(EntityType.PLAYER, SWEEPING_RANGE.getHolder().orElseThrow());
     }
 
     @SubscribeEvent

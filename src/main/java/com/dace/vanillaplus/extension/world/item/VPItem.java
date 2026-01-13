@@ -5,6 +5,7 @@ import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import lombok.NonNull;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.extensions.IForgeItem;
 
 /**
  * {@link Item}을 확장하는 인터페이스.
@@ -13,7 +14,7 @@ import net.minecraft.world.item.Item;
  * @param <U> {@link ItemModifier}를 상속받는 아이템 수정자
  * @see ItemModifier
  */
-public interface VPItem<T extends Item, U extends ItemModifier> extends VPMixin<T>, VPModifiableData<Item, U> {
+public interface VPItem<T extends Item, U extends ItemModifier> extends VPMixin<T>, VPModifiableData<Item, U>, IForgeItem {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Item, U extends ItemModifier> VPItem<T, U> cast(@NonNull T object) {

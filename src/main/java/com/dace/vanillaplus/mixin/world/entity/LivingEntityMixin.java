@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -88,6 +89,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     protected float getWaterSlowDown() {
+        return 0;
+    }
+
+    @Shadow
+    public abstract AttackRange entityAttackRange();
+
+    @Shadow
+    public float getSecondsToDisableBlocking() {
         return 0;
     }
 

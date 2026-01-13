@@ -58,6 +58,9 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     public abstract double getZ();
 
     @Shadow
+    public abstract float getYRot();
+
+    @Shadow
     public abstract boolean onGround();
 
     @Shadow

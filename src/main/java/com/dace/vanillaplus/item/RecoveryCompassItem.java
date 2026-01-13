@@ -48,7 +48,7 @@ public final class RecoveryCompassItem extends Item {
                 1);
         serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2, 0.5F);
 
-        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0, 0, 0, 0);
     }
 
     @Override

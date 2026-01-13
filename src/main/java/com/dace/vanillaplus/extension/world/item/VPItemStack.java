@@ -5,11 +5,12 @@ import lombok.NonNull;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.extensions.IForgeItemStack;
 
 /**
  * {@link ItemStack}을 확장하는 인터페이스.
  */
-public interface VPItemStack extends VPMixin<ItemStack> {
+public interface VPItemStack extends VPMixin<ItemStack>, IForgeItemStack {
     @NonNull
     static VPItemStack cast(@NonNull ItemStack object) {
         return (VPItemStack) (Object) object;

@@ -121,7 +121,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
-    private void addAttackRangeTooltip(@NonNull AttackRange attackRange, @Nullable Player player, @NonNull Consumer<Component> componentConsumer) {
+    private void addAttackRangeTooltip(@NonNull AttackRange attackRange, @NonNull Consumer<Component> componentConsumer) {
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(Component.translatable(COMPONENT_ATTACK_RANGE_WHEN_ATTACKING).withStyle(ChatFormatting.GRAY));
 
@@ -132,13 +132,9 @@ public abstract class ItemStackMixin implements VPItemStack {
 
             componentConsumer.accept(CommonComponents.space().append(minReachComponent).withStyle(ChatFormatting.DARK_GREEN));
         }
-
-        float maxRange = attackRange.maxRange();
-        if (player != null)
-            maxRange *= (float) (player.getAttributeBaseValue(Attributes.ENTITY_INTERACTION_RANGE) / Attributes.ENTITY_INTERACTION_RANGE.value().getDefaultValue());
-
         MutableComponent maxReachComponent = Component.translatable(COMPONENT_ATTACK_RANGE_MAX_REACH,
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(maxRange));
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(attackRange.maxRange()));
+
         componentConsumer.accept(CommonComponents.space().append(maxReachComponent).withStyle(ChatFormatting.DARK_GREEN));
 
         float hitboxMargin = attackRange.hitboxMargin();
@@ -301,8 +297,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Inject(method = "addAttributeTooltips", at = @At("TAIL"))
     private void addExtraTooltipsAfterAttribute(Consumer<Component> componentConsumer, TooltipDisplay tooltipDisplay, @Nullable Player player,
                                                 CallbackInfo ci) {
-        addTooltip(DataComponents.ATTACK_RANGE, tooltipDisplay, attackRange ->
-                addAttackRangeTooltip(attackRange, player, componentConsumer));
+        addTooltip(DataComponents.ATTACK_RANGE, tooltipDisplay, attackRange -> addAttackRangeTooltip(attackRange, componentConsumer));
         addTooltip(DataComponents.KINETIC_WEAPON, tooltipDisplay, kineticWeapon ->
                 addKineticWeaponTooltip(kineticWeapon, componentConsumer));
     }
