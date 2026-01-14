@@ -19,8 +19,17 @@
               "supply": "moderate",
               "price": 1,
               "product": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:iron_sword"
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_sword"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_spear"
+                  }
+                ]
               }
             }
           ]
@@ -70,8 +79,17 @@
               "enchantment_level": "low",
               "enchantment_tag": "#vanillaplus:weapon",
               "product": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:iron_sword"
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_sword"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_spear"
+                  }
+                ]
               }
             }
           ]
@@ -146,8 +164,17 @@
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:weapon",
               "product": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:iron_axe"
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_spear"
+                  }
+                ]
               }
             }
           ]
@@ -164,8 +191,17 @@
           "enchantment_level": "medium",
           "enchantment_tag": "#vanillaplus:weapon",
           "product": {
-            "type": "vanillaplus:itemstack",
-            "id": "minecraft:diamond_sword"
+            "type": "vanillaplus:random",
+            "items": [
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:diamond_sword"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:diamond_spear"
+              }
+            ]
           }
         },
         {
@@ -220,6 +256,10 @@
               {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:diamond_sword"
+              },
+              {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:diamond_spear"
               },
               {
                 "type": "vanillaplus:itemstack",
