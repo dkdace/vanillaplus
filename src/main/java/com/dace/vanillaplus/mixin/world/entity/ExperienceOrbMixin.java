@@ -26,6 +26,21 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
     @Shadow
     protected abstract int repairPlayerItems(ServerPlayer serverPlayer, int xp);
 
+    @Redirect(method = "playerTouch", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ExperienceOrb;repairPlayerItems(Lnet/minecraft/server/level/ServerPlayer;I)I"))
+    private int healWithXPBeforeRepair(ExperienceOrb experienceOrb, ServerPlayer serverPlayer, int xp) {
+        MutableFloat value = new MutableFloat(0);
+
+        EnchantmentHelper.runIterationOnEquipment(serverPlayer, (enchantmentHolder, level, enchantedItemInUse) ->
+                VPEnchantment.cast(enchantmentHolder.value()).modifyHealPerXp(serverPlayer.level(), level, enchantedItemInUse.itemStack(),
+                        serverPlayer, value));
+
+        float amount = Math.min(xp * value.floatValue(), serverPlayer.getMaxHealth() - serverPlayer.getHealth());
+        serverPlayer.heal(amount);
+
+        return repairPlayerItems(serverPlayer, (int) (xp - amount * xp));
+    }
+
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getRandomItemWith(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Ljava/util/Optional;"),
             index = 2)
@@ -75,20 +90,5 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             finalXp++;
 
         return finalXp;
-    }
-
-    @Redirect(method = "playerTouch", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/ExperienceOrb;repairPlayerItems(Lnet/minecraft/server/level/ServerPlayer;I)I"))
-    private int healWithXPBeforeRepair(ExperienceOrb experienceOrb, ServerPlayer serverPlayer, int xp) {
-        MutableFloat value = new MutableFloat(0);
-
-        EnchantmentHelper.runIterationOnEquipment(serverPlayer, (enchantmentHolder, level, enchantedItemInUse) ->
-                VPEnchantment.cast(enchantmentHolder.value()).modifyHealPerXp(serverPlayer.level(), level, enchantedItemInUse.itemStack(),
-                        serverPlayer, value));
-
-        float amount = Math.min(xp * value.floatValue(), serverPlayer.getMaxHealth() - serverPlayer.getHealth());
-        serverPlayer.heal(amount);
-
-        return repairPlayerItems(serverPlayer, (int) (xp - amount * xp));
     }
 }

@@ -24,6 +24,7 @@ public abstract class VillagerHostilesSensorMixin implements VPMixin<VillagerHos
         return map.put(EntityType.SKELETON, DISTANCE_LONG_RANGED)
                 .put(EntityType.STRAY, DISTANCE_LONG_RANGED)
                 .put(EntityType.BOGGED, DISTANCE_LONG_RANGED)
+                .put(EntityType.PARCHED, DISTANCE_LONG_RANGED)
                 .put(EntityType.WITHER_SKELETON, DISTANCE_LONG_RANGED)
                 .put(EntityType.WITCH, DISTANCE_RANGED)
                 .put(EntityType.SPIDER, DISTANCE_MELEE)

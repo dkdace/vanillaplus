@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class ClientForgeEventManager {
     @SubscribeEvent
     private static void onViewportRenderFog(@NonNull ViewportEvent.RenderFog event) {
-        if (!(event.getCamera().getEntity() instanceof LivingEntity livingEntity))
+        if (!(event.getCamera().entity() instanceof LivingEntity livingEntity))
             return;
 
         float fogDistance = (float) livingEntity.getAttributeValue(VPAttributes.FOG_DISTANCE.getHolder().orElseThrow());

@@ -11,16 +11,22 @@
           "max": 1.0,
           "min": 0.0,
           "value": {
-            "type": "minecraft:fraction",
-            "denominator": 4,
-            "numerator": {
-              "type": "minecraft:linear",
-              "base": 2.0,
-              "per_level_above_first": 1.0
-            }
+            "type": "minecraft:linear",
+            "base": 0.15,
+            "per_level_above_first": 0.15
           }
         },
         "attribute": "minecraft:sweeping_damage_ratio",
+        "id": "minecraft:enchantment.sweeping_edge",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.2,
+          "per_level_above_first": 0.2
+        },
+        "attribute": "vanillaplus:sweeping_range",
         "id": "minecraft:enchantment.sweeping_edge",
         "operation": "add_value"
       }
@@ -38,6 +44,6 @@
   "slots": [
     "mainhand"
   ],
-  "supported_items": "#minecraft:enchantable/sword",
+  "supported_items": "#minecraft:enchantable/sweeping",
   "weight": 2
 }

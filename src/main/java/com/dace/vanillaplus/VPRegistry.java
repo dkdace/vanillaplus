@@ -15,9 +15,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.alchemy.Potion;
@@ -29,6 +29,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -76,6 +77,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends EnchantmentLocationBasedEffect>> ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE);
     /** 마법 부여의 엔티티 효과 타입 */
     public static final VPRegistry<MapCodec<? extends EnchantmentEntityEffect>> ENCHANTMENT_ENTITY_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE);
+    /** 게임 규칙 */
+    public static final VPRegistry<GameRule<?>> GAME_RULE = new VPRegistry<>(BuiltInRegistries.GAME_RULE);
 
     /** 설정 */
     public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
@@ -122,6 +125,7 @@ public final class VPRegistry<T> {
         ReflectionUtil.loadClass(VPBlockEntityTypes.class);
         ReflectionUtil.loadClass(VPEnchantmentEffectComponentTypes.class);
         ReflectionUtil.loadClass(VPEnchantmentEntityEffectTypes.class);
+        ReflectionUtil.loadClass(VPGameRules.class);
     }
 
     /** 레지스트리 리소스 키 */
@@ -151,7 +155,7 @@ public final class VPRegistry<T> {
      * @param registry 레지스트리 인스턴스
      */
     private VPRegistry(@NonNull Registry<T> registry) {
-        this(ResourceKey.createRegistryKey(registry.key().location()));
+        this(ResourceKey.createRegistryKey(registry.key().identifier()));
         this.vanillaRegistry = registry;
     }
 
@@ -161,7 +165,7 @@ public final class VPRegistry<T> {
      * @param name 이름
      */
     private VPRegistry(@NonNull String name) {
-        this(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name)));
+        this(ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(VanillaPlus.MODID, name)));
         this.forgeRegistryHolder = deferredRegister.makeRegistry(RegistryBuilder::of);
     }
 
@@ -217,7 +221,7 @@ public final class VPRegistry<T> {
      */
     @NonNull
     public <U> VPRegistry<U> createRegistry(@NonNull String name) {
-        return new VPRegistry<>(registryKey.location().getPath() + "/" + name);
+        return new VPRegistry<>(registryKey.identifier().getPath() + "/" + name);
     }
 
     /**
@@ -256,7 +260,7 @@ public final class VPRegistry<T> {
     private <U> U getResource(@NonNull String name, @NonNull BiFunction<HolderLookup.RegistryLookup<T>, ResourceKey<T>, U> resourceFunction) {
         Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
 
-        ResourceKey<T> resourceKey = ResourceKey.create(registryKey, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
+        ResourceKey<T> resourceKey = ResourceKey.create(registryKey, Identifier.fromNamespaceAndPath(VanillaPlus.MODID, name));
         return resourceFunction.apply(provider.lookupOrThrow(registryKey), resourceKey);
     }
 

@@ -4,13 +4,14 @@ import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import lombok.NonNull;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.extensions.IForgeLivingEntity;
 
 /**
  * {@link Player}를 확장하는 인터페이스.
  *
  * @param <T> {@link Player}를 상속받는 타입
  */
-public interface VPPlayer<T extends Player> extends VPEntity<T, EntityModifier.LivingEntityModifier> {
+public interface VPPlayer<T extends Player> extends VPEntity<T, EntityModifier.LivingEntityModifier>, IForgeLivingEntity {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Player> VPPlayer<T> cast(@NonNull T object) {

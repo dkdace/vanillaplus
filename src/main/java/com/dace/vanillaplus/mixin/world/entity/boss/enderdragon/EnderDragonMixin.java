@@ -34,8 +34,11 @@ import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhaseManager;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -58,7 +61,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @Unique
     private static final int MAX_EXPLOSION_RESISTANCE = 3;
     @Unique
-    private static final int COLOR_METEOR = ARGB.color(223, 0, 249);
+    private static final int METEOR_COLOR = ARGB.color(223, 0, 249);
     @Unique
     private static final int METEOR_POS_SPREAD = 20;
     @Unique
@@ -94,8 +97,9 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     }
 
     @Override
-    protected float modifyBlockExplosionResistance(float resistance, BlockState blockState) {
-        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
+    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
+                                             float explosionPower) {
+        return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? explosionPower : Math.min(MAX_EXPLOSION_RESISTANCE, explosionPower);
     }
 
     @Override
@@ -144,7 +148,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @Unique
     private void stepMeteorClient(@NonNull BlockPos blockPos) {
-        level().addParticle(ColorParticleOption.create(ParticleTypes.FLASH, COLOR_METEOR), true, false, blockPos.getX(),
+        level().addParticle(ColorParticleOption.create(ParticleTypes.FLASH, METEOR_COLOR), true, false, blockPos.getX(),
                 blockPos.getY(), blockPos.getZ(), 0, 0, 0);
         level().playLocalSound(blockPos, VPSoundEvents.ENDER_DRAGON_FALL_METEOR.get(), getSoundSource(), 3,
                 1 + random.nextFloat() * 0.2F, false);
@@ -152,7 +156,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         for (int i = 0; i < 30; i++) {
             Vec3 pos = blockPos.getCenter().offsetRandom(random, 3);
 
-            level().addParticle(new DustParticleOptions(COLOR_METEOR, 4), true, false, pos.x(), pos.y(), pos.z(),
+            level().addParticle(new DustParticleOptions(METEOR_COLOR, 4), true, false, pos.x(), pos.y(), pos.z(),
                     0, 0, 0);
         }
     }
@@ -178,7 +182,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;"),
             index = 1)
-    private double setUpwardVelocityMultiplier(double velocity, @Local DragonPhaseInstance dragonPhaseInstance) {
+    private double modifyUpwardVelocityMultiplier(double velocity, @Local DragonPhaseInstance dragonPhaseInstance) {
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = dragonPhaseInstance.getPhase();
 
         if (enderDragonPhase == EnderDragonPhase.CHARGING_PLAYER)
@@ -207,7 +211,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Mob;onSyncedDataUpdated(Lnet/minecraft/network/syncher/EntityDataAccessor;)V"))
-    private void onSynchedDataUpdated(EntityDataAccessor<?> entityDataAccessor, CallbackInfo ci) {
+    private void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor, CallbackInfo ci) {
         if (!METEOR_POS.equals(entityDataAccessor) || !level().isClientSide())
             return;
 
@@ -242,7 +246,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         return original && enderDragonPhase != EnderDragonPhase.SITTING_SCANNING && enderDragonPhase != EnderDragonPhase.SITTING_FLAMING;
     }
 
-    @ModifyExpressionValue(method = "hurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/boss/EnderDragonPart;Lnet/minecraft/world/damagesource/DamageSource;F)Z",
+    @ModifyExpressionValue(method = "hurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/boss/enderdragon/EnderDragonPart;Lnet/minecraft/world/damagesource/DamageSource;F)Z",
             at = @At(value = "CONSTANT", args = "floatValue=0.25"))
     private float modifySittingAllowedDamage(float allowedDamage) {
         return getDataModifier().getPhaseInfo().getSitting().getAllowedDamageRatio();

@@ -8,6 +8,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.extensions.IForgeLivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see EntityModifier.EnderDragonModifier
  */
-public interface VPEnderDragon extends VPEntity<EnderDragon, EntityModifier.EnderDragonModifier> {
+public interface VPEnderDragon extends VPEntity<EnderDragon, EntityModifier.EnderDragonModifier>, IForgeLivingEntity {
     @NonNull
     static VPEnderDragon cast(@NonNull EnderDragon object) {
         return (VPEnderDragon) object;

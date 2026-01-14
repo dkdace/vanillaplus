@@ -54,6 +54,22 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static final String COMPONENT_TOOL_WHEN_BREAKING = "tool.when_breaking";
     @Unique
+    private static final String COMPONENT_ATTACK_RANGE_WHEN_ATTACKING = "attack_range.when_attacking";
+    @Unique
+    private static final String COMPONENT_ATTACK_RANGE_MIN_REACH = "attack_range.min_reach";
+    @Unique
+    private static final String COMPONENT_ATTACK_RANGE_MAX_REACH = "attack_range.max_reach";
+    @Unique
+    private static final String COMPONENT_ATTACK_RANGE_RANGE = "attack_range.range";
+    @Unique
+    private static final String COMPONENT_KINETIC_WEAPON_WHEN_CHARGING = "kinetic_weapon.when_charging";
+    @Unique
+    private static final String COMPONENT_KINETIC_WEAPON_DAMAGE_MULTIPLIER = "kinetic_weapon.damage_multiplier";
+    @Unique
+    private static final String COMPONENT_WEAPON_SHIELD_DISARMING = "weapon.shield_disarming";
+    @Unique
+    private static final String COMPONENT_WEAPON_SHIELD_DISARMING_TIME = "weapon.shield_disarming_time";
+    @Unique
     private static final String COMPONENT_ATTRIBUTE_MODIFIER = "attribute.modifier.equals.0";
     @Unique
     private static final String COMPONENT_FOOD_WHEN_EATEN = "food.whenEaten";
@@ -109,6 +125,58 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
+    private void addAttackRangeTooltip(@NonNull AttackRange attackRange, @NonNull Consumer<Component> componentConsumer) {
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(Component.translatable(COMPONENT_ATTACK_RANGE_WHEN_ATTACKING).withStyle(ChatFormatting.GRAY));
+
+        float minRange = attackRange.minRange();
+        if (minRange > 0) {
+            MutableComponent minReachComponent = Component.translatable(COMPONENT_ATTACK_RANGE_MIN_REACH,
+                    ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(minRange));
+
+            componentConsumer.accept(CommonComponents.space().append(minReachComponent).withStyle(ChatFormatting.DARK_GREEN));
+        }
+        MutableComponent maxReachComponent = Component.translatable(COMPONENT_ATTACK_RANGE_MAX_REACH,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(attackRange.maxRange()));
+
+        componentConsumer.accept(CommonComponents.space().append(maxReachComponent).withStyle(ChatFormatting.DARK_GREEN));
+
+        float hitboxMargin = attackRange.hitboxMargin();
+        if (hitboxMargin > 0) {
+            MutableComponent rangeComponent = Component.translatable(COMPONENT_ATTACK_RANGE_RANGE,
+                    ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(hitboxMargin));
+
+            componentConsumer.accept(CommonComponents.space().append(rangeComponent).withStyle(ChatFormatting.DARK_GREEN));
+        }
+    }
+
+    @Unique
+    private void addKineticWeaponTooltip(@NonNull KineticWeapon kineticWeapon, @NonNull Consumer<Component> componentConsumer) {
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(Component.translatable(COMPONENT_KINETIC_WEAPON_WHEN_CHARGING).withStyle(ChatFormatting.GRAY));
+
+        MutableComponent component = Component.translatable(COMPONENT_KINETIC_WEAPON_DAMAGE_MULTIPLIER,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(kineticWeapon.damageMultiplier()));
+
+        componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
+    }
+
+    @Unique
+    private void addWeaponTooltip(@NonNull Weapon weapon, @NonNull Consumer<Component> componentConsumer) {
+        float disableBlockingForSeconds = weapon.disableBlockingForSeconds();
+        if (disableBlockingForSeconds <= 0)
+            return;
+
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(Component.translatable(COMPONENT_WEAPON_SHIELD_DISARMING).withStyle(ChatFormatting.GRAY));
+
+        MutableComponent component = Component.translatable(COMPONENT_WEAPON_SHIELD_DISARMING_TIME,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(disableBlockingForSeconds));
+
+        componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
+    }
+
+    @Unique
     private void addFoodTooltip(@NonNull FoodProperties foodProperties, @NonNull Consumer<Component> componentConsumer) {
         componentConsumer.accept(Component.empty());
 
@@ -152,13 +220,13 @@ public abstract class ItemStackMixin implements VPItemStack {
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(Component.translatable(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT).withStyle(ChatFormatting.GRAY));
 
-        String baseDamage = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage());
-        String shootingPower = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower());
+        MutableComponent baseDamageComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage()));
+        MutableComponent shootingPowerComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_SPEED,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower()));
 
-        componentConsumer.accept(CommonComponents.space().append(Component.translatable(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE, baseDamage))
-                .withStyle(ChatFormatting.DARK_GREEN));
-        componentConsumer.accept(CommonComponents.space().append(Component.translatable(COMPONENT_PROJECTILE_WEAPON_SPEED, shootingPower))
-                .withStyle(ChatFormatting.DARK_GREEN));
+        componentConsumer.accept(CommonComponents.space().append(baseDamageComponent).withStyle(ChatFormatting.DARK_GREEN));
+        componentConsumer.accept(CommonComponents.space().append(shootingPowerComponent).withStyle(ChatFormatting.DARK_GREEN));
     }
 
     @Unique
@@ -243,6 +311,15 @@ public abstract class ItemStackMixin implements VPItemStack {
                                    Consumer<Component> componentConsumer, CallbackInfo ci) {
         addTooltip(DataComponents.TOOL, tooltipDisplay, tool -> addToolTooltip(tool, componentConsumer));
         addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, ignored -> addProjectileWeaponTooltip(componentConsumer));
+    }
+
+    @Inject(method = "addAttributeTooltips", at = @At("TAIL"))
+    private void addExtraTooltipsAfterAttribute(Consumer<Component> componentConsumer, TooltipDisplay tooltipDisplay, @Nullable Player player,
+                                                CallbackInfo ci) {
+        addTooltip(DataComponents.ATTACK_RANGE, tooltipDisplay, attackRange -> addAttackRangeTooltip(attackRange, componentConsumer));
+        addTooltip(DataComponents.KINETIC_WEAPON, tooltipDisplay, kineticWeapon ->
+                addKineticWeaponTooltip(kineticWeapon, componentConsumer));
+        addTooltip(DataComponents.WEAPON, tooltipDisplay, weapon -> addWeaponTooltip(weapon, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))

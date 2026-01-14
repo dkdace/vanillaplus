@@ -4,6 +4,8 @@ import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
 import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -11,11 +13,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
@@ -26,8 +29,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.List;
 
@@ -41,6 +46,9 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     @Shadow
     @Final
     private ItemCooldowns cooldowns;
+
+    @Shadow
+    public abstract float getAttackStrengthScale(float adjustTicks);
 
     @Override
     protected boolean canUseTotem(boolean canUse, ItemStack itemStack) {
@@ -69,7 +77,7 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
         return (float) (exhaustion * getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
     }
 
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V"))
+    @Redirect(method = "causeExtraKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V"))
     private void removeSprintCancelOnAttack(Player player, boolean isSprinting) {
         // 미사용
     }
@@ -84,5 +92,35 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
                 entity -> entity instanceof ItemEntity || entity instanceof AbstractArrow || entity instanceof ExperienceOrb));
 
         return entities;
+    }
+
+    @Redirect(method = "doSweepAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;getSweepHitBox(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/AABB;"))
+    private AABB modifySweepHitbox(ItemStack instance, Player player, Entity target) {
+        double sweepingRange = player.getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
+        return target.getBoundingBox().inflate(sweepingRange, 0.25, sweepingRange);
+    }
+
+    @Definition(id = "distanceToSqr", method = "Lnet/minecraft/world/entity/player/Player;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D")
+    @Expression("this.distanceToSqr(?) < ?")
+    @ModifyExpressionValue(method = "doSweepAttack", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean redirectSweepDistanceCheck(boolean original, @Local LivingEntity sweepTarget) {
+        double yRot = Math.toRadians(-getYRot() + 90);
+        double distance = Math.cos(yRot) * (getX() - sweepTarget.getX()) - Math.sin(yRot) * (getZ() - sweepTarget.getZ());
+
+        return distance > 0 && distance < entityAttackRange().effectiveMaxRange(getThis());
+    }
+
+    @ModifyArgs(method = "doSweepAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/server/level/ServerLevel;sendParticles(Lnet/minecraft/core/particles/ParticleOptions;DDDIDDDD)I"))
+    private void modifySweepParticleArgs(Args args) {
+        args.set(5, getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow()));
+        args.set(7, 0.0);
+        args.set(8, 1.0);
+    }
+
+    @Override
+    public float getSecondsToDisableBlocking() {
+        return getAttackStrengthScale(0.5F) > 0.9 ? super.getSecondsToDisableBlocking() : 0;
     }
 }

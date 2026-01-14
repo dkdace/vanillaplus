@@ -4,6 +4,7 @@ import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.common.extensions.IForgeEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <U> {@link EntityModifier}를 상속받는 엔티티 수정자
  * @see EntityModifier
  */
-public interface VPEntity<T extends Entity, U extends EntityModifier> extends VPMixin<T> {
+public interface VPEntity<T extends Entity, U extends EntityModifier> extends VPMixin<T>, IForgeEntity {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Entity, U extends EntityModifier> VPEntity<T, U> cast(@NonNull T object) {

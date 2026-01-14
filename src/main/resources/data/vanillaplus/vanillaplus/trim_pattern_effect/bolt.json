@@ -3,10 +3,10 @@
   "effects": {
     "minecraft:attributes": [
       {
-        "amount": 0.15,
-        "attribute": "minecraft:entity_interaction_range",
+        "amount": 0.05,
+        "attribute": "vanillaplus:attack_reach_multiplier",
         "id": "vanillaplus:trim_pattern_effect.bolt",
-        "operation": "add_value"
+        "operation": "add_multiplied_base"
       }
     ]
   }

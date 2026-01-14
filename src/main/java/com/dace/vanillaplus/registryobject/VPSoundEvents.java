@@ -4,7 +4,7 @@ import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -21,7 +21,7 @@ public final class VPSoundEvents {
 
     @NonNull
     private static RegistryObject<SoundEvent> create(@NonNull String name) {
-        SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
+        SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(VanillaPlus.MODID, name));
         return VPRegistry.SOUND_EVENT.register(name, () -> soundEvent);
     }
 }

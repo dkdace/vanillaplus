@@ -15,7 +15,7 @@ public abstract class RaiderMixin<T extends Raider, U extends EntityModifier.Liv
     public abstract Raid getCurrentRaid();
 
     @Override
-    protected float modifyWaterSlowDown(float value) {
-        return getCurrentRaid() == null ? super.modifyWaterSlowDown(value) : 0.9F;
+    protected float getWaterSlowDown() {
+        return getCurrentRaid() == null ? super.getWaterSlowDown() : 0.9F;
     }
 }

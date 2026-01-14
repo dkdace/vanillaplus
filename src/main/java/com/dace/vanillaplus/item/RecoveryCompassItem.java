@@ -30,6 +30,9 @@ import org.jetbrains.annotations.Nullable;
  * 만회 나침반 아이템 클래스.
  */
 public final class RecoveryCompassItem extends Item {
+    /** 컴포넌트 키 */
+    private static final String COMPONENT_TELEPORT_NOT_VALID = "item.minecraft.recovery_compass.teleport_not_valid";
+
     public RecoveryCompassItem(@NonNull Properties properties) {
         super(properties);
     }
@@ -45,7 +48,7 @@ public final class RecoveryCompassItem extends Item {
                 1);
         serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2, 0.5F);
 
-        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0, 0, 0, 0);
     }
 
     @Override
@@ -60,7 +63,7 @@ public final class RecoveryCompassItem extends Item {
 
         Vec3 pos = getTeleportLocation(serverLevel, lastDeathPos);
         if (pos == null) {
-            player.displayClientMessage(Component.translatable("item.minecraft.recovery_compass.teleport_not_valid"), true);
+            player.displayClientMessage(Component.translatable(COMPONENT_TELEPORT_NOT_VALID), true);
             return InteractionResult.FAIL;
         }
 

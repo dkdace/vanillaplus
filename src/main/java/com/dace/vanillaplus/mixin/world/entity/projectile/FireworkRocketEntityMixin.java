@@ -20,11 +20,11 @@ public abstract class FireworkRocketEntityMixin extends EntityMixin<FireworkRock
     private void modifyElytraDeltaMovement(Args args, @Local(ordinal = 0) Vec3 direction, @Local(ordinal = 1) Vec3 speed) {
         ItemModifier.ElytraModifier itemModifier = DataModifierInfo.ITEM_MODIFIER.getOrThrow(Items.ELYTRA);
 
-        args.setAll(direction.x * 0.1 + (direction.x * itemModifier.getFireworkAddSpeedMultiplier() - speed.x)
+        args.setAll(direction.x() * 0.1 + (direction.x() * itemModifier.getFireworkAddSpeedMultiplier() - speed.x())
                         * itemModifier.getFireworkFinalSpeedModifier(),
-                direction.y * 0.1 + (direction.y * itemModifier.getFireworkAddSpeedMultiplier() - speed.y)
+                direction.y() * 0.1 + (direction.y() * itemModifier.getFireworkAddSpeedMultiplier() - speed.y())
                         * itemModifier.getFireworkFinalSpeedModifier(),
-                direction.z * 0.1 + (direction.z * itemModifier.getFireworkAddSpeedMultiplier() - speed.z)
+                direction.z() * 0.1 + (direction.z() * itemModifier.getFireworkAddSpeedMultiplier() - speed.z())
                         * itemModifier.getFireworkFinalSpeedModifier());
     }
 }

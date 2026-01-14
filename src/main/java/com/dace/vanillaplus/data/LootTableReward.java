@@ -49,6 +49,6 @@ public final class LootTableReward {
      */
     @Nullable
     public static LootTableReward fromLootTable(@NonNull ResourceKey<LootTable> lootTableResourceKey) {
-        return VPRegistry.LOOT_TABLE_REWARD.getValue(lootTableResourceKey.location().getPath());
+        return VPRegistry.LOOT_TABLE_REWARD.getValue(lootTableResourceKey.identifier().getPath());
     }
 }

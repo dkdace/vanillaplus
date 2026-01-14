@@ -21,9 +21,9 @@ import java.util.function.Consumer;
 public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnchantments> {
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0,
             shift = At.Shift.AFTER))
-    private void addDescriptionToolTip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                        DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
-                                        @Local int level) {
+    private void addEffectsTooltip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
+                                    DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
+                                    @Local int level) {
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
                 VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentResourceKey,
                         enchantmentHolder.value(), level));
@@ -31,9 +31,9 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
             shift = At.Shift.AFTER))
-    private void addDescriptionToolTip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                        DataComponentGetter dataComponentGetter, CallbackInfo ci,
-                                        @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
+    private void addEffectsTooltip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
+                                    DataComponentGetter dataComponentGetter, CallbackInfo ci,
+                                    @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
         Holder<Enchantment> enchantmentHolder = entry.getKey();
 
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
