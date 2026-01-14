@@ -66,6 +66,10 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static final String COMPONENT_KINETIC_WEAPON_DAMAGE_MULTIPLIER = "kinetic_weapon.damage_multiplier";
     @Unique
+    private static final String COMPONENT_WEAPON_SHIELD_DISARMING = "weapon.shield_disarming";
+    @Unique
+    private static final String COMPONENT_WEAPON_SHIELD_DISARMING_TIME = "weapon.shield_disarming_time";
+    @Unique
     private static final String COMPONENT_ATTRIBUTE_MODIFIER = "attribute.modifier.equals.0";
     @Unique
     private static final String COMPONENT_FOOD_WHEN_EATEN = "food.whenEaten";
@@ -153,6 +157,21 @@ public abstract class ItemStackMixin implements VPItemStack {
 
         MutableComponent component = Component.translatable(COMPONENT_KINETIC_WEAPON_DAMAGE_MULTIPLIER,
                 ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(kineticWeapon.damageMultiplier()));
+
+        componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
+    }
+
+    @Unique
+    private void addWeaponTooltip(@NonNull Weapon weapon, @NonNull Consumer<Component> componentConsumer) {
+        float disableBlockingForSeconds = weapon.disableBlockingForSeconds();
+        if (disableBlockingForSeconds <= 0)
+            return;
+
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(Component.translatable(COMPONENT_WEAPON_SHIELD_DISARMING).withStyle(ChatFormatting.GRAY));
+
+        MutableComponent component = Component.translatable(COMPONENT_WEAPON_SHIELD_DISARMING_TIME,
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(disableBlockingForSeconds));
 
         componentConsumer.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_GREEN));
     }
@@ -300,6 +319,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.ATTACK_RANGE, tooltipDisplay, attackRange -> addAttackRangeTooltip(attackRange, componentConsumer));
         addTooltip(DataComponents.KINETIC_WEAPON, tooltipDisplay, kineticWeapon ->
                 addKineticWeaponTooltip(kineticWeapon, componentConsumer));
+        addTooltip(DataComponents.WEAPON, tooltipDisplay, weapon -> addWeaponTooltip(weapon, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))

@@ -4,6 +4,9 @@
     "minecraft:attack_range": {
       "hitbox_margin": 0.2,
       "mob_factor": 0.3
+    },
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 0.4
     }
   },
   "attribute_modifiers": [

@@ -131,5 +131,7 @@
   "trim_pattern.minecraft.silence.description.1": "%s%% Mob Detection Range",
   "trim_pattern.minecraft.snout.description.0": "%s%% Damage from Piglins and Hoglins",
   "trim_pattern.minecraft.tide.description.0": "+%s%% Speed when in contact with Water",
-  "trim_pattern.minecraft.vex.description.0": "%s%% Damage from Vexes and Magic"
+  "trim_pattern.minecraft.vex.description.0": "%s%% Damage from Vexes and Magic",
+  "weapon.shield_disarming": "Shield Disarming:",
+  "weapon.shield_disarming_time": "%s Shield Disarming Time"
 }

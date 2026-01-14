@@ -12,6 +12,9 @@
       "min_reach": 1.8,
       "mob_factor": 0.5
     },
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 0.4
+    },
     "minecraft:kinetic_weapon": {
       "damage_multiplier": 0.75,
       "delay_ticks": 9,

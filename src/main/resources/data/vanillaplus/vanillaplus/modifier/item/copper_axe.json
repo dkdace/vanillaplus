@@ -1,5 +1,11 @@
 {
   "type": "vanillaplus:item",
+  "components": {
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 1.75,
+      "item_damage_per_attack": 2
+    }
+  },
   "attribute_modifiers": [
     {
       "type": "minecraft:attack_speed",
