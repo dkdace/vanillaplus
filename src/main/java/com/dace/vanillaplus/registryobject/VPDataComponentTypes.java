@@ -23,6 +23,8 @@ public final class VPDataComponentTypes {
             builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
     public static final RegistryObject<DataComponentType<Holder<TrimPattern>>> PROVIDES_TRIM_PATTERN = create("provides_trim_pattern", builder ->
             builder.persistent(TrimPattern.CODEC).networkSynchronized(TrimPattern.STREAM_CODEC));
+    public static final RegistryObject<DataComponentType<Integer>> ENCHANTMENT_LEVEL_MULTIPLIER = create("enchantment_level_multiplier", builder ->
+            builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

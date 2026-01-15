@@ -10,7 +10,6 @@
     "advancements.criterion.PlayerPredicateMixin",
     "core.CauldronInteractionMixin",
     "server.MinecraftServerMixin",
-    "server.commands.EnchantCommandMixin",
     "server.level.ServerLevelMixin",
     "server.players.PlayerListMixin",
     "world.entity.EntityMixin",
@@ -85,7 +84,6 @@
     "world.item.enchantment.EnchantmentHelperMixin",
     "world.item.enchantment.EnchantmentMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
-    "world.item.enchantment.providers.SingleEnchantmentMixin",
     "world.item.equipment.trim.ArmorTrimMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BedBlockMixin",
@@ -113,7 +111,6 @@
     "world.level.levelgen.structure.structures.SwampHutPieceMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
-    "world.level.storage.loot.functions.EnchantRandomlyFunctionMixin",
     "world.level.storage.loot.functions.SetOminousBottleAmplifierFunctionMixin"
   ],
   "client": [

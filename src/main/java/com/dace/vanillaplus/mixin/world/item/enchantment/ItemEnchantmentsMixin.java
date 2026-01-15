@@ -1,8 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
 import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
@@ -11,6 +13,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,6 +22,11 @@ import java.util.function.Consumer;
 
 @Mixin(ItemEnchantments.class)
 public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnchantments> {
+    @Unique
+    private int getFinalEnchantmentLevel(@NonNull DataComponentGetter dataComponentGetter, int level) {
+        return level * dataComponentGetter.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
+    }
+
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0,
             shift = At.Shift.AFTER))
     private void addEffectsTooltip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
@@ -26,7 +34,7 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
                                     @Local int level) {
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
                 VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentResourceKey,
-                        enchantmentHolder.value(), level));
+                        enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, level)));
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
@@ -38,6 +46,6 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
 
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
                 VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentResourceKey,
-                        enchantmentHolder.value(), entry.getIntValue()));
+                        enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, entry.getIntValue())));
     }
 }

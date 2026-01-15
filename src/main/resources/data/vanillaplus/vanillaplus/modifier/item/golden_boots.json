@@ -1,9 +1,7 @@
 {
   "type": "vanillaplus:item",
   "components": {
-    "minecraft:enchantable": {
-      "value": 30
-    }
+    "vanillaplus:enchantment_level_multiplier": 2
   },
   "attribute_modifiers": [
     {

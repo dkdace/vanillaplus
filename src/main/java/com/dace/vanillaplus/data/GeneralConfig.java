@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.VanillaPlus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -27,10 +26,7 @@ public final class GeneralConfig {
                             .forGetter(GeneralConfig::getSmeltingToolDamageRatio),
                     ExtraCodecs.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
                             .forGetter(GeneralConfig::getMaxRepairLimitRatio),
-                    ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5)
-                            .forGetter(GeneralConfig::getMaxBadOmenLevel),
-                    ExtraCodecs.floatRange(1, 10).optionalFieldOf("extended_enchantment_max_cost_multiplier", 1F)
-                            .forGetter(GeneralConfig::getExtendedEnchantmentMaxCostMultiplier))
+                    ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5).forGetter(GeneralConfig::getMaxBadOmenLevel))
             .apply(instance, GeneralConfig::new));
     /** 리소스 이름 */
     private static final String RESOURCE_NAME = "general";
@@ -41,8 +37,6 @@ public final class GeneralConfig {
     private final float maxRepairLimitRatio;
     /** 최대 흉조 레벨 */
     private final int maxBadOmenLevel;
-    /** {@link VPTags.Items#EXTENDED_ENCHANTABLE} 아이템의 최대 마법 부여 비용 배수 */
-    private final float extendedEnchantmentMaxCostMultiplier;
 
     /**
      * 전역 설정을 반환한다.

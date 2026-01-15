@@ -45,7 +45,6 @@
               "sound": [
                 "minecraft:item.spear.lunge_1",
                 "minecraft:item.spear.lunge_2",
-                "minecraft:item.spear.lunge_3",
                 "minecraft:item.spear.lunge_3"
               ],
               "volume": 1.0

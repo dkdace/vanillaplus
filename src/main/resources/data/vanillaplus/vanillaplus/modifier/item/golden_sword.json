@@ -1,9 +1,7 @@
 {
   "type": "vanillaplus:item",
   "components": {
-    "minecraft:enchantable": {
-      "value": 26
-    },
+    "vanillaplus:enchantment_level_multiplier": 2,
     "minecraft:attack_range": {
       "hitbox_margin": 0.2,
       "mob_factor": 0.3
