@@ -3,7 +3,6 @@ package com.dace.vanillaplus.data.modifier;
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -53,7 +52,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         CODEC_REGISTRY.register("ravager", () -> RavagerModifier.CODEC);
         CODEC_REGISTRY.register("ender_dragon", () -> EnderDragonModifier.CODEC);
 
-        ReflectionUtil.loadClass(InterfaceInfoMap.class);
+        VanillaPlus.loadClass(InterfaceInfoMap.class);
     }
 
     /** 인터페이스 수정자 목록 */

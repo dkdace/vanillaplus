@@ -4,7 +4,6 @@ import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
@@ -111,19 +110,19 @@ public final class VPRegistry<T> {
     private static HolderLookup.Provider provider;
 
     static {
-        ReflectionUtil.loadClass(VPSoundEvents.class);
-        ReflectionUtil.loadClass(VPAttributes.class);
-        ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
-        ReflectionUtil.loadClass(VPDataComponentTypes.class);
-        ReflectionUtil.loadClass(VPRecipeTypes.class);
-        ReflectionUtil.loadClass(VPRecipeSerializers.class);
-        ReflectionUtil.loadClass(VPRecipeBookCategories.class);
-        ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
-        ReflectionUtil.loadClass(VPPotions.class);
-        ReflectionUtil.loadClass(VPBlockEntityTypes.class);
-        ReflectionUtil.loadClass(VPEnchantmentEffectComponentTypes.class);
-        ReflectionUtil.loadClass(VPEnchantmentEntityEffectTypes.class);
-        ReflectionUtil.loadClass(VPGameRules.class);
+        VanillaPlus.loadClass(VPSoundEvents.class);
+        VanillaPlus.loadClass(VPAttributes.class);
+        VanillaPlus.loadClass(VPEnchantmentLevelBasedValueTypes.class);
+        VanillaPlus.loadClass(VPDataComponentTypes.class);
+        VanillaPlus.loadClass(VPRecipeTypes.class);
+        VanillaPlus.loadClass(VPRecipeSerializers.class);
+        VanillaPlus.loadClass(VPRecipeBookCategories.class);
+        VanillaPlus.loadClass(VPRecipeDisplayTypes.class);
+        VanillaPlus.loadClass(VPPotions.class);
+        VanillaPlus.loadClass(VPBlockEntityTypes.class);
+        VanillaPlus.loadClass(VPEnchantmentEffectComponentTypes.class);
+        VanillaPlus.loadClass(VPEnchantmentEntityEffectTypes.class);
+        VanillaPlus.loadClass(VPGameRules.class);
     }
 
     /** 레지스트리 리소스 키 */

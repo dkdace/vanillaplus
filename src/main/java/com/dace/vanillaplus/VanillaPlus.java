@@ -31,6 +31,21 @@ public final class VanillaPlus {
     }
 
     /**
+     * 지정한 클래스를 {@link Class#forName(String)}을 이용하여 불러온다.
+     *
+     * <p>주로 필요한 static initializer를 실행할 때 사용한다.</p>
+     *
+     * @param clazz 클래스
+     */
+    public static void loadClass(@NonNull Class<?> clazz) {
+        try {
+            Class.forName(clazz.getName());
+        } catch (ClassNotFoundException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
      * DeferredRegister 인스턴스를 등록한다.
      *
      * @param deferredRegister DeferredRegister 인스턴스
@@ -39,4 +54,5 @@ public final class VanillaPlus {
     public <T> void registerBusGroup(@NonNull DeferredRegister<T> deferredRegister) {
         deferredRegister.register(busGroup);
     }
+
 }
