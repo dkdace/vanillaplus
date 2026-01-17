@@ -16,7 +16,6 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -26,6 +25,9 @@ import java.util.*;
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LevelBasedValuePreset {
+    /** DataGetter */
+    public static final DataGetter<ResourceKey<Enchantment>, LevelBasedValuePreset> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.LEVEL_BASED_VALUE_PRESET);
+
     /** 레지스트리 코덱 */
     public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */
@@ -46,17 +48,6 @@ public final class LevelBasedValuePreset {
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.LEVEL_BASED_VALUE_PRESET.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
-    }
-
-    /**
-     * 지정한 마법 부여에 해당하는 레벨 기반 값 프리셋을 반환한다.
-     *
-     * @param enchantmentResourceKey 마법 부여 리소스 키
-     * @return 레벨 기반 값 프리셋. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    public static LevelBasedValuePreset fromEnchantment(@NonNull ResourceKey<Enchantment> enchantmentResourceKey) {
-        return VPRegistry.LEVEL_BASED_VALUE_PRESET.getValue(enchantmentResourceKey.identifier().getPath());
     }
 
     /**

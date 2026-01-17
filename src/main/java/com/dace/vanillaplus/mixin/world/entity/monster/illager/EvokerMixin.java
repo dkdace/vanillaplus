@@ -28,8 +28,8 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        RaiderEffect.EvokerEffect evokerEffect = RaiderEffect.fromEntityType(getType());
-        evokerEffect.getEquipItemInfos().forEach(itemInfo -> itemInfo.equipItem(getThis()));
+        getRaiderEffect(RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
+                evokerEffect.getEquipItemInfos().forEach(itemInfo -> itemInfo.equipItem(getThis())));
     }
 
     @Mixin(targets = "net.minecraft.world.entity.monster.illager.Evoker$EvokerSummonSpellGoal")
@@ -37,8 +37,8 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
         @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
         private void applyRaidBuffsToVex(CallbackInfo ci, @Local Vex vex) {
-            RaiderEffect.EvokerEffect evokerEffect = RaiderEffect.fromEntityType(EntityType.EVOKER);
-            evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex));
+            RaiderEffect.DATA_GETTER.get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
+                    evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex)));
         }
     }
 }

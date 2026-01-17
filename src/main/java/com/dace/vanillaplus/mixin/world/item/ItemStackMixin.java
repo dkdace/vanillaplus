@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.modifier.PotionModifier;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
@@ -209,24 +210,20 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
-    private void addProjectileWeaponTooltip(@NonNull Consumer<Component> componentConsumer) {
-        if (!(getItem() instanceof ProjectileWeaponItem projectileWeaponItem))
-            return;
+    private void addProjectileWeaponTooltip(@NonNull ProjectileWeaponItem projectileWeaponItem, @NonNull Consumer<Component> componentConsumer) {
+        VPModifiableData.getDataModifier(projectileWeaponItem, ItemModifier.ProjectileWeaponModifier.class)
+                .ifPresent(projectileWeaponModifier -> {
+                    componentConsumer.accept(Component.empty());
+                    componentConsumer.accept(Component.translatable(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT).withStyle(ChatFormatting.GRAY));
 
-        ItemModifier.ProjectileWeaponModifier projectileWeaponModifier = DataModifierInfo.ITEM_MODIFIER.get(projectileWeaponItem);
-        if (projectileWeaponModifier == null)
-            return;
+                    MutableComponent baseDamageComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE,
+                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage()));
+                    MutableComponent shootingPowerComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_SPEED,
+                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower()));
 
-        componentConsumer.accept(Component.empty());
-        componentConsumer.accept(Component.translatable(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT).withStyle(ChatFormatting.GRAY));
-
-        MutableComponent baseDamageComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE,
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage()));
-        MutableComponent shootingPowerComponent = Component.translatable(COMPONENT_PROJECTILE_WEAPON_SPEED,
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower()));
-
-        componentConsumer.accept(CommonComponents.space().append(baseDamageComponent).withStyle(ChatFormatting.DARK_GREEN));
-        componentConsumer.accept(CommonComponents.space().append(shootingPowerComponent).withStyle(ChatFormatting.DARK_GREEN));
+                    componentConsumer.accept(CommonComponents.space().append(baseDamageComponent).withStyle(ChatFormatting.DARK_GREEN));
+                    componentConsumer.accept(CommonComponents.space().append(shootingPowerComponent).withStyle(ChatFormatting.DARK_GREEN));
+                });
     }
 
     @Unique
@@ -273,10 +270,11 @@ public abstract class ItemStackMixin implements VPItemStack {
             target = "Lnet/minecraft/world/item/Item;isFoil(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean modifyFoilState(boolean hasFoil) {
         PotionContents potionContents = getThis().get(DataComponents.POTION_CONTENTS);
+        if (potionContents == null)
+            return hasFoil;
 
-        return potionContents == null
-                ? hasFoil
-                : potionContents.potion().map(potionHolder -> VPPotion.cast(potionHolder.value()).isGlistering()).orElse(hasFoil);
+        return potionContents.potion().flatMap(potionHolder ->
+                VPPotion.cast(potionHolder.value()).getDataModifier().map(PotionModifier::isGlistering)).orElse(hasFoil);
     }
 
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",
@@ -310,7 +308,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addExtraTooltips1(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player, TooltipFlag tooltipFlag,
                                    Consumer<Component> componentConsumer, CallbackInfo ci) {
         addTooltip(DataComponents.TOOL, tooltipDisplay, tool -> addToolTooltip(tool, componentConsumer));
-        addTooltip(DataComponents.ATTRIBUTE_MODIFIERS, tooltipDisplay, ignored -> addProjectileWeaponTooltip(componentConsumer));
+
+        if (getItem() instanceof ProjectileWeaponItem projectileWeaponItem)
+            addProjectileWeaponTooltip(projectileWeaponItem, componentConsumer);
     }
 
     @Inject(method = "addAttributeTooltips", at = @At("TAIL"))

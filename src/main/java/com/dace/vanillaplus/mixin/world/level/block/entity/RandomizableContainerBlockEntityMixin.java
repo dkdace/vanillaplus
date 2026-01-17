@@ -4,6 +4,7 @@ import com.dace.vanillaplus.data.LootTableReward;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
@@ -24,22 +25,28 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
 
     @Override
     public void onLoad() {
-        if (hasReward || level == null || getLootTableReward() == null || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
-            return;
-
-        hasReward = true;
-        level.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
+        init();
     }
 
     @Override
     @Nullable
     public LootTableReward getLootTableReward() {
-        return lootTable == null ? null : LootTableReward.fromLootTable(lootTable);
+        return lootTable == null ? null : LootTableReward.DATA_GETTER.get(lootTable).orElse(null);
+    }
+
+    @Unique
+    private void init() {
+        if (!(level instanceof ServerLevel serverLevel) || hasReward || getLootTableReward() == null
+                || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+            return;
+
+        hasReward = true;
+        serverLevel.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
     }
 
     @Inject(method = "setLootTable", at = @At("TAIL"))
     private void setLootTableReward(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
         if (lootTableResourceKey != null && !hasReward)
-            onLoad();
+            init();
     }
 }

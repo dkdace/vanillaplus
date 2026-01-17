@@ -8,7 +8,7 @@
     "advancements.criterion.EntityFlagsPredicateMixin",
     "advancements.criterion.LocationPredicateMixin",
     "advancements.criterion.PlayerPredicateMixin",
-    "core.CauldronInteractionMixin",
+    "core.cauldron.CauldronInteractionMixin",
     "server.MinecraftServerMixin",
     "server.level.ServerLevelMixin",
     "server.players.PlayerListMixin",

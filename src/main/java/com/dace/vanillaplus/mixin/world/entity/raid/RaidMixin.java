@@ -119,8 +119,7 @@ public abstract class RaidMixin {
 
     @Overwrite
     public int getNumGroups(Difficulty difficulty) {
-        RaidWave raidWave = RaidWave.fromDifficulty(difficulty);
-        return raidWave == null ? 0 : raidWave.getTotalWaves();
+        return RaidWave.DATA_GETTER.get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
@@ -177,11 +176,8 @@ public abstract class RaidMixin {
         ticksActive = 0;
         totalHealth = 0;
 
-        RaidWave raidWave = RaidWave.fromDifficulty(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty());
-        if (raidWave == null)
-            return;
-
-        spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1);
+        RaidWave.DATA_GETTER.get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
+                spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1));
 
         waveSpawnPos = Optional.empty();
         groupsSpawned++;

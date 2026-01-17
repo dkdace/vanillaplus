@@ -10,7 +10,6 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,7 +30,7 @@ public final class NetworkManager {
     private static final int PROTOCOL_VERSION = 3;
     /** 패킷 전송 채널 */
     private static final SimpleChannel CHANNEL = ChannelBuilder
-            .named(Identifier.fromNamespaceAndPath(VanillaPlus.MODID, "main"))
+            .named(VanillaPlus.createIdentifier("main"))
             .networkProtocolVersion(PROTOCOL_VERSION)
             .acceptedVersions((status, version) -> version == PROTOCOL_VERSION)
             .simpleChannel();

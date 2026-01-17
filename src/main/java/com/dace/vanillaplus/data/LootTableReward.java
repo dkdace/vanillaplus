@@ -16,7 +16,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * 노획물 테이블의 보상을 관리하는 클래스.
@@ -25,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LootTableReward {
+    /** DataGetter */
+    public static final DataGetter<ResourceKey<LootTable>, LootTableReward> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.LOOT_TABLE_REWARD);
+
     /** 레지스트리 코덱 */
     public static final Codec<Holder<LootTableReward>> CODEC = VPRegistry.LOOT_TABLE_REWARD.createRegistryCodec();
     /** JSON 코덱 */
@@ -38,17 +40,6 @@ public final class LootTableReward {
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.LOOT_TABLE_REWARD.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
-    }
-
-    /**
-     * 지정한 노획물 테이블에 해당하는 노획물 테이블 보상을 반환한다.
-     *
-     * @param lootTableResourceKey 노획물 테이블 리소스 키
-     * @return 노획물 테이블 보상. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    public static LootTableReward fromLootTable(@NonNull ResourceKey<LootTable> lootTableResourceKey) {
-        return VPRegistry.LOOT_TABLE_REWARD.getValue(lootTableResourceKey.identifier().getPath());
+        event.dataPackRegistry(VPRegistry.LOOT_TABLE_REWARD.getRegistryKey(), DIRECT_CODEC);
     }
 }

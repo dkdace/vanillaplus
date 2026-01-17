@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import com.dace.vanillaplus.registryobject.VPAttributes;
-import lombok.Getter;
+import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -29,15 +29,16 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+import java.util.Optional;
+
 @Mixin(Entity.class)
 public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
-    @Unique
-    @Nullable
-    @Getter
-    protected U dataModifier;
     @Shadow
     @Final
     protected RandomSource random;
+    @Unique
+    @Nullable
+    private U dataModifier;
 
     @Shadow
     public abstract float getBbWidth();
@@ -91,8 +92,16 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     public abstract LivingEntity getControllingPassenger();
 
     @Shadow
-    public abstract float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState,
-                                                      FluidState fluidState, float explosionPower);
+    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
+                                             float explosionPower) {
+        return 0;
+    }
+
+    @Override
+    @NonNull
+    public Optional<U> getDataModifier() {
+        return Optional.ofNullable(dataModifier);
+    }
 
     @Override
     @MustBeInvokedByOverriders

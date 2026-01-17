@@ -53,6 +53,9 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEffect> {
+    /** DataGetter */
+    public static final DataGetter<EntityType<?>, RaiderEffect> DATA_GETTER = DataGetter.fromDirectRegistry(BuiltInRegistries.ENTITY_TYPE, VPRegistry.RAIDER_EFFECT);
+
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends RaiderEffect>> CODEC_REGISTRY = VPRegistry.RAIDER_EFFECT.createRegistry("type");
     /** 유형별 코덱 */
@@ -70,19 +73,6 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.RAIDER_EFFECT.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
-
-    /**
-     * 지정한 엔티티 타입에 해당하는 습격자 효과를 반환한다.
-     *
-     * @param <T> {@link RaiderEffect}를 상속받는 습격자 효과
-     * @return 습격자 효과
-     * @throws IllegalStateException 해당하는 엔티티 수정자가 존재하지 않으면 발생
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    public static <T extends RaiderEffect> T fromEntityType(@NonNull EntityType<?> entityType) {
-        return (T) VPRegistry.RAIDER_EFFECT.getValueOrThrow(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath());
     }
 
     /**

@@ -23,12 +23,13 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Mixin(Item.class)
 public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPItem<T, U> {
     @Unique
     @Nullable
-    protected U dataModifier;
+    private U dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -64,8 +65,11 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         map.map().put(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
 
-    @Shadow
-    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+    @Override
+    @NonNull
+    public Optional<U> getDataModifier() {
+        return Optional.ofNullable(dataModifier);
+    }
 
     @Override
     @MustBeInvokedByOverriders
@@ -85,6 +89,9 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
         map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * GeneralConfig.get().getMaxRepairLimitRatio()));
     }
+
+    @Shadow
+    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
 
     @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
     private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity livingEntity) {

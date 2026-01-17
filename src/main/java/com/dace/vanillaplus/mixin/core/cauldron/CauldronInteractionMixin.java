@@ -1,9 +1,9 @@
-package com.dace.vanillaplus.mixin.core;
+package com.dace.vanillaplus.mixin.core.cauldron;
 
 import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
 import com.dace.vanillaplus.data.modifier.BlockModifier;
-import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPSoundEvents;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -46,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(CauldronInteraction.class)
@@ -59,14 +60,20 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
 
     @Unique
     @NonNull
+    private static Optional<BlockModifier.WaterCauldronModifier> getDataModifier() {
+        return VPModifiableData.getDataModifier(Blocks.WATER_CAULDRON, BlockModifier.WaterCauldronModifier.class);
+    }
+
+    @Unique
+    @NonNull
     private static InteractionResult getArrowInteractionResult(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos,
                                                                @NonNull Player player, @NonNull InteractionHand interactionHand,
                                                                @NonNull ItemStack itemStack) {
-        if (!level.isClientSide() && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity) {
-            int maxCount = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
-                    .getMaxTippedArrowCount();
+        getDataModifier().ifPresent(waterCauldronModifier -> {
+            if (level.isClientSide() || !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity))
+                return;
 
-            int count = Math.min(itemStack.getCount(), maxCount);
+            int count = Math.min(itemStack.getCount(), waterCauldronModifier.getMaxTippedArrowCount());
             itemStack.consume(count, player);
 
             ItemStack newItemStack = new ItemStack(Items.TIPPED_ARROW, count);
@@ -85,7 +92,7 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
             level.playSound(null, blockPos, VPSoundEvents.ARROW_TIPPED.get(), SoundSource.BLOCKS, 1, 1);
 
             LayeredCauldronBlock.lowerFillLevel(blockState, level, blockPos);
-        }
+        });
 
         return InteractionResult.SUCCESS;
     }
@@ -95,7 +102,8 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
     private static InteractionResult getDyeInteractionResult(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos,
                                                              @NonNull Player player, @NonNull InteractionHand interactionHand,
                                                              @NonNull ItemStack itemStack) {
-        if (!level.isClientSide() && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity) {
+        if (getDataModifier().isPresent() && !level.isClientSide()
+                && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity) {
             DyeItem item = (DyeItem) itemStack.getItem();
             itemStack.consume(1, player);
 
@@ -111,36 +119,39 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
 
     @Unique
     private static boolean isNotWashable(boolean condition, @NonNull Level level, @NonNull BlockPos blockPos) {
-        return level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
-                ? condition || !layeredCauldronBlockEntity.hasPureWater()
-                : condition;
+        if (getDataModifier().isPresent())
+            return condition || level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity
+                    && !layeredCauldronBlockEntity.hasPureWater();
+
+        return condition;
     }
 
     @ModifyExpressionValue(method = "lambda$bootStrap$1", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;is(Lnet/minecraft/core/Holder;)Z"))
     private static boolean modifyPotionTakeCondition(boolean original) {
-        return true;
+        return getDataModifier().isPresent() || original;
     }
 
     @ModifyExpressionValue(method = "lambda$bootStrap$5", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;is(Lnet/minecraft/core/Holder;)Z"))
     private static boolean modifyPotionFillCondition(boolean original) {
-        return true;
+        return getDataModifier().isPresent() || original;
     }
 
     @Inject(method = "lambda$bootStrap$1", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
     private static void addPotionOnFill0(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand,
                                          ItemStack itemStack, CallbackInfoReturnable<InteractionResult> cir, @Local PotionContents potionContents) {
-        if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
+        if (getDataModifier().isPresent() && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
             layeredCauldronBlockEntity.addPotionContents(potionContents);
     }
 
     @Inject(method = "lambda$bootStrap$5", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
     private static void addPotionOnFill1(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand,
-                                         ItemStack itemStack, CallbackInfoReturnable<InteractionResult> cir) {
-        PotionContents potionContents = itemStack.get(DataComponents.POTION_CONTENTS);
+                                         ItemStack itemStack, CallbackInfoReturnable<InteractionResult> cir, @Local PotionContents potionContents) {
+        if (getDataModifier().isEmpty())
+            return;
 
         if (potionContents != null && level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
             layeredCauldronBlockEntity.addPotionContents(potionContents);
@@ -148,8 +159,11 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
 
     @Redirect(method = "lambda$bootStrap$4", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
-    private static ItemStack redirectPotionOnTake(Item item, Holder<Potion> potionHolder, @Local(argsOnly = true) Level level,
-                                                  @Local(argsOnly = true) BlockPos blockPos) {
+    private static ItemStack redirectPotionOnTake(Item item, Holder<Potion> potionHolder, @Local(argsOnly = true) BlockState blockState,
+                                                  @Local(argsOnly = true) Level level, @Local(argsOnly = true) BlockPos blockPos) {
+        if (getDataModifier().isEmpty())
+            return PotionContents.createItemStack(item, potionHolder);
+
         ItemStack itemStack = new ItemStack(item);
 
         if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
@@ -162,6 +176,9 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
             target = "Lnet/minecraft/core/cauldron/CauldronInteraction;emptyBucket(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/sounds/SoundEvent;)Lnet/minecraft/world/InteractionResult;"))
     private static InteractionResult addPotionOnFillWater(Level level, BlockPos blockPos, Player player, InteractionHand interactionHand,
                                                           ItemStack filledItemStack, BlockState blockState, SoundEvent emptySound) {
+        if (getDataModifier().isEmpty())
+            return emptyBucket(level, blockPos, player, interactionHand, filledItemStack, blockState, emptySound);
+
         if (level.isClientSide())
             return InteractionResult.SUCCESS;
 
@@ -185,10 +202,13 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
     @ModifyArg(method = "lambda$bootStrap$3", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/cauldron/CauldronInteraction;fillBucket(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Ljava/util/function/Predicate;Lnet/minecraft/sounds/SoundEvent;)Lnet/minecraft/world/InteractionResult;"),
             index = 7)
-    private static Predicate<BlockState> modifyWaterTakeCondition(Predicate<BlockState> predicate, @Local(argsOnly = true) Level level,
-                                                                  @Local(argsOnly = true) BlockPos blockPos) {
-        return predicate.and(blockState -> !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
-                || layeredCauldronBlockEntity.hasPureWater());
+    private static Predicate<BlockState> modifyWaterTakeCondition(Predicate<BlockState> predicate, @Local(argsOnly = true) BlockState blockState,
+                                                                  @Local(argsOnly = true) Level level, @Local(argsOnly = true) BlockPos blockPos) {
+        if (getDataModifier().isPresent())
+            return predicate.and(ignored -> !(level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
+                    || layeredCauldronBlockEntity.hasPureWater());
+
+        return predicate;
     }
 
     @Definition(id = "pStack", local = @Local(type = ItemStack.class, argsOnly = true))
@@ -219,23 +239,23 @@ public interface CauldronInteractionMixin extends VPMixin<CauldronInteraction> {
     @Inject(method = "bootStrap", at = @At(value = "FIELD",
             target = "Lnet/minecraft/core/cauldron/CauldronInteraction;LAVA:Lnet/minecraft/core/cauldron/CauldronInteraction$InteractionMap;",
             opcode = Opcodes.GETSTATIC))
-    private static void addItemInteractions(CallbackInfo ci, @Local(ordinal = 1) Map<Item, CauldronInteraction> map1) {
-        map1.put(Items.ARROW, CauldronInteractionMixin::getArrowInteractionResult);
-        map1.put(Items.WHITE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.LIGHT_GRAY_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.GRAY_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.BLACK_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.BROWN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.RED_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.ORANGE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.YELLOW_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.LIME_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.GREEN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.CYAN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.LIGHT_BLUE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.BLUE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.PURPLE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.MAGENTA_DYE, CauldronInteractionMixin::getDyeInteractionResult);
-        map1.put(Items.PINK_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+    private static void addItemInteractions(CallbackInfo ci, @Local(ordinal = 1) Map<Item, CauldronInteraction> waterMap) {
+        waterMap.put(Items.ARROW, CauldronInteractionMixin::getArrowInteractionResult);
+        waterMap.put(Items.WHITE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.LIGHT_GRAY_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.GRAY_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.BLACK_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.BROWN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.RED_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.ORANGE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.YELLOW_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.LIME_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.GREEN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.CYAN_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.LIGHT_BLUE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.BLUE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.PURPLE_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.MAGENTA_DYE, CauldronInteractionMixin::getDyeInteractionResult);
+        waterMap.put(Items.PINK_DYE, CauldronInteractionMixin::getDyeInteractionResult);
     }
 }

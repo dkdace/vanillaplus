@@ -33,10 +33,10 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(itemEnchantments);
 
         armorTrim.pattern().unwrapKey()
-                .map(ArmorTrimEffect.TrimPatternEffect::fromTrimPattern)
+                .flatMap(ArmorTrimEffect.TrimPatternEffect.DATA_GETTER::get)
                 .ifPresent(trimPatternEffect -> mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
         armorTrim.material().unwrapKey()
-                .map(ArmorTrimEffect.TrimMaterialEffect::fromTrimMaterial)
+                .flatMap(ArmorTrimEffect.TrimMaterialEffect.DATA_GETTER::get)
                 .ifPresent(trimMaterialEffect -> mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
 
         return mutable.toImmutable();

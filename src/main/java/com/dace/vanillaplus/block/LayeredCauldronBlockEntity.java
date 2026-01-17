@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.block;
 
 import com.dace.vanillaplus.data.modifier.BlockModifier;
-import com.dace.vanillaplus.data.modifier.DataModifierInfo;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.Getter;
 import lombok.NonNull;
@@ -70,15 +70,13 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      * <p>호환되지 않는 상태 효과가 존재하면 빈 목록을 반환한다.</p>
      *
      * @param mobEffectInstances 상태 효과 목록
+     * @param maxPotionTypes     담을 수 있는 최대 물약 종류 수
      * @return 상태 효과 목록
      */
     @NonNull
     @UnmodifiableView
-    private static List<MobEffectInstance> combineMobEffects(@NonNull List<MobEffectInstance> mobEffectInstances) {
+    private static List<MobEffectInstance> combineMobEffects(@NonNull List<MobEffectInstance> mobEffectInstances, int maxPotionTypes) {
         HashMap<Pair<Holder<MobEffect>, Integer>, MobEffectInstance> mobEffectInstanceMap = new HashMap<>();
-
-        int maxPotionTypes = ((BlockModifier.WaterCauldronModifier) DataModifierInfo.BLOCK_MODIFIER.getOrThrow(Blocks.WATER_CAULDRON))
-                .getMaxPotionTypes();
 
         for (MobEffectInstance mobEffectInstance : mobEffectInstances) {
             mobEffectInstanceMap.compute(Pair.of(mobEffectInstance.getEffect(), mobEffectInstance.getAmplifier()),
@@ -152,6 +150,12 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      * @param potionContents 물약 내용물
      */
     public void addPotionContents(@Nullable PotionContents potionContents) {
+        BlockModifier.WaterCauldronModifier waterCauldronModifier = VPModifiableData.getDataModifier(Blocks.WATER_CAULDRON,
+                BlockModifier.WaterCauldronModifier.class).orElse(null);
+
+        if (waterCauldronModifier == null)
+            return;
+
         if (potionContents == null)
             potionContents = new PotionContents(Potions.WATER);
 
@@ -160,7 +164,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
             colorWeightSum = levelValue - 1.0;
 
         addColor(getPotionColor(potionContents), 1);
-        if (mixPotionContents(potionContents))
+        if (mixPotionContents(potionContents, waterCauldronModifier.getMaxPotionTypes()))
             setChanged();
     }
 
@@ -168,9 +172,10 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
      * 물약 내용물을 혼합한다.
      *
      * @param potionContents 물약 내용물
+     * @param maxPotionTypes 담을 수 있는 최대 물약 종류 수
      * @return 성공 여부
      */
-    private boolean mixPotionContents(@NonNull PotionContents potionContents) {
+    private boolean mixPotionContents(@NonNull PotionContents potionContents, int maxPotionTypes) {
         Optional<Holder<Potion>> potion = potionContents.potion();
         List<MobEffectInstance> customEffects = potionContents.customEffects();
         int levelValue = getBlockState().getValue(LayeredCauldronBlock.LEVEL);
@@ -189,7 +194,7 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
                 potion = Optional.of(Potions.WATER);
             else {
                 potion = Optional.empty();
-                customEffects = combineMobEffects(mobEffectInstances);
+                customEffects = combineMobEffects(mobEffectInstances, maxPotionTypes);
 
                 if (customEffects.isEmpty()) {
                     explode();

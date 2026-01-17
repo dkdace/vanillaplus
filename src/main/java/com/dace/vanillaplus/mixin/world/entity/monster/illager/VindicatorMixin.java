@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 public abstract class VindicatorMixin extends AbstractIllagerMixin<Vindicator, EntityModifier.LivingEntityModifier> {
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+        getRaiderEffect(RaiderEffect.VindicatorEffect.class).ifPresent(vindicatorEffect -> {
+            setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
 
-        RaiderEffect.VindicatorEffect vindicatorEffect = RaiderEffect.fromEntityType(getType());
-
-        vindicatorEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
-        vindicatorEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis()));
+            vindicatorEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
+            vindicatorEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis()));
+        });
     }
 }

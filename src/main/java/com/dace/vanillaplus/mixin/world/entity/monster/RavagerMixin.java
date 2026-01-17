@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(Ravager.class)
 public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.RavagerModifier> {
     @Unique
@@ -42,8 +40,8 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        RaiderEffect.RavagerEffect ravagerEffect = RaiderEffect.fromEntityType(getType());
-        ravagerEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis()));
+        getRaiderEffect(RaiderEffect.RavagerEffect.class).ifPresent(ravagerEffect ->
+                ravagerEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis())));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
@@ -66,18 +64,20 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 1,
             opcode = Opcodes.PUTFIELD))
     private void setRoarCooldown(CallbackInfo ci) {
-        roarCooldown = Objects.requireNonNull(dataModifier).getRoarCooldown();
+        getDataModifier().ifPresent(ravagerModifier -> roarCooldown = ravagerModifier.getRoarCooldown());
     }
 
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0,
             opcode = Opcodes.GETFIELD))
     private void performRoar(CallbackInfo ci) {
-        LivingEntity target = getTarget();
-        if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
-            return;
+        getDataModifier().ifPresent(ravagerModifier -> {
+            LivingEntity target = getTarget();
+            if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
+                return;
 
-        playSound(SoundEvents.RAVAGER_ROAR, 1, 1);
-        roarTick = 20;
-        roarCooldown = Objects.requireNonNull(dataModifier).getRoarCooldown();
+            playSound(SoundEvents.RAVAGER_ROAR, 1, 1);
+            roarTick = 20;
+            roarCooldown = ravagerModifier.getRoarCooldown();
+        });
     }
 }

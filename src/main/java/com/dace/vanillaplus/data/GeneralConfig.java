@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,8 +29,8 @@ public final class GeneralConfig {
                             .forGetter(GeneralConfig::getMaxRepairLimitRatio),
                     ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5).forGetter(GeneralConfig::getMaxBadOmenLevel))
             .apply(instance, GeneralConfig::new));
-    /** 리소스 이름 */
-    private static final String RESOURCE_NAME = "general";
+    /** 리소스 키 */
+    private static final ResourceKey<GeneralConfig> RESOURCE_KEY = VPRegistry.CONFIG.createResourceKey("general");
 
     /** 구리, 철 또는 금 도구를 화로에서 녹일 때 내구도 감소 비율 */
     private final float smeltingToolDamageRatio;
@@ -45,7 +46,7 @@ public final class GeneralConfig {
      */
     @NonNull
     public static GeneralConfig get() {
-        return VPRegistry.CONFIG.getValueOrThrow(RESOURCE_NAME);
+        return VPRegistry.getRegistries().getOrThrow(RESOURCE_KEY).value();
     }
 
     @SubscribeEvent

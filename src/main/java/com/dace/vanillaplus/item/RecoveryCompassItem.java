@@ -75,14 +75,12 @@ public final class RecoveryCompassItem extends Item {
         playUseEffects(serverLevel, oldPos);
         playUseEffects(serverLevel, pos);
 
-        if (player instanceof ServerPlayer serverPlayer)
-            NetworkManager.sendToPlayer(new RecoveryCompassTeleportPacketHandler(), serverPlayer);
+        NetworkManager.sendToPlayer(new RecoveryCompassTeleportPacketHandler(), ((ServerPlayer) player));
 
-        player.resetFallDistance();
         player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
 
-        if (player instanceof ServerPlayer)
-            player.resetCurrentImpulseContext();
+        player.resetFallDistance();
+        player.resetCurrentImpulseContext();
 
         player.awardStat(Stats.ITEM_USED.get(this));
         player.getItemInHand(interactionHand).consume(1, player);

@@ -23,7 +23,7 @@ public abstract class PotionContentsMixin implements VPMixin<PotionContents> {
     @ModifyExpressionValue(method = "getColorOr", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;getColorOptional(Ljava/lang/Iterable;)Ljava/util/OptionalInt;"))
     private OptionalInt modifyColor(OptionalInt color) {
-        return potion.map(potionHolder -> VPPotion.cast(potionHolder.value()).getColor().map(OptionalInt::of).orElse(color))
-                .orElse(color);
+        return potion.flatMap(potionHolder -> VPPotion.cast(potionHolder.value()).getDataModifier()
+                .flatMap(potionModifier -> potionModifier.getColor().map(OptionalInt::of))).orElse(color);
     }
 }

@@ -17,8 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.LivingEntityModifier> {
     @Override
     public ItemStack getProjectile(ItemStack weapon) {
-        return ((RaiderEffect.IllusionerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
-                .applyArrowPotionEffect(getThis(), super.getProjectile(weapon));
+        ItemStack itemStack = super.getProjectile(weapon);
+
+        return getRaiderEffect(RaiderEffect.IllusionerEffect.class)
+                .map(illusionerEffect -> illusionerEffect.getTippedArrowInfo().applyArrowPotionEffect(getThis(), itemStack))
+                .orElse(itemStack);
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
@@ -33,7 +36,7 @@ public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, E
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        RaiderEffect.IllusionerEffect illusionerEffect = RaiderEffect.fromEntityType(getType());
-        illusionerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
+        getRaiderEffect(RaiderEffect.IllusionerEffect.class).ifPresent(illusionerEffect ->
+                illusionerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis())));
     }
 }

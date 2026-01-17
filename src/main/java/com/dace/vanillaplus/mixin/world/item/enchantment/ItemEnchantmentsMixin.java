@@ -33,19 +33,18 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
                                     DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
                                     @Local int level) {
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
-                VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentResourceKey,
-                        enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, level)));
+                VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(),
+                        enchantmentResourceKey, enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, level)));
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
             shift = At.Shift.AFTER))
     private void addEffectsTooltip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                    DataComponentGetter dataComponentGetter, CallbackInfo ci,
-                                    @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
+                                    DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
         Holder<Enchantment> enchantmentHolder = entry.getKey();
 
         enchantmentHolder.unwrapKey().ifPresent(enchantmentResourceKey ->
-                VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentResourceKey,
-                        enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, entry.getIntValue())));
+                VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(),
+                        enchantmentResourceKey, enchantmentHolder.value(), getFinalEnchantmentLevel(dataComponentGetter, entry.getIntValue())));
     }
 }

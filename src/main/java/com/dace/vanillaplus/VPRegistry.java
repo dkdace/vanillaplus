@@ -9,12 +9,10 @@ import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -39,8 +37,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -162,13 +158,13 @@ public final class VPRegistry<T> {
      * @param name 이름
      */
     private VPRegistry(@NonNull String name) {
-        this(ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(VanillaPlus.MODID, name)));
+        this(ResourceKey.createRegistryKey(VanillaPlus.createIdentifier(name)));
         this.forgeRegistryHolder = deferredRegister.makeRegistry(RegistryBuilder::of);
     }
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        initData(event::getRegistries);
+        initData(event.getServerResources().fullRegistries()::lookup);
         VanillaPlus.LOGGER.debug("Server-side Data Loaded");
     }
 
@@ -184,15 +180,27 @@ public final class VPRegistry<T> {
     private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
         provider = providerFunction.get();
 
-        applyDataModifiers(DataModifierInfo.ITEM_MODIFIER::get, BuiltInRegistries.ITEM);
-        applyDataModifiers(DataModifierInfo.BLOCK_MODIFIER::get, BuiltInRegistries.BLOCK);
-        applyDataModifiers(DataModifierInfo.ENTITY_MODIFIER::get, BuiltInRegistries.ENTITY_TYPE);
-        applyDataModifiers(DataModifierInfo.POTION_MODIFIER::get, BuiltInRegistries.POTION);
+        applyDataModifiers(BuiltInRegistries.ITEM, ItemModifier.DATA_GETTER);
+        applyDataModifiers(BuiltInRegistries.BLOCK, BlockModifier.DATA_GETTER);
+        applyDataModifiers(BuiltInRegistries.ENTITY_TYPE, EntityModifier.DATA_GETTER);
+        applyDataModifiers(BuiltInRegistries.POTION, PotionModifier.DATA_GETTER);
     }
 
-    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Function<T, U> dataModifierFunction,
-                                                                          @NonNull Registry<T> registry) {
-        registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataModifierFunction.apply(element)));
+    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Registry<T> registry,
+                                                                          @NonNull DataGetter<T, U> dataGetter) {
+        registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataGetter.get(element).orElse(null)));
+    }
+
+    /**
+     * 전체 레지스트리를 반환한다.
+     *
+     * @return 전체 레지스트리
+     * @throws IllegalStateException 레지스트리에 접근할 수 없으면 발생
+     */
+    @NonNull
+    public static HolderLookup.Provider getRegistries() {
+        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
+        return provider;
     }
 
     /**
@@ -207,6 +215,17 @@ public final class VPRegistry<T> {
     @NonNull
     public static <T> RegistryObject<T> register(@NonNull VPRegistry<? super T> vpRegistry, @NonNull String name, Supplier<T> objectFunction) {
         return vpRegistry.deferredRegister.register(name, objectFunction);
+    }
+
+    /**
+     * 레지스트리의 리소스 키를 생성한다.
+     *
+     * @param path 리소스 경로
+     * @return 리소스 키
+     */
+    @NonNull
+    public ResourceKey<T> createResourceKey(@NonNull String path) {
+        return deferredRegister.key(path);
     }
 
     /**
@@ -252,36 +271,5 @@ public final class VPRegistry<T> {
     @NonNull
     public RegistryObject<T> register(@NonNull String name, Supplier<T> objectFunction) {
         return deferredRegister.register(name, objectFunction);
-    }
-
-    private <U> U getResource(@NonNull String name, @NonNull BiFunction<HolderLookup.RegistryLookup<T>, ResourceKey<T>, U> resourceFunction) {
-        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
-
-        ResourceKey<T> resourceKey = ResourceKey.create(registryKey, Identifier.fromNamespaceAndPath(VanillaPlus.MODID, name));
-        return resourceFunction.apply(provider.lookupOrThrow(registryKey), resourceKey);
-    }
-
-    /**
-     * 지정한 리소스 이름에 해당하는 값을 반환한다.
-     *
-     * @param name 리소스 이름
-     * @return 리소스 이름에 해당하는 값
-     * @throws IllegalStateException 레지스트리에 접근할 수 없으면 발생
-     */
-    @Nullable
-    public T getValue(@NonNull String name) {
-        return getResource(name, HolderGetter::get).map(Holder.Reference::value).orElse(null);
-    }
-
-    /**
-     * 지정한 리소스 이름에 해당하는 값을 반환한다.
-     *
-     * @param name 리소스 이름
-     * @return 리소스 이름에 해당하는 값
-     * @throws IllegalStateException 레지스트리에 접근할 수 없거나 값이 존재하지 않으면 발생
-     */
-    @NonNull
-    public T getValueOrThrow(@NonNull String name) {
-        return getResource(name, HolderGetter::getOrThrow).value();
     }
 }

@@ -21,7 +21,6 @@ import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * 갑옷 장식의 효과를 관리하는 클래스.
@@ -50,8 +49,7 @@ public abstract class ArmorTrimEffect<T> {
                 builder.withSpecialEffect((DataComponentType) typedDataComponent.type(), typedDataComponent.value()));
 
         ResourceKey<T> resourceKey = holder.unwrapKey().orElseThrow();
-        Identifier identifier = Identifier.fromNamespaceAndPath(VanillaPlus.MODID,
-                resourceKey.registry().getPath() + "/" + resourceKey.identifier().getPath());
+        Identifier identifier = VanillaPlus.createIdentifier(resourceKey.registry().getPath() + "/" + resourceKey.identifier().getPath());
 
         this.enchantmentHolder = Holder.direct(builder.build(identifier));
         this.enchantmentResourceKey = ResourceKey.create(Registries.ENCHANTMENT, identifier);
@@ -67,6 +65,9 @@ public abstract class ArmorTrimEffect<T> {
      * 갑옷 장식 재료의 효과를 관리하는 클래스.
      */
     public static final class TrimMaterialEffect extends ArmorTrimEffect<TrimMaterial> {
+        /** DataGetter */
+        public static final DataGetter<ResourceKey<TrimMaterial>, TrimMaterialEffect> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRIM_MATERIAL_EFFECT);
+
         /** 레지스트리 코덱 */
         public static final Codec<Holder<TrimMaterialEffect>> CODEC = VPRegistry.TRIM_MATERIAL_EFFECT.createRegistryCodec();
         /** JSON 코덱 */
@@ -79,23 +80,15 @@ public abstract class ArmorTrimEffect<T> {
         private TrimMaterialEffect(@NonNull Holder<TrimMaterial> trimMaterialHolder, @NonNull DataComponentMap effectMap) {
             super(trimMaterialHolder, effectMap);
         }
-
-        /**
-         * 지정한 갑옷 장식 재료에 해당하는 갑옷 장식 재료 효과를 반환한다.
-         *
-         * @param trimMaterialResourceKey 갑옷 장식 재료 리소스 키
-         * @return 갑옷 장식 재료 효과. 존재하지 않으면 {@code null} 반환
-         */
-        @Nullable
-        public static TrimMaterialEffect fromTrimMaterial(@NonNull ResourceKey<TrimMaterial> trimMaterialResourceKey) {
-            return VPRegistry.TRIM_MATERIAL_EFFECT.getValue(trimMaterialResourceKey.identifier().getPath());
-        }
     }
 
     /**
      * 갑옷 장식 형판의 효과를 관리하는 클래스.
      */
     public static final class TrimPatternEffect extends ArmorTrimEffect<TrimPattern> {
+        /** DataGetter */
+        public static final DataGetter<ResourceKey<TrimPattern>, TrimPatternEffect> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRIM_PATTERN_EFFECT);
+
         /** 레지스트리 코덱 */
         public static final Codec<Holder<TrimPatternEffect>> CODEC = VPRegistry.TRIM_PATTERN_EFFECT.createRegistryCodec();
         /** JSON 코덱 */
@@ -107,17 +100,6 @@ public abstract class ArmorTrimEffect<T> {
 
         private TrimPatternEffect(@NonNull Holder<TrimPattern> trimPatternHolder, @NonNull DataComponentMap effectMap) {
             super(trimPatternHolder, effectMap);
-        }
-
-        /**
-         * 지정한 갑옷 장식 형판에 해당하는 갑옷 장식 형판 효과를 반환한다.
-         *
-         * @param trimPatternResourceKey 갑옷 장식 형판 리소스 키
-         * @return 갑옷 장식 형판 효과. 존재하지 않으면 {@code null} 반환
-         */
-        @Nullable
-        public static TrimPatternEffect fromTrimPattern(@NonNull ResourceKey<TrimPattern> trimPatternResourceKey) {
-            return VPRegistry.TRIM_PATTERN_EFFECT.getValue(trimPatternResourceKey.identifier().getPath());
         }
     }
 }

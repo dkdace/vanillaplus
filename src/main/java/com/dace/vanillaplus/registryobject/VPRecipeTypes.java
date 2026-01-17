@@ -17,7 +17,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,12 +42,12 @@ public final class VPRecipeTypes {
 
     @NonNull
     private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> create(@NonNull String name) {
-        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () -> RecipeType.simple(Identifier.fromNamespaceAndPath(name, VanillaPlus.MODID)));
+        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () -> RecipeType.simple(VanillaPlus.createIdentifier(name)));
     }
 
     @NonNull
     private static ResourceKey<RecipePropertySet> createPropertySet(@NonNull String name) {
-        return ResourceKey.create(RecipePropertySet.TYPE_KEY, Identifier.fromNamespaceAndPath(name, VanillaPlus.MODID));
+        return ResourceKey.create(RecipePropertySet.TYPE_KEY, VanillaPlus.createIdentifier(name));
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

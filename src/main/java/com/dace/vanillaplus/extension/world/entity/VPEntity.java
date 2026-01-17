@@ -7,6 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.extensions.IForgeEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * {@link Entity}를 확장하는 인터페이스.
  *
@@ -24,8 +26,8 @@ public interface VPEntity<T extends Entity, U extends EntityModifier> extends VP
     /**
      * @return 엔티티 수정자
      */
-    @Nullable
-    U getDataModifier();
+    @NonNull
+    Optional<U> getDataModifier();
 
     /**
      * @param dataModifier 엔티티 수정자

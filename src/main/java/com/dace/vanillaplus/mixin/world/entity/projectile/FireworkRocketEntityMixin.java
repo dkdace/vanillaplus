@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -18,13 +18,12 @@ public abstract class FireworkRocketEntityMixin extends EntityMixin<FireworkRock
     @ModifyArgs(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;",
             ordinal = 0))
     private void modifyElytraDeltaMovement(Args args, @Local(ordinal = 0) Vec3 direction, @Local(ordinal = 1) Vec3 speed) {
-        ItemModifier.ElytraModifier itemModifier = DataModifierInfo.ITEM_MODIFIER.getOrThrow(Items.ELYTRA);
-
-        args.setAll(direction.x() * 0.1 + (direction.x() * itemModifier.getFireworkAddSpeedMultiplier() - speed.x())
-                        * itemModifier.getFireworkFinalSpeedModifier(),
-                direction.y() * 0.1 + (direction.y() * itemModifier.getFireworkAddSpeedMultiplier() - speed.y())
-                        * itemModifier.getFireworkFinalSpeedModifier(),
-                direction.z() * 0.1 + (direction.z() * itemModifier.getFireworkAddSpeedMultiplier() - speed.z())
-                        * itemModifier.getFireworkFinalSpeedModifier());
+        VPModifiableData.getDataModifier(Items.ELYTRA, ItemModifier.ElytraModifier.class).ifPresent(elytraModifier ->
+                args.setAll(direction.x() * 0.1 + (direction.x() * elytraModifier.getFireworkAddSpeedMultiplier() - speed.x())
+                                * elytraModifier.getFireworkFinalSpeedModifier(),
+                        direction.y() * 0.1 + (direction.y() * elytraModifier.getFireworkAddSpeedMultiplier() - speed.y())
+                                * elytraModifier.getFireworkFinalSpeedModifier(),
+                        direction.z() * 0.1 + (direction.z() * elytraModifier.getFireworkAddSpeedMultiplier() - speed.z())
+                                * elytraModifier.getFireworkFinalSpeedModifier()));
     }
 }

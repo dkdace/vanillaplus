@@ -14,14 +14,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(Pillager.class)
 public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.LivingEntityModifier> {
     @Override
     public ItemStack getProjectile(ItemStack weapon) {
-        return ((RaiderEffect.PillagerEffect) RaiderEffect.fromEntityType(getType())).getTippedArrowInfo()
-                .applyArrowPotionEffect(getThis(), super.getProjectile(weapon));
+        ItemStack itemStack = super.getProjectile(weapon);
+
+        return getRaiderEffect(RaiderEffect.PillagerEffect.class)
+                .map(pillagerEffect -> pillagerEffect.getTippedArrowInfo().applyArrowPotionEffect(getThis(), itemStack))
+                .orElse(itemStack);
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
@@ -38,12 +39,15 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
             target = "Lnet/minecraft/world/entity/monster/illager/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float velocity) {
-        return Objects.requireNonNull(dataModifier).getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingPower();
+        return getDataModifier()
+                .map(livingEntityModifier ->
+                        livingEntityModifier.getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingPower())
+                .orElse(velocity);
     }
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
-        RaiderEffect.PillagerEffect pillagerEffect = RaiderEffect.fromEntityType(getType());
-        pillagerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis()));
+        getRaiderEffect(RaiderEffect.PillagerEffect.class).ifPresent(pillagerEffect ->
+                pillagerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis())));
     }
 }

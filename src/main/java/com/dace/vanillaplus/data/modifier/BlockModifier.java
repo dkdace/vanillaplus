@@ -2,6 +2,7 @@ package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.data.DataGetter;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
@@ -11,12 +12,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -30,6 +31,9 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier> {
+    /** DataGetter */
+    public static final DataGetter<Block, BlockModifier> DATA_GETTER = DataGetter.fromDirectRegistry(BuiltInRegistries.BLOCK, VPRegistry.BLOCK_MODIFIER);
+
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */
@@ -40,7 +44,6 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
 
     static {
         CODEC_REGISTRY.register("block", () -> CODEC);
-        CODEC_REGISTRY.register("drop_experience", () -> DropExperienceModifier.CODEC);
         CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
         CODEC_REGISTRY.register("water_cauldron", () -> WaterCauldronModifier.CODEC);
     }
@@ -48,6 +51,9 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     /** 블록 속성 */
     @NonNull
     private final BlockBehaviour.Properties properties;
+    /** 드롭 경험치 범위 */
+    @NonNull
+    private final IntProvider xpRange;
 
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
@@ -55,42 +61,16 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     }
 
     @NonNull
-    private static <T extends BlockModifier> Products.P1<RecordCodecBuilder.Mu<T>, BlockBehaviour.Properties> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+    private static <T extends BlockModifier> Products.P2<RecordCodecBuilder.Mu<T>, BlockBehaviour.Properties, IntProvider> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
         return instance.group(BlockBehaviour.Properties.CODEC.optionalFieldOf("properties", BlockBehaviour.Properties.of())
-                .forGetter(BlockModifier::getProperties));
+                        .forGetter(BlockModifier::getProperties),
+                IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", ConstantInt.of(0)).forGetter(BlockModifier::getXpRange));
     }
 
     @Override
     @NonNull
     public MapCodec<? extends BlockModifier> getCodec() {
         return CODEC;
-    }
-
-    /**
-     * {@link DropExperienceBlock}의 블록 수정자 클래스.
-     */
-    @Getter
-    public static final class DropExperienceModifier extends BlockModifier {
-        private static final MapCodec<DropExperienceModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
-                createBaseCodec(instance)
-                        .and(IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", ConstantInt.of(0))
-                                .forGetter(DropExperienceModifier::getXpRange))
-                        .apply(instance, DropExperienceModifier::new));
-
-        /** 드롭 경험치 범위 */
-        @NonNull
-        private final IntProvider xpRange;
-
-        private DropExperienceModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange) {
-            super(properties);
-            this.xpRange = xpRange;
-        }
-
-        @Override
-        @NonNull
-        public MapCodec<? extends BlockModifier> getCodec() {
-            return CODEC;
-        }
     }
 
     /**
@@ -101,8 +81,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
                 createBaseCodec(instance)
                         .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range", 32)
                                         .forGetter(BellModifier::getRaiderDetectionRange),
-                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("glow_range", 48)
-                                        .forGetter(BellModifier::getGlowRange),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("glow_range", 48).forGetter(BellModifier::getGlowRange),
                                 ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("glow_duration_seconds", 3F)
                                         .forGetter(bellModifier -> bellModifier.glowDurationSeconds)))
                         .apply(instance, BellModifier::new));
@@ -116,8 +95,9 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         /** 발광 효과 지속시간 (초) */
         private final float glowDurationSeconds;
 
-        private BellModifier(@NonNull BlockBehaviour.Properties properties, int raiderDetectionRange, int glowRange, float glowDurationSeconds) {
-            super(properties);
+        private BellModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange, int raiderDetectionRange, int glowRange,
+                             float glowDurationSeconds) {
+            super(properties, xpRange);
 
             this.raiderDetectionRange = raiderDetectionRange;
             this.glowRange = glowRange;
@@ -156,8 +136,9 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         /** 제작 가능한 물약이 묻은 화살의 최대 개수 */
         private final int maxTippedArrowCount;
 
-        private WaterCauldronModifier(@NonNull BlockBehaviour.Properties properties, int maxPotionTypes, int maxTippedArrowCount) {
-            super(properties);
+        private WaterCauldronModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange, int maxPotionTypes,
+                                      int maxTippedArrowCount) {
+            super(properties, xpRange);
 
             this.maxPotionTypes = maxPotionTypes;
             this.maxTippedArrowCount = maxTippedArrowCount;

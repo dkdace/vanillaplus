@@ -22,10 +22,6 @@ public interface VPEnderDragon extends VPEntity<EnderDragon, EntityModifier.Ende
         return (VPEnderDragon) object;
     }
 
-    @Override
-    @NonNull
-    EntityModifier.EnderDragonModifier getDataModifier();
-
     /**
      * 기본 대상 탐지 조건을 반환한다.
      *

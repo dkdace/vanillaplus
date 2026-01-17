@@ -12,14 +12,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Objects;
-
 @Mixin(TridentItem.class)
 public abstract class TridentItemMixin extends ItemMixin<TridentItem, ItemModifier.TridentModifier> {
     @Inject(method = "releaseUsing", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;startAutoSpinAttack(IFLnet/minecraft/world/item/ItemStack;)V"))
     private void applyCooldownOnRiptide(ItemStack itemStack, Level level, LivingEntity livingEntity, int durationLeft,
                                         CallbackInfoReturnable<Boolean> cir, @Local Player player) {
-        player.getCooldowns().addCooldown(itemStack, Objects.requireNonNull(dataModifier).getRiptideCooldown());
+        getDataModifier().ifPresent(tridentModifier ->
+                player.getCooldowns().addCooldown(itemStack, tridentModifier.getRiptideCooldown()));
     }
 }

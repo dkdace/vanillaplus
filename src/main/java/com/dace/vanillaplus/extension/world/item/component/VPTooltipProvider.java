@@ -59,11 +59,11 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
      * @param enchantment            마법 부여
      * @param level                  마법 부여 레벨
      */
-    static void applyEnchantmentEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent,
-                                               @NonNull ResourceKey<Enchantment> enchantmentResourceKey, @NonNull Enchantment enchantment, int level) {
-        LevelBasedValuePreset levelBasedValuePreset = LevelBasedValuePreset.fromEnchantment(enchantmentResourceKey);
-        if (levelBasedValuePreset != null)
-            applyLevelBasedValueTooltip(componentConsumer, descriptionComponent, levelBasedValuePreset, level);
+    static void applyEnchantmentEffectsTooltip(@NonNull Consumer<Component> componentConsumer,
+                                               @NonNull Component descriptionComponent, @NonNull ResourceKey<Enchantment> enchantmentResourceKey,
+                                               @NonNull Enchantment enchantment, int level) {
+        LevelBasedValuePreset.DATA_GETTER.get(enchantmentResourceKey).ifPresent(levelBasedValuePreset ->
+                applyLevelBasedValueTooltip(componentConsumer, descriptionComponent, levelBasedValuePreset, level));
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
@@ -78,12 +78,10 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
      * @param trimPatternHolder 갑옷 장식 형판 홀더 인스턴스
      */
     static void applyTrimPatternEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<TrimPattern> trimPatternHolder) {
-        trimPatternHolder.unwrapKey().ifPresent(trimPatternResourceKey -> {
-            ArmorTrimEffect.TrimPatternEffect trimPatternEffect = ArmorTrimEffect.TrimPatternEffect.fromTrimPattern(trimPatternResourceKey);
-            if (trimPatternEffect != null)
-                applyEnchantmentEffectsTooltip(componentConsumer, trimPatternHolder.value().description(),
-                        trimPatternEffect.getEnchantmentResourceKey(), trimPatternEffect.getEnchantmentHolder().value(), 1);
-        });
+        trimPatternHolder.unwrapKey().flatMap(ArmorTrimEffect.TrimPatternEffect.DATA_GETTER::get)
+                .ifPresent(trimPatternEffect -> applyEnchantmentEffectsTooltip(componentConsumer,
+                        trimPatternHolder.value().description(), trimPatternEffect.getEnchantmentResourceKey(),
+                        trimPatternEffect.getEnchantmentHolder().value(), 1));
     }
 
     /**
@@ -93,11 +91,9 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
      * @param trimMaterialHolder 갑옷 장식 재료 홀더 인스턴스
      */
     static void applyTrimMaterialEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<TrimMaterial> trimMaterialHolder) {
-        trimMaterialHolder.unwrapKey().ifPresent(trimMaterialResourceKey -> {
-            ArmorTrimEffect.TrimMaterialEffect trimMaterialEffect = ArmorTrimEffect.TrimMaterialEffect.fromTrimMaterial(trimMaterialResourceKey);
-            if (trimMaterialEffect != null)
-                applyEnchantmentEffectsTooltip(componentConsumer, trimMaterialHolder.value().description(),
-                        trimMaterialEffect.getEnchantmentResourceKey(), trimMaterialEffect.getEnchantmentHolder().value(), 1);
-        });
+        trimMaterialHolder.unwrapKey().flatMap(ArmorTrimEffect.TrimMaterialEffect.DATA_GETTER::get)
+                .ifPresent(trimMaterialEffect -> applyEnchantmentEffectsTooltip(componentConsumer,
+                        trimMaterialHolder.value().description(), trimMaterialEffect.getEnchantmentResourceKey(),
+                        trimMaterialEffect.getEnchantmentHolder().value(), 1));
     }
 }

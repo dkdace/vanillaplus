@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class LayeredCauldronRenderer implements BlockEntityRenderer<LayeredCauldronBlockEntity, LayeredCauldronRenderer.RenderState> {
     /** 물 텍스쳐 식별자 */
-    private static final Identifier RESOURCE_LOCATION = Identifier.fromNamespaceAndPath(VanillaPlus.MODID, "water_still_opaque");
+    private static final Identifier RESOURCE_LOCATION = VanillaPlus.createIdentifier("water_still_opaque");
     /** 물의 최소 투명도 */
     private static final float MIN_ALPHA = 0.5F;
 

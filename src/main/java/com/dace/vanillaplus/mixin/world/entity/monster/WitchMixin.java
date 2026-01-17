@@ -59,10 +59,11 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
     @Redirect(method = "registerGoals", at = @At(value = "NEW",
             target = "(Lnet/minecraft/world/entity/monster/RangedAttackMob;DIF)Lnet/minecraft/world/entity/ai/goal/RangedAttackGoal;"))
     private RangedAttackGoal modifyAttackCooldown(RangedAttackMob mob, double speedModifier, int attackInterval, float attackRadius) {
-        int attackIntervalMin = ((RaiderEffect.WitchEffect) RaiderEffect.fromEntityType(getType())).getModifyPotionCooldownInfos().stream()
-                .mapToInt(modifyValueInfo -> modifyValueInfo.modifyValue(getThis(), attackInterval))
-                .min()
-                .orElse(attackInterval);
+        int attackIntervalMin = getRaiderEffect(RaiderEffect.WitchEffect.class)
+                .map(witchEffect -> witchEffect.getModifyPotionCooldownInfos().stream()
+                        .mapToInt(modifyValueInfo -> modifyValueInfo.modifyValue(getThis(), attackInterval))
+                        .min()
+                        .orElse(attackInterval)).orElse(attackInterval);
 
         return new RangedAttackGoal(mob, speedModifier, attackIntervalMin, attackInterval, attackRadius);
     }
@@ -81,18 +82,19 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack upgradePotionSelf(ItemStack itemStack) {
-        RaiderEffect.WitchEffect witchEffect = RaiderEffect.fromEntityType(getType());
-        itemStack = witchEffect.getUpgradePotionForSelfInfo().upgradePotion(getThis(), itemStack);
+        return getRaiderEffect(RaiderEffect.WitchEffect.class).map(witchEffect -> {
+            ItemStack resultItemStack = witchEffect.getUpgradePotionForSelfInfo().upgradePotion(getThis(), itemStack);
 
-        return witchEffect.getReplacePotionForSelfInfo().replacePotion(getThis(), itemStack);
+            return witchEffect.getReplacePotionForSelfInfo().replacePotion(getThis(), resultItemStack);
+        }).orElse(itemStack);
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack upgradePotionThrow(ItemStack itemStack, @Local(argsOnly = true) LivingEntity target) {
-        RaiderEffect.WitchEffect witchEffect = RaiderEffect.fromEntityType(getType());
-
-        return (target instanceof Raider ? witchEffect.getUpgradePotionForSupportInfo() : witchEffect.getUpgradePotionForAttackInfo())
-                .upgradePotion(getThis(), itemStack);
+        return getRaiderEffect(RaiderEffect.WitchEffect.class).map(witchEffect ->
+                (target instanceof Raider
+                        ? witchEffect.getUpgradePotionForSupportInfo()
+                        : witchEffect.getUpgradePotionForAttackInfo()).upgradePotion(getThis(), itemStack)).orElse(itemStack);
     }
 }

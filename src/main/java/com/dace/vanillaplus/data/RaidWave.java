@@ -30,6 +30,9 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class RaidWave {
+    /** DataGetter */
+    public static final DataGetter<Difficulty, RaidWave> DATA_GETTER = DataGetter.fromMapper(difficulty -> VPRegistry.RAID_WAVE.createResourceKey(difficulty.getKey()));
+
     /** 레지스트리 코덱 */
     public static final Codec<Holder<RaidWave>> CODEC = VPRegistry.RAID_WAVE.createRegistryCodec();
     /** JSON 코덱 */
@@ -44,17 +47,6 @@ public final class RaidWave {
     @SubscribeEvent
     private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(VPRegistry.RAID_WAVE.getRegistryKey(), DIRECT_CODEC);
-    }
-
-    /**
-     * 지정한 난이도에 해당하는 습격 웨이브 정보를 반환한다.
-     *
-     * @param difficulty 난이도
-     * @return 습격 웨이브 정보. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    public static RaidWave fromDifficulty(@NonNull Difficulty difficulty) {
-        return VPRegistry.RAID_WAVE.getValue(difficulty.getKey());
     }
 
     /**

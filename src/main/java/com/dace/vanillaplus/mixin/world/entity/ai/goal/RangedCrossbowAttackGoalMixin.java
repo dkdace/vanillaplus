@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
-import com.dace.vanillaplus.data.modifier.DataModifierInfo;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -37,15 +37,18 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Definition(id = "pAttackRadius", local = @Local(type = float.class, argsOnly = true))
     @Expression("pAttackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
-    private float modifyAttackRadius(float original, @Local(argsOnly = true) T monster) {
-        return DataModifierInfo.ENTITY_MODIFIER.getOrThrow(monster.getType()).getInterfaceInfoMap()
-                .get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingRange();
+    private float modifyAttackRadius(float radius, @Local(argsOnly = true) T monster) {
+        return VPEntity.cast(monster).getDataModifier()
+                .map(entityModifier -> entityModifier.getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB)
+                        .getShootingRange())
+                .orElse((int) radius);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
     private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target) {
-        if (mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME || !target.closerThan(mob, BACKUP_DISTANCE))
+        if (VPEntity.cast(mob).getDataModifier().isEmpty() || mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME
+                || !target.closerThan(mob, BACKUP_DISTANCE))
             return;
 
         mob.getMoveControl().strafe(-0.75F, 0);

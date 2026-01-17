@@ -56,6 +56,9 @@ import java.util.stream.Stream;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class Trade {
+    /** DataGetter */
+    public static final DataGetter<ResourceKey<VillagerProfession>, Trade> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRADE);
+
     /** 레지스트리 코덱 */
     public static final Codec<Holder<Trade>> CODEC = VPRegistry.TRADE.createRegistryCodec();
     /** JSON 코덱 */
@@ -113,17 +116,6 @@ public final class Trade {
     @NonNull
     private static Map<OfferList.Level, OfferList> fromListToMap(@NonNull List<OfferList> offerLists) {
         return offerLists.stream().collect(Collectors.toMap(offerList -> offerList.level, Function.identity()));
-    }
-
-    /**
-     * 지정한 주민 직업에 해당하는 주민 거래 정보를 반환한다.
-     *
-     * @param villagerProfessionResourceKey 주민 직업 리소스 키
-     * @return 주민 거래 정보. 존재하지 않으면 {@code null} 반환
-     */
-    @Nullable
-    public static Trade fromVillagerProfession(@NonNull ResourceKey<VillagerProfession> villagerProfessionResourceKey) {
-        return VPRegistry.TRADE.getValue(villagerProfessionResourceKey.identifier().getPath());
     }
 
     /**

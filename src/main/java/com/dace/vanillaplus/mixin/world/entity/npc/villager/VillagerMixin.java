@@ -60,18 +60,18 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
 
     @Unique
     private void addOffers(@NonNull ServerLevel serverLevel, int level) {
-        Trade trade = getVillagerData().profession().unwrapKey().map(Trade::fromVillagerProfession).orElse(null);
-        if (trade == null)
-            return;
+        getVillagerData().profession().unwrapKey()
+                .flatMap(Trade.DATA_GETTER::get)
+                .ifPresent(trade -> {
+                    VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
+                    MerchantOffers offers = getOffers();
 
-        VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
-        MerchantOffers offers = getOffers();
-
-        for (VillagerTrades.ItemListing itemListing : itemListings) {
-            MerchantOffer offer = itemListing.getOffer(serverLevel, getThis(), random);
-            if (offer != null)
-                offers.add(offer);
-        }
+                    for (VillagerTrades.ItemListing itemListing : itemListings) {
+                        MerchantOffer offer = itemListing.getOffer(serverLevel, getThis(), random);
+                        if (offer != null)
+                            offers.add(offer);
+                    }
+                });
     }
 
     @Overwrite

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DropExperienceBlock.class)
-public abstract class DropExperienceBlockMixin<T extends DropExperienceBlock, U extends BlockModifier.DropExperienceModifier> extends BlockMixin<T, U> {
+public abstract class DropExperienceBlockMixin<T extends DropExperienceBlock, U extends BlockModifier> extends BlockMixin<T, U> {
     @Mutable
     @Shadow
     @Final
