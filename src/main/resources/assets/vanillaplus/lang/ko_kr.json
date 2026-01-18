@@ -83,6 +83,7 @@
   "food.saturation": "+%s 포만감",
   "food.whenEaten": "섭취 시:",
   "gamerule.vanillaplus.disable_mobs_in_boss_fight": "엔더 드래곤 전투 중 몹 비활성화",
+  "gamerule.vanillaplus.max_bad_omen_level": "최대 흉조 레벨",
   "gamerule.vanillaplus.show_head_on_locator_bar": "위치 표시 바에 플레이어 머리 표시",
   "gamerule.vanillaplus.show_head_on_locator_bar.description": "켜져 있으면 플레이어의 머리가 위치 표시 바에 표시됩니다. '플레이어 위치 표시 바 켜기'가 켜져 있을 때만 작동합니다.",
   "item.minecraft.lingering_potion.effect.elixir_of_the_earth": "잔류형 대지의 영약",

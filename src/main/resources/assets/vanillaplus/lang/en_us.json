@@ -83,6 +83,7 @@
   "food.saturation": "+%s Saturation",
   "food.whenEaten": "When Eaten:",
   "gamerule.vanillaplus.disable_mobs_in_boss_fight": "Disable mobs during Ender Dragon fight",
+  "gamerule.vanillaplus.max_bad_omen_level": "Max Bad Omen level",
   "gamerule.vanillaplus.show_head_on_locator_bar": "Show player head on the Locator Bar",
   "gamerule.vanillaplus.show_head_on_locator_bar.description": "When enabled, player's head is shown on the Locator Bar. Works only when locatorBar is enabled.",
   "item.minecraft.lingering_potion.effect.elixir_of_the_earth": "Lingering Elixir of the Earth",

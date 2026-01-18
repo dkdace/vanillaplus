@@ -26,8 +26,7 @@ public final class GeneralConfig {
             .group(ExtraCodecs.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
                             .forGetter(GeneralConfig::getSmeltingToolDamageRatio),
                     ExtraCodecs.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
-                            .forGetter(GeneralConfig::getMaxRepairLimitRatio),
-                    ExtraCodecs.UNSIGNED_BYTE.optionalFieldOf("max_bad_omen_level", 5).forGetter(GeneralConfig::getMaxBadOmenLevel))
+                            .forGetter(GeneralConfig::getMaxRepairLimitRatio))
             .apply(instance, GeneralConfig::new));
     /** 리소스 키 */
     private static final ResourceKey<GeneralConfig> RESOURCE_KEY = VPRegistry.CONFIG.createResourceKey("general");
@@ -36,8 +35,6 @@ public final class GeneralConfig {
     private final float smeltingToolDamageRatio;
     /** 최대 내구도 : 최대 수리 한도 비율 */
     private final float maxRepairLimitRatio;
-    /** 최대 흉조 레벨 */
-    private final int maxBadOmenLevel;
 
     /**
      * 전역 설정을 반환한다.

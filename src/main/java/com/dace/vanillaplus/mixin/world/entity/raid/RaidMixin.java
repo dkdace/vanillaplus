@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
-import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.RaidWave;
+import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -21,6 +23,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -29,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Mixin(Raid.class)
-public abstract class RaidMixin {
+public abstract class RaidMixin implements VPMixin<Raid> {
     @Unique
     private static final String COMPONENT_RAID_WAVES = "event.minecraft.raid.waves";
     @Unique
@@ -107,9 +110,9 @@ public abstract class RaidMixin {
         ridingRaider.startRiding(raider);
     }
 
-    @Overwrite
-    public int getMaxRaidOmenLevel() {
-        return GeneralConfig.get().getMaxBadOmenLevel();
+    @ModifyArg(method = "absorbRaidOmen", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(III)I"), index = 2)
+    private int modifyMaxRaidOmenLevel(int max, @Local(argsOnly = true) ServerPlayer serverPlayer) {
+        return VPGameRules.getValue(VPGameRules.MAX_BAD_OMEN_LEVEL, serverPlayer.level());
     }
 
     @Overwrite
