@@ -23,16 +23,12 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 public final class GeneralConfig {
     /** JSON 코덱 */
     private static final Codec<GeneralConfig> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(ExtraCodecs.floatRange(0, 1).optionalFieldOf("smelting_tool_damage_ratio", 1F)
-                            .forGetter(GeneralConfig::getSmeltingToolDamageRatio),
-                    ExtraCodecs.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
-                            .forGetter(GeneralConfig::getMaxRepairLimitRatio))
+            .group(ExtraCodecs.floatRange(0, 1).optionalFieldOf("max_repair_limit_ratio", 0.5F)
+                    .forGetter(GeneralConfig::getMaxRepairLimitRatio))
             .apply(instance, GeneralConfig::new));
     /** 리소스 키 */
     private static final ResourceKey<GeneralConfig> RESOURCE_KEY = VPRegistry.CONFIG.createResourceKey("general");
 
-    /** 구리, 철 또는 금 도구를 화로에서 녹일 때 내구도 감소 비율 */
-    private final float smeltingToolDamageRatio;
     /** 최대 내구도 : 최대 수리 한도 비율 */
     private final float maxRepairLimitRatio;
 

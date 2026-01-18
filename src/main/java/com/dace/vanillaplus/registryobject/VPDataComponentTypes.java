@@ -25,6 +25,8 @@ public final class VPDataComponentTypes {
             builder.persistent(TrimPattern.CODEC).networkSynchronized(TrimPattern.STREAM_CODEC));
     public static final RegistryObject<DataComponentType<Integer>> ENCHANTMENT_LEVEL_MULTIPLIER = create("enchantment_level_multiplier", builder ->
             builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
+    public static final RegistryObject<DataComponentType<Float>> SMELTING_DAMAGE_RATIO = create("smelting_damage_ratio", builder ->
+            builder.persistent(ExtraCodecs.floatRange(0, 1)).networkSynchronized(ByteBufCodecs.FLOAT));
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

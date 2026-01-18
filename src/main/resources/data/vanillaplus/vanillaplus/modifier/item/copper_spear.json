@@ -1,6 +1,7 @@
 {
   "type": "vanillaplus:item",
   "components": {
+    "vanillaplus:smelting_damage_ratio": 0.21,
     "minecraft:attack_range": {
       "hitbox_margin": 0,
       "max_creative_reach": 6.5,

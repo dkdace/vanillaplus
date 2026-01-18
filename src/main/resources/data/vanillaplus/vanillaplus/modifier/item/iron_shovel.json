@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "vanillaplus:smelting_damage_ratio": 0.21
+  }
+}

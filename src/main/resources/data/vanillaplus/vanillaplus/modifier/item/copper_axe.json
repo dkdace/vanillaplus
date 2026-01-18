@@ -4,7 +4,8 @@
     "minecraft:weapon": {
       "disable_blocking_for_seconds": 1.75,
       "item_damage_per_attack": 2
-    }
+    },
+    "vanillaplus:smelting_damage_ratio": 0.21
   },
   "attribute_modifiers": [
     {
