@@ -65,10 +65,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract boolean hasLineOfSight(Entity target);
 
     @Shadow
-    public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
+    public abstract ItemStack getItemBySlot(EquipmentSlot equipmentSlot);
 
     @Shadow
-    public abstract boolean hasItemInSlot(EquipmentSlot equipmentSlot);
+    public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
 
     @Shadow
     public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
