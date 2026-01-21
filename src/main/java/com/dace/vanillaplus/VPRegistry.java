@@ -75,8 +75,6 @@ public final class VPRegistry<T> {
     /** 게임 규칙 */
     public static final VPRegistry<GameRule<?>> GAME_RULE = new VPRegistry<>(BuiltInRegistries.GAME_RULE);
 
-    /** 설정 */
-    public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */

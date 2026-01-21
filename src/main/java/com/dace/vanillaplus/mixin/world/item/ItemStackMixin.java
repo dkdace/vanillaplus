@@ -31,8 +31,6 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -105,7 +103,13 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Override
     public int getMaxRepairLimit() {
-        return getThis().getOrDefault(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), 0);
+        VPDataComponentTypes.RepairWithXP repairWithXP = getThis().get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+        Integer maxDamage = getThis().get(DataComponents.MAX_DAMAGE);
+
+        if (repairWithXP == null || maxDamage == null)
+            return 0;
+
+        return (int) (maxDamage * repairWithXP.getMaxRepairLimitRatio());
     }
 
     @Unique
@@ -325,8 +329,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
     private void addRepairLimitTooltip(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, @Nullable Player player,
                                        TooltipFlag tooltipFlag, Consumer<Component> componentConsumer, CallbackInfo ci) {
-        if (EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP)
-                && tooltipDisplay.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
+        if (isRepairLimitBarVisible() && tooltipDisplay.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
             componentConsumer.accept(Component.translatable(COMPONENT_REPAIR_LIMIT,
                     getMaxRepairLimit() - getRepairLimit(),
                     getMaxRepairLimit()));

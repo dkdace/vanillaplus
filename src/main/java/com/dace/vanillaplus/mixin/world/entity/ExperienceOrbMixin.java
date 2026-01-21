@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
@@ -10,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,26 +46,31 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             index = 2)
     private Predicate<ItemStack> modifyRepairFilter(Predicate<ItemStack> filter, @Local(argsOnly = true) ServerPlayer serverPlayer) {
         return filter.and(itemStack -> {
+            VPDataComponentTypes.RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+            if (repairWithXP == null)
+                return true;
+
             VPItemStack vpItemStack = VPItemStack.cast(itemStack);
             if (serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
                 return true;
 
-            return serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
-                if (targetItemStack.is(Items.LAPIS_LAZULI)) {
-                    targetItemStack.shrink(1);
-                    vpItemStack.setRepairLimit(0);
+            return repairWithXP.getRequiredItem().map(itemHolder ->
+                    serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
+                        if (targetItemStack.is(itemHolder)) {
+                            targetItemStack.shrink(1);
+                            vpItemStack.setRepairLimit(0);
 
-                    return true;
-                }
+                            return true;
+                        }
 
-                return false;
-            });
+                        return false;
+                    })).orElse(false);
         });
     }
 
     @ModifyExpressionValue(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     private int modifyRepairValue(int original, @Local(argsOnly = true) ServerPlayer serverPlayer, @Local ItemStack itemStack) {
-        if (serverPlayer.hasInfiniteMaterials())
+        if (!itemStack.has(VPDataComponentTypes.REPAIR_WITH_XP.get()) || serverPlayer.hasInfiniteMaterials())
             return original;
 
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);

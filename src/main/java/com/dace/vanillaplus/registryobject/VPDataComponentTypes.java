@@ -1,15 +1,25 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -19,17 +29,46 @@ import java.util.function.UnaryOperator;
 public final class VPDataComponentTypes {
     public static final RegistryObject<DataComponentType<Integer>> REPAIR_LIMIT = create("repair_limit", builder ->
             builder.persistent(ExtraCodecs.NON_NEGATIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
-    public static final RegistryObject<DataComponentType<Integer>> MAX_REPAIR_LIMIT = create("max_repair_limit", builder ->
-            builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
     public static final RegistryObject<DataComponentType<Holder<TrimPattern>>> PROVIDES_TRIM_PATTERN = create("provides_trim_pattern", builder ->
             builder.persistent(TrimPattern.CODEC).networkSynchronized(TrimPattern.STREAM_CODEC));
     public static final RegistryObject<DataComponentType<Integer>> ENCHANTMENT_LEVEL_MULTIPLIER = create("enchantment_level_multiplier", builder ->
             builder.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT));
     public static final RegistryObject<DataComponentType<Float>> SMELTING_DAMAGE_RATIO = create("smelting_damage_ratio", builder ->
             builder.persistent(ExtraCodecs.floatRange(0, 1)).networkSynchronized(ByteBufCodecs.FLOAT));
+    public static final RegistryObject<DataComponentType<RepairWithXP>> REPAIR_WITH_XP = create("repair_with_xp", builder ->
+            builder.persistent(RepairWithXP.CODEC).networkSynchronized(RepairWithXP.STREAM_CODEC).cacheEncoding());
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {
         return VPRegistry.register(VPRegistry.DATA_COMPONENT_TYPE, name, onBuilder.apply(DataComponentType.builder())::build);
+    }
+
+    @Getter
+    public static final class RepairWithXP {
+        public static final RepairWithXP DEFAULT = new RepairWithXP(0.4F,
+                Optional.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.LAPIS_LAZULI)), ARGB.color(50, 50, 255));
+
+        private static final Codec<RepairWithXP> CODEC = RecordCodecBuilder.create(instance -> instance
+                .group(ExtraCodecs.floatRange(0, 1).fieldOf("max_repair_limit_ratio")
+                                .forGetter(RepairWithXP::getMaxRepairLimitRatio),
+                        Item.CODEC.optionalFieldOf("required_item").forGetter(RepairWithXP::getRequiredItem),
+                        ExtraCodecs.RGB_COLOR_CODEC.fieldOf("bar_color").forGetter(RepairWithXP::getBarColor))
+                .apply(instance, RepairWithXP::new));
+        private static final StreamCodec<RegistryFriendlyByteBuf, RepairWithXP> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.FLOAT, RepairWithXP::getMaxRepairLimitRatio,
+                ByteBufCodecs.optional(Item.STREAM_CODEC), RepairWithXP::getRequiredItem,
+                ByteBufCodecs.RGB_COLOR, RepairWithXP::getBarColor,
+                RepairWithXP::new);
+
+        private final float maxRepairLimitRatio;
+        @NonNull
+        private final Optional<Holder<Item>> requiredItem;
+        private final int barColor;
+
+        private RepairWithXP(float maxRepairLimitRatio, @NonNull Optional<Holder<Item>> requiredItem, int barColor) {
+            this.maxRepairLimitRatio = maxRepairLimitRatio;
+            this.requiredItem = requiredItem;
+            this.barColor = ARGB.opaque(barColor);
+        }
     }
 }

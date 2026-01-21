@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.extension.world.item;
 
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import lombok.NonNull;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -32,7 +33,7 @@ public interface VPItemStack extends VPMixin<ItemStack>, IForgeItemStack {
      * @return 수리 한도 표시 여부
      */
     default boolean isRepairLimitBarVisible() {
-        return EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP);
+        return EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP) && getThis().has(VPDataComponentTypes.REPAIR_WITH_XP.get());
     }
 
     /**
