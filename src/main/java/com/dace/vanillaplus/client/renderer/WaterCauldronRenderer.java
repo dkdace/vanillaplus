@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.client.renderer;
 
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
+import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -27,9 +27,9 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link LayeredCauldronBlockEntity}의 렌더러 클래스.
+ * {@link WaterCauldronBlockEntity}의 렌더러 클래스.
  */
-public final class LayeredCauldronRenderer implements BlockEntityRenderer<LayeredCauldronBlockEntity, LayeredCauldronRenderer.RenderState> {
+public final class WaterCauldronRenderer implements BlockEntityRenderer<WaterCauldronBlockEntity, WaterCauldronRenderer.RenderState> {
     /** 물 텍스쳐 식별자 */
     private static final Identifier RESOURCE_LOCATION = VanillaPlus.createIdentifier("water_still_opaque");
     /** 물의 최소 투명도 */
@@ -38,7 +38,7 @@ public final class LayeredCauldronRenderer implements BlockEntityRenderer<Layere
     /** 물 텍스쳐 스프라이트 */
     private final TextureAtlasSprite sprite;
 
-    public LayeredCauldronRenderer() {
+    public WaterCauldronRenderer() {
         this.sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS)
                 .getSprite(Sheets.BLOCKS_MAPPER.apply(RESOURCE_LOCATION).texture());
     }
@@ -83,15 +83,15 @@ public final class LayeredCauldronRenderer implements BlockEntityRenderer<Layere
     }
 
     @Override
-    public void extractRenderState(@NonNull LayeredCauldronBlockEntity layeredCauldronBlockEntity, @NonNull RenderState renderState, float partialTick,
+    public void extractRenderState(@NonNull WaterCauldronBlockEntity waterCauldronBlockEntity, @NonNull RenderState renderState, float partialTick,
                                    @NonNull Vec3 cameraPos, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
-        BlockEntityRenderer.super.extractRenderState(layeredCauldronBlockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
+        BlockEntityRenderer.super.extractRenderState(waterCauldronBlockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
-        Level level = layeredCauldronBlockEntity.getLevel();
+        Level level = waterCauldronBlockEntity.getLevel();
         if (level == null)
             return;
 
-        renderState.color = getMixedColor(BiomeColors.getAverageWaterColor(level, renderState.blockPos), layeredCauldronBlockEntity.getColor(),
+        renderState.color = getMixedColor(BiomeColors.getAverageWaterColor(level, renderState.blockPos), waterCauldronBlockEntity.getColor(),
                 MIN_ALPHA);
         renderState.height = ((LayeredCauldronBlock) renderState.blockState.getBlock()).getContentHeight(renderState.blockState);
     }

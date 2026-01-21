@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
+import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.world.level.block.Block;
@@ -24,6 +24,6 @@ public final class VPBlockEntityTypes {
         return VPRegistry.register(VPRegistry.BLOCK_ENTITY_TYPE, name, () -> new BlockEntityType<>(onCreate, Set.of(validBlocks)));
     }
 
-    public static final RegistryObject<BlockEntityType<LayeredCauldronBlockEntity>> LAYERED_CAULDRON = create("layered_cauldron",
-            LayeredCauldronBlockEntity::new, Blocks.WATER_CAULDRON);
+    public static final RegistryObject<BlockEntityType<WaterCauldronBlockEntity>> WATER_CAULDRON = create("water_cauldron",
+            WaterCauldronBlockEntity::new, Blocks.WATER_CAULDRON);
 }

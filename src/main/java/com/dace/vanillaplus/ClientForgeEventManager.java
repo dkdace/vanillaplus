@@ -1,6 +1,6 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.client.renderer.LayeredCauldronRenderer;
+import com.dace.vanillaplus.client.renderer.WaterCauldronRenderer;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.NonNull;
@@ -30,6 +30,6 @@ public final class ClientForgeEventManager {
 
     @SubscribeEvent
     private static void onEntityRenderersRegisterRenderers(@NonNull EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(VPBlockEntityTypes.LAYERED_CAULDRON.get(), context -> new LayeredCauldronRenderer());
+        event.registerBlockEntityRenderer(VPBlockEntityTypes.WATER_CAULDRON.get(), context -> new WaterCauldronRenderer());
     }
 }

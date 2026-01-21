@@ -41,7 +41,7 @@ import java.util.*;
 /**
  * 물이 담긴 가마솥 블록 엔티티 클래스.
  */
-public final class LayeredCauldronBlockEntity extends BlockEntity {
+public final class WaterCauldronBlockEntity extends BlockEntity {
     /** 물약 내용물 */
     private PotionContents potionContents = new PotionContents(Potions.WATER);
     /** 현재 색상 */
@@ -50,8 +50,8 @@ public final class LayeredCauldronBlockEntity extends BlockEntity {
     /** 누적 색상 가중치 */
     private double colorWeightSum;
 
-    public LayeredCauldronBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
-        super(VPBlockEntityTypes.LAYERED_CAULDRON.get(), blockPos, blockState);
+    public WaterCauldronBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
+        super(VPBlockEntityTypes.WATER_CAULDRON.get(), blockPos, blockState);
     }
 
     /**

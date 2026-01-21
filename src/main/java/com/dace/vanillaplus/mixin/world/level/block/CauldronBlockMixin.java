@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
+import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -19,15 +19,15 @@ public abstract class CauldronBlockMixin extends BlockMixin<CauldronBlock, Block
             target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;)V",
             ordinal = 0))
     private void addWaterOnRain(BlockState blockState, Level level, BlockPos blockPos, Biome.Precipitation precipitation, CallbackInfo ci) {
-        if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
-            layeredCauldronBlockEntity.addPotionContents(null);
+        if (level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
+            waterCauldronBlockEntity.addPotionContents(null);
     }
 
     @Inject(method = "receiveStalactiteDrip", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V",
             ordinal = 0))
     private void addWaterOnStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid, CallbackInfo ci) {
-        if (level.getBlockEntity(blockPos) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
-            layeredCauldronBlockEntity.addPotionContents(null);
+        if (level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
+            waterCauldronBlockEntity.addPotionContents(null);
     }
 }

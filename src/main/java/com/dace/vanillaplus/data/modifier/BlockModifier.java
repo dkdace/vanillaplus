@@ -18,7 +18,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -119,7 +119,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
     }
 
     /**
-     * {@link LayeredCauldronBlock}의 블록 수정자 클래스.
+     * {@link Blocks#WATER_CAULDRON}의 블록 수정자 클래스.
      */
     @Getter
     public static final class WaterCauldronModifier extends BlockModifier {
