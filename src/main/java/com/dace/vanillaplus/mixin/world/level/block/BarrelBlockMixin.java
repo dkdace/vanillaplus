@@ -3,9 +3,11 @@ package com.dace.vanillaplus.mixin.world.level.block;
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BarrelBlock.class)
 public abstract class BarrelBlockMixin<T extends BlockModifier> extends BlockMixin<BarrelBlock, T> implements VPLootContainerBlock<BarrelBlock, T> {
+    @Override
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return getXP(state, level, randomSource, pos);
+    }
+
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/BarrelBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private BlockState modifyBlockState(BlockState blockState) {
@@ -37,6 +44,6 @@ public abstract class BarrelBlockMixin<T extends BlockModifier> extends BlockMix
             target = "Lnet/minecraft/world/entity/player/Player;openMenu(Lnet/minecraft/world/MenuProvider;)Ljava/util/OptionalInt;"))
     protected void onOpen(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
                           CallbackInfoReturnable<InteractionResult> cir) {
-        popOpenXP(blockState, level, blockPos);
+        awardLootTableReward(blockState, level, blockPos);
     }
 }

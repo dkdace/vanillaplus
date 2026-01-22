@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,6 +36,16 @@ public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends 
     @Override
     public void openLid() {
         chestLidController.shouldBeOpen(true);
+    }
+
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void loadAdditional(ValueInput valueInput, CallbackInfo ci) {
+        onLoadAdditional(valueInput);
+    }
+
+    @Inject(method = "saveAdditional", at = @At("TAIL"))
+    private void saveAdditional(ValueOutput valueOutput, CallbackInfo ci) {
+        onSaveAdditional(valueOutput);
     }
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))
