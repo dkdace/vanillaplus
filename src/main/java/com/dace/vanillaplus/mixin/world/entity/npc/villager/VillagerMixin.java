@@ -61,7 +61,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Unique
     private void addOffers(@NonNull ServerLevel serverLevel, int level) {
         getVillagerData().profession().unwrapKey()
-                .flatMap(Trade.DATA_GETTER::get)
+                .flatMap(Trade.getDataManager()::get)
                 .ifPresent(trade -> {
                     VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
                     MerchantOffers offers = getOffers();

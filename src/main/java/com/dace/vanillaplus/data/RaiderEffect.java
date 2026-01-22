@@ -39,9 +39,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +53,13 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEffect> {
-    /** DataGetter */
-    public static final DataGetter<EntityType<?>, RaiderEffect> DATA_GETTER = DataGetter.fromDirectRegistry(BuiltInRegistries.ENTITY_TYPE, VPRegistry.RAIDER_EFFECT);
-
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends RaiderEffect>> CODEC_REGISTRY = VPRegistry.RAIDER_EFFECT.createRegistry("type");
     /** 유형별 코덱 */
     private static final Codec<RaiderEffect> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
+    /** 데이터 매니저 */
+    @Getter
+    private static ReloadableDataManager<EntityType<?>, RaiderEffect> dataManager;
 
     static {
         CODEC_REGISTRY.register("pillager", () -> PillagerEffect.CODEC);
@@ -71,8 +71,9 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     }
 
     @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.RAIDER_EFFECT.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
+    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
+        dataManager = ReloadableDataManager.createDirect(event.getRegistries(), VPRegistry.RAIDER_EFFECT, TYPE_CODEC, BuiltInRegistries.ENTITY_TYPE);
+        event.addListener(dataManager);
     }
 
     /**

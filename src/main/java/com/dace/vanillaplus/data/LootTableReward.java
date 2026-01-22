@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -24,8 +23,6 @@ import net.minecraftforge.fml.common.Mod;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LootTableReward {
-    /** 레지스트리 코덱 */
-    public static final Codec<Holder<LootTableReward>> CODEC = VPRegistry.LOOT_TABLE_REWARD.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<LootTableReward> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", UniformInt.of(20, 30))
@@ -41,7 +38,7 @@ public final class LootTableReward {
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = ReloadableDataManager.fromVPRegistry(event.getRegistries(), VPRegistry.LOOT_TABLE_REWARD, DIRECT_CODEC);
+        dataManager = ReloadableDataManager.createResourceKeyed(event.getRegistries(), VPRegistry.LOOT_TABLE_REWARD, DIRECT_CODEC);
         event.addListener(dataManager);
     }
 }

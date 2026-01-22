@@ -37,7 +37,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
         @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
         private void applyRaidBuffsToVex(CallbackInfo ci, @Local Vex vex) {
-            RaiderEffect.DATA_GETTER.get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
+            RaiderEffect.getDataManager().get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
                     evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex)));
         }
     }

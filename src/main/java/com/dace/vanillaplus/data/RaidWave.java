@@ -9,14 +9,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.Holder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -30,23 +29,22 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class RaidWave {
-    /** DataGetter */
-    public static final DataGetter<Difficulty, RaidWave> DATA_GETTER = DataGetter.fromMapper(difficulty -> VPRegistry.RAID_WAVE.createResourceKey(difficulty.getKey()));
-
-    /** 레지스트리 코덱 */
-    public static final Codec<Holder<RaidWave>> CODEC = VPRegistry.RAID_WAVE.createRegistryCodec();
     /** JSON 코덱 */
     private static final Codec<RaidWave> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.unboundedMap(RaiderType.CODEC, ExtraCodecs.POSITIVE_INT).listOf().fieldOf("waves")
                     .forGetter(raidWave -> raidWave.raiderCountMaps))
             .apply(instance, RaidWave::new));
+    /** 데이터 매니저 */
+    @Getter
+    private static ReloadableDataManager<Difficulty, RaidWave> dataManager;
 
     /** 습격대원 종류별 대원 수 목록 (습격대원 종류 : 대원 수) */
     private final List<Map<RaiderType, Integer>> raiderCountMaps;
 
     @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.RAID_WAVE.getRegistryKey(), DIRECT_CODEC);
+    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
+        dataManager = ReloadableDataManager.createMapped(event.getRegistries(), VPRegistry.RAID_WAVE, DIRECT_CODEC, Enum::toString);
+        event.addListener(dataManager);
     }
 
     /**

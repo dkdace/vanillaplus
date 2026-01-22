@@ -22,7 +22,7 @@ public abstract class RaiderMixin<T extends Raider, U extends EntityModifier.Liv
     @Unique
     @NonNull
     protected <V extends RaiderEffect> Optional<V> getRaiderEffect(@NonNull Class<V> checkClass) {
-        return RaiderEffect.DATA_GETTER.get(getType(), checkClass);
+        return RaiderEffect.getDataManager().get(getType(), checkClass);
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
@@ -25,7 +26,8 @@ public final class VanillaPlus {
     private final BusGroup busGroup;
 
     public VanillaPlus(@NonNull FMLJavaModLoadingContext context) {
-        LOGGER.debug("VanillaPlus Loaded");
+        IModInfo modInfo = context.getContainer().getModInfo();
+        LOGGER.info("{} {} Loaded", modInfo.getModId(), modInfo.getVersion());
 
         instance = this;
         busGroup = context.getModBusGroup();

@@ -20,6 +20,9 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
     public ItemStack getProjectile(ItemStack weapon) {
         ItemStack itemStack = super.getProjectile(weapon);
 
+        if (level().isClientSide())
+            return itemStack;
+
         return getRaiderEffect(RaiderEffect.PillagerEffect.class)
                 .map(pillagerEffect -> pillagerEffect.getTippedArrowInfo().applyArrowPotionEffect(getThis(), itemStack))
                 .orElse(itemStack);

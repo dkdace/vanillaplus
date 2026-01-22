@@ -68,8 +68,6 @@ public abstract class ArmorTrimEffect<T> {
         /** DataGetter */
         public static final DataGetter<ResourceKey<TrimMaterial>, TrimMaterialEffect> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRIM_MATERIAL_EFFECT);
 
-        /** 레지스트리 코덱 */
-        public static final Codec<Holder<TrimMaterialEffect>> CODEC = VPRegistry.TRIM_MATERIAL_EFFECT.createRegistryCodec();
         /** JSON 코덱 */
         private static final Codec<TrimMaterialEffect> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
                 .group(TrimMaterial.CODEC.fieldOf("material").forGetter(trimMaterialEffect -> trimMaterialEffect.holder),
@@ -89,8 +87,6 @@ public abstract class ArmorTrimEffect<T> {
         /** DataGetter */
         public static final DataGetter<ResourceKey<TrimPattern>, TrimPatternEffect> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRIM_PATTERN_EFFECT);
 
-        /** 레지스트리 코덱 */
-        public static final Codec<Holder<TrimPatternEffect>> CODEC = VPRegistry.TRIM_PATTERN_EFFECT.createRegistryCodec();
         /** JSON 코덱 */
         private static final Codec<TrimPatternEffect> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
                 .group(TrimPattern.CODEC.fieldOf("pattern").forGetter(trimPatternEffect -> trimPatternEffect.holder),

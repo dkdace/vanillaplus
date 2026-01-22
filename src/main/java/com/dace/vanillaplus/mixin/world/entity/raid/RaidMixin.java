@@ -122,7 +122,7 @@ public abstract class RaidMixin implements VPMixin<Raid> {
 
     @Overwrite
     public int getNumGroups(Difficulty difficulty) {
-        return RaidWave.DATA_GETTER.get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
+        return RaidWave.getDataManager().get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
@@ -179,7 +179,7 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         ticksActive = 0;
         totalHealth = 0;
 
-        RaidWave.DATA_GETTER.get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
+        RaidWave.getDataManager().get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
                 spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1));
 
         waveSpawnPos = Optional.empty();

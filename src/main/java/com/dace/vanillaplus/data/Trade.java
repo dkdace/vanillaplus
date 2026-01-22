@@ -7,10 +7,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -38,9 +35,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 import org.apache.commons.lang3.IntegerRange;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
@@ -56,16 +53,15 @@ import java.util.stream.Stream;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class Trade {
-    /** DataGetter */
-    public static final DataGetter<ResourceKey<VillagerProfession>, Trade> DATA_GETTER = DataGetter.fromVPRegistry(VPRegistry.TRADE);
-
-    /** 레지스트리 코덱 */
-    public static final Codec<Holder<Trade>> CODEC = VPRegistry.TRADE.createRegistryCodec();
     /** JSON 코덱 */
-    private static final Codec<Trade> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(OfferList.CODEC.listOf().xmap(Trade::fromListToMap, Trade::fromMapToList).fieldOf("trades")
-                    .forGetter(trade -> trade.offerListMap))
-            .apply(instance, Trade::new));
+    private static final Codec<Trade> DIRECT_CODEC = Codec.lazyInitialized(() ->
+            RecordCodecBuilder.create(instance -> instance
+                    .group(OfferList.CODEC.listOf().xmap(Trade::fromListToMap, Trade::fromMapToList).fieldOf("trades")
+                            .forGetter(trade -> trade.offerListMap))
+                    .apply(instance, Trade::new)));
+    /** 데이터 매니저 */
+    @Getter
+    private static ReloadableDataManager<ResourceKey<VillagerProfession>, Trade> dataManager;
 
     static {
         OfferList.OfferItem.REGISTRY.register("buy", () -> OfferList.OfferItem.Buy.CODEC);
@@ -92,8 +88,9 @@ public final class Trade {
     private final Map<OfferList.Level, OfferList> offerListMap;
 
     @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.TRADE.getRegistryKey(), DIRECT_CODEC);
+    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
+        dataManager = ReloadableDataManager.createResourceKeyed(event.getRegistries(), VPRegistry.TRADE, DIRECT_CODEC);
+        event.addListener(dataManager);
     }
 
     /**

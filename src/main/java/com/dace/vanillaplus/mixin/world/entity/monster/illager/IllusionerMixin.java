@@ -19,6 +19,9 @@ public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, E
     public ItemStack getProjectile(ItemStack weapon) {
         ItemStack itemStack = super.getProjectile(weapon);
 
+        if (level().isClientSide())
+            return itemStack;
+
         return getRaiderEffect(RaiderEffect.IllusionerEffect.class)
                 .map(illusionerEffect -> illusionerEffect.getTippedArrowInfo().applyArrowPotionEffect(getThis(), itemStack))
                 .orElse(itemStack);
