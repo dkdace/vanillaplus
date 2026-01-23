@@ -20,6 +20,7 @@
     "world.entity.LivingEntityMixin",
     "world.entity.MobMixin",
     "world.entity.ai.behavior.BehaviorUtilsMixin",
+    "world.entity.ai.goal.RangedBowAttackGoalMixin",
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",
     "world.entity.animal.golem.IronGolemMixin",
