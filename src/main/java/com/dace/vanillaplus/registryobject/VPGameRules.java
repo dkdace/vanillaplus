@@ -33,8 +33,8 @@ public final class VPGameRules {
 
     public static final RegistryObject<GameRule<Boolean>> SHOW_HEAD_ON_LOCATOR_BAR = create("show_head_on_locator_bar",
             GameRuleCategory.PLAYER, true);
-    public static final RegistryObject<GameRule<Boolean>> DISABLE_MOBS_IN_BOSS_FIGHT = create("disable_mobs_in_boss_fight",
-            GameRuleCategory.SPAWNING, true);
+    public static final RegistryObject<GameRule<Boolean>> SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT = create("spawn_mobs_in_ender_dragon_fight",
+            GameRuleCategory.SPAWNING, false);
     public static final RegistryObject<GameRule<Integer>> MAX_BAD_OMEN_LEVEL = create("max_bad_omen_level",
             GameRuleCategory.MISC, MAX_POSSIBLE_BAD_OMEN_LEVEL, 1, MAX_POSSIBLE_BAD_OMEN_LEVEL);
 
@@ -69,8 +69,8 @@ public final class VPGameRules {
     private static void onMobSpawnAllowDespawn(@NonNull MobSpawnEvent.AllowDespawn event) {
         ServerLevel level = event.getLevel().getLevel();
 
-        if (level.getGameRules().get(DISABLE_MOBS_IN_BOSS_FIGHT.get()) && level.getBiome(event.getEntity().blockPosition()).is(Biomes.THE_END)
-                && !level.getLevel().getEntities(EntityType.ENDER_DRAGON, enderDragon -> true).isEmpty())
+        if (!level.getGameRules().get(SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT.get()) && level.getBiome(event.getEntity().blockPosition()).is(Biomes.THE_END)
+                && !level.getEntities(EntityType.ENDER_DRAGON, enderDragon -> true).isEmpty())
             event.setResult(Result.ALLOW);
     }
 
