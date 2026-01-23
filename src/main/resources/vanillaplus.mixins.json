@@ -91,7 +91,6 @@
     "world.item.equipment.trim.TrimMaterialMixin",
     "world.item.equipment.trim.TrimPatternMixin",
     "world.level.block.BarrelBlockMixin",
-    "world.level.block.BedBlockMixin",
     "world.level.block.BlockMixin",
     "world.level.block.CauldronBlockMixin",
     "world.level.block.ChestBlockMixin",
