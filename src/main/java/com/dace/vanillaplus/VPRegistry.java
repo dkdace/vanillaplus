@@ -4,6 +4,7 @@ import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
@@ -13,6 +14,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -28,7 +31,7 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffe
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -100,9 +103,6 @@ public final class VPRegistry<T> {
     /** 물약 수정자 */
     public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
 
-    @Nullable
-    private static HolderLookup.Provider provider;
-
     static {
         VanillaPlus.loadClass(VPSoundEvents.class);
         VanillaPlus.loadClass(VPAttributes.class);
@@ -156,49 +156,49 @@ public final class VPRegistry<T> {
      * @param name 이름
      */
     private VPRegistry(@NonNull String name) {
-        this(ResourceKey.createRegistryKey(VanillaPlus.createIdentifier(name)));
+        this(ResourceKey.createRegistryKey(IdentifierUtil.fromPath(name)));
         this.forgeRegistryHolder = deferredRegister.makeRegistry(RegistryBuilder::of);
     }
 
     @SubscribeEvent
-    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        initData(event.getServerResources().fullRegistries()::lookup);
-        VanillaPlus.LOGGER.debug("Server-side Data Loaded");
+    private static void onServerAboutToStart(@NonNull ServerAboutToStartEvent event) {
+        initData(event.getServer().registryAccess());
+        VanillaPlus.LOGGER.debug("Server-side DataModifier Loaded");
     }
 
     @SubscribeEvent
     private static void onClientPlayerNetworkLoggingIn(@NonNull ClientPlayerNetworkEvent.LoggingIn event) {
-        if (provider != null)
-            return;
-
-        initData(event.getPlayer()::registryAccess);
-        VanillaPlus.LOGGER.debug("Client-side Data Loaded");
+        initData(event.getPlayer().registryAccess());
+        VanillaPlus.LOGGER.debug("Client-side DataModifier Loaded");
     }
 
-    private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
-        provider = providerFunction.get();
+    private static void initData(@NonNull HolderLookup.Provider registries) {
+        applyDataModifiers(registries, Registries.ITEM, VPRegistry.ITEM_MODIFIER);
+        applyDataModifiers(registries, Registries.BLOCK, VPRegistry.BLOCK_MODIFIER);
+        applyDataModifiers(registries, Registries.ENTITY_TYPE, VPRegistry.ENTITY_MODIFIER);
+        applyDataModifiers(registries, Registries.POTION, VPRegistry.POTION_MODIFIER);
+        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.LEVEL_BASED_VALUE_PRESET);
+        applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
+        applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
 
-        applyDataModifiers(BuiltInRegistries.ITEM, ItemModifier.DATA_GETTER);
-        applyDataModifiers(BuiltInRegistries.BLOCK, BlockModifier.DATA_GETTER);
-        applyDataModifiers(BuiltInRegistries.ENTITY_TYPE, EntityModifier.DATA_GETTER);
-        applyDataModifiers(BuiltInRegistries.POTION, PotionModifier.DATA_GETTER);
+        applyArmorTrimEffects(registries, VPRegistry.TRIM_MATERIAL_EFFECT);
+        applyArmorTrimEffects(registries, VPRegistry.TRIM_PATTERN_EFFECT);
     }
 
-    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Registry<T> registry,
-                                                                          @NonNull DataGetter<T, U> dataGetter) {
-        registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataGetter.get(element).orElse(null)));
+    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull HolderLookup.Provider registries,
+                                                                          @NonNull ResourceKey<Registry<T>> registryKey,
+                                                                          @NonNull VPRegistry<U> vpRegistry) {
+        registries.lookupOrThrow(registryKey).listElements().forEach(element ->
+                registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key()))).ifPresent(holder ->
+                        VPModifiableData.cast(element.value()).setDataModifier(holder.value())));
     }
 
-    /**
-     * 전체 레지스트리를 반환한다.
-     *
-     * @return 전체 레지스트리
-     * @throws IllegalStateException 레지스트리에 접근할 수 없으면 발생
-     */
-    @NonNull
-    public static HolderLookup.Provider getRegistries() {
-        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
-        return provider;
+    private static <T extends ArmorTrimEffect<?>> void applyArmorTrimEffects(@NonNull HolderLookup.Provider registries,
+                                                                             @NonNull VPRegistry<T> vpRegistry) {
+        registries.lookupOrThrow(vpRegistry.registryKey).listElements().forEach(element ->
+                registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(element.value().getIdentifier()))
+                        .ifPresent(levelBasedValuePresetHolder ->
+                                element.value().applyLevelBasedValuePreset(levelBasedValuePresetHolder.value())));
     }
 
     /**
@@ -218,12 +218,12 @@ public final class VPRegistry<T> {
     /**
      * 레지스트리의 리소스 키를 생성한다.
      *
-     * @param path 리소스 경로
+     * @param identifier 식별자
      * @return 리소스 키
      */
     @NonNull
-    public ResourceKey<T> createResourceKey(@NonNull String path) {
-        return deferredRegister.key(path);
+    public ResourceKey<T> createResourceKey(@NonNull Identifier identifier) {
+        return deferredRegister.key(identifier);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.util.CodecUtil;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -72,7 +73,9 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = ReloadableDataManager.createDirect(event.getRegistries(), VPRegistry.RAIDER_EFFECT, TYPE_CODEC, BuiltInRegistries.ENTITY_TYPE);
+        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAIDER_EFFECT, TYPE_CODEC,
+                entityType -> IdentifierUtil.fromRegistry(BuiltInRegistries.ENTITY_TYPE, entityType));
+
         event.addListener(dataManager);
     }
 

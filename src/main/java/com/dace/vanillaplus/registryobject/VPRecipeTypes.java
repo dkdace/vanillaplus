@@ -2,7 +2,7 @@ package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -42,12 +42,12 @@ public final class VPRecipeTypes {
 
     @NonNull
     private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> create(@NonNull String name) {
-        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () -> RecipeType.simple(VanillaPlus.createIdentifier(name)));
+        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () -> RecipeType.simple(IdentifierUtil.fromPath(name)));
     }
 
     @NonNull
     private static ResourceKey<RecipePropertySet> createPropertySet(@NonNull String name) {
-        return ResourceKey.create(RecipePropertySet.TYPE_KEY, VanillaPlus.createIdentifier(name));
+        return ResourceKey.create(RecipePropertySet.TYPE_KEY, IdentifierUtil.fromPath(name));
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

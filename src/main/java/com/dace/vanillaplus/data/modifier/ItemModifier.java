@@ -2,7 +2,6 @@ package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.data.DataGetter;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -31,9 +29,6 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponent<ItemModifier> {
-    /** DataGetter */
-    public static final DataGetter<Item, ItemModifier> DATA_GETTER = DataGetter.fromDirectRegistry(BuiltInRegistries.ITEM, VPRegistry.ITEM_MODIFIER);
-
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends ItemModifier>> CODEC_REGISTRY = VPRegistry.ITEM_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */

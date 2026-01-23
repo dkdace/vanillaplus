@@ -3,6 +3,7 @@ package com.dace.vanillaplus.data;
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -89,7 +90,7 @@ public final class Trade {
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = ReloadableDataManager.createResourceKeyed(event.getRegistries(), VPRegistry.TRADE, DIRECT_CODEC);
+        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.TRADE, DIRECT_CODEC, IdentifierUtil::fromResourceKey);
         event.addListener(dataManager);
     }
 

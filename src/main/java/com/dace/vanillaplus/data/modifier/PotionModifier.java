@@ -2,14 +2,12 @@ package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.data.DataGetter;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -27,9 +25,6 @@ import java.util.Optional;
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PotionModifier implements DataModifier<Potion> {
-    /** DataGetter */
-    public static final DataGetter<Potion, PotionModifier> DATA_GETTER = DataGetter.fromDirectRegistry(BuiltInRegistries.POTION, VPRegistry.POTION_MODIFIER);
-
     /** JSON 코덱 */
     private static final Codec<PotionModifier> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.RGB_COLOR_CODEC.optionalFieldOf("color").forGetter(PotionModifier::getColor),

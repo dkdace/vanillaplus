@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.component;
 
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalDoubleRef;
@@ -27,9 +27,9 @@ public abstract class ItemAttributeModifiersMixin implements VPMixin<ItemAttribu
     @Mixin(ItemAttributeModifiers.Display.Default.class)
     public abstract static class DefaultDisplayMixin implements VPMixin<ItemAttributeModifiers.Display.Default> {
         @Unique
-        private static final Identifier BASE_SWEEPING_DAMAGE_RATIO = VanillaPlus.createIdentifier("base_sweeping_damage_ratio");
+        private static final Identifier BASE_SWEEPING_DAMAGE_RATIO = IdentifierUtil.fromPath("base_sweeping_damage_ratio");
         @Unique
-        private static final Identifier BASE_SWEEPING_RANGE = VanillaPlus.createIdentifier("base_sweeping_range");
+        private static final Identifier BASE_SWEEPING_RANGE = IdentifierUtil.fromPath("base_sweeping_range");
 
         @Redirect(method = "apply", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Holder;is(Lnet/minecraft/core/Holder;)Z"))
         private boolean removeKnockbackResistanceMultiplier(Holder<Attribute> attributeHolder, Holder<Attribute> targetHolder) {

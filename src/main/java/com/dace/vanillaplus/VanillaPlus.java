@@ -3,7 +3,6 @@ package com.dace.vanillaplus;
 import com.mojang.logging.LogUtils;
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.resources.Identifier;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -49,17 +48,6 @@ public final class VanillaPlus {
     }
 
     /**
-     * 모드의 식별자를 생성한다.
-     *
-     * @param path 리소스 경로
-     * @return 식별자
-     */
-    @NonNull
-    public static Identifier createIdentifier(@NonNull String path) {
-        return Identifier.fromNamespaceAndPath(MODID, path);
-    }
-
-    /**
      * DeferredRegister 인스턴스를 등록한다.
      *
      * @param deferredRegister DeferredRegister 인스턴스
@@ -68,5 +56,4 @@ public final class VanillaPlus {
     public <T> void registerBusGroup(@NonNull DeferredRegister<T> deferredRegister) {
         deferredRegister.register(busGroup);
     }
-
 }

@@ -3,6 +3,7 @@ package com.dace.vanillaplus.data;
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
@@ -43,7 +44,9 @@ public final class RaidWave {
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = ReloadableDataManager.createMapped(event.getRegistries(), VPRegistry.RAID_WAVE, DIRECT_CODEC, Enum::toString);
+        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAID_WAVE, DIRECT_CODEC,
+                difficulty -> IdentifierUtil.fromPath(difficulty.getKey()));
+
         event.addListener(dataManager);
     }
 

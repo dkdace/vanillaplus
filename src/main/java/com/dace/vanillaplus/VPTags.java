@@ -1,5 +1,6 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.util.IdentifierUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Registry;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 public final class VPTags {
     @NonNull
     private static <T> TagKey<T> create(@NonNull ResourceKey<Registry<T>> registry, @NonNull String name) {
-        return TagKey.create(registry, VanillaPlus.createIdentifier(name));
+        return TagKey.create(registry, IdentifierUtil.fromPath(name));
     }
 
     /**

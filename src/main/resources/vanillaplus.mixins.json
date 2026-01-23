@@ -88,6 +88,8 @@
     "world.item.enchantment.EnchantmentMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
     "world.item.equipment.trim.ArmorTrimMixin",
+    "world.item.equipment.trim.TrimMaterialMixin",
+    "world.item.equipment.trim.TrimPatternMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BedBlockMixin",
     "world.level.block.BlockMixin",

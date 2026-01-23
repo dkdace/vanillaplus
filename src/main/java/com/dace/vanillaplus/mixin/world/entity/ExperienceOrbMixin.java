@@ -36,9 +36,12 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
                         serverPlayer, value));
 
         float amount = Math.min(xp * value.floatValue(), serverPlayer.getMaxHealth() - serverPlayer.getHealth());
-        serverPlayer.heal(amount);
+        if (amount > 0) {
+            serverPlayer.heal(amount);
+            xp -= (int) (amount / value.floatValue());
+        }
 
-        return repairPlayerItems(serverPlayer, (int) (xp - amount * xp));
+        return repairPlayerItems(serverPlayer, xp);
     }
 
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",

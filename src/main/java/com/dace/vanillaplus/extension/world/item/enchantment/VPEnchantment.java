@@ -1,6 +1,8 @@
 package com.dace.vanillaplus.extension.world.item.enchantment;
 
+import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +16,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 /**
  * {@link Enchantment}를 확장하는 인터페이스.
  */
-public interface VPEnchantment extends VPMixin<Enchantment> {
+public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<Enchantment, LevelBasedValuePreset> {
     @NonNull
     static VPEnchantment cast(@NonNull Enchantment object) {
         return (VPEnchantment) (Object) object;

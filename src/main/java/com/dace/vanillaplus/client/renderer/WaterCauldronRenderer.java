@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.client.renderer;
 
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class WaterCauldronRenderer implements BlockEntityRenderer<WaterCauldronBlockEntity, WaterCauldronRenderer.RenderState> {
     /** 물 텍스쳐 식별자 */
-    private static final Identifier RESOURCE_LOCATION = VanillaPlus.createIdentifier("water_still_opaque");
+    private static final Identifier RESOURCE_LOCATION = IdentifierUtil.fromPath("water_still_opaque");
     /** 물의 최소 투명도 */
     private static final float MIN_ALPHA = 0.5F;
 

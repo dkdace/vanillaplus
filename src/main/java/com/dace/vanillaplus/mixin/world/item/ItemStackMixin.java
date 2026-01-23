@@ -234,6 +234,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Item.TooltipContext tooltipContext,
                                         @NonNull Consumer<Component> componentConsumer) {
         HolderLookup.Provider registries = tooltipContext.registries();
+
         if (registries != null)
             providesTrimMaterial.unwrap(registries).ifPresent(trimMaterialHolder -> {
                 componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));

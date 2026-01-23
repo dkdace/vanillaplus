@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.sounds.SoundEvent;
@@ -20,6 +20,6 @@ public final class VPSoundEvents {
 
     @NonNull
     private static RegistryObject<SoundEvent> create(@NonNull String name) {
-        return VPRegistry.SOUND_EVENT.register(name, () -> SoundEvent.createVariableRangeEvent(VanillaPlus.createIdentifier(name)));
+        return VPRegistry.SOUND_EVENT.register(name, () -> SoundEvent.createVariableRangeEvent(IdentifierUtil.fromPath(name)));
     }
 }

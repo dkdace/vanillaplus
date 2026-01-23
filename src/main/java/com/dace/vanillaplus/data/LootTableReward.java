@@ -2,6 +2,7 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
@@ -38,7 +39,7 @@ public final class LootTableReward {
 
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = ReloadableDataManager.createResourceKeyed(event.getRegistries(), VPRegistry.LOOT_TABLE_REWARD, DIRECT_CODEC);
+        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.LOOT_TABLE_REWARD, DIRECT_CODEC, IdentifierUtil::fromResourceKey);
         event.addListener(dataManager);
     }
 }

@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.ArmorTrimEffect;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -32,12 +33,10 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(itemEnchantments);
 
-        armorTrim.pattern().unwrapKey()
-                .flatMap(ArmorTrimEffect.TrimPatternEffect.DATA_GETTER::get)
-                .ifPresent(trimPatternEffect -> mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
-        armorTrim.material().unwrapKey()
-                .flatMap(ArmorTrimEffect.TrimMaterialEffect.DATA_GETTER::get)
-                .ifPresent(trimMaterialEffect -> mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
+        VPTrimPattern.cast(armorTrim.pattern().value()).getDataModifier().ifPresent(trimPatternEffect ->
+                mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
+        VPTrimMaterial.cast(armorTrim.material().value()).getDataModifier().ifPresent(trimMaterialEffect ->
+                mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
 
         return mutable.toImmutable();
     }

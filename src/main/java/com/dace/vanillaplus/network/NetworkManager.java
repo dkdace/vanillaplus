@@ -5,6 +5,7 @@ import com.dace.vanillaplus.network.packet.PacketHandler;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
 import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
 import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -30,7 +31,7 @@ public final class NetworkManager {
     private static final int PROTOCOL_VERSION = 3;
     /** 패킷 전송 채널 */
     private static final SimpleChannel CHANNEL = ChannelBuilder
-            .named(VanillaPlus.createIdentifier("main"))
+            .named(IdentifierUtil.fromPath("main"))
             .networkProtocolVersion(PROTOCOL_VERSION)
             .acceptedVersions((status, version) -> version == PROTOCOL_VERSION)
             .simpleChannel();
