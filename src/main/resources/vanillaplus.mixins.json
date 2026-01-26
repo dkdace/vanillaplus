@@ -50,6 +50,7 @@
     "world.entity.monster.piglin.PiglinMixin",
     "world.entity.monster.skeleton.AbstractSkeletonMixin",
     "world.entity.monster.spider.SpiderMixin",
+    "world.entity.monster.zombie.ZombieVillagerMixin",
     "world.entity.npc.villager.AbstractVillagerMixin",
     "world.entity.npc.villager.VillagerDataMixin",
     "world.entity.npc.villager.VillagerMixin",
