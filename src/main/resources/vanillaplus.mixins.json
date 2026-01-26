@@ -24,6 +24,7 @@
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",
     "world.entity.animal.golem.IronGolemMixin",
+    "world.entity.animal.wolf.WolfMixin",
     "world.entity.boss.enderdragon.EnderDragonMixin",
     "world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstanceMixin",
     "world.entity.boss.enderdragon.phases.DragonChargePlayerPhaseMixin",
