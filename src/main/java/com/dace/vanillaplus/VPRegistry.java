@@ -188,9 +188,13 @@ public final class VPRegistry<T> {
     private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull HolderLookup.Provider registries,
                                                                           @NonNull ResourceKey<Registry<T>> registryKey,
                                                                           @NonNull VPRegistry<U> vpRegistry) {
-        registries.lookupOrThrow(registryKey).listElements().forEach(element ->
-                registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key()))).ifPresent(holder ->
-                        VPModifiableData.cast(element.value()).setDataModifier(holder.value())));
+        registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
+            U dataModifier = registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key())))
+                    .map(Holder::value)
+                    .orElse(null);
+
+            VPModifiableData.cast(element.value()).setDataModifier(dataModifier);
+        });
     }
 
     private static <T extends ArmorTrimEffect<?>> void applyArmorTrimEffects(@NonNull HolderLookup.Provider registries,
