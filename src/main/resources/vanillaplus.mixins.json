@@ -134,6 +134,7 @@
     "client.particle.AttackSweepParticleMixin",
     "client.particle.SingleQuadParticleMixin",
     "client.player.LocalPlayerMixin",
+    "client.renderer.ItemInHandRendererMixin",
     "client.renderer.ScreenEffectRendererMixin",
     "client.renderer.entity.EnderDragonRendererMixin",
     "client.renderer.entity.state.EnderDragonRenderStateMixin",
