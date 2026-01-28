@@ -45,6 +45,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     protected Brain<?> brain;
+    @Shadow
+    protected int attackStrengthTicker;
     @Unique
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
