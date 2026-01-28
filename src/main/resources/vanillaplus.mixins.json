@@ -138,6 +138,7 @@
     "client.renderer.ScreenEffectRendererMixin",
     "client.renderer.entity.EnderDragonRendererMixin",
     "client.renderer.entity.state.EnderDragonRenderStateMixin",
+    "client.resources.sounds.GuardianAttackSoundInstanceMixin",
     "client.sounds.SoundEngineMixin"
   ],
   "injectors": {
