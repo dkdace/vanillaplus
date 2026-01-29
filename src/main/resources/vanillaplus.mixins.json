@@ -14,6 +14,7 @@
     "server.level.ServerLevelMixin",
     "server.players.PlayerListMixin",
     "world.effect.BadOmenMobEffectMixin",
+    "world.effect.MobEffectCategoryMixin",
     "world.entity.EntityMixin",
     "world.entity.EntityTypeMixin",
     "world.entity.ExperienceOrbMixin",
