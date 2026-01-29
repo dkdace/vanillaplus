@@ -55,8 +55,8 @@ public abstract class DragonFireballMixin extends EntityMixin<DragonFireball, En
     }
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;discard()V"))
-    private void explode(HitResult hitResult, CallbackInfo ci, @Local Entity owner) {
-        if (owner instanceof EnderDragon enderDragon)
+    private void explode(HitResult hitResult, CallbackInfo ci) {
+        if (getThis().getOwner() instanceof EnderDragon enderDragon)
             VPEnderDragon.cast(enderDragon).getDataModifier().ifPresent(enderDragonModifier ->
                     level().explode(getThis(), getX(), getY(), getZ(), enderDragonModifier.getPhaseInfo().getFireball().getExplosionRadius(),
                             Level.ExplosionInteraction.MOB));
