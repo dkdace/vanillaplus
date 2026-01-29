@@ -37,6 +37,7 @@
     "world.entity.boss.enderdragon.phases.DragonStrafePlayerPhaseMixin",
     "world.entity.boss.enderdragon.phases.DragonTakeoffPhaseMixin",
     "world.entity.decoration.ArmorStandMixin",
+    "world.entity.item.ItemEntityMixin",
     "world.entity.monster.MonsterMixin",
     "world.entity.monster.RavagerMixin",
     "world.entity.monster.SilverfishMixin",
