@@ -104,6 +104,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return 0;
     }
 
+    @Shadow
+    public abstract void stopUsingItem();
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {

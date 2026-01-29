@@ -12,6 +12,7 @@
     "server.MinecraftServerMixin",
     "server.commands.RaidCommandMixin",
     "server.level.ServerLevelMixin",
+    "server.level.ServerPlayerMixin",
     "server.players.PlayerListMixin",
     "world.effect.BadOmenMobEffectMixin",
     "world.effect.MobEffectCategoryMixin",
