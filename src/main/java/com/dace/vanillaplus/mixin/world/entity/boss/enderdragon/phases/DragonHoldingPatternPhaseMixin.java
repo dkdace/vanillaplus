@@ -34,7 +34,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @Unique
     private void performStrafeOrCharge(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo phaseInfo, @NonNull Player target) {
-        double chargeChance = Mth.clampedLerp(CHARGE_CHANCE_MIN, CHARGE_CHANCE_MAX, dragon.distanceTo(target) / CHARGE_CHANCE_MAX_DISTANCE);
+        double chargeChance = Mth.clampedLerp(dragon.distanceTo(target) / CHARGE_CHANCE_MAX_DISTANCE, CHARGE_CHANCE_MIN, CHARGE_CHANCE_MAX);
         if (chargeChance > dragon.getRandom().nextDouble()) {
             dragon.getPhaseManager().setPhase(EnderDragonPhase.CHARGING_PLAYER);
             dragon.getPhaseManager().getPhase(EnderDragonPhase.CHARGING_PLAYER).setTarget(target.position());
