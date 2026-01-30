@@ -45,6 +45,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     protected Brain<?> brain;
+    @Shadow
+    protected int attackStrengthTicker;
     @Unique
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
@@ -101,6 +103,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public float getSecondsToDisableBlocking() {
         return 0;
     }
+
+    @Shadow
+    public abstract void stopUsingItem();
 
     @Override
     @MustBeInvokedByOverriders

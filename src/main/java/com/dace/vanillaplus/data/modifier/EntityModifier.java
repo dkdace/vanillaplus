@@ -128,8 +128,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                     default -> 1;
                 };
 
-
-            return Mth.clampedLerp(min.doubleValue(), max.doubleValue(), Math.max(value, entity.getHealth() / entity.getMaxHealth()));
+            return Mth.clampedLerp(Math.max(value, entity.getHealth() / entity.getMaxHealth()), min.doubleValue(), max.doubleValue());
         }
     }
 

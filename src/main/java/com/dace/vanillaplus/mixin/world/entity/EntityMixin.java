@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.BlockGetter;
@@ -33,6 +34,8 @@ import java.util.Optional;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
+    @Shadow
+    public int tickCount;
     @Shadow
     @Final
     protected RandomSource random;
@@ -95,6 +98,10 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
                                              float explosionPower) {
         return 0;
+    }
+
+    @Shadow
+    public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt) {
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -167,7 +168,8 @@ public abstract class RaidMixin implements VPMixin<Raid> {
 
     @ModifyArgs(method = "playSound", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/network/protocol/game/ClientboundSoundPacket;<init>(Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;DDDFFJ)V"))
-    private void modifyRaidHornPosition(Args args, @Local(argsOnly = true) BlockPos raidPos) {
+    private void modifyRaidHornArgs(Args args, @Local(argsOnly = true) BlockPos raidPos) {
+        args.set(1, SoundSource.HOSTILE);
         args.set(2, (double) raidPos.getX());
         args.set(3, (double) raidPos.getY());
         args.set(4, (double) raidPos.getZ());

@@ -73,7 +73,7 @@ public final class WaterCauldronRenderer implements BlockEntityRenderer<WaterCau
         float blue = ARGB.blueFloat(baseColor);
         blue += (ARGB.blueFloat(addedColor) - blue) * alpha;
 
-        return ARGB.colorFromFloat(Mth.clampedLerp(minAlpha, 1, alpha), red, green, blue);
+        return ARGB.colorFromFloat(Mth.clampedLerp(alpha, minAlpha, 1), red, green, blue);
     }
 
     @Override
