@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.data.modifier.PotionModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
@@ -31,6 +32,7 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -261,6 +263,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     public abstract Item getItem();
 
     @Shadow
+    public abstract boolean is(Item item);
+
+    @Shadow
     public abstract boolean isEnchanted();
 
     @Shadow
@@ -304,6 +309,11 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
                 addConsumableTooltip(consumable, tooltipContext, componentConsumer));
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
+
+        if (is(Items.CAKE))
+            VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).ifPresent(cakeModifier ->
+                    addFoodTooltip(cakeModifier.getFoodProperties(), componentConsumer));
+
         addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
                 addTrimMaterialTooltip(providesTrimMaterial, tooltipContext, componentConsumer));
     }

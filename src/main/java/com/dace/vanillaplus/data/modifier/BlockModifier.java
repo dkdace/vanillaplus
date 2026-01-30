@@ -14,9 +14,11 @@ import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +43,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         CODEC_REGISTRY.register("block", () -> CODEC);
         CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
         CODEC_REGISTRY.register("water_cauldron", () -> WaterCauldronModifier.CODEC);
+        CODEC_REGISTRY.register("cake", () -> CakeModifier.CODEC);
     }
 
     /** 블록 속성 */
@@ -137,6 +140,33 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
 
             this.maxPotionTypes = maxPotionTypes;
             this.maxTippedArrowCount = maxTippedArrowCount;
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends BlockModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link CakeBlock}의 블록 수정자 클래스.
+     */
+    @Getter
+    public static final class CakeModifier extends BlockModifier {
+        private static final MapCodec<CakeModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(FoodProperties.DIRECT_CODEC.optionalFieldOf("food", new FoodProperties.Builder()
+                                .nutrition(2).saturationModifier(0.1F).build()).forGetter(CakeModifier::getFoodProperties))
+                        .apply(instance, CakeModifier::new));
+
+        /** 음식 속성 */
+        @NonNull
+        private final FoodProperties foodProperties;
+
+        private CakeModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange, @NonNull FoodProperties foodProperties) {
+            super(properties, xpRange);
+            this.foodProperties = foodProperties;
         }
 
         @Override

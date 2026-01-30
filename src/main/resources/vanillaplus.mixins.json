@@ -98,6 +98,7 @@
     "world.item.equipment.trim.TrimPatternMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BlockMixin",
+    "world.level.block.CakeBlockMixin",
     "world.level.block.CauldronBlockMixin",
     "world.level.block.ChestBlockMixin",
     "world.level.block.CreakingHeartBlockMixin",
