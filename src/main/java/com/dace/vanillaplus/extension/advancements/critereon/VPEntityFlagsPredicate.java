@@ -25,4 +25,15 @@ public interface VPEntityFlagsPredicate extends VPMixin<EntityFlagsPredicate> {
      * @param isSpinAttacking 회전 공격 여부
      */
     void setIsSpinAttacking(@NonNull Optional<Boolean> isSpinAttacking);
+
+    /**
+     * @return 비에 닿았는지 여부
+     */
+    @NonNull
+    Optional<Boolean> getIsInRain();
+
+    /**
+     * @param isInRain 비에 닿았는지 여부
+     */
+    void setIsInRain(@NonNull Optional<Boolean> isInRain);
 }

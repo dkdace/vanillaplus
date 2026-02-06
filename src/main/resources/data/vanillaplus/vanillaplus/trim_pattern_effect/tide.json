@@ -4,51 +4,46 @@
     "minecraft:location_changed": [
       {
         "effect": {
-          "type": "minecraft:all_of",
-          "effects": [
-            {
-              "type": "minecraft:attribute",
-              "amount": {
-                "type": "vanillaplus:preset",
-                "value": "vanillaplus:trim_pattern/tide",
-                "name": "speed"
-              },
-              "attribute": "minecraft:movement_speed",
-              "id": "minecraft:trim_pattern_effect.tide",
-              "operation": "add_multiplied_base"
-            },
-            {
-              "type": "minecraft:attribute",
-              "amount": {
-                "type": "vanillaplus:preset",
-                "value": "vanillaplus:trim_pattern/tide",
-                "name": "speed"
-              },
-              "attribute": "forge:swim_speed",
-              "id": "minecraft:trim_pattern_effect.tide",
-              "operation": "add_multiplied_base"
-            }
-          ]
+          "type": "minecraft:attribute",
+          "amount": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/tide",
+            "name": "speed"
+          },
+          "attribute": "minecraft:movement_speed",
+          "id": "minecraft:trim_pattern_effect.tide",
+          "operation": "add_multiplied_base"
         },
         "requirements": {
-          "condition": "minecraft:any_of",
-          "terms": [
-            {
-              "condition": "minecraft:location_check",
-              "predicate": {
-                "precipitation": "rain"
-              }
-            },
-            {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "flags": {
-                  "is_in_water": true
-                }
-              }
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_in_rain": true
             }
-          ]
+          }
+        }
+      },
+      {
+        "effect": {
+          "type": "minecraft:attribute",
+          "amount": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:trim_pattern/tide",
+            "name": "speed"
+          },
+          "attribute": "forge:swim_speed",
+          "id": "minecraft:trim_pattern_effect.tide",
+          "operation": "add_multiplied_base"
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_in_water": true
+            }
+          }
         }
       }
     ]

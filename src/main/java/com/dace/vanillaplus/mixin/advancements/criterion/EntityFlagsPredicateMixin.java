@@ -34,22 +34,29 @@ public abstract class EntityFlagsPredicateMixin implements VPEntityFlagsPredicat
                     Codec.BOOL.optionalFieldOf("is_in_water").forGetter(EntityFlagsPredicate::isInWater),
                     Codec.BOOL.optionalFieldOf("is_fall_flying").forGetter(EntityFlagsPredicate::isFallFlying),
                     Codec.BOOL.optionalFieldOf("is_spin_attacking").forGetter(entityFlagsPredicate ->
-                            VPEntityFlagsPredicate.cast(entityFlagsPredicate).getIsSpinAttacking()))
+                            VPEntityFlagsPredicate.cast(entityFlagsPredicate).getIsSpinAttacking()),
+                    Codec.BOOL.optionalFieldOf("is_in_rain").forGetter(entityFlagsPredicate ->
+                            VPEntityFlagsPredicate.cast(entityFlagsPredicate).getIsInRain()))
             .apply(instance, EntityFlagsPredicateMixin::create));
     @Unique
     @Getter
     @Setter
     private Optional<Boolean> isSpinAttacking;
+    @Unique
+    @Getter
+    @Setter
+    private Optional<Boolean> isInRain;
 
     @Unique
     @NonNull
     private static EntityFlagsPredicate create(Optional<Boolean> isOnGround, Optional<Boolean> isOnFire, Optional<Boolean> isCrouching,
                                                Optional<Boolean> isSprinting, Optional<Boolean> isSwimming, Optional<Boolean> isFlying,
                                                Optional<Boolean> isBaby, Optional<Boolean> isInWater, Optional<Boolean> isFallFlying,
-                                               Optional<Boolean> isSpinAttacking) {
+                                               Optional<Boolean> isSpinAttacking, Optional<Boolean> isInRain) {
         EntityFlagsPredicate entityFlagsPredicate = new EntityFlagsPredicate(isOnGround, isOnFire, isCrouching, isSprinting, isSwimming, isFlying,
                 isBaby, isInWater, isFallFlying);
         VPEntityFlagsPredicate.cast(entityFlagsPredicate).setIsSpinAttacking(isSpinAttacking);
+        VPEntityFlagsPredicate.cast(entityFlagsPredicate).setIsInRain(isInRain);
 
         return entityFlagsPredicate;
     }
@@ -58,6 +65,9 @@ public abstract class EntityFlagsPredicateMixin implements VPEntityFlagsPredicat
     private void checkExtraConditions(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (isSpinAttacking.map(target -> !(entity instanceof LivingEntity livingEntity) || target != livingEntity.isAutoSpinAttack())
                 .orElse(false))
+            cir.setReturnValue(false);
+
+        if (isInRain.map(target -> target != entity.isInRain()).orElse(false))
             cir.setReturnValue(false);
     }
 }
