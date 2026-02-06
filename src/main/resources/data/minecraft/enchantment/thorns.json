@@ -37,9 +37,15 @@
               "condition": "minecraft:random_chance"
             },
             {
-              "condition": "minecraft:damage_source_properties",
+              "condition": "minecraft:entity_properties",
+              "entity": "attacker",
               "predicate": {
-                "is_direct": true
+                "distance": {
+                  "absolute": {
+                    "min": 0,
+                    "max": 5
+                  }
+                }
               }
             }
           ]
