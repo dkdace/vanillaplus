@@ -3,7 +3,7 @@
   "attributes": [
     {
       "id": "minecraft:max_health",
-      "base": 150
+      "base": 200
     },
     {
       "id": "minecraft:follow_range",
