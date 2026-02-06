@@ -107,6 +107,7 @@
   "merchant.closed": "주민이 거래를 마감했습니다. 나중에 다시 오세요.",
   "merchant.out_of_stock": "현재 재고가 없습니다. 나중에 다시 오세요.",
   "merchant.stock": "남은 재고: %s / %s",
+  "pack.vanillaplus.description": "VanillaPlus 데이터 팩",
   "potion.potency.6": "VII",
   "potion.potency.7": "VIII",
   "potion.potency.8": "IX",
