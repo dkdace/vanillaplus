@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -41,7 +42,17 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
     @Unique
     private static <T extends ItemModifier> void applyModifier(@NonNull T dataModifier, @NonNull DataComponentMap.Builder.SimpleMap map) {
-        dataModifier.getDataComponentMap().forEach(typedDataComponent ->
+        PatchedDataComponentMap patchedDataComponentMap = PatchedDataComponentMap.fromPatch(map, dataModifier.getDataComponentPatch());
+
+        map.map().forEach((dataComponentType, value) -> {
+            Object newValue = patchedDataComponentMap.remove(dataComponentType);
+            if (newValue == null)
+                map.map().remove(dataComponentType);
+            else
+                map.map().put(dataComponentType, newValue);
+        });
+
+        patchedDataComponentMap.forEach(typedDataComponent ->
                 map.map().put(typedDataComponent.type(), typedDataComponent.value()));
 
         ItemAttributeModifiers itemAttributeModifiers = map.get(DataComponents.ATTRIBUTE_MODIFIERS);
