@@ -21,12 +21,12 @@
               "required_item": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:gravel",
-                "count": 20
+                "count": 15
               },
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:flint",
-                "count": 20
+                "count": 15
               }
             }
           ]
@@ -95,7 +95,7 @@
               "price": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:flint",
-                "count": 18
+                "count": 15
               }
             },
             {
@@ -154,6 +154,10 @@
               "price_modifier": 1.1,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:weapon",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:bow"
+              },
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:bow"
@@ -167,33 +171,225 @@
       "level": 4,
       "offers": [
         {
-          "type": "vanillaplus:sell",
-          "supply": "moderate",
-          "price": 2,
-          "required_item": {
-            "type": "vanillaplus:itemstack",
-            "id": "minecraft:arrow",
-            "count": 8
-          },
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:slowness",
-                "count": 8
+          "type": "vanillaplus:type_specific",
+          "map": {
+            "minecraft:plains": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
               },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:poison",
-                "count": 8
-              },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:weakness",
-                "count": 8
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:healing"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:harming"
+                    }
+                  }
+                ]
               }
-            ]
+            },
+            "minecraft:taiga": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:infested"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:slowness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:snow": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:weaving"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:slowness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:desert": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:harming"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:weakness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:jungle": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:wind_charged"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:poison"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:savanna": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:healing"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:weakness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:swamp": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 9
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:oozing"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 9,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:poison"
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         {
@@ -202,6 +398,10 @@
           "price_modifier": 1.15,
           "enchantment_level": "medium",
           "enchantment_tag": "#vanillaplus:weapon",
+          "required_item": {
+            "type": "vanillaplus:itemstack",
+            "id": "minecraft:crossbow"
+          },
           "product": {
             "type": "vanillaplus:itemstack",
             "id": "minecraft:crossbow"
@@ -213,48 +413,225 @@
       "level": 5,
       "offers": [
         {
-          "type": "vanillaplus:sell",
-          "supply": "moderate",
-          "price": 2,
-          "required_item": {
-            "type": "vanillaplus:itemstack",
-            "id": "minecraft:arrow",
-            "count": 7
-          },
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:strong_slowness",
+          "type": "vanillaplus:type_specific",
+          "map": {
+            "minecraft:plains": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
                 "count": 7
               },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:long_slowness",
-                "count": 7
-              },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:strong_poison",
-                "count": 7
-              },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:long_poison",
-                "count": 7
-              },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:long_weakness",
-                "count": 7
-              },
-              {
-                "type": "vanillaplus:tipped_arrow",
-                "potion": "minecraft:harming",
-                "count": 7
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_healing"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_harming"
+                    }
+                  }
+                ]
               }
-            ]
+            },
+            "minecraft:taiga": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_slowness"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_slowness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:snow": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_slowness"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_slowness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:desert": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_harming"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_weakness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:jungle": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_poison"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_poison"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:savanna": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_healing"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_weakness"
+                    }
+                  }
+                ]
+              }
+            },
+            "minecraft:swamp": {
+              "type": "vanillaplus:sell",
+              "supply": "moderate",
+              "price": 2,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:arrow",
+                "count": 7
+              },
+              "product": {
+                "type": "vanillaplus:random",
+                "items": [
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:long_poison"
+                    }
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tipped_arrow",
+                    "count": 7,
+                    "components": {
+                      "minecraft:potion_contents": "minecraft:strong_poison"
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         {
@@ -266,6 +643,10 @@
               "price_modifier": 1.1,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:weapon",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:bow"
+              },
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:bow"
@@ -277,6 +658,10 @@
               "price_modifier": 1.15,
               "enchantment_level": "high",
               "enchantment_tag": "#vanillaplus:weapon",
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:crossbow"
+              },
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:crossbow"

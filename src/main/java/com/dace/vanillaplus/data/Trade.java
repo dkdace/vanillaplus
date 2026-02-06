@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -27,11 +28,9 @@ import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.item.component.InstrumentComponent;
-import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
@@ -43,7 +42,10 @@ import org.apache.commons.lang3.IntegerRange;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,15 +76,12 @@ public final class Trade {
         OfferList.ItemStackGenerator.REGISTRY.register("empty", () -> OfferList.ItemStackGenerator.EmptyGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("itemstack", () -> OfferList.ItemStackGenerator.DirectGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("random", () -> OfferList.ItemStackGenerator.RandomGenerator.CODEC);
-        OfferList.ItemStackGenerator.REGISTRY.register("suspicious_stew", () -> OfferList.ItemStackGenerator.SuspiciousStewGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("tropical_fish_bucket", () -> OfferList.ItemStackGenerator.TropicalFishBucketGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("axolotl_bucket", () -> OfferList.ItemStackGenerator.AxolotlBucketGenerator.CODEC);
-        OfferList.ItemStackGenerator.REGISTRY.register("potion", () -> OfferList.ItemStackGenerator.PotionGenerator.CODEC);
-        OfferList.ItemStackGenerator.REGISTRY.register("tipped_arrow", () -> OfferList.ItemStackGenerator.TippedArrowGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("map", () -> OfferList.ItemStackGenerator.MapGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("structure_map", () -> OfferList.ItemStackGenerator.StructureMapGenerator.CODEC);
         OfferList.ItemStackGenerator.REGISTRY.register("leather_item", () -> OfferList.ItemStackGenerator.LeatherItemGenerator.CODEC);
-        OfferList.ItemStackGenerator.REGISTRY.register("goat_horn", () -> OfferList.ItemStackGenerator.GoatHornItemGenerator.CODEC);
+        OfferList.ItemStackGenerator.REGISTRY.register("firework_rocket", () -> OfferList.ItemStackGenerator.FireworkRocketGenerator.CODEC);
     }
 
     /* 주민 등급별 거래 품목 목록 (주민 등급 : 거래 품목 목록) */
@@ -289,11 +288,15 @@ public final class Trade {
              * 구매 품목 클래스.
              *
              * @param itemStackGenerator 구매 아이템 생성 처리기
+             * @param required           추가 요구 아이템 생성 처리기
              * @param priceMultiplier    가격 배수
              */
-            record Buy(@NonNull ItemStackGenerator itemStackGenerator, @NonNull PriceMultiplier priceMultiplier) implements OfferItem {
+            record Buy(@NonNull ItemStackGenerator itemStackGenerator, @NonNull ItemStackGenerator required, @NonNull PriceMultiplier priceMultiplier)
+                    implements OfferItem {
                 private static final MapCodec<Buy> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                         .group(ItemStackGenerator.CODEC.fieldOf("price").forGetter(Buy::itemStackGenerator),
+                                ItemStackGenerator.CODEC.optionalFieldOf("required_item", ItemStackGenerator.EmptyGenerator.instance)
+                                        .forGetter(Buy::required),
                                 PriceMultiplier.CODEC.optionalFieldOf("price_multiplier", PriceMultiplier.LOW).forGetter(Buy::priceMultiplier))
                         .apply(instance, Buy::new));
 
@@ -311,8 +314,10 @@ public final class Trade {
                         if (itemStack == null)
                             return null;
 
-                        return new MerchantOffer(getItemCost(itemStack), new ItemStack(Items.EMERALD), Supply.ABUNDANT.maxTradeCount,
-                                offerList.level.buyXP, priceMultiplier.value);
+                        ItemStack requiredItemStack = required.create(entity, randomSource);
+
+                        return new MerchantOffer(getItemCost(itemStack), Optional.ofNullable(requiredItemStack).map(OfferItem::getItemCost),
+                                new ItemStack(Items.EMERALD), Supply.ABUNDANT.maxTradeCount, offerList.level.buyXP, priceMultiplier.value);
                     };
                 }
             }
@@ -578,32 +583,6 @@ public final class Trade {
             }
 
             /**
-             * 수상한 스튜 아이템을 반환하는 아이템 생성 처리기 클래스.
-             *
-             * @param effects 효과 목록
-             */
-            record SuspiciousStewGenerator(@NonNull List<SuspiciousStewEffects.Entry> effects) implements ItemStackGenerator {
-                private static final MapCodec<SuspiciousStewGenerator> CODEC = SuspiciousStewEffects.Entry.CODEC.listOf().fieldOf("effects")
-                        .xmap(SuspiciousStewGenerator::new, SuspiciousStewGenerator::effects);
-
-                @Override
-                @NonNull
-                public MapCodec<? extends ItemStackGenerator> getCodec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    ItemStack itemStack = new ItemStack(Items.SUSPICIOUS_STEW);
-                    itemStack.set(DataComponents.SUSPICIOUS_STEW_EFFECTS,
-                            new SuspiciousStewEffects(Collections.singletonList(effects.get(randomSource.nextInt(effects.size())))));
-
-                    return itemStack;
-                }
-            }
-
-            /**
              * 열대어가 담긴 양동이 아이템을 반환하는 아이템 생성 처리기 클래스.
              */
             @NoArgsConstructor
@@ -652,57 +631,6 @@ public final class Trade {
                 public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
                     ItemStack itemStack = new ItemStack(Items.AXOLOTL_BUCKET);
                     itemStack.set(DataComponents.AXOLOTL_VARIANT, Axolotl.Variant.getCommonSpawnVariant(randomSource));
-
-                    return itemStack;
-                }
-            }
-
-            /**
-             * 물약 아이템을 반환하는 아이템 생성 처리기 클래스.
-             *
-             * @param potionHolder 물약 홀더 인스턴스
-             */
-            record PotionGenerator(@NonNull Holder<Potion> potionHolder) implements ItemStackGenerator {
-                private static final MapCodec<PotionGenerator> CODEC = Potion.CODEC.fieldOf("potion")
-                        .xmap(PotionGenerator::new, PotionGenerator::potionHolder);
-
-                @Override
-                @NonNull
-                public MapCodec<? extends ItemStackGenerator> getCodec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    return PotionContents.createItemStack(Items.POTION, potionHolder);
-                }
-            }
-
-            /**
-             * 물약 화살 아이템을 반환하는 아이템 생성 처리기 클래스.
-             *
-             * @param potionHolder 물약 홀더 인스턴스
-             * @param count        수량
-             */
-            record TippedArrowGenerator(@NonNull Holder<Potion> potionHolder, int count) implements ItemStackGenerator {
-                private static final MapCodec<TippedArrowGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                        .group(Potion.CODEC.fieldOf("potion").forGetter(TippedArrowGenerator::potionHolder),
-                                ExtraCodecs.intRange(1, 99).fieldOf("count").orElse(1)
-                                        .forGetter(TippedArrowGenerator::count))
-                        .apply(instance, TippedArrowGenerator::new));
-
-                @Override
-                @NonNull
-                public MapCodec<? extends ItemStackGenerator> getCodec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    ItemStack itemStack = new ItemStack(Items.TIPPED_ARROW, count);
-                    itemStack.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
 
                     return itemStack;
                 }
@@ -791,13 +719,13 @@ public final class Trade {
             }
 
             /**
-             * 염소 뿔 아이템을 반환하는 아이템 생성 처리기 클래스.
+             * 무작위 폭죽 로켓을 반환하는 아이템 생성 처리기 클래스.
              *
-             * @param instrumentHolder 염소 뿔 종류 홀더 인스턴스
+             * @param fireworkStars 폭죽 탄약 개수
              */
-            record GoatHornItemGenerator(@NonNull Holder<Instrument> instrumentHolder) implements ItemStackGenerator {
-                private static final MapCodec<GoatHornItemGenerator> CODEC = Instrument.CODEC.fieldOf("instrument")
-                        .xmap(GoatHornItemGenerator::new, GoatHornItemGenerator::instrumentHolder);
+            record FireworkRocketGenerator(int fireworkStars) implements ItemStackGenerator {
+                private static final MapCodec<FireworkRocketGenerator> CODEC = ExtraCodecs.intRange(1, 256)
+                        .fieldOf("firework_stars").xmap(FireworkRocketGenerator::new, FireworkRocketGenerator::fireworkStars);
 
                 @Override
                 @NonNull
@@ -808,8 +736,20 @@ public final class Trade {
                 @Override
                 @NonNull
                 public ItemStack create(@NonNull Entity entity, @NonNull RandomSource randomSource) {
-                    ItemStack itemStack = new ItemStack(Items.GOAT_HORN);
-                    itemStack.set(DataComponents.INSTRUMENT, new InstrumentComponent(instrumentHolder));
+                    ArrayList<FireworkExplosion> fireworkExplosions = new ArrayList<>();
+
+                    for (int i = 0; i < fireworkStars; i++) {
+                        FireworkExplosion.Shape shape = FireworkExplosion.Shape.byId(randomSource.nextInt(FireworkExplosion.Shape.values().length));
+                        DyeColor color = DyeColor.byId(randomSource.nextInt(DyeColor.values().length));
+                        DyeColor fadeColor = DyeColor.byId(randomSource.nextInt(DyeColor.values().length));
+
+                        fireworkExplosions.add(new FireworkExplosion(shape,
+                                IntList.of(color.getFireworkColor()), IntList.of(fadeColor.getFireworkColor()), randomSource.nextBoolean(),
+                                randomSource.nextBoolean()));
+                    }
+
+                    ItemStack itemStack = new ItemStack(Items.FIREWORK_ROCKET);
+                    itemStack.set(DataComponents.FIREWORKS, new Fireworks(randomSource.nextInt(3), fireworkExplosions));
 
                     return itemStack;
                 }

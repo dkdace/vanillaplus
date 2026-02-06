@@ -79,6 +79,7 @@
   "filled_map.explorer_snowy": "Snowy Explorer Map",
   "filled_map.mineshaft": "Mineshaft Explorer Map",
   "filled_map.pillager_outpost": "Pillager Outpost Explorer Map",
+  "filled_map.trail_ruins": "Trail Ruins Explorer Map",
   "food.nutrition": "+%s Hunger Restore",
   "food.saturation": "+%s Saturation",
   "food.whenEaten": "When Eaten:",

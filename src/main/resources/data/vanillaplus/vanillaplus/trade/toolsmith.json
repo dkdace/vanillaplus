@@ -15,21 +15,71 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 1,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_hoe"
-                  },
-                  {
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_shovel"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 1,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  }
+                }
               }
             }
           ]
@@ -46,21 +96,71 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 1,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_axe"
-                  },
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_pickaxe"
                   }
-                ]
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                }
               }
             }
           ]
@@ -82,21 +182,23 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
+              "type": "vanillaplus:sell",
               "supply": "moderate",
-              "price_modifier": 0.85,
-              "enchantment_level": "low",
-              "enchantment_tag": "#vanillaplus:tool",
+              "price": 1,
               "product": {
                 "type": "vanillaplus:random",
                 "items": [
                   {
                     "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_hoe"
+                    "id": "minecraft:brush"
                   },
                   {
                     "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_shovel"
+                    "id": "minecraft:flint_and_steel"
+                  },
+                  {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spyglass"
                   }
                 ]
               }
@@ -115,24 +217,229 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "moderate",
-              "price_modifier": 0.9,
-              "enchantment_level": "low",
-              "enchantment_tag": "#vanillaplus:tool",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_axe"
-                  },
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_pickaxe"
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_hoe"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.85,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_shovel"
+                      }
+                    }
                   }
-                ]
-              }
+                },
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_pickaxe"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 0.9,
+                      "enchantment_level": "low",
+                      "enchantment_tag": "#vanillaplus:tool",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_axe"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -152,23 +459,113 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 0.85,
-              "enchantment_level": "medium",
-              "enchantment_tag": "#vanillaplus:tool",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_hoe"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_shovel"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_hoe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.85,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_shovel"
+                  }
+                }
               }
             }
           ]
@@ -185,23 +582,113 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 0.9,
-              "enchantment_level": "medium",
-              "enchantment_tag": "#vanillaplus:tool",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
-                    "id": "minecraft:iron_axe"
+                    "id": "minecraft:iron_pickaxe"
                   },
-                  {
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_pickaxe"
                   }
-                ]
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_pickaxe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.9,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_axe"
+                  }
+                }
               }
             }
           ]
@@ -212,44 +699,257 @@
       "level": 4,
       "offers": [
         {
-          "type": "vanillaplus:sell_enchanted",
-          "supply": "scarce",
-          "price_modifier": 0.95,
-          "enchantment_level": "medium",
-          "enchantment_tag": "#vanillaplus:tool",
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 12,
+              "price_multiplier": "high",
+              "product": {
                 "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_hoe"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_shovel"
+                "id": "minecraft:bell"
               }
-            ]
-          }
+            },
+            {
+              "type": "vanillaplus:sell",
+              "supply": "scarce",
+              "price": 7,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:chipped_anvil"
+              },
+              "product": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:anvil"
+              }
+            }
+          ]
         },
         {
-          "type": "vanillaplus:sell_enchanted",
-          "supply": "scarce",
-          "price_modifier": 1,
-          "enchantment_level": "medium",
-          "enchantment_tag": "#vanillaplus:tool",
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_axe"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_pickaxe"
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  }
+                }
               }
-            ]
-          }
+            },
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "medium",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -262,17 +962,21 @@
             {
               "type": "vanillaplus:sell",
               "supply": "scarce",
-              "price": 11,
-              "price_multiplier": "high",
+              "price": 7,
+              "required_item": {
+                "type": "vanillaplus:itemstack",
+                "id": "minecraft:netherite_upgrade_smithing_template"
+              },
               "product": {
                 "type": "vanillaplus:itemstack",
-                "id": "minecraft:bell"
+                "id": "minecraft:netherite_upgrade_smithing_template",
+                "count": 2
               }
             },
             {
               "type": "vanillaplus:sell",
               "supply": "scarce",
-              "price": 9,
+              "price": 10,
               "price_multiplier": "high",
               "required_item": {
                 "type": "vanillaplus:itemstack",
@@ -289,43 +993,223 @@
           "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 0.95,
-              "enchantment_level": "high",
-              "enchantment_tag": "#vanillaplus:tool",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_hoe"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_shovel"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_hoe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 0.95,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_shovel"
+                  }
+                }
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 1,
-              "enchantment_level": "high",
-              "enchantment_tag": "#vanillaplus:tool",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
-                    "id": "minecraft:diamond_axe"
+                    "id": "minecraft:diamond_pickaxe"
                   },
-                  {
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_pickaxe"
                   }
-                ]
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_pickaxe"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1,
+                  "enchantment_level": "high",
+                  "enchantment_tag": "#vanillaplus:tool",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_axe"
+                  }
+                }
               }
             }
           ]

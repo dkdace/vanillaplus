@@ -86,18 +86,380 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "moderate",
-              "price_modifier": 1.3,
-              "enchantment_level": "low",
-              "required_item": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:book"
-              },
-              "product": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:book"
-              }
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 6,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:book"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:enchanted_book",
+                    "components": {
+                      "minecraft:stored_enchantments": {
+                        "minecraft:unbreaking": 1
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:sharpness": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:protection": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:efficiency": 2
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:smite": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:bane_of_arthropods": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:looting": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:sweeping_edge": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:fire_aspect": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:flame": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:silk_touch": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:aqua_affinity": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:fire_protection": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:fortune": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:thorns": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:knockback": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:projectile_protection": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:power": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:infinity": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:punch": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:feather_falling": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:quick_charge": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:multishot": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:piercing": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 8,
+                      "price_multiplier": "high",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:book"
+                      },
+                      "product": {
+                        "type": "vanillaplus:random",
+                        "items": [
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:blast_protection": 2
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:depth_strider": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:respiration": 1
+                              }
+                            }
+                          },
+                          {
+                            "type": "vanillaplus:itemstack",
+                            "id": "minecraft:enchanted_book",
+                            "components": {
+                              "minecraft:stored_enchantments": {
+                                "minecraft:lunge": 1
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -131,11 +493,109 @@
           "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "vanillaplus:buy",
-              "price": {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:glow_ink_sac",
-                "count": 9
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:cherry_shelf",
+                        "count": 10
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_shelf",
+                        "count": 10
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:birch_shelf",
+                        "count": 10
+                      }
+                    ]
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spruce_shelf",
+                    "count": 10
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spruce_shelf",
+                    "count": 10
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:jungle_shelf",
+                    "count": 10
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:bamboo_shelf",
+                        "count": 10
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:jungle_shelf",
+                        "count": 10
+                      }
+                    ]
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_shelf",
+                        "count": 10
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:acacia_shelf",
+                        "count": 10
+                      }
+                    ]
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:buy",
+                  "price": {
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:oak_shelf",
+                        "count": 10
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:mangrove_shelf",
+                        "count": 10
+                      }
+                    ]
+                  }
+                }
               }
             },
             {
@@ -165,7 +625,7 @@
             {
               "type": "vanillaplus:sell",
               "supply": "scarce",
-              "price": 8,
+              "price": 7,
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:enchanting_table"
@@ -174,7 +634,7 @@
             {
               "type": "vanillaplus:sell",
               "supply": "scarce",
-              "price": 15,
+              "price": 14,
               "price_multiplier": "high",
               "product": {
                 "type": "vanillaplus:itemstack",
