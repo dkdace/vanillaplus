@@ -69,7 +69,8 @@
               "entity": "this",
               "predicate": {
                 "flags": {
-                  "is_fall_flying": false
+                  "is_fall_flying": false,
+                  "is_sprinting": true
                 }
               }
             },
