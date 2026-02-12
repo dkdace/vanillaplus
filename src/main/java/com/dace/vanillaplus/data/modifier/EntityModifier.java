@@ -273,7 +273,9 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                                 ExtraCodecs.floatRange(0, 1).optionalFieldOf("ender_pearl_drop_chance", 0.1F)
                                         .forGetter(EnderDragonModifier::getEnderPearlDropChance),
                                 ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("max_ender_pearl_drops", 20)
-                                        .forGetter(EnderDragonModifier::getMaxEnderPearlDrops)))
+                                        .forGetter(EnderDragonModifier::getMaxEnderPearlDrops),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("endermite_count", 3)
+                                        .forGetter(EnderDragonModifier::getEndermiteCount)))
                         .apply(instance, EnderDragonModifier::new));
 
         /** 드롭 경험치 정보 */
@@ -289,10 +291,12 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         private final float enderPearlDropChance;
         /** 최대 엔더 진주 드롭 횟수 */
         private final int maxEnderPearlDrops;
+        /** 엔더 진주 드롭 시 생성되는 엔더마이트 수 */
+        private final int endermiteCount;
 
         private EnderDragonModifier(@NonNull EntityModifier.InterfaceInfoMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
                                     @NonNull Experience experience, @NonNull HealthBasedValue<Float> movementSpeedMultiplier,
-                                    @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops) {
+                                    @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount) {
             super(interfaceInfoMap, packedAttributes);
 
             this.experience = experience;
@@ -300,6 +304,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             this.phaseInfo = phaseInfo;
             this.enderPearlDropChance = enderPearlDropChance;
             this.maxEnderPearlDrops = maxEnderPearlDrops;
+            this.endermiteCount = endermiteCount;
         }
 
         @Override

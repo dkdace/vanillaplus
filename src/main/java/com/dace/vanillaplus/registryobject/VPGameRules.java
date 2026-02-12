@@ -9,6 +9,8 @@ import lombok.*;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.gamerules.GameRule;
@@ -68,8 +70,10 @@ public final class VPGameRules {
     @SubscribeEvent
     private static void onMobSpawnAllowDespawn(@NonNull MobSpawnEvent.AllowDespawn event) {
         ServerLevel level = event.getLevel().getLevel();
+        Mob entity = event.getEntity();
 
-        if (!level.getGameRules().get(SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT.get()) && level.getBiome(event.getEntity().blockPosition()).is(Biomes.THE_END)
+        if (!(entity instanceof Endermite) && !level.getGameRules().get(SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT.get())
+                && level.getBiome(entity.blockPosition()).is(Biomes.THE_END)
                 && !level.getEntities(EntityType.ENDER_DRAGON, enderDragon -> true).isEmpty())
             event.setResult(Result.ALLOW);
     }

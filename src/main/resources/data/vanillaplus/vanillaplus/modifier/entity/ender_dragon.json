@@ -20,6 +20,7 @@
   },
   "ender_pearl_drop_chance": 0.1,
   "max_ender_pearl_drops": 20,
+  "endermite_count": 3,
   "phases": {
     "attack_cooldown_seconds": {
       "max": 16,
