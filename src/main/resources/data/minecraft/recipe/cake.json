@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
+  "group": "cake",
   "key": {
     "A": "minecraft:milk_bucket",
     "B": "minecraft:sugar",
