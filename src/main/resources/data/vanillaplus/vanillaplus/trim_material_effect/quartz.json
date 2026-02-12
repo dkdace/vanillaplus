@@ -3,7 +3,7 @@
   "effects": {
     "minecraft:attributes": [
       {
-        "amount": 0.25,
+        "amount": 0.3,
         "attribute": "vanillaplus:fog_distance",
         "id": "vanillaplus:trim_material_effect.quartz",
         "operation": "add_multiplied_base"
