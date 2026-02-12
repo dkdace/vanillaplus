@@ -6,8 +6,6 @@ import com.dace.vanillaplus.extension.VPModifiableData;
 import lombok.NonNull;
 import net.minecraft.world.item.alchemy.Potion;
 
-import java.util.Optional;
-
 /**
  * {@link Potion}을 확장하는 인터페이스.
  *
@@ -18,19 +16,4 @@ public interface VPPotion extends VPMixin<Potion>, VPModifiableData<Potion, Poti
     static VPPotion cast(@NonNull Potion object) {
         return (VPPotion) object;
     }
-
-    /**
-     * 물약의 색상을 반환한다.
-     *
-     * @return 물약의 색상
-     */
-    @NonNull
-    Optional<Integer> getColor();
-
-    /**
-     * 물약이 반짝이는지 확인한다.
-     *
-     * @return 반짝임 여부
-     */
-    boolean isGlistering();
 }

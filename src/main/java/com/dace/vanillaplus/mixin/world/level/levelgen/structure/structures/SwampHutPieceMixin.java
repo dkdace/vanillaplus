@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.levelgen.structure.structures;
 
 import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.block.LayeredCauldronBlockEntity;
+import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.dace.vanillaplus.mixin.world.level.levelgen.structure.StructurePieceMixin;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -61,7 +61,7 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
         int levelValue = randomSource.nextInt(LayeredCauldronBlock.MAX_FILL_LEVEL) + 1;
         placeBlock(level, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, levelValue), x, y, z, boundingBox);
 
-        if (level.getBlockEntity(getWorldPos(x, y, z)) instanceof LayeredCauldronBlockEntity layeredCauldronBlockEntity)
-            layeredCauldronBlockEntity.overridePotionContents(new PotionContents(BuiltInRegistries.POTION.getRandom(randomSource).orElseThrow()));
+        if (level.getBlockEntity(getWorldPos(x, y, z)) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
+            waterCauldronBlockEntity.overridePotionContents(new PotionContents(BuiltInRegistries.POTION.getRandom(randomSource).orElseThrow()));
     }
 }

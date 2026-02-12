@@ -17,7 +17,7 @@
             {
               "type": "vanillaplus:sell",
               "supply": "moderate",
-              "price": 3,
+              "price": 2,
               "product": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:map"
@@ -39,7 +39,7 @@
             {
               "type": "vanillaplus:sell",
               "supply": "moderate",
-              "price": 3,
+              "price": 2,
               "product": {
                 "type": "vanillaplus:map"
               }
@@ -106,6 +106,10 @@
                       {
                         "type": "vanillaplus:structure_map",
                         "structure_map": "vanillaplus:pillager_outpost"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:trail_ruins"
                       }
                     ]
                   }
@@ -164,6 +168,10 @@
                       {
                         "type": "vanillaplus:structure_map",
                         "structure_map": "vanillaplus:explorer_swamp"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:trail_ruins"
                       }
                     ]
                   }
@@ -191,6 +199,10 @@
                       {
                         "type": "vanillaplus:structure_map",
                         "structure_map": "vanillaplus:explorer_jungle"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:trail_ruins"
                       }
                     ]
                   }
@@ -253,6 +265,10 @@
                       {
                         "type": "vanillaplus:structure_map",
                         "structure_map": "vanillaplus:explorer_desert"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:trail_ruins"
                       }
                     ]
                   }
@@ -284,6 +300,10 @@
                       {
                         "type": "vanillaplus:structure_map",
                         "structure_map": "vanillaplus:explorer_jungle"
+                      },
+                      {
+                        "type": "vanillaplus:structure_map",
+                        "structure_map": "vanillaplus:trail_ruins"
                       }
                     ]
                   }
@@ -490,17 +510,17 @@
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:cherry_sign",
-                        "count": 3
+                        "count": 4
                       },
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:oak_sign",
-                        "count": 3
+                        "count": 4
                       },
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:birch_sign",
-                        "count": 3
+                        "count": 4
                       }
                     ]
                   }
@@ -508,55 +528,25 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:buy",
                   "price": {
-                    "type": "vanillaplus:random",
-                    "items": [
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:oak_sign",
-                        "count": 3
-                      },
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:spruce_sign",
-                        "count": 3
-                      }
-                    ]
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spruce_sign",
+                    "count": 4
                   }
                 },
                 "minecraft:snow": {
                   "type": "vanillaplus:buy",
                   "price": {
-                    "type": "vanillaplus:random",
-                    "items": [
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:oak_sign",
-                        "count": 3
-                      },
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:spruce_sign",
-                        "count": 3
-                      }
-                    ]
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spruce_sign",
+                    "count": 4
                   }
                 },
                 "minecraft:desert": {
                   "type": "vanillaplus:buy",
                   "price": {
-                    "type": "vanillaplus:random",
-                    "items": [
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:oak_sign",
-                        "count": 3
-                      },
-                      {
-                        "type": "vanillaplus:itemstack",
-                        "id": "minecraft:jungle_sign",
-                        "count": 3
-                      }
-                    ]
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:jungle_sign",
+                    "count": 4
                   }
                 },
                 "minecraft:jungle": {
@@ -567,12 +557,12 @@
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:bamboo_sign",
-                        "count": 3
+                        "count": 4
                       },
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:jungle_sign",
-                        "count": 3
+                        "count": 4
                       }
                     ]
                   }
@@ -585,12 +575,12 @@
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:oak_sign",
-                        "count": 3
+                        "count": 4
                       },
                       {
                         "type": "vanillaplus:itemstack",
                         "id": "minecraft:acacia_sign",
-                        "count": 3
+                        "count": 4
                       }
                     ]
                   }
@@ -602,13 +592,13 @@
                     "items": [
                       {
                         "type": "vanillaplus:itemstack",
-                        "id": "minecraft:mangrove_sign",
-                        "count": 3
+                        "id": "minecraft:oak_sign",
+                        "count": 4
                       },
                       {
                         "type": "vanillaplus:itemstack",
-                        "id": "minecraft:dark_oak_sign",
-                        "count": 3
+                        "id": "minecraft:mangrove_sign",
+                        "count": 4
                       }
                     ]
                   }
@@ -787,7 +777,7 @@
             {
               "type": "vanillaplus:sell",
               "supply": "scarce",
-              "price": 23,
+              "price": 25,
               "price_multiplier": "high",
               "required_item": {
                 "type": "vanillaplus:itemstack",

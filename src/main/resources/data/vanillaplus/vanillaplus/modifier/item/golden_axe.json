@@ -1,9 +1,12 @@
 {
   "type": "vanillaplus:item",
   "components": {
-    "minecraft:enchantable": {
-      "value": 26
-    }
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 1.25,
+      "item_damage_per_attack": 2
+    },
+    "vanillaplus:enchantment_level_multiplier": 2
   },
   "attribute_modifiers": [
     {

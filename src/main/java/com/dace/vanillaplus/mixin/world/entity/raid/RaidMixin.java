@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
-import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.RaidWave;
+import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,6 +11,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -21,6 +24,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -29,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Mixin(Raid.class)
-public abstract class RaidMixin {
+public abstract class RaidMixin implements VPMixin<Raid> {
     @Unique
     private static final String COMPONENT_RAID_WAVES = "event.minecraft.raid.waves";
     @Unique
@@ -107,9 +111,9 @@ public abstract class RaidMixin {
         ridingRaider.startRiding(raider);
     }
 
-    @Overwrite
-    public int getMaxRaidOmenLevel() {
-        return GeneralConfig.get().getMaxBadOmenLevel();
+    @ModifyArg(method = "absorbRaidOmen", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(III)I"), index = 2)
+    private int modifyMaxRaidOmenLevel(int max, @Local(argsOnly = true) ServerPlayer serverPlayer) {
+        return VPGameRules.getValue(VPGameRules.MAX_BAD_OMEN_LEVEL, serverPlayer.level());
     }
 
     @Overwrite
@@ -119,8 +123,7 @@ public abstract class RaidMixin {
 
     @Overwrite
     public int getNumGroups(Difficulty difficulty) {
-        RaidWave raidWave = RaidWave.fromDifficulty(difficulty);
-        return raidWave == null ? 0 : raidWave.getTotalWaves();
+        return RaidWave.getDataManager().get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
@@ -165,7 +168,8 @@ public abstract class RaidMixin {
 
     @ModifyArgs(method = "playSound", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/network/protocol/game/ClientboundSoundPacket;<init>(Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;DDDFFJ)V"))
-    private void modifyRaidHornPosition(Args args, @Local(argsOnly = true) BlockPos raidPos) {
+    private void modifyRaidHornArgs(Args args, @Local(argsOnly = true) BlockPos raidPos) {
+        args.set(1, SoundSource.HOSTILE);
         args.set(2, (double) raidPos.getX());
         args.set(3, (double) raidPos.getY());
         args.set(4, (double) raidPos.getZ());
@@ -177,11 +181,8 @@ public abstract class RaidMixin {
         ticksActive = 0;
         totalHealth = 0;
 
-        RaidWave raidWave = RaidWave.fromDifficulty(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty());
-        if (raidWave == null)
-            return;
-
-        spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1);
+        RaidWave.getDataManager().get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
+                spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1));
 
         waveSpawnPos = Optional.empty();
         groupsSpawned++;

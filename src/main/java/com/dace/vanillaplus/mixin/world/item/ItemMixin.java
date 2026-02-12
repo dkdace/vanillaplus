@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.world.item.VPItem;
 import com.dace.vanillaplus.registryobject.VPAttributes;
@@ -10,11 +9,13 @@ import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -23,12 +24,13 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Mixin(Item.class)
 public abstract class ItemMixin<T extends Item, U extends ItemModifier> implements VPItem<T, U> {
     @Unique
     @Nullable
-    protected U dataModifier;
+    private U dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -36,7 +38,17 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
     @Unique
     private static <T extends ItemModifier> void applyModifier(@NonNull T dataModifier, @NonNull DataComponentMap.Builder.SimpleMap map) {
-        dataModifier.getDataComponentMap().forEach(typedDataComponent ->
+        PatchedDataComponentMap patchedDataComponentMap = PatchedDataComponentMap.fromPatch(map, dataModifier.getDataComponentPatch());
+
+        map.map().forEach((dataComponentType, value) -> {
+            Object newValue = patchedDataComponentMap.remove(dataComponentType);
+            if (newValue == null)
+                map.map().remove(dataComponentType);
+            else
+                map.map().put(dataComponentType, newValue);
+        });
+
+        patchedDataComponentMap.forEach(typedDataComponent ->
                 map.map().put(typedDataComponent.type(), typedDataComponent.value()));
 
         ItemAttributeModifiers itemAttributeModifiers = map.get(DataComponents.ATTRIBUTE_MODIFIERS);
@@ -64,8 +76,11 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         map.map().put(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
 
-    @Shadow
-    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+    @Override
+    @NonNull
+    public Optional<U> getDataModifier() {
+        return Optional.ofNullable(dataModifier);
+    }
 
     @Override
     @MustBeInvokedByOverriders
@@ -75,19 +90,26 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         if (!(components instanceof DataComponentMap.Builder.SimpleMap map))
             return;
 
+        Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
+        if (maxDamage != null) {
+            map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
+            map.map().put(VPDataComponentTypes.REPAIR_WITH_XP.get(), VPDataComponentTypes.RepairWithXP.DEFAULT);
+        }
+
         if (dataModifier != null)
             applyModifier(dataModifier, map);
-
-        Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
-        if (maxDamage == null)
-            return;
-
-        map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
-        map.map().put(VPDataComponentTypes.MAX_REPAIR_LIMIT.get(), (int) (maxDamage * GeneralConfig.get().getMaxRepairLimitRatio()));
     }
 
+    @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        return !newStack.is(oldStack.getItem());
+    }
+
+    @Shadow
+    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+
     @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
-    private int modifyEatingTime(int time, @Local(argsOnly = true) LivingEntity livingEntity) {
-        return (int) (time * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
+    private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity livingEntity) {
+        return (int) (duration * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
     }
 }

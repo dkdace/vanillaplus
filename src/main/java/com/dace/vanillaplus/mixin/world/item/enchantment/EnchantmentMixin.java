@@ -1,8 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
+import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;
+import lombok.Setter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -18,9 +20,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +32,11 @@ import java.util.function.Consumer;
 
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin implements VPEnchantment {
+    @Unique
+    @Nullable
+    @Setter
+    private LevelBasedValuePreset dataModifier;
+
     @Shadow
     @UnknownNullability
     public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity entity, DamageSource damageSource) {
@@ -49,6 +58,12 @@ public abstract class EnchantmentMixin implements VPEnchantment {
 
     @Shadow
     public abstract <T> List<T> getEffects(DataComponentType<List<T>> dataComponentType);
+
+    @Override
+    @NonNull
+    public Optional<LevelBasedValuePreset> getDataModifier() {
+        return Optional.ofNullable(dataModifier);
+    }
 
     @Override
     public void modifyXpMultiplier(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull ItemStack itemStack, @NonNull Entity entity,

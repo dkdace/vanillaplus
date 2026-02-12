@@ -7,13 +7,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Objects;
-
 @Mixin(CreakingHeartBlock.class)
-public abstract class CreakingHeartBlockMixin extends BlockMixin<CreakingHeartBlock, BlockModifier.DropExperienceModifier> {
+public abstract class CreakingHeartBlockMixin extends BlockMixin<CreakingHeartBlock, BlockModifier> {
     @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
     private void modifyDropXP(Args args) {
-        Objects.requireNonNull(dataModifier);
-        args.setAll(dataModifier.getXpRange().getMinValue(), dataModifier.getXpRange().getMaxValue());
+        getDataModifier().ifPresent(blockModifier ->
+                args.setAll(blockModifier.getXpRange().getMinValue(), blockModifier.getXpRange().getMaxValue()));
     }
 }

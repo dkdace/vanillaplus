@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -33,35 +33,32 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
     protected abstract void strafePlayer(Player player);
 
     @Unique
-    private void performStrafeOrCharge(@NonNull Player target) {
-        double chargeChance = Mth.clampedLerp(CHARGE_CHANCE_MIN, CHARGE_CHANCE_MAX, dragon.distanceTo(target) / CHARGE_CHANCE_MAX_DISTANCE);
+    private void performStrafeOrCharge(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo phaseInfo, @NonNull Player target) {
+        double chargeChance = Mth.clampedLerp(dragon.distanceTo(target) / CHARGE_CHANCE_MAX_DISTANCE, CHARGE_CHANCE_MIN, CHARGE_CHANCE_MAX);
         if (chargeChance > dragon.getRandom().nextDouble()) {
             dragon.getPhaseManager().setPhase(EnderDragonPhase.CHARGING_PLAYER);
             dragon.getPhaseManager().getPhase(EnderDragonPhase.CHARGING_PLAYER).setTarget(target.position());
         } else
             strafePlayer(target);
 
-        VPEnderDragon vpEnderDragon = VPEnderDragon.cast(dragon);
-
-        double attackCooldownSeconds = vpEnderDragon.getDataModifier().getPhaseInfo().getAttackCooldownSeconds().get(dragon);
-        vpEnderDragon.setAttackCooldown((int) (attackCooldownSeconds * 20.0));
+        double attackCooldownSeconds = phaseInfo.getAttackCooldownSeconds().get(dragon);
+        getVPEnderDragon().setAttackCooldown((int) (attackCooldownSeconds * 20.0));
     }
 
     @Unique
-    private void performMeteorAttack(@NonNull Player target) {
-        VPEnderDragon vpEnderDragon = VPEnderDragon.cast(dragon);
-        if (!vpEnderDragon.dropMeteor(target.position()))
+    private void performMeteorAttack(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo.Meteor meteor, @NonNull Player target) {
+        if (!getVPEnderDragon().dropMeteor(target.position()))
             return;
 
-        double cooldownSeconds = vpEnderDragon.getDataModifier().getPhaseInfo().getMeteor().getCooldownSeconds().get(dragon);
-        vpEnderDragon.setMeteorAttackCooldown((int) (cooldownSeconds * 20.0));
+        double cooldownSeconds = meteor.getCooldownSeconds().get(dragon);
+        getVPEnderDragon().setMeteorAttackCooldown((int) (cooldownSeconds * 20.0));
     }
 
     @Redirect(method = "findNewTarget", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;Lnet/minecraft/world/entity/LivingEntity;DDD)Lnet/minecraft/world/entity/player/Player;"))
     private Player cancelDefaultStrafe(ServerLevel serverLevel, TargetingConditions targetingConditions, LivingEntity entity, double x, double y,
                                        double z) {
-        return null;
+        return getVPEnderDragon().getDataModifier().isPresent() ? null : serverLevel.getNearestPlayer(targetingConditions, entity, x, y, z);
     }
 
     @Definition(id = "dragon", field = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonHoldingPatternPhase;dragon:Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;")
@@ -70,28 +67,32 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
     @Expression("this.dragon.getRandom().nextInt(?) == 0")
     @ModifyExpressionValue(method = "findNewTarget", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private boolean modifyLandingCondition(boolean original) {
-        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().getLandingChance().get(dragon) > dragon.getRandom().nextDouble();
+        return getVPEnderDragon().getDataModifier()
+                .map(enderDragonModifier ->
+                        enderDragonModifier.getPhaseInfo().getLandingChance().get(dragon) > dragon.getRandom().nextDouble())
+                .orElse(original);
     }
 
     @Inject(method = "doServerTick", at = @At("TAIL"))
     private void performAttack(ServerLevel serverLevel, CallbackInfo ci) {
-        VPEnderDragon vpEnderDragon = VPEnderDragon.cast(dragon);
-        if (vpEnderDragon.getAttackCooldown() > 0 && vpEnderDragon.getMeteorAttackCooldown() > 0)
-            return;
+        getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
+            if (getVPEnderDragon().getAttackCooldown() > 0 && getVPEnderDragon().getMeteorAttackCooldown() > 0)
+                return;
 
-        Player target = serverLevel.getNearestPlayer(vpEnderDragon.getDefaultTargetingConditions(), dragon);
-        if (target == null)
-            return;
+            Player target = serverLevel.getNearestPlayer(getVPEnderDragon().getDefaultTargetingConditions(), dragon);
+            if (target == null)
+                return;
 
-        if (vpEnderDragon.getAttackCooldown() <= 0)
-            performStrafeOrCharge(target);
-        if (vpEnderDragon.getMeteorAttackCooldown() <= 0)
-            performMeteorAttack(target);
+            if (getVPEnderDragon().getAttackCooldown() <= 0)
+                performStrafeOrCharge(enderDragonModifier.getPhaseInfo(), target);
+            if (getVPEnderDragon().getMeteorAttackCooldown() <= 0)
+                performMeteorAttack(enderDragonModifier.getPhaseInfo().getMeteor(), target);
+        });
     }
 
     @Redirect(method = "onCrystalDestroyed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonHoldingPatternPhase;strafePlayer(Lnet/minecraft/world/entity/player/Player;)V"))
     private void resetCooldownOnCrystalDestroyed(DragonHoldingPatternPhase dragonHoldingPatternPhase, Player player) {
-        VPEnderDragon.cast(dragon).setAttackCooldown(0);
+        getVPEnderDragon().setAttackCooldown(0);
     }
 }

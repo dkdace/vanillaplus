@@ -1,12 +1,12 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
@@ -25,12 +25,26 @@ public final class VanillaPlus {
     private final BusGroup busGroup;
 
     public VanillaPlus(@NonNull FMLJavaModLoadingContext context) {
-        LOGGER.debug("VanillaPlus Loaded");
+        IModInfo modInfo = context.getContainer().getModInfo();
+        LOGGER.info("{} {} Loaded", modInfo.getModId(), modInfo.getVersion());
 
         instance = this;
         busGroup = context.getModBusGroup();
+    }
 
-        ReflectionUtil.loadClass(VPGameRules.class);
+    /**
+     * 지정한 클래스를 {@link Class#forName(String)}을 이용하여 불러온다.
+     *
+     * <p>static initializer를 실행하기 위해 사용한다.</p>
+     *
+     * @param clazz 클래스
+     */
+    public static void loadClass(@NonNull Class<?> clazz) {
+        try {
+            Class.forName(clazz.getName());
+        } catch (ClassNotFoundException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

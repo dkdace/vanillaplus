@@ -3,7 +3,6 @@ package com.dace.vanillaplus.data.modifier;
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
-import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -53,7 +52,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         CODEC_REGISTRY.register("ravager", () -> RavagerModifier.CODEC);
         CODEC_REGISTRY.register("ender_dragon", () -> EnderDragonModifier.CODEC);
 
-        ReflectionUtil.loadClass(InterfaceInfoMap.class);
+        VanillaPlus.loadClass(InterfaceInfoMap.class);
     }
 
     /** 인터페이스 수정자 목록 */
@@ -129,8 +128,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                     default -> 1;
                 };
 
-
-            return Mth.clampedLerp(min.doubleValue(), max.doubleValue(), Math.max(value, entity.getHealth() / entity.getMaxHealth()));
+            return Mth.clampedLerp(Math.max(value, entity.getHealth() / entity.getMaxHealth()), min.doubleValue(), max.doubleValue());
         }
     }
 
@@ -275,7 +273,9 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                                 ExtraCodecs.floatRange(0, 1).optionalFieldOf("ender_pearl_drop_chance", 0.1F)
                                         .forGetter(EnderDragonModifier::getEnderPearlDropChance),
                                 ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("max_ender_pearl_drops", 20)
-                                        .forGetter(EnderDragonModifier::getMaxEnderPearlDrops)))
+                                        .forGetter(EnderDragonModifier::getMaxEnderPearlDrops),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("endermite_count", 3)
+                                        .forGetter(EnderDragonModifier::getEndermiteCount)))
                         .apply(instance, EnderDragonModifier::new));
 
         /** 드롭 경험치 정보 */
@@ -291,10 +291,12 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
         private final float enderPearlDropChance;
         /** 최대 엔더 진주 드롭 횟수 */
         private final int maxEnderPearlDrops;
+        /** 엔더 진주 드롭 시 생성되는 엔더마이트 수 */
+        private final int endermiteCount;
 
         private EnderDragonModifier(@NonNull EntityModifier.InterfaceInfoMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
                                     @NonNull Experience experience, @NonNull HealthBasedValue<Float> movementSpeedMultiplier,
-                                    @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops) {
+                                    @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount) {
             super(interfaceInfoMap, packedAttributes);
 
             this.experience = experience;
@@ -302,6 +304,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             this.phaseInfo = phaseInfo;
             this.enderPearlDropChance = enderPearlDropChance;
             this.maxEnderPearlDrops = maxEnderPearlDrops;
+            this.endermiteCount = endermiteCount;
         }
 
         @Override
@@ -375,7 +378,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 private static final Codec<Charge> CODEC = RecordCodecBuilder.create(instance -> instance
                         .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_duration_seconds", 5F)
                                         .forGetter(target -> target.flameDurationSeconds),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_radius", 4F).forGetter(Charge::getFlameRadius))
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_radius", 5F).forGetter(Charge::getFlameRadius))
                         .apply(instance, Charge::new));
 
                 /** 브레스 잔류 시간 (초) */
@@ -437,14 +440,14 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             public static final class Sitting {
                 /** JSON 코덱 */
                 private static final Codec<Sitting> CODEC = RecordCodecBuilder.create(instance -> instance
-                        .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("scan_duration", 0.7F)
+                        .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("scan_duration_seconds", 0.8F)
                                         .forGetter(target -> target.scanDurationSeconds),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
                                         .optionalFieldOf("scan_idle_duration_seconds", new HealthBasedValue<>(3F))
                                         .forGetter(Sitting::getScanIdleDurationSeconds),
-                                ExtraCodecs.floatRange(0, 1).optionalFieldOf("allowed_damage_ratio", 0.15F)
+                                ExtraCodecs.floatRange(0, 1).optionalFieldOf("allowed_damage_ratio", 0.25F)
                                         .forGetter(Sitting::getAllowedDamageRatio),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("spin_attack_duration_seconds", 0.8F)
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("spin_attack_duration_seconds", 1F)
                                         .forGetter(target -> target.spinAttackDurationSeconds),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
                                         .optionalFieldOf("flaming_duration_seconds", new HealthBasedValue<>(3F))
@@ -493,11 +496,11 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             public static final class Meteor {
                 /** JSON 코덱 */
                 private static final Codec<Meteor> CODEC = RecordCodecBuilder.create(instance -> instance
-                        .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("velocity", 3).forGetter(Meteor::getVelocity),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("explosion_radius", 3.5F)
+                        .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("velocity", 4).forGetter(Meteor::getVelocity),
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("explosion_radius", 5F)
                                         .forGetter(Meteor::getExplosionRadius),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                        .optionalFieldOf("cooldown_seconds", new HealthBasedValue<>(30F))
+                                        .optionalFieldOf("cooldown_seconds", new HealthBasedValue<>(24F))
                                         .forGetter(Meteor::getCooldownSeconds))
                         .apply(instance, Meteor::new));
 

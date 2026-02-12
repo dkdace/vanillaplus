@@ -1,6 +1,6 @@
 package com.dace.vanillaplus;
 
-import com.dace.vanillaplus.client.renderer.LayeredCauldronRenderer;
+import com.dace.vanillaplus.client.renderer.WaterCauldronRenderer;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.NonNull;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class ClientForgeEventManager {
     @SubscribeEvent
     private static void onViewportRenderFog(@NonNull ViewportEvent.RenderFog event) {
-        if (!(event.getCamera().getEntity() instanceof LivingEntity livingEntity))
+        if (!(event.getCamera().entity() instanceof LivingEntity livingEntity))
             return;
 
         float fogDistance = (float) livingEntity.getAttributeValue(VPAttributes.FOG_DISTANCE.getHolder().orElseThrow());
@@ -30,6 +30,6 @@ public final class ClientForgeEventManager {
 
     @SubscribeEvent
     private static void onEntityRenderersRegisterRenderers(@NonNull EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(VPBlockEntityTypes.LAYERED_CAULDRON.get(), context -> new LayeredCauldronRenderer());
+        event.registerBlockEntityRenderer(VPBlockEntityTypes.WATER_CAULDRON.get(), context -> new WaterCauldronRenderer());
     }
 }

@@ -73,6 +73,14 @@
       },
       "trigger": "minecraft:consume_item"
     },
+    "popped_chorus_fruit": {
+      "conditions": {
+        "item": {
+          "items": "minecraft:popped_chorus_fruit"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
     "cod": {
       "conditions": {
         "item": {
@@ -137,6 +145,14 @@
       },
       "trigger": "minecraft:consume_item"
     },
+    "sugar": {
+      "conditions": {
+        "item": {
+          "items": "minecraft:sugar"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
     "cookie": {
       "conditions": {
         "item": {
@@ -197,6 +213,14 @@
       "conditions": {
         "item": {
           "items": "minecraft:melon_slice"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "glistering_melon_slice": {
+      "conditions": {
+        "item": {
+          "items": "minecraft:glistering_melon_slice"
         }
       },
       "trigger": "minecraft:consume_item"
@@ -376,10 +400,16 @@
       "cooked_salmon"
     ],
     [
+      "sugar"
+    ],
+    [
       "cookie"
     ],
     [
       "melon_slice"
+    ],
+    [
+      "glistering_melon_slice"
     ],
     [
       "beef"
@@ -434,6 +464,9 @@
     ],
     [
       "chorus_fruit"
+    ],
+    [
+      "popped_chorus_fruit"
     ],
     [
       "beetroot"

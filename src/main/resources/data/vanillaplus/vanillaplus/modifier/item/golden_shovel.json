@@ -1,9 +1,8 @@
 {
   "type": "vanillaplus:item",
   "components": {
-    "minecraft:enchantable": {
-      "value": 26
-    }
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "vanillaplus:enchantment_level_multiplier": 2
   },
   "attribute_modifiers": [
     {

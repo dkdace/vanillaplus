@@ -1,11 +1,11 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.util.IdentifierUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 public final class VPTags {
     @NonNull
     private static <T> TagKey<T> create(@NonNull ResourceKey<Registry<T>> registry, @NonNull String name) {
-        return TagKey.create(registry, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
+        return TagKey.create(registry, IdentifierUtil.fromPath(name));
     }
 
     /**
@@ -29,8 +29,6 @@ public final class VPTags {
      */
     @UtilityClass
     public static final class Items {
-        public static final TagKey<Item> EXTENDED_ENCHANTABLE = create(Registries.ITEM, "enchantable/extended");
-        public static final TagKey<Item> UNLIMITED_ENCHANTABLE = create(Registries.ITEM, "enchantable/unlimited");
         public static final TagKey<Item> POTIONS = create(Registries.ITEM, "potions");
         public static final TagKey<Item> INFESTED = create(Registries.ITEM, "infested");
     }
@@ -73,5 +71,6 @@ public final class VPTags {
     public static final class DamageTypes {
         public static final TagKey<DamageType> ENVIRONMENTAL = create(Registries.DAMAGE_TYPE, "environmental");
         public static final TagKey<DamageType> IS_ENDER_PEARL = create(Registries.DAMAGE_TYPE, "is_ender_pearl");
+        public static final TagKey<DamageType> IS_CACTUS = create(Registries.DAMAGE_TYPE, "is_cactus");
     }
 }

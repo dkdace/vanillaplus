@@ -5,6 +5,8 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockEntityMixin<BarrelBlockEntity> {
     @Unique
     private static final String COMPONENT_BARREL_LOOT = "container.barrelLoot";
+
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void loadAdditional(ValueInput valueInput, CallbackInfo ci) {
+        onLoadAdditional(valueInput);
+    }
+
+    @Inject(method = "saveAdditional", at = @At("TAIL"))
+    private void saveAdditional(ValueOutput valueOutput, CallbackInfo ci) {
+        onSaveAdditional(valueOutput);
+    }
 
     @Inject(method = "updateBlockState", at = @At("HEAD"), cancellable = true)
     private void cancelCloseIfAlwaysOpen(BlockState blockState, boolean isOpen, CallbackInfo ci) {

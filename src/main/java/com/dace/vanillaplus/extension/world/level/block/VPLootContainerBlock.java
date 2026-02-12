@@ -31,10 +31,18 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
         return (VPLootContainerBlock<T, U>) object;
     }
 
-    @Override
-    default int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        if (state.getValue(LOOT) && !state.getValue(ALWAYS_OPEN)
-                && level.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
+    /**
+     * 경험치 획득량을 반환한다.
+     *
+     * @param blockState   블록 사앹
+     * @param level        월드
+     * @param randomSource 랜덤 소스
+     * @param blockPos     블록 위치
+     * @return 경험치 획득량
+     */
+    default int getXP(@NonNull BlockState blockState, @NonNull LevelReader level, @NonNull RandomSource randomSource, @NonNull BlockPos blockPos) {
+        if (blockState.getValue(LOOT) && !blockState.getValue(ALWAYS_OPEN)
+                && level.getBlockEntity(blockPos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity) {
             LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.cast(randomizableContainerBlockEntity).getLootTableReward();
             if (lootTableReward != null)
                 return lootTableReward.getXpRange().sample(randomSource);
@@ -44,22 +52,21 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
     }
 
     /**
-     * 지정한 위치에 경험치를 생성한다.
+     * 지정한 위치에 노획물 테이블 보상을 생성한다.
      *
      * @param blockState 블록 상태
      * @param level      월드
      * @param blockPos   블록 위치
      */
-    default void popOpenXP(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos) {
-        if (!(level instanceof ServerLevel serverLevel) || !blockState.getValue(LOOT) || blockState.getValue(ALWAYS_OPEN)
-                || !(level.getBlockEntity(blockPos) instanceof RandomizableContainerBlockEntity randomizableContainerBlockEntity))
+    default void awardLootTableReward(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos) {
+        if (!(level instanceof ServerLevel serverLevel))
             return;
 
-        LootTableReward lootTableReward = VPRandomizableContainerBlockEntity.cast(randomizableContainerBlockEntity).getLootTableReward();
-        if (lootTableReward == null)
+        int xp = getXP(blockState, serverLevel, level.getRandom(), blockPos);
+        if (xp <= 0)
             return;
 
         level.setBlockAndUpdate(blockPos, blockState.setValue(ALWAYS_OPEN, true));
-        getThis().popExperience(serverLevel, blockPos, lootTableReward.getXpRange().sample(level.getRandom()));
+        getThis().popExperience(serverLevel, blockPos, xp);
     }
 }

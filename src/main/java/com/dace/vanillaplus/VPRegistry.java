@@ -4,20 +4,20 @@ import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
-import com.dace.vanillaplus.util.ReflectionUtil;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.alchemy.Potion;
@@ -29,8 +29,9 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -39,8 +40,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -76,17 +75,15 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends EnchantmentLocationBasedEffect>> ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE);
     /** 마법 부여의 엔티티 효과 타입 */
     public static final VPRegistry<MapCodec<? extends EnchantmentEntityEffect>> ENCHANTMENT_ENTITY_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE);
+    /** 게임 규칙 */
+    public static final VPRegistry<GameRule<?>> GAME_RULE = new VPRegistry<>(BuiltInRegistries.GAME_RULE);
 
-    /** 설정 */
-    public static final VPRegistry<GeneralConfig> CONFIG = new VPRegistry<>("config");
     /** 주민 거래 정보 */
     public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
     /** 노획물 테이블 보상 */
     public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
-    /** 마법 부여 확장 */
-    public static final VPRegistry<EnchantmentExtension> ENCHANTMENT_EXTENSION = new VPRegistry<>("enchantment_extension");
     /** 레벨 기반 값 프리셋 */
     public static final VPRegistry<LevelBasedValuePreset> LEVEL_BASED_VALUE_PRESET = new VPRegistry<>("level_based_value_preset");
     /** 습격 웨이브 정보 */
@@ -106,22 +103,20 @@ public final class VPRegistry<T> {
     /** 물약 수정자 */
     public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
 
-    @Nullable
-    private static HolderLookup.Provider provider;
-
     static {
-        ReflectionUtil.loadClass(VPSoundEvents.class);
-        ReflectionUtil.loadClass(VPAttributes.class);
-        ReflectionUtil.loadClass(VPEnchantmentLevelBasedValueTypes.class);
-        ReflectionUtil.loadClass(VPDataComponentTypes.class);
-        ReflectionUtil.loadClass(VPRecipeTypes.class);
-        ReflectionUtil.loadClass(VPRecipeSerializers.class);
-        ReflectionUtil.loadClass(VPRecipeBookCategories.class);
-        ReflectionUtil.loadClass(VPRecipeDisplayTypes.class);
-        ReflectionUtil.loadClass(VPPotions.class);
-        ReflectionUtil.loadClass(VPBlockEntityTypes.class);
-        ReflectionUtil.loadClass(VPEnchantmentEffectComponentTypes.class);
-        ReflectionUtil.loadClass(VPEnchantmentEntityEffectTypes.class);
+        VanillaPlus.loadClass(VPSoundEvents.class);
+        VanillaPlus.loadClass(VPAttributes.class);
+        VanillaPlus.loadClass(VPEnchantmentLevelBasedValueTypes.class);
+        VanillaPlus.loadClass(VPDataComponentTypes.class);
+        VanillaPlus.loadClass(VPRecipeTypes.class);
+        VanillaPlus.loadClass(VPRecipeSerializers.class);
+        VanillaPlus.loadClass(VPRecipeBookCategories.class);
+        VanillaPlus.loadClass(VPRecipeDisplayTypes.class);
+        VanillaPlus.loadClass(VPPotions.class);
+        VanillaPlus.loadClass(VPBlockEntityTypes.class);
+        VanillaPlus.loadClass(VPEnchantmentEffectComponentTypes.class);
+        VanillaPlus.loadClass(VPEnchantmentEntityEffectTypes.class);
+        VanillaPlus.loadClass(VPGameRules.class);
     }
 
     /** 레지스트리 리소스 키 */
@@ -151,7 +146,7 @@ public final class VPRegistry<T> {
      * @param registry 레지스트리 인스턴스
      */
     private VPRegistry(@NonNull Registry<T> registry) {
-        this(ResourceKey.createRegistryKey(registry.key().location()));
+        this(ResourceKey.createRegistryKey(registry.key().identifier()));
         this.vanillaRegistry = registry;
     }
 
@@ -161,37 +156,53 @@ public final class VPRegistry<T> {
      * @param name 이름
      */
     private VPRegistry(@NonNull String name) {
-        this(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name)));
+        this(ResourceKey.createRegistryKey(IdentifierUtil.fromPath(name)));
         this.forgeRegistryHolder = deferredRegister.makeRegistry(RegistryBuilder::of);
     }
 
     @SubscribeEvent
-    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        initData(event::getRegistries);
-        VanillaPlus.LOGGER.debug("Server-side Data Loaded");
+    private static void onServerAboutToStart(@NonNull ServerAboutToStartEvent event) {
+        initData(event.getServer().registryAccess());
+        VanillaPlus.LOGGER.debug("Server-side DataModifier Loaded");
     }
 
     @SubscribeEvent
     private static void onClientPlayerNetworkLoggingIn(@NonNull ClientPlayerNetworkEvent.LoggingIn event) {
-        if (provider != null)
-            return;
-
-        initData(event.getPlayer()::registryAccess);
-        VanillaPlus.LOGGER.debug("Client-side Data Loaded");
+        initData(event.getPlayer().registryAccess());
+        VanillaPlus.LOGGER.debug("Client-side DataModifier Loaded");
     }
 
-    private static void initData(@NonNull Supplier<HolderLookup.Provider> providerFunction) {
-        provider = providerFunction.get();
+    private static void initData(@NonNull HolderLookup.Provider registries) {
+        applyDataModifiers(registries, Registries.ITEM, VPRegistry.ITEM_MODIFIER);
+        applyDataModifiers(registries, Registries.BLOCK, VPRegistry.BLOCK_MODIFIER);
+        applyDataModifiers(registries, Registries.ENTITY_TYPE, VPRegistry.ENTITY_MODIFIER);
+        applyDataModifiers(registries, Registries.POTION, VPRegistry.POTION_MODIFIER);
+        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.LEVEL_BASED_VALUE_PRESET);
+        applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
+        applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
 
-        applyDataModifiers(DataModifierInfo.ITEM_MODIFIER::get, BuiltInRegistries.ITEM);
-        applyDataModifiers(DataModifierInfo.BLOCK_MODIFIER::get, BuiltInRegistries.BLOCK);
-        applyDataModifiers(DataModifierInfo.ENTITY_MODIFIER::get, BuiltInRegistries.ENTITY_TYPE);
-        applyDataModifiers(DataModifierInfo.POTION_MODIFIER::get, BuiltInRegistries.POTION);
+        applyArmorTrimEffects(registries, VPRegistry.TRIM_MATERIAL_EFFECT);
+        applyArmorTrimEffects(registries, VPRegistry.TRIM_PATTERN_EFFECT);
     }
 
-    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull Function<T, U> dataModifierFunction,
-                                                                          @NonNull Registry<T> registry) {
-        registry.forEach(element -> VPModifiableData.cast(element).setDataModifier(dataModifierFunction.apply(element)));
+    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull HolderLookup.Provider registries,
+                                                                          @NonNull ResourceKey<Registry<T>> registryKey,
+                                                                          @NonNull VPRegistry<U> vpRegistry) {
+        registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
+            U dataModifier = registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key())))
+                    .map(Holder::value)
+                    .orElse(null);
+
+            VPModifiableData.cast(element.value()).setDataModifier(dataModifier);
+        });
+    }
+
+    private static <T extends ArmorTrimEffect<?>> void applyArmorTrimEffects(@NonNull HolderLookup.Provider registries,
+                                                                             @NonNull VPRegistry<T> vpRegistry) {
+        registries.lookupOrThrow(vpRegistry.registryKey).listElements().forEach(element ->
+                registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(element.value().getIdentifier()))
+                        .ifPresent(levelBasedValuePresetHolder ->
+                                element.value().applyLevelBasedValuePreset(levelBasedValuePresetHolder.value())));
     }
 
     /**
@@ -209,6 +220,17 @@ public final class VPRegistry<T> {
     }
 
     /**
+     * 레지스트리의 리소스 키를 생성한다.
+     *
+     * @param identifier 식별자
+     * @return 리소스 키
+     */
+    @NonNull
+    public ResourceKey<T> createResourceKey(@NonNull Identifier identifier) {
+        return deferredRegister.key(identifier);
+    }
+
+    /**
      * 레지스트리의 하위 레지스트리를 생성한다.
      *
      * @param name 이름
@@ -217,7 +239,7 @@ public final class VPRegistry<T> {
      */
     @NonNull
     public <U> VPRegistry<U> createRegistry(@NonNull String name) {
-        return new VPRegistry<>(registryKey.location().getPath() + "/" + name);
+        return new VPRegistry<>(registryKey.identifier().getPath() + "/" + name);
     }
 
     /**
@@ -251,36 +273,5 @@ public final class VPRegistry<T> {
     @NonNull
     public RegistryObject<T> register(@NonNull String name, Supplier<T> objectFunction) {
         return deferredRegister.register(name, objectFunction);
-    }
-
-    private <U> U getResource(@NonNull String name, @NonNull BiFunction<HolderLookup.RegistryLookup<T>, ResourceKey<T>, U> resourceFunction) {
-        Validate.validState(provider != null, "레지스트리에 접근할 수 없음");
-
-        ResourceKey<T> resourceKey = ResourceKey.create(registryKey, ResourceLocation.fromNamespaceAndPath(VanillaPlus.MODID, name));
-        return resourceFunction.apply(provider.lookupOrThrow(registryKey), resourceKey);
-    }
-
-    /**
-     * 지정한 리소스 이름에 해당하는 값을 반환한다.
-     *
-     * @param name 리소스 이름
-     * @return 리소스 이름에 해당하는 값
-     * @throws IllegalStateException 레지스트리에 접근할 수 없으면 발생
-     */
-    @Nullable
-    public T getValue(@NonNull String name) {
-        return getResource(name, HolderGetter::get).map(Holder.Reference::value).orElse(null);
-    }
-
-    /**
-     * 지정한 리소스 이름에 해당하는 값을 반환한다.
-     *
-     * @param name 리소스 이름
-     * @return 리소스 이름에 해당하는 값
-     * @throws IllegalStateException 레지스트리에 접근할 수 없거나 값이 존재하지 않으면 발생
-     */
-    @NonNull
-    public T getValueOrThrow(@NonNull String name) {
-        return getResource(name, HolderGetter::getOrThrow).value();
     }
 }

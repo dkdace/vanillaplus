@@ -3,7 +3,7 @@
   "effects": {
     "minecraft:attributes": [
       {
-        "amount": -0.12,
+        "amount": -0.1,
         "attribute": "vanillaplus:eating_time",
         "id": "vanillaplus:trim_material_effect.resin",
         "operation": "add_multiplied_base"

@@ -26,6 +26,9 @@ public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeB
     @Shadow
     public abstract BlockState getBlockState();
 
+    @Shadow
+    public abstract void setChanged();
+
     @Inject(method = "preRemoveSideEffects", at = @At("TAIL"))
     protected void onPreRemoveSideEffects(BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
         // 미사용

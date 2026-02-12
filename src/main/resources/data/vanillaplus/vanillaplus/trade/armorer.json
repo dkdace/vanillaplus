@@ -15,21 +15,71 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 2,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_helmet"
-                  },
-                  {
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_boots"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 2,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                }
               }
             }
           ]
@@ -46,21 +96,71 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 3,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_chestplate"
-                  },
-                  {
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_leggings"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell",
+                  "supply": "moderate",
+                  "price": 3,
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  }
+                }
               }
             }
           ]
@@ -81,22 +181,145 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 4,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:chainmail_helmet"
-                  },
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:chainmail_boots"
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_helmet"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_helmet"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_boots"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_boots"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_boots"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_helmet"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 4,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_boots"
+                      }
+                    }
                   }
-                ]
-              }
+                },
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_chestplate"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_chestplate"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_leggings"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_chestplate"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_chestplate"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_leggings"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell",
+                      "supply": "moderate",
+                      "price": 5,
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:chainmail_leggings"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         },
@@ -112,22 +335,215 @@
               }
             },
             {
-              "type": "vanillaplus:sell",
-              "supply": "moderate",
-              "price": 5,
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:chainmail_chestplate"
-                  },
-                  {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:chainmail_leggings"
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_helmet"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.1,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_boots"
+                      }
+                    }
                   }
-                ]
-              }
+                },
+                {
+                  "type": "vanillaplus:type_specific",
+                  "map": {
+                    "minecraft:plains": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      }
+                    },
+                    "minecraft:taiga": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      }
+                    },
+                    "minecraft:snow": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      }
+                    },
+                    "minecraft:desert": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      }
+                    },
+                    "minecraft:jungle": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_chestplate"
+                      }
+                    },
+                    "minecraft:savanna": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      }
+                    },
+                    "minecraft:swamp": {
+                      "type": "vanillaplus:sell_enchanted",
+                      "supply": "moderate",
+                      "price_modifier": 1.15,
+                      "enchantment_level": "low",
+                      "required_item": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      },
+                      "product": {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:iron_leggings"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -147,22 +563,106 @@
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 1.1,
-              "enchantment_level": "low",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_helmet"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_boots"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_helmet"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.1,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_boots"
+                  }
+                }
               }
             }
           ]
@@ -175,26 +675,110 @@
               "price": {
                 "type": "vanillaplus:itemstack",
                 "id": "minecraft:armor_stand",
-                "count": 6
+                "count": 4
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 1.15,
-              "enchantment_level": "low",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_chestplate"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:iron_leggings"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_chestplate"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.15,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:iron_leggings"
+                  }
+                }
               }
             }
           ]
@@ -205,75 +789,19 @@
       "level": 4,
       "offers": [
         {
-          "type": "vanillaplus:sell_enchanted",
-          "supply": "scarce",
-          "price_modifier": 1.2,
-          "enchantment_level": "medium",
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_helmet"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_boots"
-              }
-            ]
-          }
-        },
-        {
-          "type": "vanillaplus:sell_enchanted",
-          "supply": "scarce",
-          "price_modifier": 1.25,
-          "enchantment_level": "medium",
-          "product": {
-            "type": "vanillaplus:random",
-            "items": [
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_chestplate"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:diamond_leggings"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "level": 5,
-      "offers": [
-        {
           "type": "vanillaplus:sell",
           "supply": "scarce",
-          "price": 12,
-          "price_multiplier": "high",
+          "price": 7,
           "product": {
             "type": "vanillaplus:random",
             "items": [
               {
                 "type": "vanillaplus:itemstack",
-                "id": "minecraft:sentry_armor_trim_smithing_template"
+                "id": "minecraft:iron_horse_armor"
               },
               {
                 "type": "vanillaplus:itemstack",
-                "id": "minecraft:dune_armor_trim_smithing_template"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:eye_armor_trim_smithing_template"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:wild_armor_trim_smithing_template"
-              },
-              {
-                "type": "vanillaplus:itemstack",
-                "id": "minecraft:coast_armor_trim_smithing_template"
+                "id": "minecraft:iron_nautilus_armor"
               }
             ]
           }
@@ -282,41 +810,703 @@
           "type": "vanillaplus:random",
           "offers": [
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 1.2,
-              "enchantment_level": "high",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_helmet"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_boots"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                }
               }
             },
             {
-              "type": "vanillaplus:sell_enchanted",
-              "supply": "scarce",
-              "price_modifier": 1.25,
-              "enchantment_level": "high",
-              "product": {
-                "type": "vanillaplus:random",
-                "items": [
-                  {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_chestplate"
                   },
-                  {
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
                     "type": "vanillaplus:itemstack",
                     "id": "minecraft:diamond_leggings"
                   }
-                ]
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "medium",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "offers": [
+        {
+          "type": "vanillaplus:type_specific",
+          "map": {
+            "minecraft:plains": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:coast_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:coast_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:sentry_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:sentry_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:taiga": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:wayfinder_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:wayfinder_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:host_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:host_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:vex_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:vex_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:snow": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:snout_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:snout_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:eye_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:eye_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:desert": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:dune_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:dune_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:rib_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:rib_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:jungle": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:wild_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:wild_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:raiser_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:raiser_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:shaper_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:shaper_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:savanna": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:flow_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:flow_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:bolt_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:bolt_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spire_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:spire_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "minecraft:swamp": {
+              "type": "vanillaplus:random",
+              "offers": [
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tide_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:tide_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                },
+                {
+                  "type": "vanillaplus:sell",
+                  "supply": "scarce",
+                  "price": 7,
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:ward_armor_trim_smithing_template"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:ward_armor_trim_smithing_template",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "vanillaplus:random",
+          "offers": [
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_helmet"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.2,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_boots"
+                  }
+                }
+              }
+            },
+            {
+              "type": "vanillaplus:type_specific",
+              "map": {
+                "minecraft:plains": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:taiga": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:snow": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  }
+                },
+                "minecraft:desert": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:jungle": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_chestplate"
+                  }
+                },
+                "minecraft:savanna": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  }
+                },
+                "minecraft:swamp": {
+                  "type": "vanillaplus:sell_enchanted",
+                  "supply": "scarce",
+                  "price_modifier": 1.25,
+                  "enchantment_level": "high",
+                  "required_item": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  },
+                  "product": {
+                    "type": "vanillaplus:itemstack",
+                    "id": "minecraft:diamond_leggings"
+                  }
+                }
               }
             }
           ]

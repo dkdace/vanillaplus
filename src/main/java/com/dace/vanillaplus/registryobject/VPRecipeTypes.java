@@ -2,7 +2,7 @@ package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -18,7 +18,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -43,13 +42,12 @@ public final class VPRecipeTypes {
 
     @NonNull
     private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> create(@NonNull String name) {
-        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () ->
-                RecipeType.simple(ResourceLocation.fromNamespaceAndPath(name, VanillaPlus.MODID)));
+        return VPRegistry.register(VPRegistry.RECIPE_TYPE, name, () -> RecipeType.simple(IdentifierUtil.fromPath(name)));
     }
 
     @NonNull
     private static ResourceKey<RecipePropertySet> createPropertySet(@NonNull String name) {
-        return ResourceKey.create(RecipePropertySet.TYPE_KEY, ResourceLocation.fromNamespaceAndPath(name, VanillaPlus.MODID));
+        return ResourceKey.create(RecipePropertySet.TYPE_KEY, IdentifierUtil.fromPath(name));
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

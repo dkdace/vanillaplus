@@ -4,6 +4,7 @@ import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.util.CodecUtil;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -22,8 +23,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -39,9 +40,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     private static final VPRegistry<MapCodec<? extends RaiderEffect>> CODEC_REGISTRY = VPRegistry.RAIDER_EFFECT.createRegistry("type");
     /** 유형별 코덱 */
     private static final Codec<RaiderEffect> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
+    /** 데이터 매니저 */
+    @Getter
+    private static ReloadableDataManager<EntityType<?>, RaiderEffect> dataManager;
 
     static {
         CODEC_REGISTRY.register("pillager", () -> PillagerEffect.CODEC);
@@ -68,21 +72,11 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     }
 
     @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.RAIDER_EFFECT.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
+    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
+        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAIDER_EFFECT, TYPE_CODEC,
+                entityType -> IdentifierUtil.fromRegistry(BuiltInRegistries.ENTITY_TYPE, entityType));
 
-    /**
-     * 지정한 엔티티 타입에 해당하는 습격자 효과를 반환한다.
-     *
-     * @param <T> {@link RaiderEffect}를 상속받는 습격자 효과
-     * @return 습격자 효과
-     * @throws IllegalStateException 해당하는 엔티티 수정자가 존재하지 않으면 발생
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    public static <T extends RaiderEffect> T fromEntityType(@NonNull EntityType<?> entityType) {
-        return (T) VPRegistry.RAIDER_EFFECT.getValueOrThrow(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath());
+        event.addListener(dataManager);
     }
 
     /**

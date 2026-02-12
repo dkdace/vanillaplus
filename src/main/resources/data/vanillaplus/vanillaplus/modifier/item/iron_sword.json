@@ -1,0 +1,29 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "minecraft:attack_range": {
+      "hitbox_margin": 0.2,
+      "mob_factor": 0.3
+    },
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 0.4
+    }
+  },
+  "attribute_modifiers": [
+    {
+      "type": "minecraft:sweeping_damage_ratio",
+      "amount": 0.3,
+      "id": "vanillaplus:base_sweeping_damage_ratio",
+      "operation": "add_value",
+      "slot": "mainhand"
+    },
+    {
+      "type": "vanillaplus:sweeping_range",
+      "amount": 1,
+      "id": "vanillaplus:base_sweeping_range",
+      "operation": "add_value",
+      "slot": "mainhand"
+    }
+  ]
+}

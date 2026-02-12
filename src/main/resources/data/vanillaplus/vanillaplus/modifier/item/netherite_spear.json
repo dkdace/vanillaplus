@@ -1,0 +1,55 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "minecraft:attack_range": {
+      "hitbox_margin": 0,
+      "max_creative_reach": 6.5,
+      "max_reach": 4.5,
+      "min_creative_reach": 1.8,
+      "min_reach": 1.8,
+      "mob_factor": 0.5
+    },
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 0.4
+    },
+    "minecraft:kinetic_weapon": {
+      "damage_multiplier": 1.1,
+      "delay_ticks": 12,
+      "dismount_conditions": {
+        "max_duration_ticks": 50,
+        "min_speed": 9.0
+      },
+      "knockback_conditions": {
+        "max_duration_ticks": 100,
+        "min_speed": 5.0
+      },
+      "damage_conditions": {
+        "max_duration_ticks": 160,
+        "min_relative_speed": 4.5
+      },
+      "forward_movement": 0.38,
+      "hit_sound": "minecraft:item.spear.hit",
+      "sound": "minecraft:item.spear.use"
+    },
+    "minecraft:swing_animation": {
+      "type": "stab",
+      "duration": 18
+    }
+  },
+  "attribute_modifiers": [
+    {
+      "type": "minecraft:attack_damage",
+      "amount": 5.0,
+      "id": "minecraft:base_attack_damage",
+      "operation": "add_value",
+      "slot": "mainhand"
+    },
+    {
+      "type": "minecraft:attack_speed",
+      "amount": -2.8,
+      "id": "minecraft:base_attack_speed",
+      "operation": "add_value",
+      "slot": "mainhand"
+    }
+  ]
+}

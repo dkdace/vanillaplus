@@ -1,5 +1,8 @@
 {
   "type": "vanillaplus:item",
+  "components": {
+    "vanillaplus:smelting_damage_ratio": 0.21
+  },
   "attribute_modifiers": [
     {
       "type": "minecraft:attack_speed",

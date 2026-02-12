@@ -7,9 +7,14 @@
     "minecraft:attributes": [
       {
         "amount": {
-          "type": "minecraft:linear",
-          "base": 0.15,
-          "per_level_above_first": 0.15
+          "type": "minecraft:clamped",
+          "max": 1,
+          "min": 0,
+          "value": {
+            "type": "minecraft:linear",
+            "base": 0.15,
+            "per_level_above_first": 0.15
+          }
         },
         "attribute": "minecraft:explosion_knockback_resistance",
         "id": "minecraft:enchantment.blast_protection",

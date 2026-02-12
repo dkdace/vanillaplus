@@ -1,0 +1,10 @@
+{
+  "type": "vanillaplus:item",
+  "components": {
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 2,
+      "item_damage_per_attack": 2
+    }
+  }
+}

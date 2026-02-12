@@ -8,9 +8,14 @@
       "description_index": 1,
       "description_value_multiplier": 100,
       "value": {
-        "type": "minecraft:linear",
-        "base": 0.15,
-        "per_level_above_first": 0.15
+        "type": "minecraft:clamped",
+        "max": 1,
+        "min": 0,
+        "value": {
+          "type": "minecraft:linear",
+          "base": 0.15,
+          "per_level_above_first": 0.15
+        }
       }
     }
   }

@@ -1,33 +1,29 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.data.ArmorTrimEffect;
-import com.dace.vanillaplus.data.EnchantmentExtension;
-import com.dace.vanillaplus.data.GeneralConfig;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.google.common.collect.Lists;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelper> {
+    @Unique
+    private static int getFinalEnchantmentLevel(int level, @NonNull ItemStack itemStack) {
+        return level * itemStack.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
+    }
+
     @Unique
     @NonNull
     private static ItemEnchantments addArmorTrimEnchantments(@NonNull ItemEnchantments itemEnchantments, @NonNull ItemStack itemStack) {
@@ -37,70 +33,52 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(itemEnchantments);
 
-        armorTrim.pattern().unwrapKey()
-                .map(ArmorTrimEffect.TrimPatternEffect::fromTrimPattern)
-                .ifPresent(trimPatternEffect -> mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
-        armorTrim.material().unwrapKey()
-                .map(ArmorTrimEffect.TrimMaterialEffect::fromTrimMaterial)
-                .ifPresent(trimMaterialEffect -> mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
+        VPTrimPattern.cast(armorTrim.pattern().value()).getDataModifier().ifPresent(trimPatternEffect ->
+                mutable.set(trimPatternEffect.getEnchantmentHolder(), 1));
+        VPTrimMaterial.cast(armorTrim.material().value()).getDataModifier().ifPresent(trimMaterialEffect ->
+                mutable.set(trimMaterialEffect.getEnchantmentHolder(), 1));
 
         return mutable.toImmutable();
     }
 
-    @Overwrite
-    public static List<EnchantmentInstance> getAvailableEnchantmentResults(int level, ItemStack itemStack,
-                                                                           Stream<Holder<Enchantment>> possibleEnchantments) {
-        List<EnchantmentInstance> list = Lists.newArrayList();
-        boolean flag = itemStack.is(Items.BOOK);
-
-        possibleEnchantments.filter(enchantmentHolder -> itemStack.canApplyAtEnchantingTable(enchantmentHolder) || flag)
-                .forEach(enchantmentHolder -> {
-                    Enchantment enchantment = enchantmentHolder.value();
-
-                    int maxLevel = enchantmentHolder.unwrapKey()
-                            .map(EnchantmentExtension::fromEnchantment)
-                            .map(enchantmentExtension -> enchantmentExtension.getMaxLevel(itemStack))
-                            .orElse(enchantment.getMaxLevel());
-
-                    for (int i = maxLevel; i >= enchantment.getMinLevel(); i--) {
-                        if (level >= enchantment.getMinCost(i) && level <= enchantment.getMaxCost(i)) {
-                            list.add(new EnchantmentInstance(enchantmentHolder, i));
-                            break;
-                        }
-                    }
-                });
-
-        return list;
+    @ModifyReturnValue(method = "getItemEnchantmentLevel", at = @At("RETURN"))
+    private static int modifyGetEnchantmentLevel(int level, @Local(argsOnly = true) ItemStack itemStack) {
+        return getFinalEnchantmentLevel(level, itemStack);
     }
 
-    @ModifyExpressionValue(method = "getEnchantmentCost", at = @At(value = "CONSTANT", args = "intValue=15"))
-    private static int modifyMaxPower(int maxPower, @Local(argsOnly = true) ItemStack itemStack) {
-        return itemStack.is(VPTags.Items.EXTENDED_ENCHANTABLE)
-                ? (int) (maxPower * GeneralConfig.get().getExtendedEnchantmentMaxCostMultiplier())
-                : maxPower;
+    @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",
+            at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Object2IntMap$Entry;getIntValue()I"))
+    private static int doubleEnchantmentLevel0(int level, @Local(argsOnly = true) ItemStack itemStack) {
+        return getFinalEnchantmentLevel(level, itemStack);
+    }
+
+    @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V",
+            at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Object2IntMap$Entry;getIntValue()I"))
+    private static int doubleEnchantmentLevel1(int level, @Local(argsOnly = true) ItemStack itemStack) {
+        return getFinalEnchantmentLevel(level, itemStack);
     }
 
     @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private static Object modifyEnchantments0(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
+    private static Object applyArmorTrimEnchantments0(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }
 
     @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"))
-    private static Object modifyEnchantments1(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
+    private static Object applyArmorTrimEnchantments1(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }
 
     @ModifyExpressionValue(method = "hasTag", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private static Object modifyEnchantments2(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
+    private static Object applyArmorTrimEnchantments2(Object itemEnchantments, @Local(argsOnly = true) ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }
 
     @ModifyExpressionValue(method = "getRandomItemWith", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private static Object modifyEnchantments3(Object itemEnchantments, @Local ItemStack itemStack) {
+    private static Object applyArmorTrimEnchantments3(Object itemEnchantments, @Local ItemStack itemStack) {
         return addArmorTrimEnchantments((ItemEnchantments) itemEnchantments, itemStack);
     }
 }

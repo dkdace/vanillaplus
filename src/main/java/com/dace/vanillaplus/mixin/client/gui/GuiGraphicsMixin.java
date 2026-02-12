@@ -2,27 +2,23 @@ package com.dace.vanillaplus.mixin.client.gui;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
+import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiGraphics.class)
 public abstract class GuiGraphicsMixin implements VPMixin<GuiGraphics> {
-    @Unique
-    private static final int COLOR_REPAIR_LIMIT_BAR = ARGB.color(50, 50, 255);
-
     @Shadow
     public abstract void fill(RenderPipeline renderPipeline, int minX, int minY, int maxX, int maxY, int color);
 
@@ -33,6 +29,10 @@ public abstract class GuiGraphicsMixin implements VPMixin<GuiGraphics> {
         if (!vpItemStack.isRepairLimitBarVisible())
             return;
 
+        VPDataComponentTypes.RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+        if (repairWithXP == null)
+            return;
+
         x += 2;
         y += itemStack.isBarVisible() ? 11 : 13;
 
@@ -40,6 +40,6 @@ public abstract class GuiGraphicsMixin implements VPMixin<GuiGraphics> {
         int barWidth = Math.clamp(value, 0, Item.MAX_BAR_WIDTH);
 
         fill(RenderPipelines.GUI, x, y, x + Item.MAX_BAR_WIDTH, y + 2, CommonColors.BLACK);
-        fill(RenderPipelines.GUI, x, y, x + barWidth, y + 1, COLOR_REPAIR_LIMIT_BAR);
+        fill(RenderPipelines.GUI, x, y, x + barWidth, y + 1, repairWithXP.getBarColor());
     }
 }

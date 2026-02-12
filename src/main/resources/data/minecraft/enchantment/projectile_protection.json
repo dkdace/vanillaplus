@@ -7,9 +7,14 @@
     "minecraft:attributes": [
       {
         "amount": {
-          "type": "minecraft:linear",
-          "base": 0.12,
-          "per_level_above_first": 0.12
+          "type": "minecraft:clamped",
+          "max": 1,
+          "min": 0,
+          "value": {
+            "type": "minecraft:linear",
+            "base": 0.12,
+            "per_level_above_first": 0.12
+          }
         },
         "attribute": "vanillaplus:projectile_knockback_resistance",
         "id": "minecraft:enchantment.projectile_protection",

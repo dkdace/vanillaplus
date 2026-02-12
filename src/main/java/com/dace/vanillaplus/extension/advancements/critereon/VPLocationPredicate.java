@@ -2,7 +2,7 @@ package com.dace.vanillaplus.extension.advancements.critereon;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
-import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.Optional;

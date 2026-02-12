@@ -2,8 +2,8 @@ package com.dace.vanillaplus.extension.advancements.critereon;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
-import net.minecraft.advancements.critereon.DistancePredicate;
-import net.minecraft.advancements.critereon.PlayerPredicate;
+import net.minecraft.advancements.criterion.DistancePredicate;
+import net.minecraft.advancements.criterion.PlayerPredicate;
 
 import java.util.Optional;
 

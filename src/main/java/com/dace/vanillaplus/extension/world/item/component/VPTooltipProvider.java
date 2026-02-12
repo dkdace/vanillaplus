@@ -1,8 +1,10 @@
 package com.dace.vanillaplus.extension.world.item.component;
 
-import com.dace.vanillaplus.data.ArmorTrimEffect;
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -10,7 +12,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipProvider;
@@ -53,17 +54,15 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
     /**
      * 지정한 마법 부여의 효과에 대한 툴팁을 적용한다.
      *
-     * @param componentConsumer      {@link TooltipProvider}의 텍스트 요소 Consumer
-     * @param descriptionComponent   설명 텍스트 요소
-     * @param enchantmentResourceKey 마법 부여 리소스 키
-     * @param enchantment            마법 부여
-     * @param level                  마법 부여 레벨
+     * @param componentConsumer    {@link TooltipProvider}의 텍스트 요소 Consumer
+     * @param descriptionComponent 설명 텍스트 요소
+     * @param enchantment          마법 부여
+     * @param level                마법 부여 레벨
      */
-    static void applyEnchantmentEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent,
-                                               @NonNull ResourceKey<Enchantment> enchantmentResourceKey, @NonNull Enchantment enchantment, int level) {
-        LevelBasedValuePreset levelBasedValuePreset = LevelBasedValuePreset.fromEnchantment(enchantmentResourceKey);
-        if (levelBasedValuePreset != null)
-            applyLevelBasedValueTooltip(componentConsumer, descriptionComponent, levelBasedValuePreset, level);
+    static void applyEnchantmentEffectsTooltip(@NonNull Consumer<Component> componentConsumer,
+                                               @NonNull Component descriptionComponent, @NonNull Enchantment enchantment, int level) {
+        VPEnchantment.cast(enchantment).getDataModifier().ifPresent(levelBasedValuePreset ->
+                applyLevelBasedValueTooltip(componentConsumer, descriptionComponent, levelBasedValuePreset, level));
 
         enchantment.getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
@@ -78,12 +77,9 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
      * @param trimPatternHolder 갑옷 장식 형판 홀더 인스턴스
      */
     static void applyTrimPatternEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<TrimPattern> trimPatternHolder) {
-        trimPatternHolder.unwrapKey().ifPresent(trimPatternResourceKey -> {
-            ArmorTrimEffect.TrimPatternEffect trimPatternEffect = ArmorTrimEffect.TrimPatternEffect.fromTrimPattern(trimPatternResourceKey);
-            if (trimPatternEffect != null)
+        VPTrimPattern.cast(trimPatternHolder.value()).getDataModifier().ifPresent(trimPatternEffect ->
                 applyEnchantmentEffectsTooltip(componentConsumer, trimPatternHolder.value().description(),
-                        trimPatternEffect.getEnchantmentResourceKey(), trimPatternEffect.getEnchantmentHolder().value(), 1);
-        });
+                        trimPatternEffect.getEnchantmentHolder().value(), 1));
     }
 
     /**
@@ -93,11 +89,8 @@ public interface VPTooltipProvider<T extends TooltipProvider> extends VPMixin<T>
      * @param trimMaterialHolder 갑옷 장식 재료 홀더 인스턴스
      */
     static void applyTrimMaterialEffectsTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Holder<TrimMaterial> trimMaterialHolder) {
-        trimMaterialHolder.unwrapKey().ifPresent(trimMaterialResourceKey -> {
-            ArmorTrimEffect.TrimMaterialEffect trimMaterialEffect = ArmorTrimEffect.TrimMaterialEffect.fromTrimMaterial(trimMaterialResourceKey);
-            if (trimMaterialEffect != null)
+        VPTrimMaterial.cast(trimMaterialHolder.value()).getDataModifier().ifPresent(trimMaterialEffect ->
                 applyEnchantmentEffectsTooltip(componentConsumer, trimMaterialHolder.value().description(),
-                        trimMaterialEffect.getEnchantmentResourceKey(), trimMaterialEffect.getEnchantmentHolder().value(), 1);
-        });
+                        trimMaterialEffect.getEnchantmentHolder().value(), 1));
     }
 }
