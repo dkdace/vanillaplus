@@ -3,7 +3,7 @@
   "effects": {
     "minecraft:attributes": [
       {
-        "amount": 0.15,
+        "amount": 0.12,
         "attribute": "vanillaplus:heal_multiplier",
         "id": "vanillaplus:trim_pattern_effect.wild",
         "operation": "add_multiplied_base"
