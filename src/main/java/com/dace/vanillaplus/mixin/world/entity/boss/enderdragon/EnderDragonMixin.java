@@ -27,12 +27,15 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhaseManager;
+import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -58,11 +61,13 @@ import java.util.Optional;
 @Mixin(EnderDragon.class)
 public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModifier.EnderDragonModifier> implements VPEnderDragon {
     @Unique
-    private static final int MAX_EXPLOSION_RESISTANCE = 3;
+    private static final int MAX_EXPLOSION_RESISTANCE = 1;
     @Unique
     private static final int METEOR_COLOR = ARGB.color(223, 0, 249);
     @Unique
     private static final int METEOR_POS_SPREAD = 20;
+    @Unique
+    private static final int ENDERMITE_POS_SPREAD = 4;
     @Unique
     private static final EntityDataAccessor<Optional<BlockPos>> METEOR_POS = SynchedEntityData.defineId(EnderDragon.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
@@ -80,8 +85,6 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     private double enderPearlDropRate = 0;
     @Unique
     private int enderPearlDropCount = 0;
-    @Unique
-    private boolean isMeteorExploding = false;
     @Shadow
     @Final
     private EnderDragonPhaseManager phaseManager;
@@ -127,7 +130,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @Override
     public boolean dropMeteor(@NonNull Vec3 pos) {
-        if (level().getDifficulty() != Difficulty.HARD || getHealth() >= getMaxHealth() || getMeteorPos() != null)
+        if (getHealth() >= getMaxHealth() || getMeteorPos() != null)
             return false;
 
         pos = pos.offsetRandom(random, METEOR_POS_SPREAD);
@@ -158,18 +161,6 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         }
     }
 
-    @Unique
-    private void stepMeteorServer(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo.Meteor meteor, @NonNull BlockPos blockPos) {
-        if (!isMeteorExploding && !level().isEmptyBlock(blockPos))
-            isMeteorExploding = true;
-
-        if (!isMeteorExploding)
-            return;
-
-        level().explode(getThis(), blockPos.getX(), blockPos.getY() + 1.0, blockPos.getZ(), meteor.getExplosionRadius(),
-                Level.ExplosionInteraction.MOB);
-    }
-
     @ModifyArg(method = "onCrystalDestroyed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;DDD)Lnet/minecraft/world/entity/player/Player;"),
             index = 0)
@@ -186,7 +177,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = dragonPhaseInstance.getPhase();
 
         if (enderDragonPhase == EnderDragonPhase.CHARGING_PLAYER)
-            return velocity * 4;
+            return velocity * 5;
         else if (enderDragonPhase == EnderDragonPhase.LANDING)
             return velocity * 2;
 
@@ -276,6 +267,17 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
             spawnAtLocation(serverLevel, Items.ENDER_PEARL);
 
+            for (int i = 0; i < enderDragonModifier.getEndermiteCount(); i++) {
+                Endermite endermite = EntityType.ENDERMITE.create(serverLevel, EntitySpawnReason.MOB_SUMMONED);
+
+                if (endermite != null) {
+                    Vec3 pos = position().offsetRandomXZ(random, ENDERMITE_POS_SPREAD);
+
+                    endermite.snapTo(pos);
+                    serverLevel.addFreshEntity(endermite);
+                }
+            }
+
             serverLevel.playSound(null, getX(), getY(), getZ(), VPSoundEvents.ENDER_DRAGON_DROP_PEARL.get(), getSoundSource(), 5,
                     1 + random.nextFloat() * 0.2F);
         });
@@ -304,13 +306,14 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
                 if (meteorPos.getY() > serverLevel.getMinY() && serverLevel.isEmptyBlock(meteorPos)) {
                     meteorPos = meteorPos.below();
                     setMeteorPos(meteorPos);
-                    stepMeteorServer(enderDragonModifier.getPhaseInfo().getMeteor(), meteorPos);
 
                     continue;
                 }
 
                 setMeteorPos(null);
-                isMeteorExploding = false;
+                level().explode(getThis(), meteorPos.getX(), meteorPos.getY() + 1.0, meteorPos.getZ(),
+                        enderDragonModifier.getPhaseInfo().getMeteor().getExplosionRadius(), Level.ExplosionInteraction.MOB);
+
                 return;
             }
         });

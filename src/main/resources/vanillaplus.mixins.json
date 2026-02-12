@@ -60,6 +60,7 @@
     "world.entity.npc.wanderingtrader.WanderingTraderMixin",
     "world.entity.player.PlayerMixin",
     "world.entity.projectile.FireworkRocketEntityMixin",
+    "world.entity.projectile.ProjectileMixin",
     "world.entity.projectile.arrow.AbstractArrowMixin",
     "world.entity.projectile.arrow.ThrownTridentMixin",
     "world.entity.projectile.hurtingprojectile.DragonFireballMixin",

@@ -1,0 +1,9 @@
+{
+  "type": "vanillaplus:living_entity",
+  "attributes": [
+    {
+      "id": "minecraft:fall_damage_multiplier",
+      "base": 0
+    }
+  ]
+}
