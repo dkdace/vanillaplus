@@ -7,12 +7,9 @@ import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +24,6 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(Item.class)
@@ -106,19 +102,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
 
     @Override
     public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null)
-            return VPItem.super.shouldCauseBlockBreakReset(oldStack, newStack);
-
-        if (!newStack.is(oldStack.getItem()))
-            return true;
-
-        DataComponentMap oldStackComponents = oldStack.getComponents();
-        DataComponentMap newStackComponents = newStack.getComponents();
-
-        return player.registryAccess().lookupOrThrow(Registries.DATA_COMPONENT_TYPE).stream().anyMatch(dataComponentType ->
-                dataComponentType != DataComponents.DAMAGE && dataComponentType != VPDataComponentTypes.REPAIR_LIMIT.get()
-                        && !Objects.equals(oldStackComponents.get(dataComponentType), newStackComponents.get(dataComponentType)));
+        return !newStack.is(oldStack.getItem());
     }
 
     @Shadow
