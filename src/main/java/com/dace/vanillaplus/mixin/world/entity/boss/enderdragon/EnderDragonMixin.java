@@ -186,7 +186,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = dragonPhaseInstance.getPhase();
 
         if (enderDragonPhase == EnderDragonPhase.CHARGING_PLAYER)
-            return velocity * 4;
+            return velocity * 5;
         else if (enderDragonPhase == EnderDragonPhase.LANDING)
             return velocity * 2;
 

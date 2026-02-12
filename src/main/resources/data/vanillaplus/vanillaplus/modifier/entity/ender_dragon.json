@@ -23,7 +23,7 @@
   "phases": {
     "attack_cooldown_seconds": {
       "max": 16,
-      "min": 7
+      "min": 8
     },
     "landing_chance": {
       "max": 0.3,
@@ -32,7 +32,7 @@
     },
     "charge": {
       "flame_duration_seconds": 5,
-      "flame_radius": 4
+      "flame_radius": 5
     },
     "fireball": {
       "velocity_multiplier": 1.5,
@@ -44,13 +44,13 @@
       }
     },
     "sitting": {
-      "scan_duration_seconds": 0.7,
+      "scan_duration_seconds": 0.8,
       "scan_idle_duration_seconds": {
         "max": 3,
         "min": 1
       },
-      "allowed_damage_ratio": 0.2,
-      "spin_attack_duration_seconds": 0.8,
+      "allowed_damage_ratio": 0.25,
+      "spin_attack_duration_seconds": 1,
       "flaming_duration_seconds": {
         "max": 3,
         "min": 1.5
@@ -58,11 +58,11 @@
       "flame_radius": 6
     },
     "meteor": {
-      "velocity": 3,
-      "explosion_radius": 3.5,
+      "velocity": 4,
+      "explosion_radius": 5,
       "cooldown_seconds": {
-        "max": 30,
-        "min": 10
+        "max": 24,
+        "min": 5
       }
     }
   }

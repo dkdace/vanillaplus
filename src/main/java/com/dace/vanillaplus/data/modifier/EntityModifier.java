@@ -373,7 +373,7 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
                 private static final Codec<Charge> CODEC = RecordCodecBuilder.create(instance -> instance
                         .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_duration_seconds", 5F)
                                         .forGetter(target -> target.flameDurationSeconds),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_radius", 4F).forGetter(Charge::getFlameRadius))
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("flame_radius", 5F).forGetter(Charge::getFlameRadius))
                         .apply(instance, Charge::new));
 
                 /** 브레스 잔류 시간 (초) */
@@ -435,14 +435,14 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             public static final class Sitting {
                 /** JSON 코덱 */
                 private static final Codec<Sitting> CODEC = RecordCodecBuilder.create(instance -> instance
-                        .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("scan_duration", 0.7F)
+                        .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("scan_duration_seconds", 0.8F)
                                         .forGetter(target -> target.scanDurationSeconds),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
                                         .optionalFieldOf("scan_idle_duration_seconds", new HealthBasedValue<>(3F))
                                         .forGetter(Sitting::getScanIdleDurationSeconds),
-                                ExtraCodecs.floatRange(0, 1).optionalFieldOf("allowed_damage_ratio", 0.15F)
+                                ExtraCodecs.floatRange(0, 1).optionalFieldOf("allowed_damage_ratio", 0.25F)
                                         .forGetter(Sitting::getAllowedDamageRatio),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("spin_attack_duration_seconds", 0.8F)
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("spin_attack_duration_seconds", 1F)
                                         .forGetter(target -> target.spinAttackDurationSeconds),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
                                         .optionalFieldOf("flaming_duration_seconds", new HealthBasedValue<>(3F))
@@ -491,11 +491,11 @@ public class EntityModifier implements DataModifier<EntityType<?>>, CodecUtil.Co
             public static final class Meteor {
                 /** JSON 코덱 */
                 private static final Codec<Meteor> CODEC = RecordCodecBuilder.create(instance -> instance
-                        .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("velocity", 3).forGetter(Meteor::getVelocity),
-                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("explosion_radius", 3.5F)
+                        .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("velocity", 4).forGetter(Meteor::getVelocity),
+                                ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("explosion_radius", 5F)
                                         .forGetter(Meteor::getExplosionRadius),
                                 HealthBasedValue.codec(ExtraCodecs.POSITIVE_FLOAT)
-                                        .optionalFieldOf("cooldown_seconds", new HealthBasedValue<>(30F))
+                                        .optionalFieldOf("cooldown_seconds", new HealthBasedValue<>(24F))
                                         .forGetter(Meteor::getCooldownSeconds))
                         .apply(instance, Meteor::new));
 
