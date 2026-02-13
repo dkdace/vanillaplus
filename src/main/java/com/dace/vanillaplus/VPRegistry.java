@@ -20,6 +20,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -57,6 +58,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    /** 아이템 */
+    public static final VPRegistry<Item> ITEM = new VPRegistry<>(BuiltInRegistries.ITEM);
     /** 제작법 타입 */
     public static final VPRegistry<RecipeType<?>> RECIPE_TYPE = new VPRegistry<>(BuiltInRegistries.RECIPE_TYPE);
     /** 제작법 직렬화 처리기 */
@@ -108,6 +111,7 @@ public final class VPRegistry<T> {
         VanillaPlus.loadClass(VPAttributes.class);
         VanillaPlus.loadClass(VPEnchantmentLevelBasedValueTypes.class);
         VanillaPlus.loadClass(VPDataComponentTypes.class);
+        VanillaPlus.loadClass(VPItems.class);
         VanillaPlus.loadClass(VPRecipeTypes.class);
         VanillaPlus.loadClass(VPRecipeSerializers.class);
         VanillaPlus.loadClass(VPRecipeBookCategories.class);

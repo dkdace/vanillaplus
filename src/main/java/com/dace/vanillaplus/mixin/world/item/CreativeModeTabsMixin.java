@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.registryobject.VPGameRules;
+import com.dace.vanillaplus.registryobject.VPItems;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -37,5 +38,12 @@ public abstract class CreativeModeTabsMixin implements VPMixin<CreativeModeTabs>
     private static void addPoppedChorusFruitToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output,
                                                     CallbackInfo ci) {
         output.accept(Items.POPPED_CHORUS_FRUIT);
+    }
+
+    @Inject(method = "lambda$bootstrap$23", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
+    private static void addMilkBottleToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output,
+                                             CallbackInfo ci) {
+        output.accept(VPItems.MILK_BOTTLE.get());
     }
 }

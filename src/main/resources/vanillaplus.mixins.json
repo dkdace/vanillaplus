@@ -25,6 +25,8 @@
     "world.entity.ai.goal.RangedBowAttackGoalMixin",
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",
+    "world.entity.animal.cow.AbstractCowMixin",
+    "world.entity.animal.goat.GoatMixin",
     "world.entity.animal.golem.IronGolemMixin",
     "world.entity.animal.wolf.WolfMixin",
     "world.entity.boss.enderdragon.EnderDragonMixin",
