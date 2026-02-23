@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TridentItem;
@@ -28,7 +27,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ItemModifier implements DataModifier<Item>, CodecUtil.CodecComponent<ItemModifier> {
+public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends ItemModifier>> CODEC_REGISTRY = VPRegistry.ITEM_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */

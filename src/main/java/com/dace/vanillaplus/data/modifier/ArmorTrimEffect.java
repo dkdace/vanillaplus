@@ -29,7 +29,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
  * @param <T> 갑옷 장식 재료 ({@link TrimMaterial}) 또는 형판 ({@link TrimPattern})
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public abstract class ArmorTrimEffect<T> implements DataModifier<T> {
+public abstract class ArmorTrimEffect<T> {
     /** 재료/형판 홀더 인스턴스 */
     final Holder<T> holder;
     /** 마법 부여 홀더 인스턴스 */

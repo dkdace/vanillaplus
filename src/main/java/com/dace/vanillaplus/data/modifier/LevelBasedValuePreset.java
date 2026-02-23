@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +22,7 @@ import java.util.*;
  * 레벨 기반 값 프리셋을 관리하는 클래스.
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class LevelBasedValuePreset implements DataModifier<Enchantment> {
+public final class LevelBasedValuePreset {
     /** 레지스트리 코덱 */
     public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */

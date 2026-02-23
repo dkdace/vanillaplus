@@ -16,7 +16,6 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.BellBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -30,7 +29,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier> {
+public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */

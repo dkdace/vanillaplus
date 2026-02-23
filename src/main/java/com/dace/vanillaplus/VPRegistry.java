@@ -189,9 +189,8 @@ public final class VPRegistry<T> {
         applyArmorTrimEffects(registries, VPRegistry.TRIM_PATTERN_EFFECT);
     }
 
-    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull HolderLookup.Provider registries,
-                                                                          @NonNull ResourceKey<Registry<T>> registryKey,
-                                                                          @NonNull VPRegistry<U> vpRegistry) {
+    private static <T, U> void applyDataModifiers(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey,
+                                                  @NonNull VPRegistry<U> vpRegistry) {
         registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
             U dataModifier = registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key())))
                     .map(Holder::value)

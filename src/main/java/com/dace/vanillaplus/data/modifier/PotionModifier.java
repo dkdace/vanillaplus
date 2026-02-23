@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -24,7 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class PotionModifier implements DataModifier<Potion> {
+public final class PotionModifier {
     /** JSON 코덱 */
     private static final Codec<PotionModifier> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.RGB_COLOR_CODEC.optionalFieldOf("color").forGetter(PotionModifier::getColor),
