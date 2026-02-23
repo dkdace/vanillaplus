@@ -19,6 +19,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,6 +33,7 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
+import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -82,6 +84,10 @@ public abstract class ItemStackMixin implements VPItemStack {
     private static final String COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT = "consumable.removeStatusEffect";
     @Unique
     private static final String COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS = "consumable.clearAllStatusEffects";
+    @Unique
+    private static final String COMPONENT_CONSUMABLE_APPLY_STATUS_EFFECTS = "consumable.applyStatusEffects";
+    @Unique
+    private static final String COMPONENT_CONSUMABLE_TELEPORT_RANDOMLY = "consumable.teleportRandomly";
     @Unique
     private static final String COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = "item.projectileWeapon.when_shoot";
     @Unique
@@ -200,14 +206,33 @@ public abstract class ItemStackMixin implements VPItemStack {
         consumable.onConsumeEffects().forEach(consumeEffect -> {
             switch (consumeEffect) {
                 case RemoveStatusEffectsConsumeEffect removeStatusEffectsConsumeEffect ->
-                        removeStatusEffectsConsumeEffect.effects().forEach(mobEffectHolder ->
-                                componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT,
-                                        mobEffectHolder.value().getDisplayName()).withStyle(ChatFormatting.BLUE)));
+                        removeStatusEffectsConsumeEffect.effects().forEach(mobEffectHolder -> {
+                            MobEffectCategory mobEffectCategory = switch (mobEffectHolder.value().getCategory()) {
+                                case BENEFICIAL -> MobEffectCategory.HARMFUL;
+                                case HARMFUL -> MobEffectCategory.BENEFICIAL;
+                                default -> MobEffectCategory.NEUTRAL;
+                            };
+
+                            componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT,
+                                    mobEffectHolder.value().getDisplayName()).withStyle(mobEffectCategory.getTooltipFormatting()));
+                        });
                 case ClearAllStatusEffectsConsumeEffect ignored ->
-                        componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS).withStyle(ChatFormatting.BLUE));
-                case ApplyStatusEffectsConsumeEffect applyStatusEffectsConsumeEffect when applyStatusEffectsConsumeEffect.probability() == 1 ->
-                        PotionContents.addPotionTooltip(applyStatusEffectsConsumeEffect.effects(), componentConsumer, 1,
-                                tooltipContext.tickRate());
+                        componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS)
+                                .withStyle(MobEffectCategory.NEUTRAL.getTooltipFormatting()));
+                case ApplyStatusEffectsConsumeEffect applyStatusEffectsConsumeEffect -> {
+                    float probability = applyStatusEffectsConsumeEffect.probability();
+                    if (probability < 1) {
+                        componentConsumer.accept(Component.empty());
+                        componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_APPLY_STATUS_EFFECTS,
+                                        ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(probability * 100))
+                                .withStyle(ChatFormatting.DARK_PURPLE));
+                    }
+
+                    PotionContents.addPotionTooltip(applyStatusEffectsConsumeEffect.effects(), componentConsumer, 1,
+                            tooltipContext.tickRate());
+                }
+                case TeleportRandomlyConsumeEffect ignored -> componentConsumer.accept(Component.translatable(COMPONENT_CONSUMABLE_TELEPORT_RANDOMLY)
+                        .withStyle(MobEffectCategory.NEUTRAL.getTooltipFormatting()));
                 default -> {
                     // 미사용
                 }
