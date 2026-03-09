@@ -8,11 +8,16 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.StringJoiner;
+
 /**
  * {@link Identifier} 관련 기능을 제공하는 클래스.
  */
 @UtilityClass
 public final class IdentifierUtil {
+    /** 경로 구분자 */
+    private static final String PATH_SEPARATOR = "/";
+
     /**
      * 리소스 경로를 통해 식별자를 생성한다.
      *
@@ -22,6 +27,35 @@ public final class IdentifierUtil {
     @NonNull
     public static Identifier fromPath(@NonNull String path) {
         return Identifier.fromNamespaceAndPath(VanillaPlus.MODID, path);
+    }
+
+    /**
+     * 두 식별자를 이어붙여 새로운 식별자를 생성한다.
+     *
+     * @param first  첫번째 식별자
+     * @param second 두번째 식별자
+     * @return 식별자
+     * @see IdentifierUtil#concat(Identifier...)
+     */
+    @NonNull
+    public static Identifier concat(@NonNull Identifier first, @NonNull Identifier second) {
+        return fromPath(first.getPath() + PATH_SEPARATOR + second.getPath());
+    }
+
+    /**
+     * 지정한 식별자들을 이어붙여 새로운 식별자를 생성한다.
+     *
+     * @param identifiers 식별자 목록
+     * @return 식별자
+     * @see IdentifierUtil#concat(Identifier, Identifier)
+     */
+    @NonNull
+    public static Identifier concat(@NonNull Identifier @NonNull ... identifiers) {
+        StringJoiner stringJoiner = new StringJoiner(PATH_SEPARATOR);
+        for (Identifier identifier : identifiers)
+            stringJoiner.add(identifier.getPath());
+
+        return fromPath(stringJoiner.toString());
     }
 
     /**

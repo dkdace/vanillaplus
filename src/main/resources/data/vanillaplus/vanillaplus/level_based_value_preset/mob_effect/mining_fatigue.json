@@ -1,0 +1,17 @@
+{
+  "values": {
+    "mining_speed": {
+      "description_index": 0,
+      "description_value_multiplier": 100,
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": -0.99919,
+        "values": [
+          -0.7,
+          -0.91,
+          -0.9973
+        ]
+      }
+    }
+  }
+}

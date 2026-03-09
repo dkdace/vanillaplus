@@ -1,0 +1,16 @@
+{
+  "effects": {
+    "minecraft:projectile_piercing": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:enchantment/piercing",
+            "name": "piercing_count"
+          }
+        }
+      }
+    ]
+  }
+}

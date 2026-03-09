@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
+import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(ItemEnchantments.class)
-public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnchantments> {
+public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
     private int getFinalEnchantmentLevel(@NonNull DataComponentGetter dataComponentGetter, int level) {
         return level * dataComponentGetter.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
@@ -32,7 +33,7 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
     private void addEffectsTooltip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                     DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
                                     @Local int level) {
-        VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantmentHolder.value().description(), enchantmentHolder.value(),
+        VPEnchantment.cast(enchantmentHolder.value()).applyTooltip(componentConsumer, enchantmentHolder.value().description(),
                 getFinalEnchantmentLevel(dataComponentGetter, level));
     }
 
@@ -42,7 +43,7 @@ public abstract class ItemEnchantmentsMixin implements VPTooltipProvider<ItemEnc
                                     DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
         Enchantment enchantment = entry.getKey().value();
 
-        VPTooltipProvider.applyEnchantmentEffectsTooltip(componentConsumer, enchantment.description(), enchantment,
+        VPEnchantment.cast(enchantment).applyTooltip(componentConsumer, enchantment.description(),
                 getFinalEnchantmentLevel(dataComponentGetter, entry.getIntValue()));
     }
 }

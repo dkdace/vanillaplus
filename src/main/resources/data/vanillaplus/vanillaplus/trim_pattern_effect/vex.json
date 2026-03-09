@@ -15,7 +15,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/vex",
+            "value": "vanillaplus:trim_pattern_effect/vex",
             "name": "damage_reduction"
           }
         },

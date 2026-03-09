@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.player;
 
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
 import com.dace.vanillaplus.registryobject.VPAttributes;
@@ -35,9 +36,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T, EntityModifier.LivingEntityModifier> implements VPPlayer<T> {
+    @Unique
+    private static final String MINING_FATIGUE_DEFINED_VALUE_NAME = "mining_speed";
+
     @Unique
     protected boolean isProneKeyDown = false;
     @Shadow
@@ -122,5 +127,18 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     @Override
     public float getSecondsToDisableBlocking() {
         return getAttackStrengthScale(0.5F) > 0.9 ? super.getSecondsToDisableBlocking() : 0;
+    }
+
+    @Definition(id = "f1", local = @Local(type = float.class, ordinal = 1))
+    @Expression("f1")
+    @ModifyExpressionValue(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)F",
+            at = @At(value = "MIXINEXTRAS:EXPRESSION"))
+    private float modifyMiningFatigueMultiplier(float multiplier) {
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
+
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
+                .map(levelBasedValuePreset -> 1 + levelBasedValuePreset.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier() + 1))
+                .orElse(multiplier);
     }
 }

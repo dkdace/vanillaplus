@@ -1,0 +1,16 @@
+{
+  "effects": {
+    "minecraft:repair_with_xp": [
+      {
+        "effect": {
+          "type": "minecraft:multiply",
+          "factor": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:enchantment/mending",
+            "name": "amount"
+          }
+        }
+      }
+    ]
+  }
+}

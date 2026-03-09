@@ -1,0 +1,18 @@
+{
+  "values": {
+    "resistance": {
+      "description_index": 0,
+      "description_value_multiplier": 4,
+      "value": {
+        "type": "minecraft:clamped",
+        "max": 20,
+        "min": 0,
+        "value": {
+          "type": "minecraft:linear",
+          "base": 5,
+          "per_level_above_first": 5
+        }
+      }
+    }
+  }
+}

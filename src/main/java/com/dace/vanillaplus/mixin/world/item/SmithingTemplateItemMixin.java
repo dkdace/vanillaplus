@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -27,6 +27,6 @@ public abstract class SmithingTemplateItemMixin extends ItemMixin<SmithingTempla
                                   Consumer<Component> componentConsumer, TooltipFlag tooltipFlag, CallbackInfo ci) {
         Holder<TrimPattern> trimPatternHolder = itemStack.get(VPDataComponentTypes.PROVIDES_TRIM_PATTERN.get());
         if (trimPatternHolder != null)
-            VPTooltipProvider.applyTrimPatternEffectsTooltip(componentConsumer, trimPatternHolder);
+            VPTrimPattern.cast(trimPatternHolder.value()).applyTooltip(componentConsumer);
     }
 }

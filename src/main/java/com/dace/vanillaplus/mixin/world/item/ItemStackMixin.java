@@ -6,7 +6,7 @@ import com.dace.vanillaplus.data.modifier.PotionModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
-import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -265,7 +265,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (registries != null)
             providesTrimMaterial.unwrap(registries).ifPresent(trimMaterialHolder -> {
                 componentConsumer.accept(Component.translatable(COMPONENT_TRIM_MATERIAL).withStyle(ChatFormatting.GRAY));
-                VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, trimMaterialHolder);
+                VPTrimMaterial.cast(trimMaterialHolder.value()).applyTooltip(componentConsumer);
             });
     }
 

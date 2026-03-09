@@ -1,0 +1,22 @@
+{
+  "values": {
+    "damage_per_tick": {
+      "sentiment": "negative",
+      "description_index": 0,
+      "description_value_multiplier": 20,
+      "value": {
+        "type": "vanillaplus:multiply",
+        "first": 0.02,
+        "second": {
+          "type": "minecraft:exponent",
+          "base": 2,
+          "power": {
+            "type": "minecraft:linear",
+            "base": 1,
+            "per_level_above_first": 1
+          }
+        }
+      }
+    }
+  }
+}
