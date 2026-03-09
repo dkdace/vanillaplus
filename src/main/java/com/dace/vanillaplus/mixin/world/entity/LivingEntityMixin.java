@@ -47,6 +47,8 @@ import java.util.Objects;
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
     @Unique
     private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
+    @Unique
+    private static final String JUMP_BOOST_DEFINED_VALUE_NAME = "power";
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -259,5 +261,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
     private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 speed) {
         // 미사용
+    }
+
+    @Expression("0.1 * (? + 1.0)")
+    @ModifyExpressionValue(method = "getJumpBoostPower", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private float modifyJumpBoostPower(float power) {
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
+
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
+                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(JUMP_BOOST_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier() + 1))
+                .orElse(power);
     }
 }

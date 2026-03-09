@@ -22,6 +22,7 @@
     "world.effect.PoisonMobEffectMixin",
     "world.effect.RegenerationMobEffectMixin",
     "world.effect.SaturationMobEffectMixin",
+    "world.effect.WitherMobEffectMixin",
     "world.entity.EntityMixin",
     "world.entity.EntityTypeMixin",
     "world.entity.ExperienceOrbMixin",
