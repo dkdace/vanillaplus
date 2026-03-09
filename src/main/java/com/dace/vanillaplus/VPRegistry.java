@@ -189,6 +189,7 @@ public final class VPRegistry<T> {
         applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
 
         applyLevelBasedValuePreset(registries, Registries.ENCHANTMENT);
+        applyLevelBasedValuePreset(registries, Registries.MOB_EFFECT);
         applyLevelBasedValuePreset(registries, VPRegistry.TRIM_MATERIAL_EFFECT.registryKey);
         applyLevelBasedValuePreset(registries, VPRegistry.TRIM_PATTERN_EFFECT.registryKey);
     }
