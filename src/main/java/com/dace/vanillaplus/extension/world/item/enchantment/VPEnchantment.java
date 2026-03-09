@@ -20,6 +20,8 @@ import java.util.function.Consumer;
 
 /**
  * {@link Enchantment}를 확장하는 인터페이스.
+ *
+ * @see EnchantmentModifier
  */
 public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<Enchantment, EnchantmentModifier>, VPLevelBased<Enchantment> {
     @NonNull

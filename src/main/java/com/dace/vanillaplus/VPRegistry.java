@@ -42,7 +42,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -207,10 +206,8 @@ public final class VPRegistry<T> {
 
     private static <T> void applyLevelBasedValuePreset(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey) {
         registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
-            Identifier identifier = IdentifierUtil.fromPath(registryKey.identifier().getPath() + "/" +
-                    Objects.requireNonNull(element.key().identifier().getPath()));
-
-            LevelBasedValuePreset levelBasedValuePreset = registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(identifier))
+            LevelBasedValuePreset levelBasedValuePreset = registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET
+                            .createResourceKey(IdentifierUtil.concat(registryKey.identifier(), element.key().identifier())))
                     .map(Holder::value)
                     .orElse(null);
 

@@ -13,7 +13,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -52,9 +51,7 @@ public abstract class ArmorTrimEffect<T> implements VPLevelBased<T> {
                 builder.withSpecialEffect((DataComponentType) typedDataComponent.type(), typedDataComponent.value()));
 
         ResourceKey<T> resourceKey = holder.unwrapKey().orElseThrow();
-        Identifier identifier = IdentifierUtil.fromPath(resourceKey.registry().getPath() + "/" + resourceKey.identifier().getPath());
-
-        this.enchantmentHolder = Holder.direct(builder.build(identifier));
+        this.enchantmentHolder = Holder.direct(builder.build(IdentifierUtil.concat(resourceKey.registry(), resourceKey.identifier())));
     }
 
     @SubscribeEvent
