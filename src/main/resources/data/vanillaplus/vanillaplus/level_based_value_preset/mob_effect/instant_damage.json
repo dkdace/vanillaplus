@@ -1,0 +1,21 @@
+{
+  "values": {
+    "amount": {
+      "sentiment": "negative",
+      "description_index": 0,
+      "value": {
+        "type": "vanillaplus:multiply",
+        "first": 3,
+        "second": {
+          "type": "minecraft:exponent",
+          "base": 2,
+          "power": {
+            "type": "minecraft:linear",
+            "base": 1,
+            "per_level_above_first": 1
+          }
+        }
+      }
+    }
+  }
+}
