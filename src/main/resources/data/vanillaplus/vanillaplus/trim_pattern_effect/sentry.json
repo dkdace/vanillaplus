@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/sentry",
+            "value": "vanillaplus:trim_pattern_effect/sentry",
             "name": "damage_reduction"
           }
         },

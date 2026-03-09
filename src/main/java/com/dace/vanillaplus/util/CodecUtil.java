@@ -1,12 +1,15 @@
 package com.dace.vanillaplus.util;
 
 import com.dace.vanillaplus.VPRegistry;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -37,6 +40,20 @@ public final class CodecUtil {
     @NonNull
     public <T extends CodecComponent<T>> Codec<T> fromCodecRegistry(@NonNull VPRegistry<MapCodec<? extends T>> vpRegistry) {
         return vpRegistry.createByNameCodec().dispatch(CodecComponent::getCodec, Function.identity());
+    }
+
+    /**
+     * 지정한 코덱에 {@link Optional}을 적용하여 반환한다.
+     *
+     * @param codec 코덱
+     * @param <T>   값의 타입
+     * @return {@link Codec}
+     */
+    @NonNull
+    public static <T> Codec<Optional<T>> optional(@NonNull Codec<T> codec) {
+        return Codec.xor(codec, Codec.EMPTY.codec())
+                .xmap(to -> to.map(Optional::of, unit -> Optional.empty()),
+                        from -> from.map(Either::<T, Unit>left).orElse(Either.right(Unit.INSTANCE)));
     }
 
     /**

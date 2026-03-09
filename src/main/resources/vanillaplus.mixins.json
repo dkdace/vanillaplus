@@ -95,6 +95,7 @@
     "world.item.crafting.RepairItemRecipeMixin",
     "world.item.enchantment.EnchantmentHelperMixin",
     "world.item.enchantment.EnchantmentMixin",
+    "world.item.enchantment.EnchantmentMixin$EnchantmentDefinitionMixin",
     "world.item.enchantment.ItemEnchantmentsMixin",
     "world.item.equipment.trim.ArmorTrimMixin",
     "world.item.equipment.trim.TrimMaterialMixin",

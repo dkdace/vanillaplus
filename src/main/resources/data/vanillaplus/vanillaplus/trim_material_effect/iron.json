@@ -5,7 +5,7 @@
       "type": "minecraft:add",
       "value": {
         "type": "vanillaplus:preset",
-        "value": "vanillaplus:trim_material/iron",
+        "value": "vanillaplus:trim_material_effect/iron",
         "name": "amount"
       }
     }

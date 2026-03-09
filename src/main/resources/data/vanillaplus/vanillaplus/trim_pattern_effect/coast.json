@@ -7,7 +7,7 @@
           "type": "minecraft:attribute",
           "amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/coast",
+            "value": "vanillaplus:trim_pattern_effect/coast",
             "name": "speed"
           },
           "attribute": "forge:swim_speed",

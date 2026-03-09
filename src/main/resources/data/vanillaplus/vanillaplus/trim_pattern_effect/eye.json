@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/eye",
+            "value": "vanillaplus:trim_pattern_effect/eye",
             "name": "damage_reduction"
           }
         },
@@ -26,12 +26,12 @@
           "type": "vanillaplus:heal_entity",
           "min_amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/eye",
+            "value": "vanillaplus:trim_pattern_effect/eye",
             "name": "heal"
           },
           "max_amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/eye",
+            "value": "vanillaplus:trim_pattern_effect/eye",
             "name": "heal"
           }
         },

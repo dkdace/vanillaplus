@@ -7,12 +7,12 @@
           "type": "vanillaplus:heal_entity",
           "min_amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/host",
+            "value": "vanillaplus:trim_pattern_effect/host",
             "name": "heal"
           },
           "max_amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/host",
+            "value": "vanillaplus:trim_pattern_effect/host",
             "name": "heal"
           }
         },

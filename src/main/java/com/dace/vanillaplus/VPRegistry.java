@@ -2,6 +2,7 @@ package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
+import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
 import com.dace.vanillaplus.util.IdentifierUtil;
@@ -41,6 +42,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -105,6 +107,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
     /** 물약 수정자 */
     public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
+    /** 마법 부여 수정자 */
+    public static final VPRegistry<EnchantmentModifier> ENCHANTMENT_MODIFIER = new VPRegistry<>("modifier/enchantment");
 
     static {
         VanillaPlus.loadClass(VPSoundEvents.class);
@@ -181,12 +185,13 @@ public final class VPRegistry<T> {
         applyDataModifiers(registries, Registries.BLOCK, VPRegistry.BLOCK_MODIFIER);
         applyDataModifiers(registries, Registries.ENTITY_TYPE, VPRegistry.ENTITY_MODIFIER);
         applyDataModifiers(registries, Registries.POTION, VPRegistry.POTION_MODIFIER);
-        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.LEVEL_BASED_VALUE_PRESET);
+        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.ENCHANTMENT_MODIFIER);
         applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
         applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
 
-        applyArmorTrimEffects(registries, VPRegistry.TRIM_MATERIAL_EFFECT);
-        applyArmorTrimEffects(registries, VPRegistry.TRIM_PATTERN_EFFECT);
+        applyLevelBasedValuePreset(registries, Registries.ENCHANTMENT);
+        applyLevelBasedValuePreset(registries, VPRegistry.TRIM_MATERIAL_EFFECT.registryKey);
+        applyLevelBasedValuePreset(registries, VPRegistry.TRIM_PATTERN_EFFECT.registryKey);
     }
 
     private static <T, U> void applyDataModifiers(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey,
@@ -200,12 +205,17 @@ public final class VPRegistry<T> {
         });
     }
 
-    private static <T extends ArmorTrimEffect<?>> void applyArmorTrimEffects(@NonNull HolderLookup.Provider registries,
-                                                                             @NonNull VPRegistry<T> vpRegistry) {
-        registries.lookupOrThrow(vpRegistry.registryKey).listElements().forEach(element ->
-                registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(element.value().getIdentifier()))
-                        .ifPresent(levelBasedValuePresetHolder ->
-                                element.value().applyLevelBasedValuePreset(levelBasedValuePresetHolder.value())));
+    private static <T> void applyLevelBasedValuePreset(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey) {
+        registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
+            Identifier identifier = IdentifierUtil.fromPath(registryKey.identifier().getPath() + "/" +
+                    Objects.requireNonNull(element.key().identifier().getPath()));
+
+            LevelBasedValuePreset levelBasedValuePreset = registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(identifier))
+                    .map(Holder::value)
+                    .orElse(null);
+
+            VPLevelBased.cast(element.value()).setLevelBasedValuePreset(levelBasedValuePreset);
+        });
     }
 
     /**

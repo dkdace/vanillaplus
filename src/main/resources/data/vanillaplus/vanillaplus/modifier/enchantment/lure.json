@@ -1,0 +1,16 @@
+{
+  "effects": {
+    "minecraft:fishing_time_reduction": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:enchantment/lure",
+            "name": "time_reduction"
+          }
+        }
+      }
+    ]
+  }
+}

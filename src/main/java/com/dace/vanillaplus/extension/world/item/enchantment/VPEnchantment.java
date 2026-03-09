@@ -1,26 +1,40 @@
 package com.dace.vanillaplus.extension.world.item.enchantment;
 
-import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.modifier.EnchantmentModifier;
+import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
+import java.util.function.Consumer;
+
 /**
  * {@link Enchantment}를 확장하는 인터페이스.
  */
-public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<Enchantment, LevelBasedValuePreset> {
+public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<Enchantment, EnchantmentModifier>, VPLevelBased<Enchantment> {
     @NonNull
     static VPEnchantment cast(@NonNull Enchantment object) {
         return (VPEnchantment) (Object) object;
     }
+
+    /**
+     * 마법 부여의 효과에 대한 툴팁을 적용한다.
+     *
+     * @param componentConsumer    {@link TooltipProvider}의 텍스트 요소 Consumer
+     * @param descriptionComponent 설명 텍스트 요소
+     * @param level                마법 부여 레벨
+     */
+    void applyTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent, int level);
 
     /**
      * 획득 경험치 배수 수치를 적용한다.
@@ -122,4 +136,21 @@ public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<En
      */
     void runPostDamageEffects(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull EnchantedItemInUse enchantedItemInUse,
                               @NonNull Entity entity, @NonNull DamageSource damageSource);
+
+    /**
+     * {@link Enchantment.EnchantmentDefinition}를 확장하는 인터페이스.
+     */
+    interface VPEnchantmentDefinition extends VPMixin<VPEnchantment> {
+        @NonNull
+        static VPEnchantmentDefinition cast(@NonNull Enchantment.EnchantmentDefinition object) {
+            return (VPEnchantmentDefinition) (Object) object;
+        }
+
+        /**
+         * 수정자의 마법 부여 설정을 적용한다.
+         *
+         * @param enchantmentDefinition 마법 부여 설정
+         */
+        void set(@NonNull EnchantmentModifier.EnchantmentDefinition enchantmentDefinition);
+    }
 }

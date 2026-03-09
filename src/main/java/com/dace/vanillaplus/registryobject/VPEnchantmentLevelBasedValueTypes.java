@@ -27,7 +27,7 @@ public final class VPEnchantmentLevelBasedValueTypes {
 
         @Override
         public float calculate(int level) {
-            return levelBasedValuePresetHolder.value().getValue(name).getLevelBasedValue().calculate(level);
+            return levelBasedValuePresetHolder.value().calculate(name, level);
         }
 
         @Override
