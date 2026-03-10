@@ -143,6 +143,7 @@
     "client.gui.contextualbar.LocatorBarRendererMixin",
     "client.gui.screens.ScreenMixin",
     "client.gui.screens.inventory.AbstractContainerScreenMixin",
+    "client.gui.screens.inventory.AnvilScreenMixin",
     "client.gui.screens.inventory.BrewingStandScreenMixin",
     "client.gui.screens.inventory.MerchantScreenMixin",
     "client.gui.screens.options.controls.ControlsScreenMixin",
