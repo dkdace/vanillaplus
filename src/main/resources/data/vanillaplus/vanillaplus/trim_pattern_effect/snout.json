@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/snout",
+            "value": "vanillaplus:trim_pattern_effect/snout",
             "name": "damage_reduction"
           }
         },

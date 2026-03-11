@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_material/gold",
+            "value": "vanillaplus:trim_material_effect/gold",
             "name": "chance"
           }
         }

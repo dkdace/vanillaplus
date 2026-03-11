@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -13,6 +14,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,8 +41,14 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
+    @Unique
+    private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
+    @Unique
+    private static final String JUMP_BOOST_DEFINED_VALUE_NAME = "power";
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -74,6 +84,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @Shadow
     public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
+
+    @Shadow
+    @Nullable
+    public abstract MobEffectInstance getEffect(Holder<MobEffect> mobEffectHolder);
 
     @Shadow
     protected abstract boolean shouldDropLoot(ServerLevel serverLevel);
@@ -168,6 +182,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - damageResistance) : damage);
     }
 
+    @Definition(id = "i", local = @Local(type = int.class))
+    @Expression("i")
+    @ModifyExpressionValue(method = "getDamageAfterMagicAbsorb", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private int modifyResistanceMultiplier(int multiplier) {
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
+
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
+                .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(RESISTANCE_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier() + 1))
+                .orElse(multiplier);
+    }
+
     @ModifyReturnValue(method = "getDamageAfterMagicAbsorb", at = @At(value = "RETURN", ordinal = 3))
     private float modifyFinalDamage(float damage, @Local(argsOnly = true) DamageSource damageSource) {
         if (!(level() instanceof ServerLevel serverLevel))
@@ -235,5 +261,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
     private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 speed) {
         // 미사용
+    }
+
+    @Expression("0.1 * (? + 1.0)")
+    @ModifyExpressionValue(method = "getJumpBoostPower", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private float modifyJumpBoostPower(float power) {
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
+
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
+                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(JUMP_BOOST_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier() + 1))
+                .orElse(power);
     }
 }

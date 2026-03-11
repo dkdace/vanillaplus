@@ -1,6 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item.equipment.trim;
 
-import com.dace.vanillaplus.extension.world.item.component.VPTooltipProvider;
+import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
@@ -19,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(ArmorTrim.class)
-public abstract class ArmorTrimMixin implements VPTooltipProvider<ArmorTrim> {
+public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
     @Shadow
     @Final
     private Holder<TrimPattern> pattern;
@@ -31,13 +33,13 @@ public abstract class ArmorTrimMixin implements VPTooltipProvider<ArmorTrim> {
             shift = At.Shift.AFTER))
     private void addTrimPatternEffectTooltip(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                              DataComponentGetter dataComponentGetter, CallbackInfo ci) {
-        VPTooltipProvider.applyTrimPatternEffectsTooltip(componentConsumer, pattern);
+        VPTrimPattern.cast(pattern.value()).applyTooltip(componentConsumer);
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 2,
             shift = At.Shift.AFTER))
     private void addTrimMaterialEffectTooltip(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
                                               DataComponentGetter dataComponentGetter, CallbackInfo ci) {
-        VPTooltipProvider.applyTrimMaterialEffectsTooltip(componentConsumer, material);
+        VPTrimMaterial.cast(material.value()).applyTooltip(componentConsumer);
     }
 }

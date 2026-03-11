@@ -1,0 +1,16 @@
+{
+  "effects": {
+    "minecraft:item_damage": [
+      {
+        "effect": {
+          "type": "minecraft:remove_binomial",
+          "chance": {
+            "type": "vanillaplus:preset",
+            "value": "vanillaplus:enchantment/unbreaking",
+            "name": "chance"
+          }
+        }
+      }
+    ]
+  }
+}

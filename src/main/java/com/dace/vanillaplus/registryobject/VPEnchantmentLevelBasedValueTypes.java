@@ -17,6 +17,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 public final class VPEnchantmentLevelBasedValueTypes {
     static {
         VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
+        VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("multiply", () -> Multiply.TYPED_CODEC);
     }
 
     private record Preset(@NonNull Holder<LevelBasedValuePreset> levelBasedValuePresetHolder, @NonNull String name) implements LevelBasedValue {
@@ -27,12 +28,30 @@ public final class VPEnchantmentLevelBasedValueTypes {
 
         @Override
         public float calculate(int level) {
-            return levelBasedValuePresetHolder.value().getValue(name).getLevelBasedValue().calculate(level);
+            return levelBasedValuePresetHolder.value().calculate(name, level);
         }
 
         @Override
         @NonNull
         public MapCodec<Preset> codec() {
+            return TYPED_CODEC;
+        }
+    }
+
+    private record Multiply(@NonNull LevelBasedValue first, @NonNull LevelBasedValue second) implements LevelBasedValue {
+        private static final MapCodec<Multiply> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+                .group(LevelBasedValue.CODEC.fieldOf("first").forGetter(Multiply::first),
+                        LevelBasedValue.CODEC.fieldOf("second").forGetter(Multiply::second))
+                .apply(instance, Multiply::new));
+
+        @Override
+        public float calculate(int level) {
+            return first.calculate(level) * second.calculate(level);
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<Multiply> codec() {
             return TYPED_CODEC;
         }
     }

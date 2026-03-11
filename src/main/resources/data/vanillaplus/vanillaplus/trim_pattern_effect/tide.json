@@ -7,7 +7,7 @@
           "type": "minecraft:attribute",
           "amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/tide",
+            "value": "vanillaplus:trim_pattern_effect/tide",
             "name": "speed"
           },
           "attribute": "minecraft:movement_speed",
@@ -29,7 +29,7 @@
           "type": "minecraft:attribute",
           "amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/tide",
+            "value": "vanillaplus:trim_pattern_effect/tide",
             "name": "speed"
           },
           "attribute": "forge:swim_speed",

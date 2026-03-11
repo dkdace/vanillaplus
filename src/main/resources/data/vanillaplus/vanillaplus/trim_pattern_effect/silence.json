@@ -15,7 +15,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/silence",
+            "value": "vanillaplus:trim_pattern_effect/silence",
             "name": "visibility"
           }
         }
@@ -27,7 +27,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/silence",
+            "value": "vanillaplus:trim_pattern_effect/silence",
             "name": "heal"
           }
         }

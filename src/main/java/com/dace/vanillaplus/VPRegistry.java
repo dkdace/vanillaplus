@@ -2,6 +2,7 @@ package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.*;
 import com.dace.vanillaplus.data.modifier.*;
+import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
 import com.dace.vanillaplus.util.IdentifierUtil;
@@ -20,6 +21,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -57,6 +59,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends LevelBasedValue>> ENCHANTMENT_LEVEL_BASED_VALUE_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     /** 데이터 요소 타입 */
     public static final VPRegistry<DataComponentType<?>> DATA_COMPONENT_TYPE = new VPRegistry<>(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    /** 아이템 */
+    public static final VPRegistry<Item> ITEM = new VPRegistry<>(BuiltInRegistries.ITEM);
     /** 제작법 타입 */
     public static final VPRegistry<RecipeType<?>> RECIPE_TYPE = new VPRegistry<>(BuiltInRegistries.RECIPE_TYPE);
     /** 제작법 직렬화 처리기 */
@@ -102,12 +106,15 @@ public final class VPRegistry<T> {
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
     /** 물약 수정자 */
     public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
+    /** 마법 부여 수정자 */
+    public static final VPRegistry<EnchantmentModifier> ENCHANTMENT_MODIFIER = new VPRegistry<>("modifier/enchantment");
 
     static {
         VanillaPlus.loadClass(VPSoundEvents.class);
         VanillaPlus.loadClass(VPAttributes.class);
         VanillaPlus.loadClass(VPEnchantmentLevelBasedValueTypes.class);
         VanillaPlus.loadClass(VPDataComponentTypes.class);
+        VanillaPlus.loadClass(VPItems.class);
         VanillaPlus.loadClass(VPRecipeTypes.class);
         VanillaPlus.loadClass(VPRecipeSerializers.class);
         VanillaPlus.loadClass(VPRecipeBookCategories.class);
@@ -177,17 +184,18 @@ public final class VPRegistry<T> {
         applyDataModifiers(registries, Registries.BLOCK, VPRegistry.BLOCK_MODIFIER);
         applyDataModifiers(registries, Registries.ENTITY_TYPE, VPRegistry.ENTITY_MODIFIER);
         applyDataModifiers(registries, Registries.POTION, VPRegistry.POTION_MODIFIER);
-        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.LEVEL_BASED_VALUE_PRESET);
+        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.ENCHANTMENT_MODIFIER);
         applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
         applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
 
-        applyArmorTrimEffects(registries, VPRegistry.TRIM_MATERIAL_EFFECT);
-        applyArmorTrimEffects(registries, VPRegistry.TRIM_PATTERN_EFFECT);
+        applyLevelBasedValuePreset(registries, Registries.ENCHANTMENT);
+        applyLevelBasedValuePreset(registries, Registries.MOB_EFFECT);
+        applyLevelBasedValuePreset(registries, VPRegistry.TRIM_MATERIAL_EFFECT.registryKey);
+        applyLevelBasedValuePreset(registries, VPRegistry.TRIM_PATTERN_EFFECT.registryKey);
     }
 
-    private static <T, U extends DataModifier<T>> void applyDataModifiers(@NonNull HolderLookup.Provider registries,
-                                                                          @NonNull ResourceKey<Registry<T>> registryKey,
-                                                                          @NonNull VPRegistry<U> vpRegistry) {
+    private static <T, U> void applyDataModifiers(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey,
+                                                  @NonNull VPRegistry<U> vpRegistry) {
         registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
             U dataModifier = registries.get(vpRegistry.createResourceKey(IdentifierUtil.fromResourceKey(element.key())))
                     .map(Holder::value)
@@ -197,12 +205,15 @@ public final class VPRegistry<T> {
         });
     }
 
-    private static <T extends ArmorTrimEffect<?>> void applyArmorTrimEffects(@NonNull HolderLookup.Provider registries,
-                                                                             @NonNull VPRegistry<T> vpRegistry) {
-        registries.lookupOrThrow(vpRegistry.registryKey).listElements().forEach(element ->
-                registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET.createResourceKey(element.value().getIdentifier()))
-                        .ifPresent(levelBasedValuePresetHolder ->
-                                element.value().applyLevelBasedValuePreset(levelBasedValuePresetHolder.value())));
+    private static <T> void applyLevelBasedValuePreset(@NonNull HolderLookup.Provider registries, @NonNull ResourceKey<Registry<T>> registryKey) {
+        registries.lookupOrThrow(registryKey).listElements().forEach(element -> {
+            LevelBasedValuePreset levelBasedValuePreset = registries.get(VPRegistry.LEVEL_BASED_VALUE_PRESET
+                            .createResourceKey(IdentifierUtil.concat(registryKey.identifier(), element.key().identifier())))
+                    .map(Holder::value)
+                    .orElse(null);
+
+            VPLevelBased.cast(element.value()).setLevelBasedValuePreset(levelBasedValuePreset);
+        });
     }
 
     /**

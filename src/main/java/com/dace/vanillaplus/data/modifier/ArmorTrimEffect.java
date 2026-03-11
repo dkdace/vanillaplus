@@ -2,6 +2,7 @@ package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
@@ -12,7 +13,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -22,6 +22,9 @@ import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * 갑옷 장식의 효과를 관리하는 클래스.
@@ -29,16 +32,13 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
  * @param <T> 갑옷 장식 재료 ({@link TrimMaterial}) 또는 형판 ({@link TrimPattern})
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public abstract class ArmorTrimEffect<T> implements DataModifier<T> {
+public abstract class ArmorTrimEffect<T> implements VPLevelBased<T> {
     /** 재료/형판 홀더 인스턴스 */
     final Holder<T> holder;
     /** 마법 부여 홀더 인스턴스 */
     @NonNull
     @Getter
     final Holder<Enchantment> enchantmentHolder;
-    /** 마법 부여 식별자 */
-    @Getter
-    private final Identifier identifier;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private ArmorTrimEffect(@NonNull Holder<T> holder, @NonNull DataComponentMap effectMap) {
@@ -51,9 +51,7 @@ public abstract class ArmorTrimEffect<T> implements DataModifier<T> {
                 builder.withSpecialEffect((DataComponentType) typedDataComponent.type(), typedDataComponent.value()));
 
         ResourceKey<T> resourceKey = holder.unwrapKey().orElseThrow();
-
-        this.identifier = IdentifierUtil.fromPath(resourceKey.registry().getPath() + "/" + resourceKey.identifier().getPath());
-        this.enchantmentHolder = Holder.direct(builder.build(identifier));
+        this.enchantmentHolder = Holder.direct(builder.build(IdentifierUtil.concat(resourceKey.registry(), resourceKey.identifier())));
     }
 
     @SubscribeEvent
@@ -62,13 +60,15 @@ public abstract class ArmorTrimEffect<T> implements DataModifier<T> {
         event.dataPackRegistry(VPRegistry.TRIM_PATTERN_EFFECT.getRegistryKey(), TrimPatternEffect.DIRECT_CODEC, TrimPatternEffect.DIRECT_CODEC);
     }
 
-    /**
-     * 마법 부여에 레벨 기반 값 프리셋을 적용한다.
-     *
-     * @param levelBasedValuePreset 레벨 기반 값 프리셋
-     */
-    public final void applyLevelBasedValuePreset(@NonNull LevelBasedValuePreset levelBasedValuePreset) {
-        VPEnchantment.cast(enchantmentHolder.value()).setDataModifier(levelBasedValuePreset);
+    @Override
+    @NonNull
+    public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
+        return VPEnchantment.cast(enchantmentHolder.value()).getLevelBasedValuePreset();
+    }
+
+    @Override
+    public void setLevelBasedValuePreset(@Nullable LevelBasedValuePreset dataModifier) {
+        VPEnchantment.cast(enchantmentHolder.value()).setLevelBasedValuePreset(dataModifier);
     }
 
     /**

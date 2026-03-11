@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_material/lapis",
+            "value": "vanillaplus:trim_material_effect/lapis",
             "name": "amount"
           }
         }

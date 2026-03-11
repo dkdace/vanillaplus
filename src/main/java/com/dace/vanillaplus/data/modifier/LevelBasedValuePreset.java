@@ -2,28 +2,37 @@ package com.dace.vanillaplus.data.modifier;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 
 /**
  * 레벨 기반 값 프리셋을 관리하는 클래스.
  */
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class LevelBasedValuePreset implements DataModifier<Enchantment> {
+public final class LevelBasedValuePreset {
     /** 레지스트리 코덱 */
     public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */
@@ -37,7 +46,7 @@ public final class LevelBasedValuePreset implements DataModifier<Enchantment> {
     private final TreeMap<String, DefinedValue> definedValueMap;
 
     private LevelBasedValuePreset(@NonNull Map<String, DefinedValue> definedValueMap) {
-        this.definedValueMap = new TreeMap<>(Comparator.comparing(k -> definedValueMap.get(k).getDescriptionIndex()));
+        this.definedValueMap = new TreeMap<>(Comparator.comparing(k -> definedValueMap.get(k).descriptionIndex));
         this.definedValueMap.putAll(definedValueMap);
     }
 
@@ -47,40 +56,75 @@ public final class LevelBasedValuePreset implements DataModifier<Enchantment> {
     }
 
     /**
-     * @return 사전 정의된 값 목록
+     * 레벨 기반 값에 대한 아이템 툴팁을 추가한다.
+     *
+     * @param componentConsumer    {@link TooltipProvider}의 텍스트 요소 Consumer
+     * @param descriptionComponent 설명 텍스트 요소
+     * @param level                마법 부여 레벨
      */
-    @NonNull
-    @UnmodifiableView
-    public Collection<DefinedValue> getValues() {
-        return Collections.unmodifiableCollection(definedValueMap.values());
+    public void applyTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent, int level) {
+        if (descriptionComponent.getContents() instanceof TranslatableContents translatableContents)
+            definedValueMap.values().forEach(definedValue -> {
+                String key = translatableContents.getKey() + ".description." + definedValue.descriptionIndex;
+                float value = definedValue.levelBasedValue.calculate(level);
+                String argument = ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value * definedValue.descriptionValueMultiplier);
+
+                MutableComponent component = Component.translatable(key, argument);
+
+                componentConsumer.accept(CommonComponents.space().append(component)
+                        .withStyle(definedValue.sentiment.attributeSentiment.getStyle(value > 0)));
+            });
     }
 
     /**
-     * 지정한 이름에 해당하는 사전 정의된 값을 반환한다.
+     * 지정한 이름에 해당하는 레벨 기반 값을 계산하여 반환한다.
      *
-     * @param name 이름
-     * @return 사전 정의된 값
-     * @throws NullPointerException 해당하는 사전 정의된 값이 존재하지 않으면 발생
+     * @param name  이름
+     * @param level 레벨
+     * @return 계산된 값
+     * @throws NullPointerException 해당하는 레벨 기반 값이 존재하지 않으면 발생
      */
-    @NonNull
-    public DefinedValue getValue(@NonNull String name) {
-        return Objects.requireNonNull(definedValueMap.get(name));
+    public float calculate(@NonNull String name, int level) {
+        return Objects.requireNonNull(definedValueMap.get(name)).levelBasedValue.calculate(level);
+    }
+
+    /**
+     * 레벨 기반 값의 유형.
+     */
+    @AllArgsConstructor
+    public enum Sentiment {
+        /** 이로운 효과 */
+        POSITIVE(Attribute.Sentiment.POSITIVE),
+        /** 중립 효과 */
+        NEUTRAL(Attribute.Sentiment.NEUTRAL),
+        /** 해로운 효과 */
+        NEGATIVE(Attribute.Sentiment.NEGATIVE);
+
+        /** JSON 코덱 */
+        private static final Codec<Sentiment> CODEC = CodecUtil.fromEnum(Sentiment.class);
+
+        /** 색상 */
+        private final Attribute.Sentiment attributeSentiment;
     }
 
     /**
      * 사전 정의된 값 클래스.
      */
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @Getter
-    public static final class DefinedValue {
+    private static final class DefinedValue {
         /** JSON 코덱 */
         private static final Codec<DefinedValue> CODEC = RecordCodecBuilder.create(instance -> instance
-                .group(ExtraCodecs.NON_NEGATIVE_INT.fieldOf("description_index").forGetter(DefinedValue::getDescriptionIndex),
+                .group(Sentiment.CODEC.optionalFieldOf("sentiment", Sentiment.POSITIVE)
+                                .forGetter(definedValue -> definedValue.sentiment),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("description_index")
+                                .forGetter(definedValue -> definedValue.descriptionIndex),
                         Codec.FLOAT.optionalFieldOf("description_value_multiplier", 1F)
-                                .forGetter(DefinedValue::getDescriptionValueMultiplier),
-                        LevelBasedValue.CODEC.fieldOf("value").forGetter(DefinedValue::getLevelBasedValue))
+                                .forGetter(definedValue -> definedValue.descriptionValueMultiplier),
+                        LevelBasedValue.CODEC.fieldOf("value").forGetter(definedValue -> definedValue.levelBasedValue))
                 .apply(instance, DefinedValue::new));
 
+        /** 효과 유형 */
+        private final Sentiment sentiment;
         /** 설명 포맷 인덱스 */
         private final int descriptionIndex;
         /** 설명 표시 값에 적용되는 배수 */

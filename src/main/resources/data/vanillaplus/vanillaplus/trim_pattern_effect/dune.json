@@ -7,7 +7,7 @@
           "type": "minecraft:attribute",
           "amount": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/dune",
+            "value": "vanillaplus:trim_pattern_effect/dune",
             "name": "speed"
           },
           "attribute": "minecraft:movement_speed",

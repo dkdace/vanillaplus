@@ -15,8 +15,8 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.BellBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -24,13 +24,15 @@ import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataPackRegistryEvent;
 
+import java.util.Optional;
+
 /**
  * 블록의 요소를 수정하는 블록 수정자 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecComponent<BlockModifier> {
+public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
     /** 코덱 레지스트리 */
     private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");
     /** 유형별 코덱 */
@@ -44,6 +46,7 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
         CODEC_REGISTRY.register("water_cauldron", () -> WaterCauldronModifier.CODEC);
         CODEC_REGISTRY.register("cake", () -> CakeModifier.CODEC);
+        CODEC_REGISTRY.register("anvil", () -> AnvilModifier.CODEC);
     }
 
     /** 블록 속성 */
@@ -167,6 +170,40 @@ public class BlockModifier implements DataModifier<Block>, CodecUtil.CodecCompon
         private CakeModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange, @NonNull FoodProperties foodProperties) {
             super(properties, xpRange);
             this.foodProperties = foodProperties;
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends BlockModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link AnvilBlock}의 블록 수정자 클래스.
+     */
+    @Getter
+    public static final class AnvilModifier extends BlockModifier {
+        private static final MapCodec<AnvilModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("cost_penalty", 1)
+                                        .forGetter(AnvilModifier::getCostPenalty),
+                                CodecUtil.optional(ExtraCodecs.POSITIVE_INT).optionalFieldOf("max_cost", Optional.of(39))
+                                        .forGetter(AnvilModifier::getMaxCost)))
+                        .apply(instance, AnvilModifier::new));
+
+        /** 사용 횟수당 작업 가격 증가량 */
+        private final int costPenalty;
+        /** 최대 작업 가격 */
+        @NonNull
+        private final Optional<Integer> maxCost;
+
+        private AnvilModifier(@NonNull BlockBehaviour.Properties properties, @NonNull IntProvider xpRange, int costPenalty,
+                              @NonNull Optional<Integer> maxCost) {
+            super(properties, xpRange);
+
+            this.costPenalty = costPenalty;
+            this.maxCost = maxCost;
         }
 
         @Override

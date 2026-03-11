@@ -7,7 +7,7 @@
           "type": "minecraft:add",
           "value": {
             "type": "vanillaplus:preset",
-            "value": "vanillaplus:trim_pattern/rib",
+            "value": "vanillaplus:trim_pattern_effect/rib",
             "name": "damage_reduction"
           }
         },

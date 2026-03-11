@@ -55,7 +55,7 @@ public final class VPAttributes {
     public static final RegistryObject<Attribute> VIBRATION_TRANSMIT_RANGE = create("vibration_transmit_range",
             new RangedAttribute("attribute.name.vibration_transmit_range", 1, 0, 4)
                     .setSyncable(true)
-                    .setSentiment(Attribute.Sentiment.NEGATIVE));
+                    .setSentiment(Attribute.Sentiment.NEUTRAL));
     public static final RegistryObject<Attribute> ELYTRA_FLYING_SPEED_MULTIPLIER = create("elytra_flying_speed_multiplier",
             new RangedAttribute("attribute.name.elytra_flying_speed_multiplier", 1, 0, 1024)
                     .setSyncable(true));
