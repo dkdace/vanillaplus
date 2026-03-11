@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 
 /**
  * {@link TrimMaterial}를 확장하는 인터페이스.
+ *
+ * @see ArmorTrimEffect.TrimMaterialEffect
  */
 public interface VPTrimMaterial extends VPMixin<TrimMaterial>, VPModifiableData<TrimMaterial, ArmorTrimEffect.TrimMaterialEffect> {
     @NonNull

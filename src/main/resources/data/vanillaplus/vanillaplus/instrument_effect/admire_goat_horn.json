@@ -1,0 +1,7 @@
+{
+  "effect": {
+    "id": "minecraft:instant_health",
+    "amplifier": 0,
+    "duration": 1
+  }
+}

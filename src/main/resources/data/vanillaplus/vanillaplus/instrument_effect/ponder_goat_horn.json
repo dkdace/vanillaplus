@@ -1,0 +1,7 @@
+{
+  "effect": {
+    "id": "minecraft:slow_falling",
+    "amplifier": 0,
+    "duration": 400
+  }
+}

@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 
 /**
  * {@link TrimPattern}를 확장하는 인터페이스.
+ *
+ * @see ArmorTrimEffect.TrimPatternEffect
  */
 public interface VPTrimPattern extends VPMixin<TrimPattern>, VPModifiableData<TrimPattern, ArmorTrimEffect.TrimPatternEffect> {
     @NonNull
