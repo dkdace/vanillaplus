@@ -96,6 +96,7 @@
     "world.item.alchemy.PotionContentsMixin",
     "world.item.alchemy.PotionMixin",
     "world.item.component.AttackRangeMixin",
+    "world.item.component.InstrumentComponentMixin",
     "world.item.component.ItemAttributeModifiersMixin",
     "world.item.component.ItemAttributeModifiersMixin$DefaultDisplayMixin",
     "world.item.component.OminousBottleAmplifierMixin",
