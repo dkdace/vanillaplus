@@ -81,7 +81,6 @@
     "world.inventory.AnvilMenuMixin",
     "world.inventory.BrewingStandMenuMixin",
     "world.inventory.BrewingStandMenuMixin$PotionSlotMixin",
-    "world.inventory.EnchantmentMenuMixin",
     "world.inventory.GrindstoneMenuMixin",
     "world.item.BowItemMixin",
     "world.item.CreativeModeTabsMixin",
