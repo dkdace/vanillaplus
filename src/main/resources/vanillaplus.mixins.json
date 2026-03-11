@@ -86,6 +86,7 @@
     "world.item.CreativeModeTabsMixin",
     "world.item.CrossbowItemMixin",
     "world.item.FireChargeItemMixin",
+    "world.item.InstrumentItemMixin",
     "world.item.InstrumentMixin",
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
