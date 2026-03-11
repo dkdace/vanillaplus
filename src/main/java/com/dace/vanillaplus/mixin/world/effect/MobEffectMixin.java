@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.effect;
 
-import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import lombok.NonNull;
 import lombok.Setter;

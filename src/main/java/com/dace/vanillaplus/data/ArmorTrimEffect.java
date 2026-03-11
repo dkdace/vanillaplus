@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.data.modifier;
+package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VPRegistry;
 import com.dace.vanillaplus.VanillaPlus;

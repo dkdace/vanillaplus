@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.dace.vanillaplus.data.modifier.EnchantmentModifier;
-import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;

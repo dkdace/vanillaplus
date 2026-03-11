@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension.world.item.equipment.trim;
 
-import com.dace.vanillaplus.data.modifier.ArmorTrimEffect;
+import com.dace.vanillaplus.data.ArmorTrimEffect;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import lombok.NonNull;
