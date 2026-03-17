@@ -1,7 +1,7 @@
 {
   "effect": {
     "id": "minecraft:regeneration",
-    "amplifier": 0,
+    "amplifier": 1,
     "duration": 300
   }
 }

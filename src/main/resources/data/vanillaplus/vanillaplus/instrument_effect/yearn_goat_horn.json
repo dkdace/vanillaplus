@@ -2,6 +2,6 @@
   "effect": {
     "id": "minecraft:strength",
     "amplifier": 0,
-    "duration": 300
+    "duration": 400
   }
 }
