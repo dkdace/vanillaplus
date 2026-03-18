@@ -25,8 +25,8 @@ public abstract class HealOrHarmMobEffectMixin extends MobEffectMixin<HealOrHarm
     }
 
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
-    private float modifyHealAmount1(float amount, @Local(argsOnly = true) int amplifier) {
-        return getAmount(amount, amplifier) / 2F;
+    private float modifyHealAmount1(float amount, @Local(argsOnly = true) int amplifier, @Local(argsOnly = true) double multiplier) {
+        return (float) (getAmount(amount, amplifier) * multiplier);
     }
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE",
@@ -39,7 +39,7 @@ public abstract class HealOrHarmMobEffectMixin extends MobEffectMixin<HealOrHarm
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2)
-    private float modifyHarmAmount1(float amount, @Local(argsOnly = true) int amplifier) {
-        return getAmount(amount, amplifier) / 2F;
+    private float modifyHarmAmount1(float amount, @Local(argsOnly = true) int amplifier, @Local(argsOnly = true) double multiplier) {
+        return (float) (getAmount(amount, amplifier) * multiplier);
     }
 }

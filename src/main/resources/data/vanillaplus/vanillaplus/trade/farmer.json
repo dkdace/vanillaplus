@@ -307,9 +307,19 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:buy",
                   "price": {
-                    "type": "vanillaplus:itemstack",
-                    "id": "minecraft:wheat_seeds",
-                    "count": 17
+                    "type": "vanillaplus:random",
+                    "items": [
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:potato",
+                        "count": 18
+                      },
+                      {
+                        "type": "vanillaplus:itemstack",
+                        "id": "minecraft:carrot",
+                        "count": 16
+                      }
+                    ]
                   }
                 },
                 "minecraft:swamp": {
