@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.InstrumentItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TridentItem;
@@ -42,6 +43,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
         CODEC_REGISTRY.register("projectile_weapon", () -> ProjectileWeaponModifier.CODEC);
         CODEC_REGISTRY.register("crossbow", () -> CrossbowModifier.CODEC);
         CODEC_REGISTRY.register("trident", () -> TridentModifier.CODEC);
+        CODEC_REGISTRY.register("instrument", () -> InstrumentModifier.CODEC);
     }
 
     /** 아이템 데이터 요소 */
@@ -189,6 +191,39 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
          */
         public int getRiptideCooldown() {
             return (int) (riptideCooldownSeconds * 20.0);
+        }
+
+        @Override
+        @NonNull
+        public MapCodec<? extends ItemModifier> getCodec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * {@link InstrumentItem}의 아이템 수정자 클래스.
+     */
+    public static final class InstrumentModifier extends ItemModifier {
+        private static final MapCodec<InstrumentModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                createBaseCodec(instance)
+                        .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("use_duration_seconds", 1.5F)
+                                .forGetter(target -> target.useDurationSeconds))
+                        .apply(instance, InstrumentModifier::new));
+
+        /** 지속시간 (초) */
+        private final float useDurationSeconds;
+
+        private InstrumentModifier(@NonNull DataComponentPatch dataComponentPatch, @NonNull ItemAttributeModifiers itemAttributeModifiers,
+                                   float useDurationSeconds) {
+            super(dataComponentPatch, itemAttributeModifiers);
+            this.useDurationSeconds = useDurationSeconds;
+        }
+
+        /**
+         * @return 지속시간 (tick)
+         */
+        public int getUseDuration() {
+            return (int) (useDurationSeconds * 20.0);
         }
 
         @Override

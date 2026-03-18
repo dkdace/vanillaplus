@@ -99,6 +99,22 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static final String COMPONENT_REPAIR_LIMIT = "item.repairLimit";
 
+    @Shadow
+    @Nullable
+    public abstract <T> T set(DataComponentType<T> dataComponentType, @Nullable T value);
+
+    @Shadow
+    public abstract Item getItem();
+
+    @Shadow
+    public abstract boolean is(Item item);
+
+    @Shadow
+    public abstract boolean isEnchanted();
+
+    @Shadow
+    public abstract int getUseDuration(LivingEntity livingEntity);
+
     @Override
     public int getRepairLimit() {
         return Math.clamp(getThis().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
@@ -279,22 +295,6 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (component != null)
             onAdd.accept(component);
     }
-
-    @Shadow
-    @Nullable
-    public abstract <T> T set(DataComponentType<T> dataComponentType, @Nullable T value);
-
-    @Shadow
-    public abstract Item getItem();
-
-    @Shadow
-    public abstract boolean is(Item item);
-
-    @Shadow
-    public abstract boolean isEnchanted();
-
-    @Shadow
-    public abstract int getUseDuration(LivingEntity livingEntity);
 
     @Overwrite
     public Rarity getRarity() {

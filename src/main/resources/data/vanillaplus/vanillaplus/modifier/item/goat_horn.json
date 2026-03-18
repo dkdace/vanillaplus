@@ -1,7 +1,8 @@
 {
-  "type": "vanillaplus:item",
+  "type": "vanillaplus:instrument",
   "components": {
     "minecraft:damage": 0,
     "minecraft:max_damage": 16
-  }
+  },
+  "use_duration_seconds": 1.5
 }

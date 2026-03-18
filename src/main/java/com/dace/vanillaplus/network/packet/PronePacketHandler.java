@@ -3,7 +3,7 @@ package com.dace.vanillaplus.network.packet;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
@@ -15,12 +15,12 @@ public final class PronePacketHandler implements PacketHandler {
     /** 키 입력 여부 */
     private boolean isPressed;
 
-    public PronePacketHandler(@NonNull FriendlyByteBuf buf) {
+    public PronePacketHandler(@NonNull RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
     @Override
-    public void encode(@NonNull FriendlyByteBuf buf) {
+    public void encode(@NonNull RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(isPressed);
     }
 
