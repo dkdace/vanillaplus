@@ -98,6 +98,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<ArmorTrimEffect.TrimMaterialEffect> TRIM_MATERIAL_EFFECT = new VPRegistry<>("trim_material_effect");
     /** 갑옷 장식 형판 효과 */
     public static final VPRegistry<ArmorTrimEffect.TrimPatternEffect> TRIM_PATTERN_EFFECT = new VPRegistry<>("trim_pattern_effect");
+    /** 염소 뿔 효과 */
+    public static final VPRegistry<InstrumentEffect> INSTRUMENT_EFFECT = new VPRegistry<>("instrument_effect");
     /** 아이템 수정자 */
     public static final VPRegistry<ItemModifier> ITEM_MODIFIER = new VPRegistry<>("modifier/item");
     /** 블록 수정자 */
@@ -187,6 +189,7 @@ public final class VPRegistry<T> {
         applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.ENCHANTMENT_MODIFIER);
         applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
         applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
+        applyDataModifiers(registries, Registries.INSTRUMENT, VPRegistry.INSTRUMENT_EFFECT);
 
         applyLevelBasedValuePreset(registries, Registries.ENCHANTMENT);
         applyLevelBasedValuePreset(registries, Registries.MOB_EFFECT);

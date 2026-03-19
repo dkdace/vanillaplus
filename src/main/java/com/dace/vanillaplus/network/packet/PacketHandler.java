@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.network.packet;
 
 import lombok.NonNull;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
@@ -13,7 +13,7 @@ public interface PacketHandler {
      *
      * @param buf ByteBuf 인스턴스
      */
-    void encode(@NonNull FriendlyByteBuf buf);
+    void encode(@NonNull RegistryFriendlyByteBuf buf);
 
     /**
      * 패킷을 처리하여 지정된 작업을 수행한다.

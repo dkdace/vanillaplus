@@ -37,6 +37,8 @@ public final class VPDataComponentTypes {
             builder.persistent(ExtraCodecs.floatRange(0, 1)).networkSynchronized(ByteBufCodecs.FLOAT));
     public static final RegistryObject<DataComponentType<RepairWithXP>> REPAIR_WITH_XP = create("repair_with_xp", builder ->
             builder.persistent(RepairWithXP.CODEC).networkSynchronized(RepairWithXP.STREAM_CODEC).cacheEncoding());
+    public static final RegistryObject<DataComponentType<Long>> SEED = create("seed", builder ->
+            builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

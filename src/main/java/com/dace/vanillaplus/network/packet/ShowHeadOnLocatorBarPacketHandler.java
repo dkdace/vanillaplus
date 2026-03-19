@@ -3,7 +3,7 @@ package com.dace.vanillaplus.network.packet;
 import com.dace.vanillaplus.registryobject.VPGameRules;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
@@ -14,12 +14,12 @@ public final class ShowHeadOnLocatorBarPacketHandler implements PacketHandler {
     /** 활성화 여부 */
     private final boolean isEnabled;
 
-    public ShowHeadOnLocatorBarPacketHandler(@NonNull FriendlyByteBuf buf) {
+    public ShowHeadOnLocatorBarPacketHandler(@NonNull RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
     @Override
-    public void encode(@NonNull FriendlyByteBuf buf) {
+    public void encode(@NonNull RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(isEnabled);
     }
 

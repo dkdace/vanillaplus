@@ -3,7 +3,7 @@ package com.dace.vanillaplus.network.packet;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
@@ -13,7 +13,7 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 @NoArgsConstructor
 public final class RecoveryCompassTeleportPacketHandler implements PacketHandler {
     @Override
-    public void encode(@NonNull FriendlyByteBuf buf) {
+    public void encode(@NonNull RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(true);
     }
 

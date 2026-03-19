@@ -76,6 +76,12 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
         map.map().put(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
 
+    @Shadow
+    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+
+    @Shadow
+    public abstract ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity);
+
     @Override
     @NonNull
     public Optional<U> getDataModifier() {
@@ -104,9 +110,6 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
         return !newStack.is(oldStack.getItem());
     }
-
-    @Shadow
-    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
 
     @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
     private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity livingEntity) {

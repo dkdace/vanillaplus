@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.data.modifier.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.LevelBasedValuePreset;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
