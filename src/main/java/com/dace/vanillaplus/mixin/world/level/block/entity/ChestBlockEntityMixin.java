@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChestBlockEntity.class)
 public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends RandomizableContainerBlockEntityMixin<T> implements VPChestBlockEntity<T> {
     @Unique
-    private static final String COMPONENT_CHEST_LOOT = "container.chestLoot";
+    private static final Component COMPONENT_CHEST_LOOT = Component.translatable("container.chestLoot");
     @Shadow
     @Final
     private ChestLidController chestLidController;
@@ -50,6 +50,6 @@ public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends 
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))
     private Component modifyDefaultName(Component component) {
-        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? Component.translatable(COMPONENT_CHEST_LOOT) : component;
+        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? COMPONENT_CHEST_LOOT : component;
     }
 }

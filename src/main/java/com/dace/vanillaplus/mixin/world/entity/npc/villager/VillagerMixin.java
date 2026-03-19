@@ -35,9 +35,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Villager.class)
 public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, EntityModifier.LivingEntityModifier> {
     @Unique
-    private static final String COMPONENT_CLOSED = "merchant.closed";
+    private static final Component COMPONENT_CLOSED = Component.translatable("merchant.closed");
     @Unique
-    private static final String COMPONENT_OUT_OF_STOCK = "merchant.out_of_stock";
+    private static final Component COMPONENT_OUT_OF_STOCK = Component.translatable("merchant.out_of_stock");
 
     @Shadow
     public abstract VillagerData getVillagerData();
@@ -114,9 +114,9 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
     private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
         if (isTradingClosed())
-            player.displayClientMessage(Component.translatable(COMPONENT_CLOSED), true);
+            player.displayClientMessage(COMPONENT_CLOSED, true);
         else if (isTradingOutOfStock())
-            player.displayClientMessage(Component.translatable(COMPONENT_OUT_OF_STOCK), true);
+            player.displayClientMessage(COMPONENT_OUT_OF_STOCK, true);
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))

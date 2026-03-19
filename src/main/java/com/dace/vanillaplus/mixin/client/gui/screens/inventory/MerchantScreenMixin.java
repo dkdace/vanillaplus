@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.MerchantScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -17,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.function.BiFunction;
+
 @Mixin(MerchantScreen.class)
 public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<MerchantScreen, MerchantMenu> {
     @Unique
@@ -26,7 +27,8 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
     @Unique
     private static final int COLOR_USED = ARGB.color(255, 255, 255);
     @Unique
-    private static final String COMPONENT_MERCHANT_STOCK = "merchant.stock";
+    private static final BiFunction<Object, Object, Component> COMPONENT_MERCHANT_STOCK = (arg1, arg2) ->
+            Component.translatable("merchant.stock", arg1, arg2);
 
     @Shadow
     @Final
@@ -62,7 +64,6 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
         if (!isHovering(hoverX, hoverY, 12, 18, mouseX, mouseY))
             return;
 
-        MutableComponent tooltipComponent = Component.translatable(COMPONENT_MERCHANT_STOCK, remainingUses, merchantOffer.getMaxUses());
-        guiGraphics.setTooltipForNextFrame(font, tooltipComponent, mouseX, mouseY);
+        guiGraphics.setTooltipForNextFrame(font, COMPONENT_MERCHANT_STOCK.apply(remainingUses, merchantOffer.getMaxUses()), mouseX, mouseY);
     }
 }

@@ -31,13 +31,17 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Mixin(Raid.class)
 public abstract class RaidMixin implements VPMixin<Raid> {
     @Unique
-    private static final String COMPONENT_RAID_WAVES = "event.minecraft.raid.waves";
+    private static final BiFunction<Object, Object, MutableComponent> COMPONENT_RAID_WAVES = (arg1, arg2) ->
+            Component.translatable("event.minecraft.raid.waves", arg1, arg2);
     @Unique
-    private static final String COMPONENT_RAID_TIME_REMAINING = "event.minecraft.raid.time_remaining";
+    private static final Function<Object, Component> COMPONENT_RAID_TIME_REMAINING = arg ->
+            Component.translatable("event.minecraft.raid.time_remaining", arg);
     @Shadow
     @Final
     private static final int RAID_TIMEOUT_TICKS = 3 * 60 * 20;
@@ -133,9 +137,9 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         if (raiderCount == 0 && !isFinalWave())
             wave++;
 
-        MutableComponent component = Component.translatable(COMPONENT_RAID_WAVES, wave, numGroups);
+        MutableComponent component = COMPONENT_RAID_WAVES.apply(wave, numGroups);
         if (ticksActive > 20) {
-            MutableComponent timeComponent = Component.translatable(COMPONENT_RAID_TIME_REMAINING,
+            Component timeComponent = COMPONENT_RAID_TIME_REMAINING.apply(
                     StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), serverLevel.tickRateManager().tickrate()));
 
             component.append(" - ").append(timeComponent);

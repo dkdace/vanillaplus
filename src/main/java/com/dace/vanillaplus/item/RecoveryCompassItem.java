@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class RecoveryCompassItem extends Item {
     /** 컴포넌트 키 */
-    private static final String COMPONENT_TELEPORT_NOT_VALID = "item.minecraft.recovery_compass.teleport_not_valid";
+    private static final Component COMPONENT_TELEPORT_NOT_VALID = Component.translatable("item.minecraft.recovery_compass.teleport_not_valid");
 
     public RecoveryCompassItem(@NonNull Properties properties) {
         super(properties);
@@ -63,7 +63,7 @@ public final class RecoveryCompassItem extends Item {
 
         Vec3 pos = getTeleportLocation(serverLevel, lastDeathPos);
         if (pos == null) {
-            player.displayClientMessage(Component.translatable(COMPONENT_TELEPORT_NOT_VALID), true);
+            player.displayClientMessage(COMPONENT_TELEPORT_NOT_VALID, true);
             return InteractionResult.FAIL;
         }
 
