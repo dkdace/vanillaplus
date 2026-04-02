@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.raid;
 import com.dace.vanillaplus.data.RaidWave;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.registryobject.VPGameRules;
+import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -10,6 +11,7 @@ import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -22,10 +24,7 @@ import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -48,6 +47,9 @@ public abstract class RaidMixin implements VPMixin<Raid> {
 
     @Shadow
     @Final
+    private ServerBossEvent raidEvent;
+    @Shadow
+    @Final
     private int numGroups;
     @Shadow
     private int groupsSpawned;
@@ -57,9 +59,6 @@ public abstract class RaidMixin implements VPMixin<Raid> {
     private Optional<BlockPos> waveSpawnPos;
     @Shadow
     private long ticksActive;
-
-    @Shadow
-    public abstract void updateBossbar();
 
     @Shadow
     protected abstract void setDirty(ServerLevel serverLevel);
@@ -130,22 +129,41 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         return RaidWave.getDataManager().get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
     }
 
+    @Definition(id = "i", local = @Local(type = int.class, ordinal = 0))
+    @Expression("i <= 2")
+    @ModifyExpressionValue(method = "tick", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean modifyRaidBarRaidersRemainingCondition(boolean original) {
+        return ticksActive <= 20;
+    }
+
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC))
-    private Component modifyRaidBarName(Component originalComponent, @Local(argsOnly = true) ServerLevel serverLevel, @Local int raiderCount) {
+    private Component modifyRaidBarName(Component originalComponent, @Local int raiderCount) {
         int wave = groupsSpawned;
         if (raiderCount == 0 && !isFinalWave())
             wave++;
 
-        MutableComponent component = COMPONENT_RAID_WAVES.apply(wave, numGroups);
-        if (ticksActive > 20) {
-            Component timeComponent = COMPONENT_RAID_TIME_REMAINING.apply(
-                    StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), serverLevel.tickRateManager().tickrate()));
+        return COMPONENT_RAID_WAVES.apply(wave, numGroups);
+    }
 
-            component.append(" - ").append(timeComponent);
-        }
+    @ModifyArg(method = "tick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/server/level/ServerBossEvent;setName(Lnet/minecraft/network/chat/Component;)V", ordinal = 2))
+    private Component addRaidBarTimer(Component originalComponent, @Local(argsOnly = true) ServerLevel serverLevel) {
+        Component timeComponent = COMPONENT_RAID_TIME_REMAINING.apply(
+                StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), serverLevel.tickRateManager().tickrate()));
 
-        return component;
+        return originalComponent.copy().append(" - ").append(timeComponent);
+    }
+
+    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/SharedConstants;DEBUG_RAIDS:Z", opcode = Opcodes.GETSTATIC))
+    private void setRaidBarProgress(ServerLevel serverLevel, CallbackInfo ci, @Local int raiderCount) {
+        if (raiderCount > 0)
+            raidEvent.setProgress(ticksActive <= 20 ? 1 : 1 - (float) ticksActive / RAID_TIMEOUT_TICKS);
+    }
+
+    @Redirect(method = "updateBossbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerBossEvent;setProgress(F)V"))
+    private void removeDefaultRaidBarProgress(ServerBossEvent instance, float progress) {
+        // 미사용
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "longValue=48000"))
@@ -190,7 +208,6 @@ public abstract class RaidMixin implements VPMixin<Raid> {
 
         waveSpawnPos = Optional.empty();
         groupsSpawned++;
-        updateBossbar();
         setDirty(serverLevel);
     }
 }
