@@ -89,6 +89,7 @@
   "enchantment.minecraft.wind_burst.description.0": "+%s Propulsion Power",
   "event.minecraft.raid.time_remaining": "Time Remaining: %s",
   "event.minecraft.raid.waves": "Raid %s / %s",
+  "extra_consumable.added": "Added %s",
   "filled_map.ancient_city": "Ancient City Explorer Map",
   "filled_map.explorer_desert": "Desert Explorer Map",
   "filled_map.explorer_snowy": "Snowy Explorer Map",

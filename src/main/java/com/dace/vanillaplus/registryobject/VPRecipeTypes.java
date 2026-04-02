@@ -51,7 +51,7 @@ public final class VPRecipeTypes {
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public abstract class Brewing implements Recipe<Brewing.Input> {
+    public static abstract class Brewing implements Recipe<Brewing.Input> {
         public static final int DEFAULT_BREWING_TIME = 400;
         public static final ResourceKey<RecipePropertySet> INGREDIENT_SET = createPropertySet("brewing_ingredient");
 

@@ -89,6 +89,7 @@
   "enchantment.minecraft.wind_burst.description.0": "+%s 추진 세기",
   "event.minecraft.raid.time_remaining": "남은 시간: %s",
   "event.minecraft.raid.waves": "습격 %s / %s",
+  "extra_consumable.added": "%s 첨가됨",
   "filled_map.ancient_city": "고대 도시 탐험가 지도",
   "filled_map.explorer_desert": "사막 탐험가 지도",
   "filled_map.explorer_snowy": "설원 탐험가 지도",

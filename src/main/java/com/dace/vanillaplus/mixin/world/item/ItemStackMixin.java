@@ -120,6 +120,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     private static final Component COMPONENT_CONSUMABLE_TELEPORT_RANDOMLY = Component.translatable("consumable.teleportRandomly")
             .withStyle(MobEffectCategory.NEUTRAL.getTooltipFormatting());
     @Unique
+    private static final Function<Object, Component> COMPONENT_EXTRA_CONSUMABLE_ADDED = arg ->
+            Component.translatable("extra_consumable.added", arg).withStyle(ChatFormatting.GRAY);
+    @Unique
     private static final Component COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = Component.translatable("item.projectileWeapon.when_shoot")
             .withStyle(ChatFormatting.GRAY);
     @Unique
@@ -274,6 +277,21 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
+    private void addExtraFoodTooltip(@NonNull VPDataComponentTypes.ExtraFood extraFood, @NonNull Consumer<Component> componentConsumer) {
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(COMPONENT_EXTRA_CONSUMABLE_ADDED.apply(extraFood.getNameComponent()));
+
+        FoodProperties foodProperties = extraFood.getFoodProperties();
+        if (foodProperties == null)
+            return;
+
+        componentConsumer.accept(CommonComponents.space().append(COMPONENT_FOOD_NUTRITION.apply(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(foodProperties.nutrition()))));
+        componentConsumer.accept(CommonComponents.space().append(COMPONENT_FOOD_SATURATION.apply(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(foodProperties.saturation()))));
+    }
+
+    @Unique
     private void addProjectileWeaponTooltip(@NonNull ProjectileWeaponItem projectileWeaponItem, @NonNull Consumer<Component> componentConsumer) {
         VPModifiableData.getDataModifier(projectileWeaponItem, ItemModifier.ProjectileWeaponModifier.class)
                 .ifPresent(projectileWeaponModifier -> {
@@ -347,6 +365,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.CONSUMABLE, tooltipDisplay, consumable ->
                 addConsumableTooltip(consumable, tooltipContext, componentConsumer));
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
+        addTooltip(VPDataComponentTypes.EXTRA_FOOD.get(), tooltipDisplay, extraFood -> addExtraFoodTooltip(extraFood, componentConsumer));
 
         if (is(Items.CAKE))
             VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).ifPresent(cakeModifier ->
