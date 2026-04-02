@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "food_add_sugar",
+  "input": "minecraft:melon_slice",
+  "material": "minecraft:sugar",
+  "result": {
+    "id": "minecraft:melon_slice",
+    "components": {
+      "vanillaplus:extra_food": "minecraft:sugar"
+    }
+  }
+}

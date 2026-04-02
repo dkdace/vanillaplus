@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "food_add_sugar",
+  "input": "minecraft:sweet_berries",
+  "material": "minecraft:sugar",
+  "result": {
+    "id": "minecraft:sweet_berries",
+    "components": {
+      "vanillaplus:extra_food": "minecraft:sugar"
+    }
+  }
+}
