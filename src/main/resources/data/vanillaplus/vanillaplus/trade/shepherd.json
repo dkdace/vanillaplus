@@ -1213,7 +1213,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "moderate",
-              "price_modifier": 0.4,
+              "price_modifier": 0.3,
               "enchantment_level": "medium",
               "enchantment_tag": "#vanillaplus:tool",
               "required_item": {
@@ -1309,7 +1309,7 @@
         {
           "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
-          "price_modifier": 0.4,
+          "price_modifier": 0.3,
           "enchantment_level": "high",
           "enchantment_tag": "#vanillaplus:tool",
           "required_item": {
@@ -1375,7 +1375,7 @@
         {
           "type": "vanillaplus:sell_enchanted",
           "supply": "scarce",
-          "price_modifier": 0.4,
+          "price_modifier": 0.3,
           "enchantment_level": "highest",
           "enchantment_tag": "#vanillaplus:tool",
           "required_item": {
