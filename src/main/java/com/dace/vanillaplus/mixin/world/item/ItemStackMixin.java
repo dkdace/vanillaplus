@@ -99,7 +99,7 @@ public abstract class ItemStackMixin implements VPItemStack {
                     .append(Component.translatable("weapon.shield_disarming_time", arg))
                     .withStyle(ChatFormatting.DARK_GREEN);
     @Unique
-    private static final Component COMPONENT_FOOD_WHEN_EATEN = Component.translatable("food.whenEaten")
+    private static final Component COMPONENT_FOOD_WHEN_EATEN = Component.translatable("food.when_eaten")
             .withStyle(ChatFormatting.DARK_PURPLE);
     @Unique
     private static final Function<Object, Component> COMPONENT_FOOD_NUTRITION = arg ->
@@ -109,38 +109,38 @@ public abstract class ItemStackMixin implements VPItemStack {
             Component.translatable("food.saturation", arg).withStyle(ChatFormatting.BLUE);
     @Unique
     private static final Function<Object, MutableComponent> COMPONENT_CONSUMABLE_REMOVE_STATUS_EFFECT = arg ->
-            Component.translatable("consumable.removeStatusEffect", arg);
+            Component.translatable("consumable.remove_status_effect", arg);
     @Unique
-    private static final Component COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS = Component.translatable("consumable.clearAllStatusEffects")
+    private static final Component COMPONENT_CONSUMABLE_CLEAR_ALL_STATUS_EFFECTS = Component.translatable("consumable.clear_all_status_effects")
             .withStyle(MobEffectCategory.NEUTRAL.getTooltipFormatting());
     @Unique
     private static final Function<Object, Component> COMPONENT_CONSUMABLE_APPLY_STATUS_EFFECTS = arg ->
-            Component.translatable("consumable.applyStatusEffects", arg).withStyle(ChatFormatting.DARK_PURPLE);
+            Component.translatable("consumable.apply_status_effects", arg).withStyle(ChatFormatting.DARK_PURPLE);
     @Unique
-    private static final Component COMPONENT_CONSUMABLE_TELEPORT_RANDOMLY = Component.translatable("consumable.teleportRandomly")
+    private static final Component COMPONENT_CONSUMABLE_TELEPORT_RANDOMLY = Component.translatable("consumable.teleport_randomly")
             .withStyle(MobEffectCategory.NEUTRAL.getTooltipFormatting());
     @Unique
     private static final Function<Object, Component> COMPONENT_EXTRA_CONSUMABLE_ADDED = arg ->
             Component.translatable("extra_consumable.added", arg).withStyle(ChatFormatting.GRAY);
     @Unique
-    private static final Component COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = Component.translatable("item.projectileWeapon.when_shoot")
+    private static final Component COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT = Component.translatable("item.projectile_weapon.when_shoot")
             .withStyle(ChatFormatting.GRAY);
     @Unique
     private static final Function<Object, Component> COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE = arg ->
             CommonComponents.space()
-                    .append(Component.translatable("item.projectileWeapon.baseDamage", arg))
+                    .append(Component.translatable("item.projectile_weapon.base_damage", arg))
                     .withStyle(ChatFormatting.DARK_GREEN);
     @Unique
     private static final Function<Object, Component> COMPONENT_PROJECTILE_WEAPON_SPEED = arg ->
             CommonComponents.space()
-                    .append(Component.translatable("item.projectileWeapon.speed", arg))
+                    .append(Component.translatable("item.projectile_weapon.speed", arg))
                     .withStyle(ChatFormatting.DARK_GREEN);
     @Unique
     private static final Component COMPONENT_TRIM_MATERIAL = Component.translatable("item.trim_material")
             .withStyle(ChatFormatting.GRAY);
     @Unique
     private static final BiFunction<Object, Object, Component> COMPONENT_REPAIR_LIMIT = (arg1, arg2) ->
-            Component.translatable("item.repairLimit", arg1, arg2);
+            Component.translatable("item.repair_limit", arg1, arg2);
 
     @Shadow
     @Nullable
