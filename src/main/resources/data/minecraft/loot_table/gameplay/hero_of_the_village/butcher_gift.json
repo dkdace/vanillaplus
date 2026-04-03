@@ -6,29 +6,18 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "minecraft:campfire"
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:cooked_rabbit",
           "functions": [
             {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:cooked_mutton",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
+                "max": 6.0,
+                "min": 3.0
               },
               "function": "minecraft:set_count"
             }
