@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:popped_chorus_fruit_from_campfire_cooking"
+        "recipe": "vanillaplus:popped_chorus_fruit_from_campfire_cooking"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:popped_chorus_fruit_from_campfire_cooking"
+      "vanillaplus:popped_chorus_fruit_from_campfire_cooking"
     ]
   }
 }
