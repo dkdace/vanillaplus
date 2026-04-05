@@ -854,7 +854,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "moderate",
-                  "price_modifier": 0.45,
+                  "price_modifier": 0.4,
                   "enchantment_level": "low",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -868,7 +868,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "moderate",
-                  "price_modifier": 0.45,
+                  "price_modifier": 0.4,
                   "enchantment_level": "low",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -882,7 +882,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "moderate",
-                  "price_modifier": 0.5,
+                  "price_modifier": 0.4,
                   "enchantment_level": "low",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -896,7 +896,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "moderate",
-                  "price_modifier": 0.5,
+                  "price_modifier": 0.4,
                   "enchantment_level": "low",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -954,7 +954,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 0.45,
+                  "price_modifier": 0.4,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -968,7 +968,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 0.45,
+                  "price_modifier": 0.4,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -982,7 +982,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 0.5,
+                  "price_modifier": 0.4,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -996,7 +996,7 @@
                 {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 0.5,
+                  "price_modifier": 0.4,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:leather_item",
@@ -1110,7 +1110,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1124,7 +1124,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1138,7 +1138,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1152,7 +1152,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1176,7 +1176,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1190,7 +1190,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1204,7 +1204,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1218,7 +1218,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "high",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1237,7 +1237,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "highest",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1251,7 +1251,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.45,
+              "price_modifier": 0.4,
               "enchantment_level": "highest",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1265,7 +1265,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "highest",
               "required_item": {
                 "type": "vanillaplus:leather_item",
@@ -1279,7 +1279,7 @@
             {
               "type": "vanillaplus:sell_enchanted",
               "supply": "scarce",
-              "price_modifier": 0.5,
+              "price_modifier": 0.4,
               "enchantment_level": "highest",
               "required_item": {
                 "type": "vanillaplus:leather_item",

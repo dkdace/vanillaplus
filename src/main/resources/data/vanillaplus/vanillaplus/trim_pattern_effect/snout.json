@@ -18,7 +18,9 @@
             "type": [
               "minecraft:piglin",
               "minecraft:piglin_brute",
-              "minecraft:hoglin"
+              "minecraft:hoglin",
+              "minecraft:zombified_piglin",
+              "minecraft:zoglin"
             ]
           }
         }

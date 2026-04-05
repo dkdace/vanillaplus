@@ -6,14 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:iron_axe",
+          "name": "minecraft:iron_spear",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
+                "min": 0.4,
+                "max": 0.8
               },
               "add": false
             }
@@ -27,8 +27,23 @@
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
+                "min": 0.4,
+                "max": 0.8
+              },
+              "add": false
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.4,
+                "max": 0.8
               },
               "add": false
             }

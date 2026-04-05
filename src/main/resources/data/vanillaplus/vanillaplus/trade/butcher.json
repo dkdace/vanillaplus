@@ -481,7 +481,7 @@
         {
           "type": "vanillaplus:sell",
           "supply": "scarce",
-          "price": 8,
+          "price": 9,
           "price_multiplier": "high",
           "product": {
             "type": "vanillaplus:random",

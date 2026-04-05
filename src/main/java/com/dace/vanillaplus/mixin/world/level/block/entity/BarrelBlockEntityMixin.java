@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BarrelBlockEntity.class)
 public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockEntityMixin<BarrelBlockEntity> {
     @Unique
-    private static final String COMPONENT_BARREL_LOOT = "container.barrelLoot";
+    private static final Component COMPONENT_BARREL_LOOT = Component.translatable("container.barrel_loot");
 
     @Inject(method = "loadAdditional", at = @At("TAIL"))
     private void loadAdditional(ValueInput valueInput, CallbackInfo ci) {
@@ -36,6 +36,6 @@ public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockE
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))
     private Component modifyDefaultName(Component component) {
-        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? Component.translatable(COMPONENT_BARREL_LOOT) : component;
+        return getBlockState().getValue(VPLootContainerBlock.LOOT) ? COMPONENT_BARREL_LOOT : component;
     }
 }

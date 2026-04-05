@@ -343,7 +343,7 @@
                     "minecraft:plains": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -357,7 +357,7 @@
                     "minecraft:taiga": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -371,7 +371,7 @@
                     "minecraft:snow": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -385,7 +385,7 @@
                     "minecraft:desert": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -399,7 +399,7 @@
                     "minecraft:jungle": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -413,7 +413,7 @@
                     "minecraft:savanna": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -427,7 +427,7 @@
                     "minecraft:swamp": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.1,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -446,7 +446,7 @@
                     "minecraft:plains": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -460,7 +460,7 @@
                     "minecraft:taiga": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -474,7 +474,7 @@
                     "minecraft:snow": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -488,7 +488,7 @@
                     "minecraft:desert": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -502,7 +502,7 @@
                     "minecraft:jungle": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -516,7 +516,7 @@
                     "minecraft:savanna": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -530,7 +530,7 @@
                     "minecraft:swamp": {
                       "type": "vanillaplus:sell_enchanted",
                       "supply": "moderate",
-                      "price_modifier": 1.15,
+                      "price_modifier": 0.6,
                       "enchantment_level": "low",
                       "required_item": {
                         "type": "vanillaplus:itemstack",
@@ -568,7 +568,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -582,7 +582,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -596,7 +596,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -610,7 +610,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -624,7 +624,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -638,7 +638,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -652,7 +652,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.1,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -684,7 +684,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -698,7 +698,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -712,7 +712,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -726,7 +726,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -740,7 +740,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -754,7 +754,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -768,7 +768,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.15,
+                  "price_modifier": 0.6,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -815,7 +815,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -829,7 +829,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -843,7 +843,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -857,7 +857,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -871,7 +871,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -885,7 +885,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -899,7 +899,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -918,7 +918,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -932,7 +932,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -946,7 +946,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -960,7 +960,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -974,7 +974,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -988,7 +988,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1002,7 +1002,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "medium",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1309,7 +1309,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1323,7 +1323,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1337,7 +1337,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1351,7 +1351,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1365,7 +1365,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1379,7 +1379,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1393,7 +1393,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.2,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1412,7 +1412,7 @@
                 "minecraft:plains": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1426,7 +1426,7 @@
                 "minecraft:taiga": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1440,7 +1440,7 @@
                 "minecraft:snow": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1454,7 +1454,7 @@
                 "minecraft:desert": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1468,7 +1468,7 @@
                 "minecraft:jungle": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1482,7 +1482,7 @@
                 "minecraft:savanna": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",
@@ -1496,7 +1496,7 @@
                 "minecraft:swamp": {
                   "type": "vanillaplus:sell_enchanted",
                   "supply": "scarce",
-                  "price_modifier": 1.25,
+                  "price_modifier": 0.7,
                   "enchantment_level": "high",
                   "required_item": {
                     "type": "vanillaplus:itemstack",

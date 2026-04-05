@@ -1,0 +1,7 @@
+{
+  "effect": {
+    "id": "minecraft:speed",
+    "amplifier": 1,
+    "duration": 400
+  }
+}

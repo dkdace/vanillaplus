@@ -6,14 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:bread",
+          "name": "minecraft:cookie",
           "functions": [
             {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
+                "max": 12.0,
+                "min": 6.0
               },
               "function": "minecraft:set_count"
             }
@@ -21,7 +21,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:cookie",
+          "name": "minecraft:bread",
           "functions": [
             {
               "add": false,

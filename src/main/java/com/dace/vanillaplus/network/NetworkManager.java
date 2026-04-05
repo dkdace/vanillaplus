@@ -1,16 +1,14 @@
 package com.dace.vanillaplus.network;
 
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.network.packet.PacketHandler;
-import com.dace.vanillaplus.network.packet.PronePacketHandler;
-import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
-import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
+import com.dace.vanillaplus.network.packet.*;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +26,7 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class NetworkManager {
     /** 프로토콜 버전 */
-    private static final int PROTOCOL_VERSION = 3;
+    private static final int PROTOCOL_VERSION = 4;
     /** 패킷 전송 채널 */
     private static final SimpleChannel CHANNEL = ChannelBuilder
             .named(IdentifierUtil.fromPath("main"))
@@ -43,6 +41,7 @@ public final class NetworkManager {
             registerPacket(PacketFlow.CLIENTBOUND, RecoveryCompassTeleportPacketHandler.class,
                     buf -> new RecoveryCompassTeleportPacketHandler());
             registerPacket(PacketFlow.CLIENTBOUND, ShowHeadOnLocatorBarPacketHandler.class, ShowHeadOnLocatorBarPacketHandler::new);
+            registerPacket(PacketFlow.CLIENTBOUND, StopSoundPacketHandler.class, StopSoundPacketHandler::new);
 
             CHANNEL.build();
         });
@@ -79,5 +78,15 @@ public final class NetworkManager {
      */
     public static void sendToPlayer(@NonNull PacketHandler packetHandler, @NonNull ServerPlayer player) {
         CHANNEL.send(packetHandler, PacketDistributor.PLAYER.with(player));
+    }
+
+    /**
+     * 지정한 패킷을 특정 월드의 모든 플레이어에게 전송한다.
+     *
+     * @param packetHandler 패킷 처리기
+     * @param level         월드
+     */
+    public static void sendToLevel(@NonNull PacketHandler packetHandler, @NonNull ServerLevel level) {
+        CHANNEL.send(packetHandler, PacketDistributor.DIMENSION.with(level.dimension()));
     }
 }

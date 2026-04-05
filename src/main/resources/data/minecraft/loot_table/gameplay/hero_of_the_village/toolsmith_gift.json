@@ -6,44 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:iron_pickaxe",
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
-              },
-              "add": false
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:iron_axe",
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
-              },
-              "add": false
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:iron_hoe",
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
+                "min": 0.5,
+                "max": 1
               },
               "add": false
             }
@@ -57,8 +27,38 @@
               "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.6,
-                "max": 0.9
+                "min": 0.5,
+                "max": 1
+              },
+              "add": false
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_pickaxe",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.4,
+                "max": 0.8
+              },
+              "add": false
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.4,
+                "max": 0.8
               },
               "add": false
             }

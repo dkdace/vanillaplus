@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "food_add_sugar",
+  "input": "minecraft:bread",
+  "material": "minecraft:sugar",
+  "result": {
+    "id": "minecraft:bread",
+    "components": {
+      "vanillaplus:extra_food": "minecraft:sugar"
+    }
+  }
+}

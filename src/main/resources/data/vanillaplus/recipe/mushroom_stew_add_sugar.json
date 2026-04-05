@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "food_add_sugar",
+  "input": "minecraft:mushroom_stew",
+  "material": "minecraft:sugar",
+  "result": {
+    "id": "minecraft:mushroom_stew",
+    "components": {
+      "vanillaplus:extra_food": "minecraft:sugar"
+    }
+  }
+}

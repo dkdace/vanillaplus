@@ -86,6 +86,8 @@
     "world.item.CreativeModeTabsMixin",
     "world.item.CrossbowItemMixin",
     "world.item.FireChargeItemMixin",
+    "world.item.InstrumentItemMixin",
+    "world.item.InstrumentMixin",
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
     "world.item.ItemStackMixin",
@@ -94,11 +96,14 @@
     "world.item.alchemy.PotionContentsMixin",
     "world.item.alchemy.PotionMixin",
     "world.item.component.AttackRangeMixin",
+    "world.item.component.InstrumentComponentMixin",
     "world.item.component.ItemAttributeModifiersMixin",
     "world.item.component.ItemAttributeModifiersMixin$DefaultDisplayMixin",
     "world.item.component.OminousBottleAmplifierMixin",
+    "world.item.crafting.AbstractCookingRecipeMixin",
     "world.item.crafting.RecipeManagerMixin",
     "world.item.crafting.RepairItemRecipeMixin",
+    "world.item.crafting.SingleItemRecipeMixin",
     "world.item.enchantment.EnchantmentHelperMixin",
     "world.item.enchantment.EnchantmentMixin",
     "world.item.enchantment.EnchantmentMixin$EnchantmentDefinitionMixin",
@@ -153,8 +158,10 @@
     "client.renderer.ScreenEffectRendererMixin",
     "client.renderer.entity.EnderDragonRendererMixin",
     "client.renderer.entity.state.EnderDragonRenderStateMixin",
+    "client.resources.sounds.EntityBoundSoundInstanceMixin",
     "client.resources.sounds.GuardianAttackSoundInstanceMixin",
-    "client.sounds.SoundEngineMixin"
+    "client.sounds.SoundEngineMixin",
+    "client.sounds.SoundManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
