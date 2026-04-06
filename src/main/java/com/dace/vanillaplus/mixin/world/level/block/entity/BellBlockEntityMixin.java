@@ -26,7 +26,7 @@ public abstract class BellBlockEntityMixin extends BlockEntityMixin<BellBlockEnt
                 .orElse((int) range);
     }
 
-    @ModifyArg(method = "lambda$showBellParticles$1", at = @At(value = "INVOKE",
+    @ModifyArg(method = "lambda$showBellParticles$0", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
     private static double modifyGlowRange1(double range) {
         return VPModifiableData.getDataModifier(Blocks.BELL, BlockModifier.BellModifier.class)

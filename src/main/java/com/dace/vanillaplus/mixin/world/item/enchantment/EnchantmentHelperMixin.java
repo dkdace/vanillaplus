@@ -9,6 +9,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -20,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelper> {
     @Unique
-    private static int getFinalEnchantmentLevel(int level, @NonNull ItemStack itemStack) {
-        return level * itemStack.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
+    private static int getFinalEnchantmentLevel(int level, @NonNull ItemInstance itemInstance) {
+        return level * itemInstance.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
     }
 
     @Unique
@@ -42,8 +43,8 @@ public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelpe
     }
 
     @ModifyReturnValue(method = "getItemEnchantmentLevel", at = @At("RETURN"))
-    private static int modifyGetEnchantmentLevel(int level, @Local(argsOnly = true) ItemStack itemStack) {
-        return getFinalEnchantmentLevel(level, itemStack);
+    private static int modifyGetEnchantmentLevel(int level, @Local(argsOnly = true) ItemInstance itemInstance) {
+        return getFinalEnchantmentLevel(level, itemInstance);
     }
 
     @ModifyExpressionValue(method = "runIterationOnItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V",

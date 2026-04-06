@@ -14,6 +14,7 @@ import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.BellBlock;
@@ -65,7 +66,7 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
     private static <T extends BlockModifier> Products.P2<RecordCodecBuilder.Mu<T>, BlockBehaviour.Properties, IntProvider> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
         return instance.group(BlockBehaviour.Properties.CODEC.optionalFieldOf("properties", BlockBehaviour.Properties.of())
                         .forGetter(BlockModifier::getProperties),
-                IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", ConstantInt.of(0)).forGetter(BlockModifier::getXpRange));
+                IntProviders.NON_NEGATIVE_CODEC.optionalFieldOf("experience", ConstantInt.of(0)).forGetter(BlockModifier::getXpRange));
     }
 
     @Override

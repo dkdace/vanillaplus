@@ -82,8 +82,6 @@ public final class VPRegistry<T> {
     /** 게임 규칙 */
     public static final VPRegistry<GameRule<?>> GAME_RULE = new VPRegistry<>(BuiltInRegistries.GAME_RULE);
 
-    /** 주민 거래 정보 */
-    public static final VPRegistry<Trade> TRADE = new VPRegistry<>("trade");
     /** 구조물 지도 */
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
     /** 노획물 테이블 보상 */

@@ -5,13 +5,14 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.world.level.levelgen.feature.EndSpikeFeature;
 import net.minecraft.world.level.levelgen.feature.SpikeFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(SpikeFeature.class)
-public abstract class SpikeFeatureMixin implements VPMixin<SpikeFeature> {
-    @Mixin(targets = "net.minecraft.world.level.levelgen.feature.SpikeFeature$SpikeCacheLoader")
+@Mixin(EndSpikeFeature.class)
+public abstract class EndSpikeFeatureMixin implements VPMixin<SpikeFeature> {
+    @Mixin(targets = "net.minecraft.world.level.levelgen.feature.EndSpikeFeature$SpikeCacheLoader")
     public abstract static class SpikeCacheLoaderMixin {
         @ModifyExpressionValue(method = "load(Ljava/lang/Long;)Ljava/util/List;", at = @At(value = "CONSTANT", args = "intValue=76"))
         private int modifyBaseHeight(int height) {

@@ -12,6 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -56,7 +57,7 @@ public final class VPRecipeDisplayTypes {
 
         @NonNull
         private static SlotDisplay createPotionDisplay(@NonNull Item item, @NonNull Holder<Potion> potionHolder) {
-            return new SlotDisplay.ItemStackSlotDisplay(PotionContents.createItemStack(item, potionHolder));
+            return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(PotionContents.createItemStack(item, potionHolder)));
         }
 
         @Override

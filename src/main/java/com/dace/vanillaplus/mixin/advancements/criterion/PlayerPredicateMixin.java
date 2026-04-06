@@ -45,6 +45,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
     @Final
     public static final MapCodec<PlayerPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(MinMaxBounds.Ints.CODEC.optionalFieldOf("level", MinMaxBounds.Ints.ANY).forGetter(PlayerPredicate::level),
+                    FoodPredicate.CODEC.optionalFieldOf("food", FoodPredicate.ANY).forGetter(PlayerPredicate::food),
                     GameTypePredicate.CODEC.optionalFieldOf("gamemode", GameTypePredicate.ANY).forGetter(PlayerPredicate::gameType),
                     PlayerPredicate.StatMatcher.CODEC.listOf().optionalFieldOf("stats", List.of()).forGetter(PlayerPredicate::stats),
                     ExtraCodecs.object2BooleanMap(Recipe.KEY_CODEC).optionalFieldOf("recipes", Object2BooleanMaps.emptyMap())
@@ -63,12 +64,12 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
 
     @Unique
     @NonNull
-    private static PlayerPredicate create(MinMaxBounds.Ints level, GameTypePredicate gameType, List<PlayerPredicate.StatMatcher<?>> stats,
-                                          Object2BooleanMap<ResourceKey<Recipe<?>>> recipes,
+    private static PlayerPredicate create(MinMaxBounds.Ints level, FoodPredicate foodPredicate, GameTypePredicate gameType,
+                                          List<PlayerPredicate.StatMatcher<?>> stats, Object2BooleanMap<ResourceKey<Recipe<?>>> recipes,
                                           Map<Identifier, PlayerPredicate.AdvancementPredicate> advancements,
                                           Optional<EntityPredicate> lookingAt, Optional<InputPredicate> input,
                                           Optional<DistancePredicate> distanceToRespawn) {
-        PlayerPredicate playerPredicate = new PlayerPredicate(level, gameType, stats, recipes, advancements, lookingAt, input);
+        PlayerPredicate playerPredicate = new PlayerPredicate(level, foodPredicate, gameType, stats, recipes, advancements, lookingAt, input);
         VPPlayerPredicate.cast(playerPredicate).setDistanceToRespawn(distanceToRespawn);
 
         return playerPredicate;

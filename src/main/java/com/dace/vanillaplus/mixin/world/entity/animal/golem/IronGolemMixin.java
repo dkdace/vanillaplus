@@ -24,7 +24,7 @@ public abstract class IronGolemMixin extends MobMixin<IronGolem, EntityModifier.
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"))
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
     private boolean modifyHealItems(boolean canHeal, @Local ItemStack itemStack) {
         return canHeal || itemStack.is(Items.IRON_NUGGET);
     }

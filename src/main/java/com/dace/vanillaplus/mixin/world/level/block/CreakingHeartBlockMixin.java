@@ -12,6 +12,6 @@ public abstract class CreakingHeartBlockMixin extends BlockMixin<CreakingHeartBl
     @ModifyArgs(method = "tryAwardExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextIntBetweenInclusive(II)I"))
     private void modifyDropXP(Args args) {
         getDataModifier().ifPresent(blockModifier ->
-                args.setAll(blockModifier.getXpRange().getMinValue(), blockModifier.getXpRange().getMaxValue()));
+                args.setAll(blockModifier.getXpRange().minInclusive(), blockModifier.getXpRange().maxInclusive()));
     }
 }

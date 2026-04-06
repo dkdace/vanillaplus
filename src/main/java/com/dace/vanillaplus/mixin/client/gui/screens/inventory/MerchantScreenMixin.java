@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.gui.screens.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.MerchantScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
@@ -37,17 +37,17 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
     @Final
     private static int SELL_ITEM_2_X;
 
-    @ModifyArg(method = "renderContents", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screens/inventory/MerchantScreen;renderButtonArrows(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/trading/MerchantOffer;II)V"),
+    @ModifyArg(method = "extractContents", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/screens/inventory/MerchantScreen;extractButtonArrows(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/world/item/trading/MerchantOffer;II)V"),
             index = 3)
     private int modifyArrowIconY(int y) {
         return y + 6;
     }
 
-    @Inject(method = "renderContents", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screens/inventory/MerchantScreen;renderButtonArrows(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/item/trading/MerchantOffer;II)V"))
-    private void renderStock(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci, @Local(ordinal = 2) int x,
-                             @Local(ordinal = 7) int y, @Local MerchantOffer merchantOffer) {
+    @Inject(method = "extractContents", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/screens/inventory/MerchantScreen;extractButtonArrows(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/world/item/trading/MerchantOffer;II)V"))
+    private void renderStock(GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick, CallbackInfo ci,
+                             @Local(ordinal = 2) int x, @Local(ordinal = 7) int y, @Local MerchantOffer merchantOffer) {
         int remainingUses = merchantOffer.getMaxUses() - merchantOffer.getUses();
         int stockTextX = x + SELL_ITEM_1_X + SELL_ITEM_2_X + 25;
         int stockTextY = y + 1;
@@ -57,13 +57,13 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreenMixin<M
         else
             stockTextColor = merchantOffer.getUses() == 0 ? COLOR_FULL : COLOR_USED;
 
-        guiGraphics.drawCenteredString(font, Integer.toString(remainingUses), stockTextX, stockTextY, stockTextColor);
+        guiGraphicsExtractor.centeredText(font, Integer.toString(remainingUses), stockTextX, stockTextY, stockTextColor);
 
         int hoverX = x + SELL_ITEM_1_X + SELL_ITEM_2_X + 18 - leftPos;
         int hoverY = y - topPos;
         if (!isHovering(hoverX, hoverY, 12, 18, mouseX, mouseY))
             return;
 
-        guiGraphics.setTooltipForNextFrame(font, COMPONENT_MERCHANT_STOCK.apply(remainingUses, merchantOffer.getMaxUses()), mouseX, mouseY);
+        guiGraphicsExtractor.setTooltipForNextFrame(font, COMPONENT_MERCHANT_STOCK.apply(remainingUses, merchantOffer.getMaxUses()), mouseX, mouseY);
     }
 }

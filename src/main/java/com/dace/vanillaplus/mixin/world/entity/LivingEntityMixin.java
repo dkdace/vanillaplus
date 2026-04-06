@@ -13,6 +13,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -83,6 +84,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
 
     @Shadow
+    public abstract ItemStack getItemInHand(InteractionHand hand);
+
+    @Shadow
     public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
 
     @Shadow
@@ -111,7 +115,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Shadow
-    public abstract AttackRange entityAttackRange();
+    public abstract AttackRange getAttackRangeWith(ItemStack weaponItem);
 
     @Shadow
     public float getSecondsToDisableBlocking() {

@@ -5,22 +5,19 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 모드에서 사용하는 제작법 직렬화 처리기를 관리하는 클래스.
  */
 @UtilityClass
 public final class VPRecipeSerializers {
-    public static final RegistryObject<RecipeSerializer<VPRecipeTypes.Brewing.Mix>> BREWING_MIX = create("brewing_mix",
-            new VPRecipeTypes.Brewing.Mix.Serializer());
-    public static final RegistryObject<RecipeSerializer<VPRecipeTypes.Brewing.Transmute>> BREWING_TRANSMUTE = create("brewing_transmute",
-            new VPRecipeTypes.Brewing.Transmute.Serializer());
-    public static final RegistryObject<RecipeSerializer<VPRecipeTypes.Brewing.Mapped>> BREWING_MAPPED = create("brewing_mapped",
-            new VPRecipeTypes.Brewing.Mapped.Serializer());
+    static {
+        create("brewing_mix", VPRecipeTypes.Brewing.Mix.SERIALIZER);
+        create("brewing_transmute", VPRecipeTypes.Brewing.Transmute.SERIALIZER);
+        create("brewing_mapped", VPRecipeTypes.Brewing.Mapped.SERIALIZER);
+    }
 
-    @NonNull
-    private static <T extends Recipe<?>> RegistryObject<RecipeSerializer<T>> create(@NonNull String name, RecipeSerializer<T> recipeSerializer) {
-        return VPRegistry.register(VPRegistry.RECIPE_SERIALIZER, name, () -> recipeSerializer);
+    private static <T extends Recipe<?>> void create(@NonNull String name, RecipeSerializer<T> recipeSerializer) {
+        VPRegistry.register(VPRegistry.RECIPE_SERIALIZER, name, () -> recipeSerializer);
     }
 }

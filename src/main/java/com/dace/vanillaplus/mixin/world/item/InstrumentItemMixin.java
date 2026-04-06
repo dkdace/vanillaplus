@@ -9,7 +9,6 @@ import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -26,6 +25,7 @@ import net.minecraft.world.item.InstrumentItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -59,11 +59,14 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
     }
 
     @Shadow
-    protected abstract Optional<Holder<Instrument>> getInstrument(ItemStack itemStack, HolderLookup.Provider registries);
+    @UnknownNullability
+    private static Optional<Holder<Instrument>> getInstrument(ItemStack itemStack) {
+        return Optional.empty();
+    }
 
     @Override
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-        getInstrument(stack, entity.registryAccess()).ifPresent(instrumentHolder -> {
+        getInstrument(stack).ifPresent(instrumentHolder -> {
             if (entity.level() instanceof ServerLevel serverLevel) {
                 Long seed = stack.get(VPDataComponentTypes.SEED.get());
                 if (seed != null)
@@ -83,7 +86,7 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
         if (!level.isClientSide())
-            getInstrument(itemStack, livingEntity.registryAccess()).ifPresent(instrumentHolder -> {
+            getInstrument(itemStack).ifPresent(instrumentHolder -> {
                 itemStack.remove(VPDataComponentTypes.SEED.get());
 
                 Instrument instrument = instrumentHolder.value();

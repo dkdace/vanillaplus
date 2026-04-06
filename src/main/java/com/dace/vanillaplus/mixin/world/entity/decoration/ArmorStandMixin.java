@@ -26,10 +26,10 @@ public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand, Enti
     @Shadow
     protected abstract boolean isDisabled(EquipmentSlot equipmentSlot);
 
-    @Inject(method = "interactAt", at = @At(value = "INVOKE",
+    @Inject(method = "interact", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/decoration/ArmorStand;getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;"),
             cancellable = true)
-    private void toggleShowArmsOrSwapItems(Player player, Vec3 interactVec, InteractionHand interactionHand,
+    private void toggleShowArmsOrSwapItems(Player player, InteractionHand interactionHand, Vec3 location,
                                            CallbackInfoReturnable<InteractionResult> cir) {
         boolean isShiftKeyDown = player.isShiftKeyDown();
         boolean isEmpty = true;

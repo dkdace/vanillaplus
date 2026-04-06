@@ -116,7 +116,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
         VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).setRecipeUsed(recipeHolder);
 
-        return recipeHolder.value().assemble(input, level.registryAccess());
+        return recipeHolder.value().assemble(input);
     }
 
     @Unique

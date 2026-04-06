@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(BrewingStandScreen.class)
 public abstract class BrewingStandScreenMixin extends AbstractContainerScreenMixin<BrewingStandScreen, BrewingStandMenu> {
-    @ModifyExpressionValue(method = "renderBg", at = @At(value = "CONSTANT", args = "floatValue=400"))
+    @ModifyExpressionValue(method = "extractBackground", at = @At(value = "CONSTANT", args = "floatValue=400"))
     private float modifyTotalBrewTime(float ticks) {
         return VPBrewingStandMenu.cast(menu).getTotalBrewTime();
     }

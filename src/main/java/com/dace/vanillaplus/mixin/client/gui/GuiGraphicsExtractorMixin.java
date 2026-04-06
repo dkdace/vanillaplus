@@ -5,7 +5,7 @@ import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.Item;
@@ -17,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiGraphics.class)
-public abstract class GuiGraphicsMixin implements VPMixin<GuiGraphics> {
+@Mixin(GuiGraphicsExtractor.class)
+public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsExtractor> {
     @Shadow
     public abstract void fill(RenderPipeline renderPipeline, int minX, int minY, int maxX, int maxY, int color);
 
-    @Inject(method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItemBar(Lnet/minecraft/world/item/ItemStack;II)V"))
+    @Inject(method = "itemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;itemBar(Lnet/minecraft/world/item/ItemStack;II)V"))
     private void renderItemRepairLimitBar(Font font, ItemStack itemStack, int x, int y, @Nullable String text, CallbackInfo ci) {
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);
         if (!vpItemStack.isRepairLimitBarVisible())

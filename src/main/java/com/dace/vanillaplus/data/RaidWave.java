@@ -45,7 +45,7 @@ public final class RaidWave {
     @SubscribeEvent
     private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
         dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAID_WAVE, DIRECT_CODEC,
-                difficulty -> IdentifierUtil.fromPath(difficulty.getKey()));
+                difficulty -> IdentifierUtil.fromPath(difficulty.getSerializedName()));
 
         event.addListener(dataManager);
     }

@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -103,7 +104,7 @@ public final class VPDataComponentTypes {
 
         @NonNull
         public Component getNameComponent() {
-            return itemHolder.value().getName();
+            return itemHolder.value().components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY);
         }
 
         @Nullable

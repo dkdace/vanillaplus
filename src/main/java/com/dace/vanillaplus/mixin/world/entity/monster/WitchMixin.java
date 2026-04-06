@@ -74,8 +74,8 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/world/item/alchemy/Potions;REGENERATION:Lnet/minecraft/core/Holder;", opcode = Opcodes.GETSTATIC))
-    private Holder<Potion> modifySupportPotion(Holder<Potion> potionHolder) {
+            target = "Lnet/minecraft/world/item/alchemy/Potions;REGENERATION:Lnet/minecraft/core/Holder$Reference;", opcode = Opcodes.GETSTATIC))
+    private Holder.Reference<Potion> modifySupportPotion(Holder.Reference<Potion> potionHolder) {
         return random.nextBoolean() ? Potions.SWIFTNESS : potionHolder;
     }
 

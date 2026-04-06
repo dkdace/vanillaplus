@@ -1,30 +1,25 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.Trade;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerData;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -58,27 +53,6 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
         return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
-    @Unique
-    private void addOffers(@NonNull ServerLevel serverLevel, int level) {
-        getVillagerData().profession().unwrapKey()
-                .flatMap(Trade.getDataManager()::get)
-                .ifPresent(trade -> {
-                    VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
-                    MerchantOffers offers = getOffers();
-
-                    for (VillagerTrades.ItemListing itemListing : itemListings) {
-                        MerchantOffer offer = itemListing.getOffer(serverLevel, getThis(), random);
-                        if (offer != null)
-                            offers.add(offer);
-                    }
-                });
-    }
-
-    @Overwrite
-    protected void updateTrades(ServerLevel serverLevel) {
-        addOffers(serverLevel, getVillagerData().level());
-    }
-
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
     private void rerollOffers(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir) {
@@ -86,7 +60,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
 
         VillagerData villagerData = getVillagerData();
         for (int i = 1; i <= villagerData.level(); i++)
-            addOffers(serverLevel, i);
+            addOffersFromTradeSet(serverLevel, getOffers(), villagerData.profession().value().getTrades(i));
 
         resendOffersToTradingPlayer();
     }
@@ -114,9 +88,9 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
     private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
         if (isTradingClosed())
-            player.displayClientMessage(COMPONENT_CLOSED, true);
+            player.sendOverlayMessage(COMPONENT_CLOSED);
         else if (isTradingOutOfStock())
-            player.displayClientMessage(COMPONENT_OUT_OF_STOCK, true);
+            player.sendOverlayMessage(COMPONENT_OUT_OF_STOCK);
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))
