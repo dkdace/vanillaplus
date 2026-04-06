@@ -96,7 +96,7 @@ public final class WaterCauldronRenderer implements BlockEntityRenderer<WaterCau
         renderState.color = getMixedColor(BiomeColors.getAverageWaterColor(clientLevel, renderState.blockPos), waterCauldronBlockEntity.getColor(),
                 MIN_ALPHA);
 
-        BlockState blockState = level.getBlockState(renderState.blockPos);
+        BlockState blockState = waterCauldronBlockEntity.getBlockState();
         renderState.height = ((LayeredCauldronBlock) blockState.getBlock()).getContentHeight(blockState);
     }
 
