@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:tripwire_hook",
+    "count": 6
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 10,
+  "reputation_discount": 0.05,
+  "xp": 42
+}
