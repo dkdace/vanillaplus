@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fisherman/level_1",
+  "trades": [
+    [
+      "vanillaplus:fisherman/1/buy_charcoal",
+      "vanillaplus:fisherman/1/sell_campfire"
+    ],
+    [
+      [
+        "vanillaplus:fisherman/1/buy_cod",
+        "vanillaplus:fisherman/1/buy_salmon",
+        "vanillaplus:fisherman/1/buy_tropical_fish"
+      ],
+      "vanillaplus:fisherman/1/sell_cooked_cod"
+    ]
+  ]
+}

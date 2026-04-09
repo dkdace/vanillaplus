@@ -1,0 +1,21 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 6
+  },
+  "additional_wants": {
+    "id": "minecraft:bucket"
+  },
+  "gives": {
+    "id": "minecraft:axolotl_bucket"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "vanillaplus:set_random_axolotl"
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 28,
+  "multiply_xp_by_cost": true
+}

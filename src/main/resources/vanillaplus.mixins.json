@@ -139,6 +139,8 @@
     "world.level.levelgen.structure.structures.SwampHutPieceMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
+    "world.level.storage.loot.functions.EnchantWithLevelsFunctionMixin",
+    "world.level.storage.loot.functions.LootItemConditionalFunctionMixin",
     "world.level.storage.loot.functions.SetOminousBottleAmplifierFunctionMixin"
   ],
   "client": [

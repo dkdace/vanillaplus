@@ -32,6 +32,7 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -81,6 +82,8 @@ public final class VPRegistry<T> {
     public static final VPRegistry<MapCodec<? extends EnchantmentEntityEffect>> ENCHANTMENT_ENTITY_EFFECT_TYPE = new VPRegistry<>(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE);
     /** 게임 규칙 */
     public static final VPRegistry<GameRule<?>> GAME_RULE = new VPRegistry<>(BuiltInRegistries.GAME_RULE);
+    /** 전리품 수정자 타입 */
+    public static final VPRegistry<MapCodec<? extends LootItemFunction>> LOOT_FUNCTION_TYPE = new VPRegistry<>(BuiltInRegistries.LOOT_FUNCTION_TYPE);
 
     /** 구조물 지도 */
     public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
@@ -124,6 +127,7 @@ public final class VPRegistry<T> {
         VanillaPlus.loadClass(VPEnchantmentEffectComponentTypes.class);
         VanillaPlus.loadClass(VPEnchantmentEntityEffectTypes.class);
         VanillaPlus.loadClass(VPGameRules.class);
+        VanillaPlus.loadClass(VPLootFunctionTypes.class);
     }
 
     /** 레지스트리 리소스 키 */
