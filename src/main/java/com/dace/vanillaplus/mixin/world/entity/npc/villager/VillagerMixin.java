@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.item.trading.TradeSet;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,11 +59,15 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
     private void rerollOffers(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir) {
-        getOffers().clear();
+        MerchantOffers merchantOffers = getOffers();
+        merchantOffers.clear();
 
         VillagerData villagerData = getVillagerData();
-        for (int i = 1; i <= villagerData.level(); i++)
-            addOffersFromTradeSet(serverLevel, getOffers(), villagerData.profession().value().getTrades(i));
+        for (int i = 1; i <= villagerData.level(); i++) {
+            ResourceKey<TradeSet> tradeSetResourceKey = villagerData.profession().value().getTrades(i);
+            if (tradeSetResourceKey != null)
+                addOffersFromTradeSet(serverLevel, merchantOffers, tradeSetResourceKey);
+        }
 
         resendOffersToTradingPlayer();
     }

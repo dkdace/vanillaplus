@@ -111,6 +111,8 @@
     "world.item.equipment.trim.ArmorTrimMixin",
     "world.item.equipment.trim.TrimMaterialMixin",
     "world.item.equipment.trim.TrimPatternMixin",
+    "world.item.trading.TradeSetMixin",
+    "world.item.trading.VillagerTradeMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BlockMixin",
     "world.level.block.CakeBlockMixin",
