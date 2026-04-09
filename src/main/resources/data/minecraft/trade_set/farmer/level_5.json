@@ -1,0 +1,17 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/farmer/level_5",
+  "trades": [
+    [
+      "vanillaplus:farmer/5/sell_glistering_melon_slice",
+      "vanillaplus:farmer/5/sell_golden_carrot"
+    ],
+    [
+      [
+        "vanillaplus:farmer/5/sell_torchflower_seeds",
+        "vanillaplus:farmer/5/sell_pitcher_pod"
+      ],
+      "vanillaplus:farmer/5/sell_golden_apple"
+    ]
+  ]
+}
