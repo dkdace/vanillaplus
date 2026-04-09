@@ -1,0 +1,47 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/shepherd/level_1",
+  "trades": [
+    [
+      [
+        "vanillaplus:shepherd/1/buy_white_dye",
+        "vanillaplus:shepherd/1/buy_light_gray_dye",
+        "vanillaplus:shepherd/1/buy_gray_dye",
+        "vanillaplus:shepherd/1/buy_black_dye",
+        "vanillaplus:shepherd/1/buy_brown_dye",
+        "vanillaplus:shepherd/1/buy_red_dye",
+        "vanillaplus:shepherd/1/buy_orange_dye",
+        "vanillaplus:shepherd/1/buy_yellow_dye",
+        "vanillaplus:shepherd/1/buy_lime_dye",
+        "vanillaplus:shepherd/1/buy_green_dye",
+        "vanillaplus:shepherd/1/buy_cyan_dye",
+        "vanillaplus:shepherd/1/buy_light_blue_dye",
+        "vanillaplus:shepherd/1/buy_blue_dye",
+        "vanillaplus:shepherd/1/buy_purple_dye",
+        "vanillaplus:shepherd/1/buy_pink_dye"
+      ],
+      [
+        "vanillaplus:shepherd/1/sell_red_wool",
+        "vanillaplus:shepherd/1/sell_orange_wool",
+        "vanillaplus:shepherd/1/sell_yellow_wool",
+        "vanillaplus:shepherd/1/sell_lime_wool",
+        "vanillaplus:shepherd/1/sell_green_wool"
+      ]
+    ],
+    [
+      [
+        "vanillaplus:shepherd/1/buy_white_wool",
+        "vanillaplus:shepherd/1/buy_black_wool",
+        "vanillaplus:shepherd/1/buy_brown_wool"
+      ],
+      [
+        "vanillaplus:shepherd/1/sell_cyan_wool",
+        "vanillaplus:shepherd/1/sell_light_blue_wool",
+        "vanillaplus:shepherd/1/sell_blue_wool",
+        "vanillaplus:shepherd/1/sell_purple_wool",
+        "vanillaplus:shepherd/1/sell_magenta_wool",
+        "vanillaplus:shepherd/1/sell_pink_wool"
+      ]
+    ]
+  ]
+}

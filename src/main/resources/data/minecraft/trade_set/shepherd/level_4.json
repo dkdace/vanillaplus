@@ -1,0 +1,25 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/shepherd/level_4",
+  "trades": [
+    [
+      "vanillaplus:shepherd/4/sell_white_banner",
+      "vanillaplus:shepherd/4/sell_light_gray_banner",
+      "vanillaplus:shepherd/4/sell_gray_banner",
+      "vanillaplus:shepherd/4/sell_black_banner",
+      "vanillaplus:shepherd/4/sell_brown_banner",
+      "vanillaplus:shepherd/4/sell_red_banner",
+      "vanillaplus:shepherd/4/sell_orange_banner",
+      "vanillaplus:shepherd/4/sell_yellow_banner",
+      "vanillaplus:shepherd/4/sell_lime_banner",
+      "vanillaplus:shepherd/4/sell_green_banner",
+      "vanillaplus:shepherd/4/sell_cyan_banner",
+      "vanillaplus:shepherd/4/sell_light_blue_banner",
+      "vanillaplus:shepherd/4/sell_blue_banner",
+      "vanillaplus:shepherd/4/sell_purple_banner",
+      "vanillaplus:shepherd/4/sell_magenta_banner",
+      "vanillaplus:shepherd/4/sell_pink_banner"
+    ],
+    "vanillaplus:shepherd/4/sell_enchanted_shears"
+  ]
+}
