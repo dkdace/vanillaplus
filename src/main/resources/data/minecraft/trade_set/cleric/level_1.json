@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cleric/level_1",
+  "trades": [
+    [
+      "vanillaplus:cleric/1/buy_rotten_flesh",
+      "vanillaplus:cleric/1/sell_redstone"
+    ],
+    [
+      "vanillaplus:cleric/1/buy_rabbit_foot",
+      "vanillaplus:cleric/1/sell_lapis_lazuli"
+    ]
+  ]
+}

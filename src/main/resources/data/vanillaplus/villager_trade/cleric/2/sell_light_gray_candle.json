@@ -1,0 +1,14 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 2
+  },
+  "gives": {
+    "id": "minecraft:light_gray_candle",
+    "count": 3
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 14,
+  "multiply_xp_by_cost": true
+}
