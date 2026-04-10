@@ -1,0 +1,34 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/librarian/level_4",
+  "trades": [
+    [
+      "vanillaplus:librarian/4/sell_enchanting_table",
+      [
+        "vanillaplus:librarian/4/sell_enchanted_book_sharpness",
+        "vanillaplus:librarian/4/sell_enchanted_book_protection",
+        "vanillaplus:librarian/4/sell_enchanted_book_efficiency",
+        "vanillaplus:librarian/4/sell_enchanted_book_smite",
+        "vanillaplus:librarian/4/sell_enchanted_book_bane_of_arthropods",
+        "vanillaplus:librarian/4/sell_enchanted_book_looting",
+        "vanillaplus:librarian/4/sell_enchanted_book_sweeping_edge",
+        "vanillaplus:librarian/4/sell_enchanted_book_fire_aspect",
+        "vanillaplus:librarian/4/sell_enchanted_book_fire_protection",
+        "vanillaplus:librarian/4/sell_enchanted_book_fortune",
+        "vanillaplus:librarian/4/sell_enchanted_book_thorns",
+        "vanillaplus:librarian/4/sell_enchanted_book_knockback",
+        "vanillaplus:librarian/4/sell_enchanted_book_projectile_protection",
+        "vanillaplus:librarian/4/sell_enchanted_book_power",
+        "vanillaplus:librarian/4/sell_enchanted_book_punch",
+        "vanillaplus:librarian/4/sell_enchanted_book_feather_falling",
+        "vanillaplus:librarian/4/sell_enchanted_book_quick_charge",
+        "vanillaplus:librarian/4/sell_enchanted_book_piercing",
+        "vanillaplus:librarian/4/sell_enchanted_book_blast_protection",
+        "vanillaplus:librarian/4/sell_enchanted_book_depth_strider",
+        "vanillaplus:librarian/4/sell_enchanted_book_respiration",
+        "vanillaplus:librarian/4/sell_enchanted_book_lunge"
+      ]
+    ],
+    "vanillaplus:librarian/4/sell_enchanted_book"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/librarian/level_5",
+  "trades": [
+    "vanillaplus:librarian/5/sell_enchanted_book_1",
+    "vanillaplus:librarian/5/sell_enchanted_book_2"
+  ]
+}
