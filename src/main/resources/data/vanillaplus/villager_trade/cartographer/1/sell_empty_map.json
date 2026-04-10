@@ -1,0 +1,13 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 2
+  },
+  "gives": {
+    "id": "minecraft:map"
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 7,
+  "multiply_xp_by_cost": true
+}

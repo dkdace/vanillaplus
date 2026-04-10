@@ -85,8 +85,6 @@ public final class VPRegistry<T> {
     /** 전리품 수정자 타입 */
     public static final VPRegistry<MapCodec<? extends LootItemFunction>> LOOT_FUNCTION_TYPE = new VPRegistry<>(BuiltInRegistries.LOOT_FUNCTION_TYPE);
 
-    /** 구조물 지도 */
-    public static final VPRegistry<StructureMap> STRUCTURE_MAP = new VPRegistry<>("structure_map");
     /** 노획물 테이블 보상 */
     public static final VPRegistry<LootTableReward> LOOT_TABLE_REWARD = new VPRegistry<>("loot_table_reward");
     /** 레벨 기반 값 프리셋 */
