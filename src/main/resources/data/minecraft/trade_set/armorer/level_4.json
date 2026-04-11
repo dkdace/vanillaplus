@@ -1,0 +1,16 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/armorer/level_4",
+  "trades": [
+    [
+      "vanillaplus:armorer/4/sell_iron_horse_armor",
+      "vanillaplus:armorer/4/sell_iron_nautilus_armor"
+    ],
+    [
+      "vanillaplus:armorer/4/sell_enchanted_diamond_helmet",
+      "vanillaplus:armorer/4/sell_enchanted_diamond_boots",
+      "vanillaplus:armorer/4/sell_enchanted_diamond_chestplate",
+      "vanillaplus:armorer/4/sell_enchanted_diamond_leggings"
+    ]
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/armorer/level_5",
+  "trades": [
+    [
+      "vanillaplus:armorer/5/sell_coast_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_sentry_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_wayfinder_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_host_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_vex_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_snout_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_eye_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_dune_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_rib_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_wild_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_raiser_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_shaper_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_flow_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_bolt_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_spire_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_tide_armor_trim_smithing_template",
+      "vanillaplus:armorer/5/sell_ward_armor_trim_smithing_template"
+    ],
+    [
+      "vanillaplus:armorer/5/sell_enchanted_diamond_helmet",
+      "vanillaplus:armorer/5/sell_enchanted_diamond_boots",
+      "vanillaplus:armorer/5/sell_enchanted_diamond_chestplate",
+      "vanillaplus:armorer/5/sell_enchanted_diamond_leggings"
+    ]
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 4
+  },
+  "gives": {
+    "id": "minecraft:chainmail_helmet"
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 14,
+  "multiply_xp_by_cost": true,
+  "merchant_predicate": {
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "predicates": {
+        "minecraft:villager/variant": [
+          "minecraft:plains",
+          "minecraft:taiga",
+          "minecraft:savanna"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/armorer/level_2",
+  "trades": [
+    [
+      "vanillaplus:armorer/2/buy_lava_bucket",
+      [
+        "vanillaplus:armorer/2/sell_chainmail_helmet",
+        "vanillaplus:armorer/2/sell_chainmail_boots",
+        "vanillaplus:armorer/2/sell_chainmail_chestplate",
+        "vanillaplus:armorer/2/sell_chainmail_leggings"
+      ]
+    ],
+    [
+      "vanillaplus:armorer/2/buy_iron_ingot",
+      [
+        "vanillaplus:armorer/2/sell_enchanted_iron_helmet",
+        "vanillaplus:armorer/2/sell_enchanted_iron_boots",
+        "vanillaplus:armorer/2/sell_enchanted_iron_chestplate",
+        "vanillaplus:armorer/2/sell_enchanted_iron_leggings"
+      ]
+    ]
+  ]
+}
