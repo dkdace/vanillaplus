@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/weaponsmith/level_5",
+  "trades": [
+    [
+      "vanillaplus:weaponsmith/5/sell_tnt",
+      [
+        "vanillaplus:weaponsmith/5/sell_firework_rocket_3",
+        "vanillaplus:weaponsmith/5/sell_firework_rocket_4"
+      ]
+    ],
+    [
+      "vanillaplus:weaponsmith/5/sell_enchanted_diamond_spear",
+      "vanillaplus:weaponsmith/5/sell_enchanted_diamond_sword",
+      "vanillaplus:weaponsmith/5/sell_enchanted_diamond_axe"
+    ]
+  ]
+}

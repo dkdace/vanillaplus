@@ -1,6 +1,5 @@
 {
   "values": [
-    "#vanillaplus:durability",
     "minecraft:bane_of_arthropods",
     "minecraft:breach",
     "minecraft:channeling",
@@ -22,6 +21,6 @@
     "minecraft:sharpness",
     "minecraft:smite",
     "minecraft:sweeping_edge",
-    "minecraft:wind_burst"
+    "minecraft:unbreaking"
   ]
 }
