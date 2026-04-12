@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/toolsmith/level_1",
+  "trades": [
+    [
+      "vanillaplus:toolsmith/1/buy_coal",
+      [
+        "vanillaplus:toolsmith/1/sell_iron_hoe",
+        "vanillaplus:toolsmith/1/sell_iron_shovel"
+      ]
+    ],
+    [
+      "vanillaplus:toolsmith/1/buy_raw_iron",
+      [
+        "vanillaplus:toolsmith/1/sell_iron_pickaxe",
+        "vanillaplus:toolsmith/1/sell_iron_axe"
+      ]
+    ]
+  ]
+}

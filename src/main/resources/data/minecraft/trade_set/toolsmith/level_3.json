@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/toolsmith/level_3",
+  "trades": [
+    [
+      "vanillaplus:toolsmith/3/buy_diamond",
+      [
+        "vanillaplus:toolsmith/3/sell_enchanted_iron_hoe",
+        "vanillaplus:toolsmith/3/sell_enchanted_iron_shovel"
+      ]
+    ],
+    [
+      "vanillaplus:toolsmith/3/buy_gold_ingot",
+      [
+        "vanillaplus:toolsmith/3/sell_enchanted_iron_pickaxe",
+        "vanillaplus:toolsmith/3/sell_enchanted_iron_axe"
+      ]
+    ]
+  ]
+}
