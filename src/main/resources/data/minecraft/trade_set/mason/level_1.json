@@ -1,0 +1,17 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/mason/level_1",
+  "trades": [
+    [
+      "vanillaplus:mason/1/buy_clay_ball",
+      "vanillaplus:mason/1/sell_brick"
+    ],
+    [
+      "vanillaplus:mason/1/buy_stone",
+      [
+        "vanillaplus:mason/1/sell_stone_bricks",
+        "vanillaplus:mason/1/sell_smooth_stone"
+      ]
+    ]
+  ]
+}
