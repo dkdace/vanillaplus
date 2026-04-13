@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/leatherworker/level_5",
+  "trades": [
+    [
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_helmet_1",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_boots_1",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_chestplate_1",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_leggings_1"
+    ],
+    [
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_helmet_2",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_boots_2",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_chestplate_2",
+      "vanillaplus:leatherworker/5/sell_enchanted_leather_leggings_2"
+    ]
+  ]
+}
