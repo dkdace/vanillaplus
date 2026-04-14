@@ -29,7 +29,6 @@ public final class VPTags {
      */
     @UtilityClass
     public static final class Items {
-        public static final TagKey<Item> POTIONS = create(Registries.ITEM, "potions");
         public static final TagKey<Item> INFESTED = create(Registries.ITEM, "infested");
     }
 

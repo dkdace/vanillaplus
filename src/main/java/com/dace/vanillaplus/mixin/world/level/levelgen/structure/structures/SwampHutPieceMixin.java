@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.level.levelgen.structure.structures;
 
-import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.dace.vanillaplus.mixin.world.level.levelgen.structure.StructurePieceMixin;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.structures.SwampHutPiece;
+import net.minecraftforge.common.Tags;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +42,7 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
             return;
 
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
-            Item potionItem = BuiltInRegistries.ITEM.getRandomElementOf(VPTags.Items.POTIONS, randomSource).map(Holder::value).orElse(null);
+            Item potionItem = BuiltInRegistries.ITEM.getRandomElementOf(Tags.Items.POTIONS, randomSource).map(Holder::value).orElse(null);
 
             if (potionItem != null) {
                 ItemStack itemStack = PotionContents.createItemStack(potionItem, BuiltInRegistries.POTION.getRandom(randomSource).orElseThrow());

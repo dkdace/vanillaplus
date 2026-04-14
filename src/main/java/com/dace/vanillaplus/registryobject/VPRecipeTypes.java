@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.registryobject;
 
 import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VPTags;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -24,6 +23,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,7 @@ public final class VPRecipeTypes {
 
         @NonNull
         public static HolderSet<Item> getPotionContainers() {
-            return BuiltInRegistries.ITEM.getOrThrow(VPTags.Items.POTIONS);
+            return BuiltInRegistries.ITEM.getOrThrow(Tags.Items.POTIONS);
         }
 
         @Override
