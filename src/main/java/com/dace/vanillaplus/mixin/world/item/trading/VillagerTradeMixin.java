@@ -1,16 +1,22 @@
 package com.dace.vanillaplus.mixin.world.item.trading;
 
 import com.dace.vanillaplus.extension.VPMixin;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
@@ -113,5 +119,19 @@ public abstract class VillagerTradeMixin implements VPMixin<VillagerTrade> {
             ordinal = 1))
     private int multiplyXPByCost(int xp, @Local ItemCost itemCost) {
         return multiplyXPByCost ? xp * itemCost.count() : xp;
+    }
+
+    @Definition(id = "itemEnchantments", local = @Local(type = ItemEnchantments.class, name = "itemEnchantments"))
+    @Expression("itemEnchantments != null")
+    @ModifyExpressionValue(method = "getOffer", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean applyDoubleTradePriceForEnchantments(boolean condition, @Local ItemStack itemStack,
+                                                         @Local HolderSet<Enchantment> enchantmentHolderSet, @Local LocalIntRef additionalCost) {
+        ItemEnchantments itemEnchantments = itemStack.get(DataComponents.ENCHANTMENTS);
+        if (itemEnchantments != null && itemEnchantments.keySet().stream().anyMatch(enchantmentHolderSet::contains)) {
+            additionalCost.set(additionalCost.get() * 2);
+            return false;
+        }
+
+        return condition;
     }
 }
