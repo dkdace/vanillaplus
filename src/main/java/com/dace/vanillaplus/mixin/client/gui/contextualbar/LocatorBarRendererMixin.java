@@ -5,8 +5,8 @@ import com.dace.vanillaplus.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientMannequin;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.gui.contextualbar.LocatorBarRenderer;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.world.entity.Avatar;
@@ -32,12 +32,12 @@ public abstract class LocatorBarRendererMixin implements VPMixin<LocatorBarRende
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "lambda$render$5", at = @At(value = "FIELD",
+    @Inject(method = "lambda$extractRenderState$1", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;NONE:Lnet/minecraft/world/waypoints/TrackedWaypoint$PitchDirection;",
             opcode = Opcodes.GETSTATIC))
-    private void drawPlayerHead(Entity entity, Level level, PartialTickSupplier partialTickSupplier, GuiGraphics guiGraphics, int startY,
-                                TrackedWaypoint trackedWaypoint, CallbackInfo ci, @Local(ordinal = 1) int startX, @Local(ordinal = 3) int x,
-                                @Local TrackedWaypoint.PitchDirection pitchDirection) {
+    private void drawPlayerHead(Entity entity, Level level, PartialTickSupplier partialTickSupplier, GuiGraphicsExtractor guiGraphicsExtractor,
+                                int startY, TrackedWaypoint trackedWaypoint, CallbackInfo ci, @Local(ordinal = 1) int startX,
+                                @Local(ordinal = 3) int x, @Local TrackedWaypoint.PitchDirection pitchDirection) {
         if (!VPGameRules.ClientState.getInstance().isShowHeadOnLocatorBar()
                 || !(trackedWaypoint.id().left().map(level::getEntity).orElse(null) instanceof Avatar avatar))
             return;
@@ -61,6 +61,6 @@ public abstract class LocatorBarRendererMixin implements VPMixin<LocatorBarRende
             return;
 
         int offset = pitchDirection == TrackedWaypoint.PitchDirection.DOWN ? -1 : 0;
-        PlayerFaceRenderer.draw(guiGraphics, playerSkin, startX + x + 1, startY - 1 + offset, 8);
+        PlayerFaceExtractor.extractRenderState(guiGraphicsExtractor, playerSkin, startX + x + 1, startY - 1 + offset, 8);
     }
 }

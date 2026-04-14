@@ -1,0 +1,17 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/butcher/level_2",
+  "trades": [
+    [
+      "vanillaplus:butcher/2/buy_sweet_berries",
+      "vanillaplus:butcher/2/sell_cooked_mutton"
+    ],
+    [
+      [
+        "vanillaplus:butcher/2/buy_porkchop",
+        "vanillaplus:butcher/2/buy_beef"
+      ],
+      "vanillaplus:butcher/2/sell_cooked_chicken"
+    ]
+  ]
+}

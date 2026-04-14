@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:bone_meal",
+    "count": 30
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 10,
+  "reputation_discount": 0.05,
+  "xp": 14
+}

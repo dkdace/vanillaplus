@@ -1,0 +1,13 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 8
+  },
+  "gives": {
+    "id": "minecraft:skeleton_skull"
+  },
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

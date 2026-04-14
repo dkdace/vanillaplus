@@ -1,0 +1,23 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fisherman/level_3",
+  "trades": [
+    [
+      [
+        "vanillaplus:fisherman/3/buy_oak_boat",
+        "vanillaplus:fisherman/3/buy_birch_boat",
+        "vanillaplus:fisherman/3/buy_cherry_boat",
+        "vanillaplus:fisherman/3/buy_spruce_boat",
+        "vanillaplus:fisherman/3/buy_jungle_boat",
+        "vanillaplus:fisherman/3/buy_bamboo_raft",
+        "vanillaplus:fisherman/3/buy_acacia_boat",
+        "vanillaplus:fisherman/3/buy_mangrove_boat"
+      ],
+      "vanillaplus:fisherman/3/sell_tropical_fish_bucket"
+    ],
+    [
+      "vanillaplus:fisherman/3/buy_pufferfish",
+      "vanillaplus:fisherman/3/sell_enchanted_fishing_rod"
+    ]
+  ]
+}

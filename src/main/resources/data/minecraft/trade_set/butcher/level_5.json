@@ -1,0 +1,11 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/butcher/level_5",
+  "trades": [
+    [
+      "vanillaplus:butcher/5/sell_zombie_head",
+      "vanillaplus:butcher/5/sell_skeleton_skull"
+    ],
+    "vanillaplus:butcher/5/sell_goat_horn"
+  ]
+}

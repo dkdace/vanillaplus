@@ -1,0 +1,23 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/librarian/level_3",
+  "trades": [
+    [
+      "vanillaplus:librarian/3/buy_writable_book",
+      "vanillaplus:librarian/3/sell_lectern"
+    ],
+    [
+      [
+        "vanillaplus:librarian/3/buy_oak_shelf",
+        "vanillaplus:librarian/3/buy_birch_shelf",
+        "vanillaplus:librarian/3/buy_cherry_shelf",
+        "vanillaplus:librarian/3/buy_spruce_shelf",
+        "vanillaplus:librarian/3/buy_jungle_shelf",
+        "vanillaplus:librarian/3/buy_bamboo_shelf",
+        "vanillaplus:librarian/3/buy_acacia_shelf",
+        "vanillaplus:librarian/3/buy_mangrove_shelf"
+      ],
+      "vanillaplus:librarian/3/sell_enchanted_book"
+    ]
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cartographer/level_5",
+  "trades": [
+    [
+      "vanillaplus:cartographer/5/sell_mojang_banner_pattern",
+      "vanillaplus:cartographer/5/sell_globe_banner_pattern"
+    ],
+    [
+      "vanillaplus:cartographer/5/sell_map_trial_chambers",
+      "vanillaplus:cartographer/5/sell_map_ancient_city"
+    ]
+  ]
+}

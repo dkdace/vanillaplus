@@ -63,7 +63,7 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     }
 
     @Shadow
-    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext lootContext, Consumer<T> onApply) {
+    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext filterData, Enchantment.GenericAction<T> action) {
     }
 
     @Shadow

@@ -7,6 +7,7 @@ import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
@@ -20,7 +21,10 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
@@ -31,10 +35,9 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     @Unique
     @Nullable
     private U dataModifier;
-    @Mutable
     @Shadow
     @Final
-    private DataComponentMap components;
+    private Holder.Reference<Item> builtInRegistryHolder;
 
     @Unique
     private static <T extends ItemModifier> void applyModifier(@NonNull T dataModifier, @NonNull DataComponentMap.Builder.SimpleMap map) {
@@ -93,6 +96,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
 
+        DataComponentMap components = builtInRegistryHolder.components();
         if (!(components instanceof DataComponentMap.Builder.SimpleMap map))
             return;
 

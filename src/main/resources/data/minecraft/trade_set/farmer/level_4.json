@@ -1,0 +1,11 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/farmer/level_4",
+  "trades": [
+    [
+      "vanillaplus:farmer/4/sell_cake",
+      "vanillaplus:farmer/4/sell_pumpkin_pie"
+    ],
+    "vanillaplus:farmer/4/sell_suspicious_stew"
+  ]
+}

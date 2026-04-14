@@ -30,7 +30,7 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     @Shadow
     private int roarTick;
 
-    @ModifyReturnValue(method = "lambda$registerGoals$3", at = @At("RETURN"))
+    @ModifyReturnValue(method = "lambda$registerGoals$0", at = @At("RETURN"))
     private static boolean modifyVillagerAttackGoalCondition(boolean original) {
         return true;
     }

@@ -1,0 +1,23 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/toolsmith/level_2",
+  "trades": [
+    [
+      "vanillaplus:toolsmith/2/buy_stick",
+      [
+        "vanillaplus:toolsmith/2/sell_brush",
+        "vanillaplus:toolsmith/2/sell_flint_and_steel",
+        "vanillaplus:toolsmith/2/sell_spyglass"
+      ]
+    ],
+    [
+      "vanillaplus:toolsmith/2/buy_iron_ingot",
+      [
+        "vanillaplus:toolsmith/2/sell_enchanted_iron_hoe",
+        "vanillaplus:toolsmith/2/sell_enchanted_iron_shovel",
+        "vanillaplus:toolsmith/2/sell_enchanted_iron_pickaxe",
+        "vanillaplus:toolsmith/2/sell_enchanted_iron_axe"
+      ]
+    ]
+  ]
+}

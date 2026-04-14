@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fletcher/level_2",
+  "trades": [
+    [
+      "vanillaplus:fletcher/2/buy_string",
+      "vanillaplus:fletcher/2/sell_spectral_arrow_1"
+    ],
+    [
+      "vanillaplus:fletcher/2/buy_flint",
+      "vanillaplus:fletcher/2/sell_spectral_arrow_2"
+    ]
+  ]
+}

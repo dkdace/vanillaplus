@@ -1,0 +1,34 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "additional_wants": {
+    "id": "minecraft:glass_bottle"
+  },
+  "gives": {
+    "id": "minecraft:potion"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_potion",
+      "id": "minecraft:long_water_breathing"
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.05,
+  "xp": 35,
+  "multiply_xp_by_cost": true,
+  "merchant_predicate": {
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "predicates": {
+        "minecraft:villager/variant": [
+          "minecraft:snow",
+          "minecraft:swamp"
+        ]
+      }
+    }
+  }
+}

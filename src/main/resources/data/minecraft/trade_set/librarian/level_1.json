@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/librarian/level_1",
+  "trades": [
+    [
+      "vanillaplus:librarian/1/buy_paper",
+      "vanillaplus:librarian/1/sell_name_tag"
+    ],
+    [
+      "vanillaplus:librarian/1/buy_ink_sac",
+      "vanillaplus:librarian/1/sell_clock"
+    ]
+  ]
+}

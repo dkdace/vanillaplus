@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -114,7 +115,7 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
         double yRot = Math.toRadians(-getYRot() + 90);
         double distance = Math.cos(yRot) * (getX() - sweepTarget.getX()) - Math.sin(yRot) * (getZ() - sweepTarget.getZ());
 
-        return distance > 0 && distance < entityAttackRange().effectiveMaxRange(getThis());
+        return distance > 0 && distance < getAttackRangeWith(getItemInHand(InteractionHand.MAIN_HAND)).effectiveMaxRange(getThis());
     }
 
     @ModifyArgs(method = "doSweepAttack", at = @At(value = "INVOKE",

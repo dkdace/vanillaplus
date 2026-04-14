@@ -1,8 +1,0 @@
-{
-  "description": {
-    "translate": "filled_map.pillager_outpost"
-  },
-  "structure_tag": "#vanillaplus:pillager_outpost",
-  "color": 7026706,
-  "decoration_type": "minecraft:target_point"
-}

@@ -4,7 +4,7 @@ import com.dace.vanillaplus.extension.VPMixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,9 +18,10 @@ public abstract class GuiMixin implements VPMixin<Gui> {
     @Shadow
     private ItemStack lastToolHighlight;
 
-    @Inject(method = "renderSelectedItemName(Lnet/minecraft/client/gui/GuiGraphics;I)V", at = @At(value = "INVOKE",
+    @Inject(method = "renderSelectedItemName", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"))
-    private void applyEnchantmentStyle(GuiGraphics guiGraphics, int yShift, CallbackInfo ci, @Local MutableComponent mutableComponent) {
+    private void applyEnchantmentStyle(GuiGraphicsExtractor guiGraphicsExtractor, int yShift, CallbackInfo ci,
+                                       @Local MutableComponent mutableComponent) {
         if (lastToolHighlight.isEnchanted())
             mutableComponent.withStyle(ChatFormatting.BOLD);
     }

@@ -1,0 +1,41 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "minecraft:leather_leggings"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_random_dyes",
+      "number_of_dyes": {
+        "type": "minecraft:sum",
+        "summands": [
+          1,
+          {
+            "type": "minecraft:binomial",
+            "n": 1,
+            "p": 0.6
+          }
+        ]
+      }
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:leather_leggings",
+        "predicates": {
+          "minecraft:dyed_color": {}
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 7,
+  "multiply_xp_by_cost": true
+}

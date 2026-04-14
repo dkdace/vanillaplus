@@ -1,0 +1,16 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/toolsmith/level_5",
+  "trades": [
+    [
+      "vanillaplus:toolsmith/5/sell_netherite_upgrade_smithing_template",
+      "vanillaplus:toolsmith/5/sell_anvil"
+    ],
+    [
+      "vanillaplus:toolsmith/5/sell_enchanted_diamond_hoe",
+      "vanillaplus:toolsmith/5/sell_enchanted_diamond_shovel",
+      "vanillaplus:toolsmith/5/sell_enchanted_diamond_pickaxe",
+      "vanillaplus:toolsmith/5/sell_enchanted_diamond_axe"
+    ]
+  ]
+}

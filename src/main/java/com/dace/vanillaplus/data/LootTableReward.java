@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -26,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class LootTableReward {
     /** JSON 코덱 */
     private static final Codec<LootTableReward> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(IntProvider.NON_NEGATIVE_CODEC.optionalFieldOf("experience", UniformInt.of(20, 30))
+            .group(IntProviders.NON_NEGATIVE_CODEC.optionalFieldOf("experience", UniformInt.of(20, 30))
                     .forGetter(LootTableReward::getXpRange))
             .apply(instance, LootTableReward::new));
     /** 데이터 매니저 */

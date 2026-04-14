@@ -9,7 +9,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -55,6 +54,7 @@ public final class VPRecipeTypes {
         public static final int DEFAULT_BREWING_TIME = 400;
         public static final ResourceKey<RecipePropertySet> INGREDIENT_SET = createPropertySet("brewing_ingredient");
 
+        protected final CommonInfo commonInfo;
         @Getter
         private final int brewingTime;
         @NonNull
@@ -66,6 +66,17 @@ public final class VPRecipeTypes {
         @NonNull
         public static HolderSet<Item> getPotionContainers() {
             return BuiltInRegistries.ITEM.getOrThrow(VPTags.Items.POTIONS);
+        }
+
+        @Override
+        public boolean showNotification() {
+            return commonInfo.showNotification();
+        }
+
+        @Override
+        @NonNull
+        public String group() {
+            return "";
         }
 
         @Override
@@ -105,11 +116,28 @@ public final class VPRecipeTypes {
         }
 
         public static final class Mix extends Brewing {
+            private static final MapCodec<Mix> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
+                    .group(CommonInfo.MAP_CODEC.forGetter(mix -> mix.commonInfo),
+                            Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
+                            Potion.CODEC.fieldOf("base").forGetter(mix -> mix.basePotion),
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
+                            Potion.CODEC.fieldOf("result").forGetter(mix -> mix.resultPotion))
+                    .apply(inst, Mix::new));
+            private static final StreamCodec<RegistryFriendlyByteBuf, Mix> STREAM_CODEC = StreamCodec.composite(
+                    CommonInfo.STREAM_CODEC, mix -> mix.commonInfo,
+                    ByteBufCodecs.INT, Brewing::getBrewingTime,
+                    Potion.STREAM_CODEC, mix -> mix.basePotion,
+                    Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
+                    Potion.STREAM_CODEC, mix -> mix.resultPotion,
+                    Mix::new);
+            public static final RecipeSerializer<Mix> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
             private final Holder<Potion> basePotion;
             private final Holder<Potion> resultPotion;
 
-            private Mix(int brewingTime, @NonNull Holder<Potion> basePotion, @NonNull Ingredient ingredient, @NonNull Holder<Potion> resultPotion) {
-                super(brewingTime, ingredient);
+            private Mix(@NonNull CommonInfo commonInfo, int brewingTime, @NonNull Holder<Potion> basePotion, @NonNull Ingredient ingredient,
+                        @NonNull Holder<Potion> resultPotion) {
+                super(commonInfo, brewingTime, ingredient);
 
                 this.basePotion = basePotion;
                 this.resultPotion = resultPotion;
@@ -118,7 +146,7 @@ public final class VPRecipeTypes {
             @Override
             @NonNull
             public RecipeSerializer<? extends Brewing> getSerializer() {
-                return VPRecipeSerializers.BREWING_MIX.get();
+                return SERIALIZER;
             }
 
             @Override
@@ -132,7 +160,7 @@ public final class VPRecipeTypes {
 
             @Override
             @NonNull
-            public ItemStack assemble(@NonNull Input input, @NonNull HolderLookup.Provider registries) {
+            public ItemStack assemble(@NonNull Input input) {
                 ItemStack itemStack = input.base;
                 itemStack.set(DataComponents.POTION_CONTENTS, new PotionContents(resultPotion));
 
@@ -147,42 +175,31 @@ public final class VPRecipeTypes {
                                 super.ingredient.display(), itemHolder.value(), resultPotion))
                         .toList();
             }
-
-            @NoArgsConstructor
-            public static final class Serializer implements RecipeSerializer<Mix> {
-                private static final MapCodec<Mix> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
-                        .group(Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
-                                Potion.CODEC.fieldOf("base").forGetter(mix -> mix.basePotion),
-                                Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
-                                Potion.CODEC.fieldOf("result").forGetter(mix -> mix.resultPotion))
-                        .apply(inst, Mix::new));
-                private static final StreamCodec<RegistryFriendlyByteBuf, Mix> STREAM_CODEC = StreamCodec.composite(
-                        ByteBufCodecs.INT, Brewing::getBrewingTime,
-                        Potion.STREAM_CODEC, mix -> mix.basePotion,
-                        Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
-                        Potion.STREAM_CODEC, mix -> mix.resultPotion,
-                        Mix::new);
-
-                @Override
-                @NonNull
-                public MapCodec<Mix> codec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public StreamCodec<RegistryFriendlyByteBuf, Mix> streamCodec() {
-                    return STREAM_CODEC;
-                }
-            }
         }
 
         public static final class Transmute extends Brewing {
+            private static final MapCodec<Transmute> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
+                    .group(Recipe.CommonInfo.MAP_CODEC.forGetter(transmute -> transmute.commonInfo),
+                            Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
+                            Item.CODEC.fieldOf("base").forGetter(transmute -> transmute.base),
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
+                            Item.CODEC.fieldOf("result").forGetter(transmute -> transmute.result))
+                    .apply(inst, Transmute::new));
+            private static final StreamCodec<RegistryFriendlyByteBuf, Transmute> STREAM_CODEC = StreamCodec.composite(
+                    CommonInfo.STREAM_CODEC, transmute -> transmute.commonInfo,
+                    ByteBufCodecs.INT, Brewing::getBrewingTime,
+                    Item.STREAM_CODEC, transmute -> transmute.base,
+                    Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
+                    Item.STREAM_CODEC, transmute -> transmute.result,
+                    Transmute::new);
+            public static final RecipeSerializer<Transmute> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
             private final Holder<Item> base;
             private final Holder<Item> result;
 
-            private Transmute(int brewingTime, @NonNull Holder<Item> base, @NonNull Ingredient ingredient, @NonNull Holder<Item> result) {
-                super(brewingTime, ingredient);
+            private Transmute(@NonNull CommonInfo commonInfo, int brewingTime, @NonNull Holder<Item> base, @NonNull Ingredient ingredient,
+                              @NonNull Holder<Item> result) {
+                super(commonInfo, brewingTime, ingredient);
 
                 this.base = base;
                 this.result = result;
@@ -191,7 +208,7 @@ public final class VPRecipeTypes {
             @Override
             @NonNull
             public RecipeSerializer<? extends Brewing> getSerializer() {
-                return VPRecipeSerializers.BREWING_TRANSMUTE.get();
+                return SERIALIZER;
             }
 
             @Override
@@ -202,7 +219,7 @@ public final class VPRecipeTypes {
 
             @Override
             @NonNull
-            public ItemStack assemble(@NonNull Input input, @NonNull HolderLookup.Provider registries) {
+            public ItemStack assemble(@NonNull Input input) {
                 ItemStack itemStack = input.base;
                 return itemStack.transmuteCopy(result.value(), itemStack.getCount());
             }
@@ -217,48 +234,36 @@ public final class VPRecipeTypes {
                                 super.ingredient.display(), result.value(), potionRegistry.wrapAsHolder(potion)))
                         .toList();
             }
-
-            @NoArgsConstructor
-            public static final class Serializer implements RecipeSerializer<Transmute> {
-                private static final MapCodec<Transmute> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
-                        .group(Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
-                                Item.CODEC.fieldOf("base").forGetter(transmute -> transmute.base),
-                                Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
-                                Item.CODEC.fieldOf("result").forGetter(transmute -> transmute.result))
-                        .apply(inst, Transmute::new));
-                private static final StreamCodec<RegistryFriendlyByteBuf, Transmute> STREAM_CODEC = StreamCodec.composite(
-                        ByteBufCodecs.INT, Brewing::getBrewingTime,
-                        Item.STREAM_CODEC, transmute -> transmute.base,
-                        Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
-                        Item.STREAM_CODEC, transmute -> transmute.result,
-                        Transmute::new);
-
-                @Override
-                @NonNull
-                public MapCodec<Transmute> codec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public StreamCodec<RegistryFriendlyByteBuf, Transmute> streamCodec() {
-                    return STREAM_CODEC;
-                }
-            }
         }
 
         public static final class Mapped extends Brewing {
+            private static final MapCodec<Mapped> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
+                    .group(CommonInfo.MAP_CODEC.forGetter(mapped -> mapped.commonInfo),
+                            Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
+                            Codec.unboundedMap(Potion.CODEC, Potion.CODEC).fieldOf("result_map")
+                                    .forGetter(mapped -> mapped.resultPotionMap))
+                    .apply(inst, Mapped::new));
+            private static final StreamCodec<RegistryFriendlyByteBuf, Mapped> STREAM_CODEC = StreamCodec.composite(
+                    CommonInfo.STREAM_CODEC, mapped -> mapped.commonInfo,
+                    ByteBufCodecs.INT, Brewing::getBrewingTime,
+                    Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
+                    ByteBufCodecs.map(HashMap::new, Potion.STREAM_CODEC, Potion.STREAM_CODEC), mapped -> mapped.resultPotionMap,
+                    Mapped::new);
+            public static final RecipeSerializer<Mapped> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
             private final Map<Holder<Potion>, Holder<Potion>> resultPotionMap;
 
-            private Mapped(int brewingTime, @NonNull Ingredient ingredient, @NonNull Map<Holder<Potion>, Holder<Potion>> resultPotionMap) {
-                super(brewingTime, ingredient);
+            private Mapped(@NonNull CommonInfo commonInfo, int brewingTime, @NonNull Ingredient ingredient, @NonNull Map<Holder<Potion>,
+                    Holder<Potion>> resultPotionMap) {
+                super(commonInfo, brewingTime, ingredient);
                 this.resultPotionMap = resultPotionMap;
             }
 
             @Override
             @NonNull
             public RecipeSerializer<? extends Brewing> getSerializer() {
-                return VPRecipeSerializers.BREWING_MAPPED.get();
+                return SERIALIZER;
             }
 
             @Override
@@ -271,7 +276,7 @@ public final class VPRecipeTypes {
 
             @Override
             @NonNull
-            public ItemStack assemble(@NonNull Input input, @NonNull HolderLookup.Provider registries) {
+            public ItemStack assemble(@NonNull Input input) {
                 ItemStack itemStack = getResult(input.base);
                 return itemStack == null ? input.base : itemStack;
             }
@@ -300,33 +305,6 @@ public final class VPRecipeTypes {
                                 (RecipeDisplay) new VPRecipeDisplayTypes.Brewing(itemHolder.value(), entry.getKey(), super.ingredient.display(),
                                         itemHolder.value(), entry.getValue())))
                         .toList();
-            }
-
-            @NoArgsConstructor
-            public static final class Serializer implements RecipeSerializer<Mapped> {
-                private static final MapCodec<Mapped> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
-                        .group(Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(Brewing::getBrewingTime),
-                                Ingredient.CODEC.fieldOf("ingredient").forGetter(Brewing::getIngredient),
-                                Codec.unboundedMap(Potion.CODEC, Potion.CODEC).fieldOf("result_map")
-                                        .forGetter(mapped -> mapped.resultPotionMap))
-                        .apply(inst, Mapped::new));
-                private static final StreamCodec<RegistryFriendlyByteBuf, Mapped> STREAM_CODEC = StreamCodec.composite(
-                        ByteBufCodecs.INT, Brewing::getBrewingTime,
-                        Ingredient.CONTENTS_STREAM_CODEC, Brewing::getIngredient,
-                        ByteBufCodecs.map(HashMap::new, Potion.STREAM_CODEC, Potion.STREAM_CODEC), mapped -> mapped.resultPotionMap,
-                        Mapped::new);
-
-                @Override
-                @NonNull
-                public MapCodec<Mapped> codec() {
-                    return CODEC;
-                }
-
-                @Override
-                @NonNull
-                public StreamCodec<RegistryFriendlyByteBuf, Mapped> streamCodec() {
-                    return STREAM_CODEC;
-                }
             }
         }
 

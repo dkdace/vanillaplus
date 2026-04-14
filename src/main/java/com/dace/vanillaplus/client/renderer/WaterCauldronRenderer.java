@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -14,7 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.data.AtlasIds;
@@ -23,6 +24,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,12 +90,14 @@ public final class WaterCauldronRenderer implements BlockEntityRenderer<WaterCau
         BlockEntityRenderer.super.extractRenderState(waterCauldronBlockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
         Level level = waterCauldronBlockEntity.getLevel();
-        if (level == null)
+        if (!(level instanceof ClientLevel clientLevel))
             return;
 
-        renderState.color = getMixedColor(BiomeColors.getAverageWaterColor(level, renderState.blockPos), waterCauldronBlockEntity.getColor(),
+        renderState.color = getMixedColor(BiomeColors.getAverageWaterColor(clientLevel, renderState.blockPos), waterCauldronBlockEntity.getColor(),
                 MIN_ALPHA);
-        renderState.height = ((LayeredCauldronBlock) renderState.blockState.getBlock()).getContentHeight(renderState.blockState);
+
+        BlockState blockState = waterCauldronBlockEntity.getBlockState();
+        renderState.height = ((LayeredCauldronBlock) blockState.getBlock()).getContentHeight(blockState);
     }
 
     @Override

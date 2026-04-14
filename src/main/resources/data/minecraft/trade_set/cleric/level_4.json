@@ -1,0 +1,21 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cleric/level_4",
+  "trades": [
+    [
+      "vanillaplus:cleric/4/sell_crying_obsidian",
+      "vanillaplus:cleric/4/sell_experience_bottle"
+    ],
+    [
+      "vanillaplus:cleric/4/sell_splash_potion_healing",
+      "vanillaplus:cleric/4/sell_splash_potion_harming",
+      "vanillaplus:cleric/4/sell_splash_potion_infested",
+      "vanillaplus:cleric/4/sell_splash_potion_slowness",
+      "vanillaplus:cleric/4/sell_splash_potion_weaving",
+      "vanillaplus:cleric/4/sell_splash_potion_weakness",
+      "vanillaplus:cleric/4/sell_splash_potion_wind_charged",
+      "vanillaplus:cleric/4/sell_splash_potion_poison",
+      "vanillaplus:cleric/4/sell_splash_potion_oozing"
+    ]
+  ]
+}

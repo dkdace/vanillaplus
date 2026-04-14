@@ -1,0 +1,31 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cleric/level_2",
+  "trades": [
+    [
+      "vanillaplus:cleric/2/buy_gold_ingot",
+      [
+        "vanillaplus:cleric/2/sell_white_candle",
+        "vanillaplus:cleric/2/sell_light_gray_candle",
+        "vanillaplus:cleric/2/sell_gray_candle",
+        "vanillaplus:cleric/2/sell_black_candle",
+        "vanillaplus:cleric/2/sell_brown_candle",
+        "vanillaplus:cleric/2/sell_red_candle",
+        "vanillaplus:cleric/2/sell_orange_candle",
+        "vanillaplus:cleric/2/sell_yellow_candle",
+        "vanillaplus:cleric/2/sell_lime_candle",
+        "vanillaplus:cleric/2/sell_green_candle",
+        "vanillaplus:cleric/2/sell_cyan_candle",
+        "vanillaplus:cleric/2/sell_light_blue_candle",
+        "vanillaplus:cleric/2/sell_blue_candle",
+        "vanillaplus:cleric/2/sell_purple_candle",
+        "vanillaplus:cleric/2/sell_magenta_candle",
+        "vanillaplus:cleric/2/sell_pink_candle"
+      ]
+    ],
+    [
+      "vanillaplus:cleric/2/buy_turtle_scute",
+      "vanillaplus:cleric/2/sell_soul_sand"
+    ]
+  ]
+}

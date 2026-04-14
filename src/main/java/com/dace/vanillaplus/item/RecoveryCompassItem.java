@@ -63,7 +63,7 @@ public final class RecoveryCompassItem extends Item {
 
         Vec3 pos = getTeleportLocation(serverLevel, lastDeathPos);
         if (pos == null) {
-            player.displayClientMessage(COMPONENT_TELEPORT_NOT_VALID, true);
+            player.sendOverlayMessage(COMPONENT_TELEPORT_NOT_VALID);
             return InteractionResult.FAIL;
         }
 

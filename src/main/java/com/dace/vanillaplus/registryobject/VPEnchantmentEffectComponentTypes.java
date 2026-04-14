@@ -11,6 +11,7 @@ import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
@@ -40,28 +41,21 @@ public final class VPEnchantmentEffectComponentTypes {
             .build();
 
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> XP_MULTIPLIER = create("xp_multiplier",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), LootContextParamSets.ENCHANTED_ENTITY)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> HEAL_PER_XP = create("heal_per_xp",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), LootContextParamSets.ENCHANTED_ENTITY)));
     public static final RegistryObject<DataComponentType<EnchantmentValueEffect>> IRON_GOLEM_HEAL_MULTIPLIER = create("iron_golem_heal_multiplier",
             builder -> builder.persistent(EnchantmentValueEffect.CODEC));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> BARTERING_ROLLS = create("bartering_rolls",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), LootContextParamSets.ENCHANTED_ENTITY)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> TRADING_COST_MULTIPLIER = create("trading_cost_multiplier",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), LootContextParamSets.ENCHANTED_ENTITY)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> FINAL_INCOMING_DAMAGE_MULTIPLIER = create("final_incoming_damage_multiplier",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.ENCHANTED_DAMAGE)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), LootContextParamSets.ENCHANTED_DAMAGE)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> MOB_VISIBILITY_MULTIPLIER = create("mob_visibility_multiplier",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, CONTEXT_KEY_SET_ENCHANTED_ENTITY_TARGET)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC), CONTEXT_KEY_SET_ENCHANTED_ENTITY_TARGET)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> POST_DAMAGE = create("post_damage",
-            builder -> builder.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, LootContextParamSets.ENCHANTED_DAMAGE)
-                    .listOf()));
+            builder -> builder.persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC), LootContextParamSets.ENCHANTED_DAMAGE)));
 
     @NonNull
     private static <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

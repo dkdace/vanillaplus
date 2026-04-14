@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cartographer/level_1",
+  "trades": [
+    [
+      "vanillaplus:cartographer/1/buy_paper",
+      "vanillaplus:cartographer/1/sell_empty_map"
+    ],
+    [
+      "vanillaplus:cartographer/1/buy_glass_pane",
+      "vanillaplus:cartographer/1/sell_map"
+    ]
+  ]
+}

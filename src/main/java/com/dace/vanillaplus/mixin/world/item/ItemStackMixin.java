@@ -13,7 +13,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -34,6 +33,7 @@ import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -150,9 +150,6 @@ public abstract class ItemStackMixin implements VPItemStack {
     public abstract Item getItem();
 
     @Shadow
-    public abstract boolean is(Item item);
-
-    @Shadow
     public abstract boolean isEnchanted();
 
     @Shadow
@@ -198,12 +195,12 @@ public abstract class ItemStackMixin implements VPItemStack {
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(COMPONENT_ATTACK_RANGE_WHEN_ATTACKING);
 
-        float minRange = attackRange.minRange();
+        float minRange = attackRange.minReach();
         if (minRange > 0)
             componentConsumer.accept(COMPONENT_ATTACK_RANGE_MIN_REACH.apply(ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(minRange)));
 
         componentConsumer.accept(COMPONENT_ATTACK_RANGE_MAX_REACH.apply(
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(attackRange.maxRange())));
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(attackRange.maxReach())));
 
         float hitboxMargin = attackRange.hitboxMargin();
         if (hitboxMargin > 0)
@@ -305,15 +302,9 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
-    private void addTrimMaterialTooltip(@NonNull ProvidesTrimMaterial providesTrimMaterial, @NonNull Item.TooltipContext tooltipContext,
-                                        @NonNull Consumer<Component> componentConsumer) {
-        HolderLookup.Provider registries = tooltipContext.registries();
-
-        if (registries != null)
-            providesTrimMaterial.unwrap(registries).ifPresent(trimMaterialHolder -> {
-                componentConsumer.accept(COMPONENT_TRIM_MATERIAL);
-                VPTrimMaterial.cast(trimMaterialHolder.value()).applyTooltip(componentConsumer);
-            });
+    private void addTrimMaterialTooltip(@NonNull Holder<TrimMaterial> providesTrimMaterialHolder, @NonNull Consumer<Component> componentConsumer) {
+        componentConsumer.accept(COMPONENT_TRIM_MATERIAL);
+        VPTrimMaterial.cast(providesTrimMaterialHolder.value()).applyTooltip(componentConsumer);
     }
 
     @Unique
@@ -367,12 +358,12 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.FOOD, tooltipDisplay, foodProperties -> addFoodTooltip(foodProperties, componentConsumer));
         addTooltip(VPDataComponentTypes.EXTRA_FOOD.get(), tooltipDisplay, extraFood -> addExtraFoodTooltip(extraFood, componentConsumer));
 
-        if (is(Items.CAKE))
+        if (getThis().is(Items.CAKE))
             VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).ifPresent(cakeModifier ->
                     addFoodTooltip(cakeModifier.getFoodProperties(), componentConsumer));
 
         addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, tooltipDisplay, providesTrimMaterial ->
-                addTrimMaterialTooltip(providesTrimMaterial, tooltipContext, componentConsumer));
+                addTrimMaterialTooltip(providesTrimMaterial, componentConsumer));
     }
 
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE",

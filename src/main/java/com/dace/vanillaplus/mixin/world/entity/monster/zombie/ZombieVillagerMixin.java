@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ZombieVillager.class)
 public abstract class ZombieVillagerMixin extends MonsterMixin<ZombieVillager, EntityModifier.LivingEntityModifier> {
-    @Inject(method = "lambda$finishConversion$2", at = @At(value = "INVOKE",
+    @Inject(method = "lambda$finishConversion$0", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/npc/villager/Villager;refreshBrain(Lnet/minecraft/server/level/ServerLevel;)V"))
     private void dismountOnConversion(ServerLevel serverLevel, Villager villager, CallbackInfo ci) {
         if (villager.getVehicle() instanceof Chicken)
