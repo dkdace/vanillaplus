@@ -1,7 +1,10 @@
 package com.dace.vanillaplus;
 
 import com.dace.vanillaplus.data.*;
-import com.dace.vanillaplus.data.modifier.*;
+import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.modifier.PotionModifier;
 import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.registryobject.*;
@@ -107,8 +110,6 @@ public final class VPRegistry<T> {
     public static final VPRegistry<EntityModifier> ENTITY_MODIFIER = new VPRegistry<>("modifier/entity");
     /** 물약 수정자 */
     public static final VPRegistry<PotionModifier> POTION_MODIFIER = new VPRegistry<>("modifier/potion");
-    /** 마법 부여 수정자 */
-    public static final VPRegistry<EnchantmentModifier> ENCHANTMENT_MODIFIER = new VPRegistry<>("modifier/enchantment");
 
     static {
         VanillaPlus.loadClass(VPSoundEvents.class);
@@ -186,7 +187,6 @@ public final class VPRegistry<T> {
         applyDataModifiers(registries, Registries.BLOCK, VPRegistry.BLOCK_MODIFIER);
         applyDataModifiers(registries, Registries.ENTITY_TYPE, VPRegistry.ENTITY_MODIFIER);
         applyDataModifiers(registries, Registries.POTION, VPRegistry.POTION_MODIFIER);
-        applyDataModifiers(registries, Registries.ENCHANTMENT, VPRegistry.ENCHANTMENT_MODIFIER);
         applyDataModifiers(registries, Registries.TRIM_MATERIAL, VPRegistry.TRIM_MATERIAL_EFFECT);
         applyDataModifiers(registries, Registries.TRIM_PATTERN, VPRegistry.TRIM_PATTERN_EFFECT);
         applyDataModifiers(registries, Registries.INSTRUMENT, VPRegistry.INSTRUMENT_EFFECT);
