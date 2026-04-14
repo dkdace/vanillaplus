@@ -2,10 +2,10 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.InstrumentEffect;
 import com.dace.vanillaplus.extension.world.item.VPInstrument;
+import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.world.item.Instrument;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

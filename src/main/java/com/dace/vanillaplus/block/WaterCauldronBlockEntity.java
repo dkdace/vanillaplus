@@ -2,6 +2,7 @@ package com.dace.vanillaplus.block;
 
 import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
 import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,7 +26,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -93,6 +94,29 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
         }
 
         return List.copyOf(mobEffectInstanceMap.values());
+    }
+
+    /**
+     * 투명도를 기준으로 색상을 혼합한다.
+     *
+     * @param baseColor  기반 색상
+     * @param addedColor 투명도가 포함된 추가 색상
+     * @param minAlpha   최소 투명도
+     * @return 최종 색상
+     */
+    public static int getMixedColor(int baseColor, int addedColor, float minAlpha) {
+        float alpha = ARGB.alphaFloat(addedColor);
+
+        float red = ARGB.redFloat(baseColor);
+        red += (ARGB.redFloat(addedColor) - red) * alpha;
+
+        float green = ARGB.greenFloat(baseColor);
+        green += (ARGB.greenFloat(addedColor) - green) * alpha;
+
+        float blue = ARGB.blueFloat(baseColor);
+        blue += (ARGB.blueFloat(addedColor) - blue) * alpha;
+
+        return ARGB.colorFromFloat(Mth.clampedLerp(alpha, minAlpha, 1), red, green, blue);
     }
 
     /**
@@ -299,6 +323,6 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
 
         this.color = ARGB.color(Math.min(alpha, 0xFF), Math.min(red, 0xFF), Math.min(green, 0xFF), Math.min(blue, 0xFF));
 
-        Objects.requireNonNull(level).sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        Objects.requireNonNull(level).setBlockAndUpdate(getBlockPos(), getBlockState().setValue(VPLayeredCauldronBlock.UPDATE_COLOR, true));
     }
 }
