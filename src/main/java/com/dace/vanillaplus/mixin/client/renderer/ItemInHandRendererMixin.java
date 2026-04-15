@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class ItemInHandRendererMixin implements VPMixin<ItemInHandRenderer> {
     @ModifyExpressionValue(method = "renderArmWithItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/player/AbstractClientPlayer;isAutoSpinAttack()Z"))
-    private boolean modifyAutoSpinAttackRenderCondition(boolean condition, @Local(argsOnly = true) ItemStack itemStack) {
-        return condition && itemStack.is(Items.TRIDENT);
+    private boolean modifyAutoSpinAttackRenderCondition(boolean isAutoSpinAttack, @Local(argsOnly = true) ItemStack itemStack) {
+        return isAutoSpinAttack && itemStack.is(Items.TRIDENT);
     }
 }

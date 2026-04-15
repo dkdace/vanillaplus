@@ -26,12 +26,12 @@ public abstract class OptionsMixin implements VPOptions {
     @Unique
     @Getter
     private final OptionInstance<Boolean> toggleProne = new OptionInstance<>("key.prone", OptionInstance.noTooltip(),
-            (caption, value) -> value ? KEY_TOGGLE : KEY_HOLD, OptionInstance.BOOLEAN_VALUES, false, value -> {
+            (_, value) -> value ? KEY_TOGGLE : KEY_HOLD, OptionInstance.BOOLEAN_VALUES, false, _ -> {
     });
 
     @Inject(method = "processOptions", at = @At(value = "FIELD",
             target = "Lnet/minecraft/client/Options;toggleSprint:Lnet/minecraft/client/OptionInstance;", opcode = Opcodes.GETFIELD))
-    private void addExtraOptions(Options.FieldAccess fieldAccess, CallbackInfo ci) {
-        fieldAccess.process("toggleProne", toggleProne);
+    private void addExtraOptions(Options.FieldAccess access, CallbackInfo ci) {
+        access.process("toggleProne", toggleProne);
     }
 }

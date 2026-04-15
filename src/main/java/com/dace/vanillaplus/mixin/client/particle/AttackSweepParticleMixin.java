@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class AttackSweepParticleMixin extends SingleQuadParticleMixin {
     @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/particle/AttackSweepParticle;quadSize:F",
             opcode = Opcodes.PUTFIELD))
-    private void modifyQuadSize(AttackSweepParticle instance, float value, @Local(ordinal = 3, argsOnly = true) double quadSizeMultiplier) {
+    private void modifyQuadSize(AttackSweepParticle instance, float value, @Local(ordinal = 3, argsOnly = true) double size) {
         quadSize = 1;
-        scale((float) quadSizeMultiplier);
+        scale((float) size);
     }
 }

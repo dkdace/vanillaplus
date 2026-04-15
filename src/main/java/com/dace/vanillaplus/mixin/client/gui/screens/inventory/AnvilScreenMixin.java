@@ -17,9 +17,9 @@ public abstract class AnvilScreenMixin extends AbstractContainerScreenMixin<Anvi
     @Definition(id = "i", local = @Local(type = int.class, ordinal = 2))
     @Expression("i >= 40")
     @ModifyExpressionValue(method = "extractLabels", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean modifyMaxCostCondition(boolean condition, @Local(ordinal = 2) int i) {
+    private boolean modifyMaxCostCondition(boolean condition, @Local(name = "cost") int cost) {
         return VPModifiableData.getDataModifier(Blocks.ANVIL, BlockModifier.AnvilModifier.class)
-                .map(anvilModifier -> anvilModifier.getMaxCost().map(value -> i > value).orElse(false))
+                .map(anvilModifier -> anvilModifier.getMaxCost().map(value -> cost > value).orElse(false))
                 .orElse(condition);
     }
 }
