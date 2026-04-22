@@ -1,12 +1,12 @@
 package com.dace.vanillaplus.event;
 
 import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.client.VPOptions;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.PronePacketHandler;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;

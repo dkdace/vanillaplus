@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.entity.boss.enderdragon;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.RaiderEffect;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.Illusioner;

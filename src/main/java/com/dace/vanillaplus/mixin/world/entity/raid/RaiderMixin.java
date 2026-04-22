@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
-import com.dace.vanillaplus.ReloadableDataManager;
-import com.dace.vanillaplus.data.RaiderEffect;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.ReloadableDataManager;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import lombok.NonNull;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;

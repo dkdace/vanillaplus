@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;

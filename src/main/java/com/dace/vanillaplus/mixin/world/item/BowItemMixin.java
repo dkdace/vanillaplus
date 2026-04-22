@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Items;

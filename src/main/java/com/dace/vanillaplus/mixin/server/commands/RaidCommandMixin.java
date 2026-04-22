@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.server.commands;
 
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.RaidCommand;

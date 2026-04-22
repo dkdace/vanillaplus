@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.color.item;
 
-import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import net.minecraft.client.color.item.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,11 +1,11 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPInstrument;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.StopSoundPacketHandler;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;

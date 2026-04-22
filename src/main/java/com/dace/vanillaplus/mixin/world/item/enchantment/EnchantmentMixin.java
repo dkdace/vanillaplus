@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
+import com.dace.vanillaplus.world.LevelBasedValuePreset;
 import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.core.component.DataComponentType;

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.crafting;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.item.crafting.BrewingRecipe;
+import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipePropertySet;

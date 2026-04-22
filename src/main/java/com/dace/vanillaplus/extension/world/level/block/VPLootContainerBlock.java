@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.level.block;
 
-import com.dace.vanillaplus.data.LootTableReward;
-import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
+import com.dace.vanillaplus.world.LootTableReward;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

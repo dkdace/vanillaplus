@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.zombie;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.monster.zombie.ZombieVillager;

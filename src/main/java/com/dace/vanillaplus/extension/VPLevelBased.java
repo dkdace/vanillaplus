@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension;
 
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
+import com.dace.vanillaplus.world.LevelBasedValuePreset;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 

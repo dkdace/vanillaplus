@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
 import org.spongepowered.asm.mixin.Mixin;

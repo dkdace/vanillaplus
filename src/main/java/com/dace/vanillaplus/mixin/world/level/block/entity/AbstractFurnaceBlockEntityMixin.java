@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;

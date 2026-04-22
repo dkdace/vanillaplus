@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
+import com.dace.vanillaplus.data.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
-import com.dace.vanillaplus.item.crafting.BrewingRecipe;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
+import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;

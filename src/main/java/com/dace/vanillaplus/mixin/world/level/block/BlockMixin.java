@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;

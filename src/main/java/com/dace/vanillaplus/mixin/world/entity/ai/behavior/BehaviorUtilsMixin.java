@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.behavior;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.registryobject.EntityModifierInterfaces;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.registryobject.EntityModifierInterfaces;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Mob;

@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.client.gui;
 
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
-import com.dace.vanillaplus.item.component.RepairWithXP;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

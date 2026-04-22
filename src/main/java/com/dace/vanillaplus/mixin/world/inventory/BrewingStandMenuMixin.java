@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.inventory;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.inventory.VPBrewingStandMenu;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
-import com.dace.vanillaplus.item.crafting.BrewingRecipe;
+import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.world.Container;

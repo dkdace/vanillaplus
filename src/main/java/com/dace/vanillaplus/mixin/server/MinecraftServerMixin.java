@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.server;
 
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
-import com.dace.vanillaplus.registryobject.VPGameRules;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.gamerules.GameRule;

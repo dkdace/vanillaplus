@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.levelgen.structure.structures;
 
-import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
 import com.dace.vanillaplus.mixin.world.level.levelgen.structure.StructurePieceMixin;
+import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;

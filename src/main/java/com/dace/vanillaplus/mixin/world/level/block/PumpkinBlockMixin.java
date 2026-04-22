@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.level.block.PumpkinBlock;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.item.enchantment;
 
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

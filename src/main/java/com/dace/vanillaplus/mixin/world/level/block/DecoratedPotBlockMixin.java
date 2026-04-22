@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;

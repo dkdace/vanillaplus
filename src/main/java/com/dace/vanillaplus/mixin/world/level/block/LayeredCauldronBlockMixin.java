@@ -1,10 +1,10 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.block.WaterCauldronBlockEntity;
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.data.registryobject.VPBlockEntityTypes;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
-import com.dace.vanillaplus.registryobject.VPBlockEntityTypes;
+import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

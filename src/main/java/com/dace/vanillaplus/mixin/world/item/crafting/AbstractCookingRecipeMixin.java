@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item.crafting;
 
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.SingleRecipeInput;

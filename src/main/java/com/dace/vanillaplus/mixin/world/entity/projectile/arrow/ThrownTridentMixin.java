@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityReference;

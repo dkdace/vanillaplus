@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.registryobject.EntityModifierInterfaces;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
-import com.dace.vanillaplus.registryobject.EntityModifierInterfaces;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
-import com.dace.vanillaplus.ReloadableDataManager;
-import com.dace.vanillaplus.data.RaidWave;
+import com.dace.vanillaplus.data.ReloadableDataManager;
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPGameRules;
+import com.dace.vanillaplus.world.entity.raid.RaidWave;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

@@ -1,10 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItem;
-import com.dace.vanillaplus.item.component.RepairWithXP;
-import com.dace.vanillaplus.registryobject.VPAttributes;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.world.item.ItemModifier;
+import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;

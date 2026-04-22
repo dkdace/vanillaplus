@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
+import com.dace.vanillaplus.data.registryobject.VPItems;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPGameRules;
-import com.dace.vanillaplus.registryobject.VPItems;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;

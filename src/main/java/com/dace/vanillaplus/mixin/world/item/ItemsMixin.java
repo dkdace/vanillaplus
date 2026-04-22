@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.item.RecoveryCompassItem;
+import com.dace.vanillaplus.world.item.RecoveryCompassItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.UnknownNullability;

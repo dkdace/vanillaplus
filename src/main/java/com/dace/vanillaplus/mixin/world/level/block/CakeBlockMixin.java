@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;

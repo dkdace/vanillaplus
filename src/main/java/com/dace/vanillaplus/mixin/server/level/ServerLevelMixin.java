@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.server.level;
 
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPAttributes;
 import lombok.NonNull;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;

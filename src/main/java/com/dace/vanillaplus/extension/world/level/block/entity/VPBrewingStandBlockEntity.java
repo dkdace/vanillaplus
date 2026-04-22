@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.item.crafting.BrewingRecipe;
+import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import lombok.NonNull;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.RecipeCraftingHolder;

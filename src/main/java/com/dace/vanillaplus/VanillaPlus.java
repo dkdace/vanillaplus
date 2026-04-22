@@ -1,5 +1,8 @@
 package com.dace.vanillaplus;
 
+import com.dace.vanillaplus.data.DataPackRegistry;
+import com.dace.vanillaplus.data.ReloadableDataManager;
+import com.dace.vanillaplus.data.StaticRegistry;
 import com.mojang.logging.LogUtils;
 import lombok.NonNull;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +25,7 @@ public final class VanillaPlus {
         LOGGER.info("Starting {} {}", modInfo.getModId(), modInfo.getVersion());
 
         StaticRegistry.bootstrap(context.getModBusGroup());
-        DataPackRegistries.bootstrap();
+        DataPackRegistry.bootstrap();
         ReloadableDataManager.bootstrap();
     }
 }

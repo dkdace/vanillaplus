@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

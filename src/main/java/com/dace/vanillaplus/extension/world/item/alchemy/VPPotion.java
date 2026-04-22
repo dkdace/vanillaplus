@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.item.alchemy;
 
-import com.dace.vanillaplus.data.modifier.PotionModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.item.PotionModifier;
 import lombok.NonNull;
 import net.minecraft.world.item.alchemy.Potion;
 

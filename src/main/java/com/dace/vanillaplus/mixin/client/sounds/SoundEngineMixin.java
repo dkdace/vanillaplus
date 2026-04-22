@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.client.sounds;
 
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.client.resources.sounds.VPEntityBoundSoundInstance;
 import com.dace.vanillaplus.extension.client.sounds.VPSoundEngine;
-import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.google.common.collect.Multimap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import lombok.NonNull;

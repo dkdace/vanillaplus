@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BellBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;

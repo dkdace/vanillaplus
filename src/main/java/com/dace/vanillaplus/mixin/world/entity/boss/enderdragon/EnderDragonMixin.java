@@ -1,10 +1,10 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon;
 
-import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.VPTags;
+import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.registryobject.VPSoundEvents;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

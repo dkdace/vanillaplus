@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.entity;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.extensions.IForgeEntity;

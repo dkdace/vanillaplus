@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.item;
 
-import com.dace.vanillaplus.data.InstrumentEffect;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.item.effect.InstrumentEffect;
 import lombok.NonNull;
 import net.minecraft.world.item.Instrument;
 

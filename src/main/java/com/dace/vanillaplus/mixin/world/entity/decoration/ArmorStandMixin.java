@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.decoration;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;

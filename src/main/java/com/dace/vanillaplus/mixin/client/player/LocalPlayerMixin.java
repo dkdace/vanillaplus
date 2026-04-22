@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.player;
 
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.mixin.world.entity.player.PlayerMixin;
-import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.Minecraft;

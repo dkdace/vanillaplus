@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.event;
 
 import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPAttributes;
-import com.dace.vanillaplus.registryobject.VPGameRules;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.level.ServerLevel;

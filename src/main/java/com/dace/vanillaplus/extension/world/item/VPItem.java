@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import lombok.NonNull;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.extensions.IForgeItem;

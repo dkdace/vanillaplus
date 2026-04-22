@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.Items;

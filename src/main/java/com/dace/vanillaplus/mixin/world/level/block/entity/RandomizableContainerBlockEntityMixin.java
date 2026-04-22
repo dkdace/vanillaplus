@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.ReloadableDataManager;
-import com.dace.vanillaplus.data.LootTableReward;
+import com.dace.vanillaplus.data.ReloadableDataManager;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
+import com.dace.vanillaplus.world.LootTableReward;
 import lombok.NonNull;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;

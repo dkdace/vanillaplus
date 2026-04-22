@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;

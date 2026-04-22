@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.storage.loot.functions;
 
-import com.dace.vanillaplus.registryobject.VPGameRules;
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.SetOminousBottleAmplifierFunction;

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.network.packet;
 
-import com.dace.vanillaplus.registryobject.VPGameRules;
+import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.network.RegistryFriendlyByteBuf;

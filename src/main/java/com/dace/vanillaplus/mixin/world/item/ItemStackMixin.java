@@ -1,15 +1,15 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
-import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.data.modifier.PotionModifier;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
-import com.dace.vanillaplus.item.component.ExtraFood;
-import com.dace.vanillaplus.item.component.RepairWithXP;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.item.ItemModifier;
+import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.component.ExtraFood;
+import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;

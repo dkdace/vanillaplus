@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.util;
 
-import com.dace.vanillaplus.StaticRegistry;
+import com.dace.vanillaplus.data.StaticRegistry;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
