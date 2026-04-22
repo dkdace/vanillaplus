@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.registryobject.EntityModifierInterfaces;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -39,8 +40,8 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyAttackRadius(float radius, @Local(argsOnly = true) T monster) {
         return VPEntity.cast(monster).getDataModifier()
-                .map(entityModifier -> entityModifier.getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB)
-                        .getShootingRange())
+                .flatMap(entityModifier -> entityModifier.get(EntityModifierInterfaces.CROSSBOW_ATTACK_MOB)
+                        .map(EntityModifier.CrossbowAttackMobInfo::getShootingRange))
                 .orElse((int) radius);
     }
 

@@ -1,37 +1,31 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.StaticRegistry;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.serialization.Codec;
 import lombok.*;
 import lombok.experimental.UtilityClass;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRuleCategory;
 import net.minecraft.world.level.gamerules.GameRuleType;
 import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
-import net.minecraftforge.common.util.Result;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 모드에서 사용하는 게임 규칙을 관리하는 클래스.
  */
 @UtilityClass
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class VPGameRules {
     /** 최대 흉조 레벨 */
     public static final int MAX_POSSIBLE_BAD_OMEN_LEVEL = 10;
+
+    private static final DeferredRegister<GameRule<?>> REGISTRY = StaticRegistry.createDeferredRegister(Registries.GAME_RULE);
 
     public static final RegistryObject<GameRule<Boolean>> SHOW_HEAD_ON_LOCATOR_BAR = create("show_head_on_locator_bar",
             GameRuleCategory.PLAYER, true);
@@ -42,14 +36,14 @@ public final class VPGameRules {
 
     @NonNull
     private static RegistryObject<GameRule<Boolean>> create(@NonNull String name, @NonNull GameRuleCategory gameRuleCategory, boolean defaultValue) {
-        return VPRegistry.register(VPRegistry.GAME_RULE, name, () -> new GameRule<>(gameRuleCategory, GameRuleType.BOOL, BoolArgumentType.bool(),
+        return REGISTRY.register(name, () -> new GameRule<>(gameRuleCategory, GameRuleType.BOOL, BoolArgumentType.bool(),
                 GameRuleTypeVisitor::visitBoolean, Codec.BOOL, value -> value ? 1 : 0, defaultValue, FeatureFlagSet.of()));
     }
 
     @NonNull
     private static RegistryObject<GameRule<Integer>> create(@NonNull String name, @NonNull GameRuleCategory gameRuleCategory, int defaultValue,
                                                             int minValue, int maxValue) {
-        return VPRegistry.register(VPRegistry.GAME_RULE, name, () -> new GameRule<>(gameRuleCategory, GameRuleType.INT,
+        return REGISTRY.register(name, () -> new GameRule<>(gameRuleCategory, GameRuleType.INT,
                 IntegerArgumentType.integer(minValue, maxValue), GameRuleTypeVisitor::visitInteger, Codec.intRange(minValue, maxValue),
                 value -> value, defaultValue, FeatureFlagSet.of()));
     }
@@ -65,17 +59,6 @@ public final class VPGameRules {
     @NonNull
     public static <T> T getValue(@NonNull RegistryObject<GameRule<T>> registryObject, @NonNull ServerLevel serverLevel) {
         return serverLevel.getGameRules().get(registryObject.get());
-    }
-
-    @SubscribeEvent
-    private static void onMobSpawnAllowDespawn(@NonNull MobSpawnEvent.AllowDespawn event) {
-        ServerLevel level = event.getLevel().getLevel();
-        Mob entity = event.getEntity();
-
-        if (!(entity instanceof Endermite) && !level.getGameRules().get(SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT.get())
-                && level.getBiome(entity.blockPosition()).is(Biomes.THE_END)
-                && !level.getEntities(EntityType.ENDER_DRAGON, enderDragon -> true).isEmpty())
-            event.setResult(Result.ALLOW);
     }
 
     /**

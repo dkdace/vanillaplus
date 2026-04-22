@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
+import com.dace.vanillaplus.item.crafting.BrewingRecipe;
 import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -54,7 +55,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
     @Unique
     @Getter
-    private RecipeManager.CachedCheck<VPRecipeTypes.Brewing.Input, ? extends VPRecipeTypes.Brewing> quickCheck;
+    private RecipeManager.CachedCheck<BrewingRecipe.Input, ? extends BrewingRecipe> quickCheck;
     @Unique
     @Getter
     @Setter
@@ -64,8 +65,8 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Unique
     @Nullable
-    private static RecipeHolder<? extends VPRecipeTypes.Brewing> getRecipeResult(@NonNull BrewingStandBlockEntity brewingStandBlockEntity,
-                                                                                 @NonNull VPRecipeTypes.Brewing.Input input, @NonNull Level level) {
+    private static RecipeHolder<? extends BrewingRecipe> getRecipeResult(@NonNull BrewingStandBlockEntity brewingStandBlockEntity,
+                                                                         @NonNull BrewingRecipe.Input input, @NonNull Level level) {
         return VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).getQuickCheck().getRecipeFor(input, (ServerLevel) level).orElse(null);
     }
 
@@ -78,7 +79,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
         if (!ingredient.isEmpty())
             for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
                 ItemStack potion = itemStacks.get(i);
-                VPRecipeTypes.Brewing.Input input = new VPRecipeTypes.Brewing.Input(potion, ingredient);
+                BrewingRecipe.Input input = new BrewingRecipe.Input(potion, ingredient);
 
                 if (!potion.isEmpty() && getRecipeResult(brewingStandBlockEntity, input, level) != null)
                     return true;
@@ -92,9 +93,9 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
                                              @Local(argsOnly = true) BrewingStandBlockEntity brewingStandBlockEntity) {
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
             ItemStack potion = brewingStandBlockEntity.getItem(i);
-            VPRecipeTypes.Brewing.Input input = new VPRecipeTypes.Brewing.Input(potion, brewingStandBlockEntity.getItem(INGREDIENT_SLOT));
+            BrewingRecipe.Input input = new BrewingRecipe.Input(potion, brewingStandBlockEntity.getItem(INGREDIENT_SLOT));
 
-            RecipeHolder<? extends VPRecipeTypes.Brewing> recipeHolder = getRecipeResult(brewingStandBlockEntity, input, level);
+            RecipeHolder<? extends BrewingRecipe> recipeHolder = getRecipeResult(brewingStandBlockEntity, input, level);
             if (recipeHolder != null)
                 duration = Math.max(duration, recipeHolder.value().getBrewingTime());
         }
@@ -108,8 +109,8 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     private static ItemStack redirectResult(PotionBrewing instance, ItemStack ingredient, ItemStack potion, @Local(argsOnly = true) Level level,
                                             @Local(argsOnly = true) BlockPos blockPos) {
         BrewingStandBlockEntity brewingStandBlockEntity = (BrewingStandBlockEntity) Objects.requireNonNull(level.getBlockEntity(blockPos));
-        VPRecipeTypes.Brewing.Input input = new VPRecipeTypes.Brewing.Input(potion, ingredient);
-        RecipeHolder<? extends VPRecipeTypes.Brewing> recipeHolder = getRecipeResult(brewingStandBlockEntity, input, level);
+        BrewingRecipe.Input input = new BrewingRecipe.Input(potion, ingredient);
+        RecipeHolder<? extends BrewingRecipe> recipeHolder = getRecipeResult(brewingStandBlockEntity, input, level);
 
         if (recipeHolder == null)
             return potion;
@@ -182,7 +183,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @Redirect(method = "canPlaceItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean redirectIsIngredient(PotionBrewing instance, ItemStack itemStack) {
-        return ((ServerLevel) Objects.requireNonNull(level)).recipeAccess().propertySet(VPRecipeTypes.Brewing.INGREDIENT_SET).test(itemStack);
+        return ((ServerLevel) Objects.requireNonNull(level)).recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET).test(itemStack);
     }
 
     @Redirect(method = "canPlaceItem", at = @At(value = "INVOKE",

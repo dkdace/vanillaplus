@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
+import com.dace.vanillaplus.ReloadableDataManager;
 import com.dace.vanillaplus.data.LootTableReward;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
@@ -36,7 +37,7 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Override
     @Nullable
     public LootTableReward getLootTableReward() {
-        return lootTableResourceKey == null ? null : LootTableReward.getDataManager().get(lootTableResourceKey).orElse(null);
+        return lootTableResourceKey == null ? null : ReloadableDataManager.LOOT_TABLE_REWARD.get(lootTableResourceKey).orElse(null);
     }
 
     @Unique

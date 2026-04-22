@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.util;
 
-import com.dace.vanillaplus.VPRegistry;
+import com.dace.vanillaplus.StaticRegistry;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
@@ -33,13 +33,13 @@ public final class CodecUtil {
     /**
      * 코덱 레지스트리의 타입 코덱을 생성하여 반환한다.
      *
-     * @param vpRegistry 레지스트리 정보
-     * @param <T>        {@link CodecComponent}를 상속받는 하위 코덱 요소
-     * @return 레지스트리 코덱
+     * @param staticRegistry 정적 레지스트리
+     * @param <T>            {@link CodecComponent}를 상속받는 하위 코덱 요소
+     * @return {@link Codec}
      */
     @NonNull
-    public <T extends CodecComponent<T>> Codec<T> fromCodecRegistry(@NonNull VPRegistry<MapCodec<? extends T>> vpRegistry) {
-        return vpRegistry.createByNameCodec().dispatch(CodecComponent::getCodec, Function.identity());
+    public static <T extends CodecComponent<T>> Codec<T> fromCodecRegistry(@NonNull StaticRegistry<MapCodec<? extends T>> staticRegistry) {
+        return staticRegistry.createCodec().dispatch(CodecComponent::getCodec, Function.identity());
     }
 
     /**
@@ -52,7 +52,7 @@ public final class CodecUtil {
     @NonNull
     public static <T> Codec<Optional<T>> optional(@NonNull Codec<T> codec) {
         return Codec.xor(codec, Codec.EMPTY.codec())
-                .xmap(to -> to.map(Optional::of, unit -> Optional.empty()),
+                .xmap(to -> to.map(Optional::of, _ -> Optional.empty()),
                         from -> from.map(Either::<T, Unit>left).orElse(Either.right(Unit.INSTANCE)));
     }
 

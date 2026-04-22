@@ -1,10 +1,7 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
+import com.dace.vanillaplus.item.crafting.BrewingRecipe;
 import com.dace.vanillaplus.util.CodecUtil;
-import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -14,13 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Vex;
@@ -28,6 +23,7 @@ import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -40,9 +36,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,33 +45,7 @@ import java.util.Optional;
  * 흉조 레벨에 따라 습격대 엔티티에게 적용되는 효과를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEffect> {
-    /** 코덱 레지스트리 */
-    private static final VPRegistry<MapCodec<? extends RaiderEffect>> CODEC_REGISTRY = VPRegistry.RAIDER_EFFECT.createRegistry("type");
-    /** 유형별 코덱 */
-    private static final Codec<RaiderEffect> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
-    /** 데이터 매니저 */
-    @Getter
-    private static ReloadableDataManager<EntityType<?>, RaiderEffect> dataManager;
-
-    static {
-        CODEC_REGISTRY.register("pillager", () -> PillagerEffect.CODEC);
-        CODEC_REGISTRY.register("vindicator", () -> VindicatorEffect.CODEC);
-        CODEC_REGISTRY.register("witch", () -> WitchEffect.CODEC);
-        CODEC_REGISTRY.register("ravager", () -> RavagerEffect.CODEC);
-        CODEC_REGISTRY.register("evoker", () -> EvokerEffect.CODEC);
-        CODEC_REGISTRY.register("illusioner", () -> IllusionerEffect.CODEC);
-    }
-
-    @SubscribeEvent
-    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAIDER_EFFECT, TYPE_CODEC,
-                entityType -> IdentifierUtil.fromRegistry(BuiltInRegistries.ENTITY_TYPE, entityType));
-
-        event.addListener(dataManager);
-    }
-
     /**
      * 효과 정보 클래스.
      */
@@ -220,7 +187,8 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
                     createBaseCodec(instance)
                             .and(instance.group(EquipmentSlot.CODEC.fieldOf("equipment")
                                             .forGetter(equipItemInfo -> equipItemInfo.equipmentSlot),
-                                    ItemStack.CODEC.fieldOf("item").forGetter(equipItemInfo -> equipItemInfo.itemStack)))
+                                    ItemStackTemplate.CODEC.fieldOf("item")
+                                            .forGetter(equipItemInfo -> equipItemInfo.itemStackTemplate)))
                             .apply(instance, EquipItemInfo::new));
 
             /** 장착 슬롯 */
@@ -228,14 +196,14 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
             private final EquipmentSlot equipmentSlot;
             /** 아이템 */
             @NonNull
-            private final ItemStack itemStack;
+            private final ItemStackTemplate itemStackTemplate;
 
             private EquipItemInfo(@NonNull LevelBasedValue.Clamped levelBasedChance, @NonNull EquipmentSlot equipmentSlot,
-                                  @NonNull ItemStack itemStack) {
+                                  @NonNull ItemStackTemplate itemStackTemplate) {
                 super(levelBasedChance);
 
                 this.equipmentSlot = equipmentSlot;
-                this.itemStack = itemStack;
+                this.itemStackTemplate = itemStackTemplate;
             }
 
             /**
@@ -245,7 +213,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
              */
             public void equipItem(@NonNull Mob mob) {
                 if (super.checkChance(mob))
-                    mob.setItemSlot(equipmentSlot, itemStack.copy());
+                    mob.setItemSlot(equipmentSlot, itemStackTemplate.create());
             }
         }
 
@@ -322,7 +290,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
                         ResourceKey<Recipe<?>> recipeResourceKey = list.remove(mob.getRandom().nextInt(list.size()));
                         RecipeHolder<?> recipeHolder = ((ServerLevel) mob.level()).recipeAccess().byKey(recipeResourceKey).orElse(null);
 
-                        if (recipeHolder != null && recipeHolder.value() instanceof VPRecipeTypes.Brewing.Mapped recipe) {
+                        if (recipeHolder != null && recipeHolder.value() instanceof BrewingRecipe.Mapped recipe) {
                             ItemStack result = recipe.getResult(itemStack);
                             if (result != null)
                                 return result;
@@ -433,7 +401,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class PillagerEffect extends RaiderEffect {
-        private static final MapCodec<PillagerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<PillagerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.EnchantItemInfo.CODEC.listOf().fieldOf("enchant_items").forGetter(PillagerEffect::getEnchantItemInfos),
                         EffectInfo.TippedArrowInfo.CODEC.fieldOf("tipped_arrow").forGetter(PillagerEffect::getTippedArrowInfo))
                 .apply(instance, PillagerEffect::new));
@@ -458,7 +426,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class VindicatorEffect extends RaiderEffect {
-        private static final MapCodec<VindicatorEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<VindicatorEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.EnchantItemInfo.CODEC.listOf().fieldOf("enchant_items").forGetter(VindicatorEffect::getEnchantItemInfos),
                         EffectInfo.MobEffectInfo.CODEC.listOf().fieldOf("mob_effects").forGetter(VindicatorEffect::getMobEffectInfos))
                 .apply(instance, VindicatorEffect::new));
@@ -483,7 +451,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class WitchEffect extends RaiderEffect {
-        private static final MapCodec<WitchEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<WitchEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.UpgradePotionInfo.CODEC.fieldOf("upgrade_potion_for_self")
                                 .forGetter(WitchEffect::getUpgradePotionForSelfInfo),
                         EffectInfo.UpgradePotionInfo.CODEC.fieldOf("upgrade_potion_for_support")
@@ -525,7 +493,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class RavagerEffect extends RaiderEffect {
-        private static final MapCodec<RavagerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<RavagerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.MobEffectInfo.CODEC.listOf().fieldOf("mob_effects").forGetter(RavagerEffect::getMobEffectInfos))
                 .apply(instance, RavagerEffect::new));
 
@@ -546,7 +514,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class EvokerEffect extends RaiderEffect {
-        private static final MapCodec<EvokerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<EvokerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.MobEffectInfo.CODEC.listOf().fieldOf("vex_mob_effects").forGetter(EvokerEffect::getVexMobEffectInfos),
                         EffectInfo.EquipItemInfo.CODEC.listOf().fieldOf("equip_items").forGetter(EvokerEffect::getEquipItemInfos))
                 .apply(instance, EvokerEffect::new));
@@ -571,7 +539,7 @@ public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEff
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static final class IllusionerEffect extends RaiderEffect {
-        private static final MapCodec<IllusionerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        public static final MapCodec<IllusionerEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
                 .group(EffectInfo.EnchantItemInfo.CODEC.listOf().fieldOf("enchant_items").forGetter(IllusionerEffect::getEnchantItemInfos),
                         EffectInfo.TippedArrowInfo.CODEC.fieldOf("tipped_arrow").forGetter(IllusionerEffect::getTippedArrowInfo))
                 .apply(instance, IllusionerEffect::new));

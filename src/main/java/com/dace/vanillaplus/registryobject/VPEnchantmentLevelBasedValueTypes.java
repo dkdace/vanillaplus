@@ -1,58 +1,23 @@
 package com.dace.vanillaplus.registryobject;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
-import com.mojang.serialization.Codec;
+import com.dace.vanillaplus.StaticRegistry;
+import com.dace.vanillaplus.item.enchantment.Multiply;
+import com.dace.vanillaplus.item.enchantment.Preset;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraftforge.registries.DeferredRegister;
 
 /**
  * 모드에서 사용하는 마법 부여의 레벨 기반 값 타입을 관리하는 클래스.
  */
 @UtilityClass
 public final class VPEnchantmentLevelBasedValueTypes {
+    private static final DeferredRegister<MapCodec<? extends LevelBasedValue>> REGISTRY = StaticRegistry.createDeferredRegister(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
+
     static {
-        VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("preset", () -> Preset.TYPED_CODEC);
-        VPRegistry.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.register("multiply", () -> Multiply.TYPED_CODEC);
-    }
-
-    private record Preset(@NonNull Holder<LevelBasedValuePreset> levelBasedValuePresetHolder, @NonNull String name) implements LevelBasedValue {
-        private static final MapCodec<Preset> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(LevelBasedValuePreset.CODEC.fieldOf("value").forGetter(Preset::levelBasedValuePresetHolder),
-                        Codec.STRING.fieldOf("name").forGetter(Preset::name))
-                .apply(instance, Preset::new));
-
-        @Override
-        public float calculate(int level) {
-            return levelBasedValuePresetHolder.value().calculate(name, level);
-        }
-
-        @Override
-        @NonNull
-        public MapCodec<Preset> codec() {
-            return TYPED_CODEC;
-        }
-    }
-
-    private record Multiply(@NonNull LevelBasedValue first, @NonNull LevelBasedValue second) implements LevelBasedValue {
-        private static final MapCodec<Multiply> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(LevelBasedValue.CODEC.fieldOf("first").forGetter(Multiply::first),
-                        LevelBasedValue.CODEC.fieldOf("second").forGetter(Multiply::second))
-                .apply(instance, Multiply::new));
-
-        @Override
-        public float calculate(int level) {
-            return first.calculate(level) * second.calculate(level);
-        }
-
-        @Override
-        @NonNull
-        public MapCodec<Multiply> codec() {
-            return TYPED_CODEC;
-        }
+        REGISTRY.register("preset", () -> Preset.TYPED_CODEC);
+        REGISTRY.register("multiply", () -> Multiply.TYPED_CODEC);
     }
 }

@@ -1,10 +1,7 @@
 package com.dace.vanillaplus.data.modifier;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
@@ -21,9 +18,6 @@ import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.util.Optional;
 
@@ -32,23 +26,10 @@ import java.util.Optional;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
-    /** 코덱 레지스트리 */
-    private static final VPRegistry<MapCodec<? extends BlockModifier>> CODEC_REGISTRY = VPRegistry.BLOCK_MODIFIER.createRegistry("type");
-    /** 유형별 코덱 */
-    private static final Codec<BlockModifier> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
     /** JSON 코덱 */
-    private static final MapCodec<BlockModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+    public static final MapCodec<BlockModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
             .apply(instance, BlockModifier::new));
-
-    static {
-        CODEC_REGISTRY.register("block", () -> CODEC);
-        CODEC_REGISTRY.register("bell", () -> BellModifier.CODEC);
-        CODEC_REGISTRY.register("water_cauldron", () -> WaterCauldronModifier.CODEC);
-        CODEC_REGISTRY.register("cake", () -> CakeModifier.CODEC);
-        CODEC_REGISTRY.register("anvil", () -> AnvilModifier.CODEC);
-    }
 
     /** 블록 속성 */
     @NonNull
@@ -56,11 +37,6 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
     /** 드롭 경험치 범위 */
     @NonNull
     private final IntProvider xpRange;
-
-    @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.BLOCK_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
 
     @NonNull
     private static <T extends BlockModifier> Products.P2<RecordCodecBuilder.Mu<T>, BlockBehaviour.Properties, IntProvider> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
@@ -79,7 +55,7 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
      * {@link BellBlock}의 블록 수정자 클래스.
      */
     public static final class BellModifier extends BlockModifier {
-        private static final MapCodec<BellModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<BellModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
                         .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range", 32)
                                         .forGetter(BellModifier::getRaiderDetectionRange),
@@ -125,7 +101,7 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
      */
     @Getter
     public static final class WaterCauldronModifier extends BlockModifier {
-        private static final MapCodec<WaterCauldronModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<WaterCauldronModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
                         .and(instance.group(ExtraCodecs.POSITIVE_INT.optionalFieldOf("max_potion_types", 3)
                                         .forGetter(WaterCauldronModifier::getMaxPotionTypes),
@@ -158,7 +134,7 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
      */
     @Getter
     public static final class CakeModifier extends BlockModifier {
-        private static final MapCodec<CakeModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<CakeModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
                         .and(FoodProperties.DIRECT_CODEC.optionalFieldOf("food", new FoodProperties.Builder()
                                 .nutrition(2).saturationModifier(0.1F).build()).forGetter(CakeModifier::getFoodProperties))
@@ -185,7 +161,7 @@ public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
      */
     @Getter
     public static final class AnvilModifier extends BlockModifier {
-        private static final MapCodec<AnvilModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<AnvilModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
                         .and(instance.group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("cost_penalty", 1)
                                         .forGetter(AnvilModifier::getCostPenalty),

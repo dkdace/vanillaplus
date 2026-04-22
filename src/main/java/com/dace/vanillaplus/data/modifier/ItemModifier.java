@@ -1,10 +1,7 @@
 package com.dace.vanillaplus.data.modifier;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
@@ -18,33 +15,16 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 
 /**
  * 아이템의 요소를 수정하는 아이템 수정자 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
-    /** 코덱 레지스트리 */
-    private static final VPRegistry<MapCodec<? extends ItemModifier>> CODEC_REGISTRY = VPRegistry.ITEM_MODIFIER.createRegistry("type");
-    /** 유형별 코덱 */
-    private static final Codec<ItemModifier> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
     /** JSON 코덱 */
-    private static final MapCodec<ItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+    public static final MapCodec<ItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
             .apply(instance, ItemModifier::new));
-
-    static {
-        CODEC_REGISTRY.register("item", () -> CODEC);
-        CODEC_REGISTRY.register("elytra", () -> ElytraModifier.CODEC);
-        CODEC_REGISTRY.register("projectile_weapon", () -> ProjectileWeaponModifier.CODEC);
-        CODEC_REGISTRY.register("crossbow", () -> CrossbowModifier.CODEC);
-        CODEC_REGISTRY.register("trident", () -> TridentModifier.CODEC);
-        CODEC_REGISTRY.register("instrument", () -> InstrumentModifier.CODEC);
-    }
 
     /** 아이템 데이터 요소 */
     @NonNull
@@ -52,11 +32,6 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
     /** 아이템 속성 수정자 목록 */
     @NonNull
     private final ItemAttributeModifiers itemAttributeModifiers;
-
-    @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.ITEM_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
 
     @NonNull
     private static <T extends ItemModifier> Products.P2<RecordCodecBuilder.Mu<T>, DataComponentPatch, ItemAttributeModifiers> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
@@ -77,7 +52,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
      */
     @Getter
     public static final class ElytraModifier extends ItemModifier {
-        private static final MapCodec<ElytraModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+        public static final MapCodec<ElytraModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
                 .and(instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("firework_add_speed_multiplier", 1.5F)
                                 .forGetter(ElytraModifier::getFireworkAddSpeedMultiplier),
                         ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("firework_final_speed_multiplier", 0.5F)
@@ -109,7 +84,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
      */
     @Getter
     public static class ProjectileWeaponModifier extends ItemModifier {
-        private static final MapCodec<ProjectileWeaponModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<ProjectileWeaponModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance).apply(instance, ProjectileWeaponModifier::new));
 
         /** 화살 피해 배수 */
@@ -146,7 +121,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
      */
     @Getter
     public static final class CrossbowModifier extends ProjectileWeaponModifier {
-        private static final MapCodec<CrossbowModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<CrossbowModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 ProjectileWeaponModifier.createBaseCodec(instance)
                         .and(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power_firework_rocket", 1.6F)
                                 .forGetter(CrossbowModifier::getShootingPowerFireworkRocket))
@@ -172,7 +147,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
      * {@link TridentItem}의 아이템 수정자 클래스.
      */
     public static final class TridentModifier extends ItemModifier {
-        private static final MapCodec<TridentModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+        public static final MapCodec<TridentModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
                 .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("riptide_cooldown_seconds", 3F)
                         .forGetter(target -> target.riptideCooldownSeconds))
                 .apply(instance, TridentModifier::new));
@@ -204,7 +179,7 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
      * {@link InstrumentItem}의 아이템 수정자 클래스.
      */
     public static final class InstrumentModifier extends ItemModifier {
-        private static final MapCodec<InstrumentModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<InstrumentModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
                         .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("use_duration_seconds", 1.5F)
                                 .forGetter(target -> target.useDurationSeconds))

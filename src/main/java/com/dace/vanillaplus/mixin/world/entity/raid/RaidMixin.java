@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
+import com.dace.vanillaplus.ReloadableDataManager;
 import com.dace.vanillaplus.data.RaidWave;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.registryobject.VPGameRules;
@@ -126,7 +127,7 @@ public abstract class RaidMixin implements VPMixin<Raid> {
 
     @Overwrite
     public int getNumGroups(Difficulty difficulty) {
-        return RaidWave.getDataManager().get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
+        return ReloadableDataManager.RAID_WAVE.get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
     }
 
     @Definition(id = "i", local = @Local(type = int.class, ordinal = 0))
@@ -203,7 +204,7 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         ticksActive = 0;
         totalHealth = 0;
 
-        RaidWave.getDataManager().get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
+        ReloadableDataManager.RAID_WAVE.get(serverLevel.getCurrentDifficultyAt(blockPos).getDifficulty()).ifPresent(raidWave ->
                 spawnRaiders(serverLevel, blockPos, raidWave, groupsSpawned + 1));
 
         waveSpawnPos = Optional.empty();

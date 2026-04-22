@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.client.gui;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
+import com.dace.vanillaplus.item.component.RepairWithXP;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.Font;
@@ -37,7 +38,7 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
         if (!vpItemStack.isRepairLimitBarVisible())
             return;
 
-        VPDataComponentTypes.RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+        RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
         if (repairWithXP == null)
             return;
 
@@ -50,6 +51,6 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
         int barWidth = Math.clamp(value, 0, Item.MAX_BAR_WIDTH);
 
         fill(RenderPipelines.GUI, x, y, x + Item.MAX_BAR_WIDTH, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT, CommonColors.BLACK);
-        fill(RenderPipelines.GUI, x, y, x + barWidth, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT - 1, repairWithXP.getBarColor());
+        fill(RenderPipelines.GUI, x, y, x + barWidth, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT - 1, repairWithXP.barColor());
     }
 }

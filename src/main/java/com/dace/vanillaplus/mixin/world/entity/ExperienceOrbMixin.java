@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.item.component.RepairWithXP;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -49,7 +50,7 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             index = 2)
     private Predicate<ItemStack> modifyRepairFilter(Predicate<ItemStack> filter, @Local(argsOnly = true) ServerPlayer serverPlayer) {
         return filter.and(itemStack -> {
-            VPDataComponentTypes.RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+            RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
             if (repairWithXP == null)
                 return true;
 
@@ -57,7 +58,7 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             if (serverPlayer.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
                 return true;
 
-            return repairWithXP.getRequiredItem().map(itemHolder ->
+            return repairWithXP.requiredItem().map(itemHolder ->
                     serverPlayer.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
                         if (targetItemStack.is(itemHolder)) {
                             targetItemStack.shrink(1);

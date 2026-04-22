@@ -1,9 +1,6 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
-import com.dace.vanillaplus.util.IdentifierUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
@@ -11,12 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -28,27 +21,14 @@ import java.util.Map;
  * 습격 웨이브 정보를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class RaidWave {
     /** JSON 코덱 */
-    private static final Codec<RaidWave> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
+    public static final Codec<RaidWave> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.unboundedMap(RaiderType.CODEC, ExtraCodecs.POSITIVE_INT).listOf().fieldOf("waves")
                     .forGetter(raidWave -> raidWave.raiderCountMaps))
             .apply(instance, RaidWave::new));
-    /** 데이터 매니저 */
-    @Getter
-    private static ReloadableDataManager<Difficulty, RaidWave> dataManager;
-
     /** 습격대원 종류별 대원 수 목록 (습격대원 종류 : 대원 수) */
     private final List<Map<RaiderType, Integer>> raiderCountMaps;
-
-    @SubscribeEvent
-    private static void onAddReloadListener(@NonNull AddReloadListenerEvent event) {
-        dataManager = new ReloadableDataManager<>(event.getRegistries(), VPRegistry.RAID_WAVE, DIRECT_CODEC,
-                difficulty -> IdentifierUtil.fromPath(difficulty.getSerializedName()));
-
-        event.addListener(dataManager);
-    }
 
     /**
      * 지정한 웨이브 번호에 해당하는 습격대원 종류별 대원 수 목록을 반환한다.

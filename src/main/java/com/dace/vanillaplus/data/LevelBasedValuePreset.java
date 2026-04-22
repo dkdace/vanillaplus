@@ -1,14 +1,11 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,9 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -31,12 +25,9 @@ import java.util.function.Consumer;
 /**
  * 레벨 기반 값 프리셋을 관리하는 클래스.
  */
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class LevelBasedValuePreset {
-    /** 레지스트리 코덱 */
-    public static final Codec<Holder<LevelBasedValuePreset>> CODEC = VPRegistry.LEVEL_BASED_VALUE_PRESET.createRegistryCodec();
     /** JSON 코덱 */
-    private static final Codec<LevelBasedValuePreset> DIRECT_CODEC = Codec.lazyInitialized(() ->
+    public static final Codec<LevelBasedValuePreset> DIRECT_CODEC = Codec.lazyInitialized(() ->
             RecordCodecBuilder.create(instance -> instance
                     .group(Codec.unboundedMap(Codec.STRING, DefinedValue.CODEC).fieldOf("values")
                             .forGetter(levelBasedValuePreset -> levelBasedValuePreset.definedValueMap))
@@ -48,11 +39,6 @@ public final class LevelBasedValuePreset {
     private LevelBasedValuePreset(@NonNull Map<String, DefinedValue> definedValueMap) {
         this.definedValueMap = new TreeMap<>(Comparator.comparing(k -> definedValueMap.get(k).descriptionIndex));
         this.definedValueMap.putAll(definedValueMap);
-    }
-
-    @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.LEVEL_BASED_VALUE_PRESET.getRegistryKey(), DIRECT_CODEC, DIRECT_CODEC);
     }
 
     /**

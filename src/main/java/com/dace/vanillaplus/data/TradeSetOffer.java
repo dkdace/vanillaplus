@@ -57,7 +57,7 @@ public abstract class TradeSetOffer {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    private final static class Direct extends TradeSetOffer {
+    private static final class Direct extends TradeSetOffer {
         private static final Codec<Direct> CODEC = RegistryCodecs.homogeneousList(Registries.VILLAGER_TRADE)
                 .xmap(Direct::new, tradeSetOffer -> tradeSetOffer.holderSet);
         private final HolderSet<VillagerTrade> holderSet;
@@ -70,7 +70,7 @@ public abstract class TradeSetOffer {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    private final static class Random extends TradeSetOffer {
+    private static final class Random extends TradeSetOffer {
         private static final Codec<Random> CODEC = TradeSetOffer.CODEC.listOf().xmap(Random::new, random -> random.tradeSetOffers);
         private final List<TradeSetOffer> tradeSetOffers;
 

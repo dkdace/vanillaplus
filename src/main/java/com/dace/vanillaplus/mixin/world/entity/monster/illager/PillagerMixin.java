@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
 import com.dace.vanillaplus.data.RaiderEffect;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.registryobject.EntityModifierInterfaces;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.Pillager;
@@ -43,8 +44,8 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
             index = 1)
     private float modifyBulletVelocity(float velocity) {
         return getDataModifier()
-                .map(livingEntityModifier ->
-                        livingEntityModifier.getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB).getShootingPower())
+                .flatMap(livingEntityModifier -> livingEntityModifier.get(EntityModifierInterfaces.CROSSBOW_ATTACK_MOB)
+                        .map(EntityModifier.CrossbowAttackMobInfo::getShootingPower))
                 .orElse(velocity);
     }
 

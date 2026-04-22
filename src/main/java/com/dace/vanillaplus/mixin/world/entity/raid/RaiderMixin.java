@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
+import com.dace.vanillaplus.ReloadableDataManager;
 import com.dace.vanillaplus.data.RaiderEffect;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
@@ -22,7 +23,7 @@ public abstract class RaiderMixin<T extends Raider, U extends EntityModifier.Liv
     @Unique
     @NonNull
     protected <V extends RaiderEffect> Optional<V> getRaiderEffect(@NonNull Class<V> checkClass) {
-        return RaiderEffect.getDataManager().get(getType(), checkClass);
+        return ReloadableDataManager.RAIDER_EFFECT.get(getType(), checkClass);
     }
 
     @Override

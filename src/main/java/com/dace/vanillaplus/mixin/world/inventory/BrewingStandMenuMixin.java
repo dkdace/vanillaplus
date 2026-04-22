@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.inventory;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.inventory.VPBrewingStandMenu;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
+import com.dace.vanillaplus.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.world.Container;
@@ -54,7 +54,7 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V",
             at = @At("TAIL"))
     private void setIngredientItemTest(int containerId, Inventory inventory, Container container, ContainerData containerData, CallbackInfo ci) {
-        ingredientItemTest = inventory.player.level().recipeAccess().propertySet(VPRecipeTypes.Brewing.INGREDIENT_SET);
+        ingredientItemTest = inventory.player.level().recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET);
     }
 
     @ModifyArg(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V",
@@ -73,7 +73,7 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
     public abstract static class PotionSlotMixin implements VPMixin<BrewingStandMenu.PotionSlot> {
         @Overwrite
         public static boolean mayPlaceItem(ItemStack itemStack) {
-            return itemStack.is(VPRecipeTypes.Brewing.getPotionContainers());
+            return itemStack.is(BrewingRecipe.getPotionContainers());
         }
 
         @Overwrite

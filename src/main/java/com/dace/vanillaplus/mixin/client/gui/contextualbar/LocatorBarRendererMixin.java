@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.waypoints.PartialTickSupplier;
 import net.minecraft.world.waypoints.TrackedWaypoint;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

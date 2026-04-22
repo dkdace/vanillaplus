@@ -7,6 +7,8 @@ import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.item.component.ExtraFood;
+import com.dace.vanillaplus.item.component.RepairWithXP;
 import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -167,13 +169,13 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Override
     public int getMaxRepairLimit() {
-        VPDataComponentTypes.RepairWithXP repairWithXP = getThis().get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+        RepairWithXP repairWithXP = getThis().get(VPDataComponentTypes.REPAIR_WITH_XP.get());
         Integer maxDamage = getThis().get(DataComponents.MAX_DAMAGE);
 
         if (repairWithXP == null || maxDamage == null)
             return 0;
 
-        return (int) (maxDamage * repairWithXP.getMaxRepairLimitRatio());
+        return (int) (maxDamage * repairWithXP.maxRepairLimitRatio());
     }
 
     @Unique
@@ -274,7 +276,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @Unique
-    private void addExtraFoodTooltip(@NonNull VPDataComponentTypes.ExtraFood extraFood, @NonNull Consumer<Component> componentConsumer) {
+    private void addExtraFoodTooltip(@NonNull ExtraFood extraFood, @NonNull Consumer<Component> componentConsumer) {
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(COMPONENT_EXTRA_CONSUMABLE_ADDED.apply(extraFood.getNameComponent()));
 

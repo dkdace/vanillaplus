@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.data.modifier;
 
-import com.dace.vanillaplus.VPRegistry;
-import com.dace.vanillaplus.VanillaPlus;
+import com.dace.vanillaplus.StaticRegistry;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
@@ -20,52 +19,44 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.Ravager;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DataPackRegistryEvent;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.Validate;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.Optional;
 
 /**
  * 엔티티의 요소를 수정하는 엔티티 수정자 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Mod.EventBusSubscriber(modid = VanillaPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> {
-    /** 코덱 레지스트리 */
-    private static final VPRegistry<MapCodec<? extends EntityModifier>> CODEC_REGISTRY = VPRegistry.ENTITY_MODIFIER.createRegistry("type");
-    /** 유형별 코덱 */
-    private static final Codec<EntityModifier> TYPE_CODEC = CodecUtil.fromCodecRegistry(CODEC_REGISTRY);
+    /** 인터페이스 수정자 JSON 코덱 */
+    private static final Codec<DataComponentMap> CODEC_INTERFACE_INFO_MAP = DataComponentMap.makeCodec(
+            StaticRegistry.ENTITY_MODIFIER_INTERFACE.createCodec());
     /** JSON 코덱 */
-    private static final MapCodec<EntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
+    public static final MapCodec<EntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
             .apply(instance, EntityModifier::new));
 
-    static {
-        CODEC_REGISTRY.register("entity", () -> CODEC);
-        CODEC_REGISTRY.register("living_entity", () -> LivingEntityModifier.CODEC);
-        CODEC_REGISTRY.register("ravager", () -> RavagerModifier.CODEC);
-        CODEC_REGISTRY.register("ender_dragon", () -> EnderDragonModifier.CODEC);
-
-        VanillaPlus.loadClass(InterfaceInfoMap.class);
-    }
-
     /** 인터페이스 수정자 목록 */
-    private final InterfaceInfoMap interfaceInfoMap;
-
-    @SubscribeEvent
-    private static void onDataPackNewRegistry(@NonNull DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(VPRegistry.ENTITY_MODIFIER.getRegistryKey(), TYPE_CODEC, TYPE_CODEC);
-    }
+    private final DataComponentMap interfaceInfoMap;
 
     @NonNull
-    private static <T extends EntityModifier> Products.P1<RecordCodecBuilder.Mu<T>, InterfaceInfoMap> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
-        return instance.group(InterfaceInfoMap.CODEC.optionalFieldOf("interfaces", new InterfaceInfoMap(DataComponentMap.EMPTY))
+    private static <T extends EntityModifier> Products.P1<RecordCodecBuilder.Mu<T>, DataComponentMap> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+        return instance.group(CODEC_INTERFACE_INFO_MAP.optionalFieldOf("interfaces", DataComponentMap.EMPTY)
                 .forGetter(EntityModifier::getInterfaceInfoMap));
+    }
+
+    /**
+     * 지정한 데이터 요소 타입에 해당하는 인터페이스 수정자를 반환한다.
+     *
+     * @param dataComponentType 데이터 요소 타입
+     * @param <T>               인터페이스 수정자 타입
+     * @return 인터페이스 수정자
+     */
+    @NonNull
+    public <T> Optional<T> get(@NonNull RegistryObject<DataComponentType<T>> dataComponentType) {
+        return Optional.ofNullable(interfaceInfoMap.get(dataComponentType.get()));
     }
 
     @Override
@@ -132,64 +123,23 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
     }
 
     /**
-     * 엔티티의 인터페이스 수정자 목록을 관리하는 클래스.
+     * {@link CrossbowAttackMob}의 수정자 클래스.
      */
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class InterfaceInfoMap {
-        /** 레지스트리 */
-        private static final VPRegistry<DataComponentType<?>> REGISTRY = VPRegistry.ENTITY_MODIFIER.createRegistry("interface");
-
-        /** {@link CrossbowAttackMobInfo}의 타입 */
-        public static final RegistryObject<DataComponentType<CrossbowAttackMobInfo>> CROSSBOW_ATTACK_MOB = register("crossbow_attack_mob",
-                builder -> builder.persistent(CrossbowAttackMobInfo.CODEC));
-
+    @Getter
+    public static final class CrossbowAttackMobInfo {
         /** JSON 코덱 */
-        private static final Codec<InterfaceInfoMap> CODEC = DataComponentMap.makeCodec(REGISTRY.createByNameCodec())
-                .xmap(InterfaceInfoMap::new, target -> target.dataComponentMap);
+        public static final Codec<CrossbowAttackMobInfo> CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 1.6F)
+                                        .forGetter(CrossbowAttackMobInfo::getShootingPower),
+                                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("shooting_range", 8)
+                                        .forGetter(CrossbowAttackMobInfo::getShootingRange))
+                        .apply(instance, CrossbowAttackMobInfo::new));
 
-        /** 데이터 요소 */
-        private final DataComponentMap dataComponentMap;
-
-        private static <T> RegistryObject<DataComponentType<T>> register(@NonNull String name,
-                                                                         @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {
-            return VPRegistry.register(REGISTRY, name, onBuilder.apply(DataComponentType.builder())::build);
-        }
-
-        /**
-         * 지정한 데이터 요소 타입에 해당하는 인터페이스 수정자를 반환한다.
-         *
-         * @param dataComponentType 데이터 요소 타입
-         * @param <T>               인터페이스 수정자 타입
-         * @return 인터페이스 수정자
-         * @throws IllegalStateException 해당하는 인터페이스 수정자가 존재하지 않으면 발생
-         */
-        @NonNull
-        public <T> T get(@NonNull RegistryObject<DataComponentType<T>> dataComponentType) {
-            T interfaceInfo = dataComponentMap.get(dataComponentType.get());
-            Validate.validState(interfaceInfo != null);
-
-            return interfaceInfo;
-        }
-
-        /**
-         * {@link CrossbowAttackMob}의 수정자 클래스.
-         */
-        @AllArgsConstructor(access = AccessLevel.PRIVATE)
-        @Getter
-        public static final class CrossbowAttackMobInfo {
-            /** JSON 코덱 */
-            private static final Codec<CrossbowAttackMobInfo> CODEC = RecordCodecBuilder.create(instance ->
-                    instance.group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power", 1.6F)
-                                            .forGetter(CrossbowAttackMobInfo::getShootingPower),
-                                    ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("shooting_range", 8)
-                                            .forGetter(CrossbowAttackMobInfo::getShootingRange))
-                            .apply(instance, CrossbowAttackMobInfo::new));
-
-            /** 화살 발사 속력 */
-            private final float shootingPower;
-            /** 공격 거리 */
-            private final int shootingRange;
-        }
+        /** 화살 발사 속력 */
+        private final float shootingPower;
+        /** 공격 거리 */
+        private final int shootingRange;
     }
 
     /**
@@ -197,20 +147,20 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
      */
     @Getter
     public static class LivingEntityModifier extends EntityModifier {
-        private static final MapCodec<LivingEntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<LivingEntityModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance).apply(instance, LivingEntityModifier::new));
 
         /** 엔티티 속성 목록 */
         @NonNull
         private final List<AttributeInstance.Packed> packedAttributes;
 
-        private LivingEntityModifier(@NonNull EntityModifier.InterfaceInfoMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes) {
+        private LivingEntityModifier(@NonNull DataComponentMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes) {
             super(interfaceInfoMap);
             this.packedAttributes = packedAttributes;
         }
 
         @NonNull
-        private static <T extends LivingEntityModifier> Products.P2<RecordCodecBuilder.Mu<T>, InterfaceInfoMap, List<AttributeInstance.Packed>> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
+        private static <T extends LivingEntityModifier> Products.P2<RecordCodecBuilder.Mu<T>, DataComponentMap, List<AttributeInstance.Packed>> createBaseCodec(@NonNull RecordCodecBuilder.Instance<T> instance) {
             return EntityModifier.createBaseCodec(instance)
                     .and(AttributeInstance.Packed.LIST_CODEC.optionalFieldOf("attributes", Collections.emptyList())
                             .forGetter(LivingEntityModifier::getPackedAttributes));
@@ -228,7 +178,7 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
      * {@link Ravager}의 엔티티 수정자 클래스.
      */
     public static final class RavagerModifier extends LivingEntityModifier {
-        private static final MapCodec<RavagerModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<RavagerModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 LivingEntityModifier.createBaseCodec(instance)
                         .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("roar_cooldown_seconds", 10F)
                                 .forGetter(ravagerModifier -> ravagerModifier.roarCooldownSeconds))
@@ -237,7 +187,7 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
         /** 포효 쿨타임 (초) */
         private final float roarCooldownSeconds;
 
-        private RavagerModifier(@NonNull EntityModifier.InterfaceInfoMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
+        private RavagerModifier(@NonNull DataComponentMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
                                 float roarCooldownSeconds) {
             super(interfaceInfoMap, packedAttributes);
             this.roarCooldownSeconds = roarCooldownSeconds;
@@ -262,7 +212,7 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
      */
     @Getter
     public static final class EnderDragonModifier extends LivingEntityModifier {
-        private static final MapCodec<EnderDragonModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        public static final MapCodec<EnderDragonModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 LivingEntityModifier.createBaseCodec(instance)
                         .and(instance.group(Experience.CODEC.fieldOf("experience").forGetter(EnderDragonModifier::getExperience),
                                 HealthBasedValue.codec(ExtraCodecs.NON_NEGATIVE_FLOAT)
@@ -293,7 +243,7 @@ public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> 
         /** 엔더 진주 드롭 시 생성되는 엔더마이트 수 */
         private final int endermiteCount;
 
-        private EnderDragonModifier(@NonNull EntityModifier.InterfaceInfoMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
+        private EnderDragonModifier(@NonNull DataComponentMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
                                     @NonNull Experience experience, @NonNull HealthBasedValue<Float> movementSpeedMultiplier,
                                     @NonNull PhaseInfo phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount) {
             super(interfaceInfoMap, packedAttributes);

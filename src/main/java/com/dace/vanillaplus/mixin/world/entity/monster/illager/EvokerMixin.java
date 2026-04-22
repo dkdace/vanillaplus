@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
+import com.dace.vanillaplus.ReloadableDataManager;
 import com.dace.vanillaplus.data.RaiderEffect;
 import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -37,7 +38,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
         @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
         private void applyRaidBuffsToVex(CallbackInfo ci, @Local Vex vex) {
-            RaiderEffect.getDataManager().get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
+            ReloadableDataManager.RAIDER_EFFECT.get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
                     evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex)));
         }
     }
