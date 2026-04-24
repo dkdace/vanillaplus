@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.server;
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.network.NetworkManager;
-import com.dace.vanillaplus.network.packet.ShowHeadOnLocatorBarPacketHandler;
+import com.dace.vanillaplus.network.client.ShowHeadOnLocatorBarPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.gamerules.GameRule;
@@ -22,6 +22,6 @@ public abstract class MinecraftServerMixin implements VPMixin<MinecraftServer> {
     private <T> void updateGameRules(GameRule<T> gameRule, T value, CallbackInfo ci) {
         if (gameRule == VPGameRules.SHOW_HEAD_ON_LOCATOR_BAR.get())
             getPlayerList().getPlayers().forEach(serverPlayer ->
-                    NetworkManager.sendToPlayer(new ShowHeadOnLocatorBarPacketHandler((boolean) value), serverPlayer));
+                    NetworkManager.sendToPlayer(new ShowHeadOnLocatorBarPacket((boolean) value), serverPlayer));
     }
 }

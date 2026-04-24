@@ -2,12 +2,13 @@ package com.dace.vanillaplus.world.item;
 
 import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.network.NetworkManager;
-import com.dace.vanillaplus.network.packet.RecoveryCompassTeleportPacketHandler;
+import com.dace.vanillaplus.network.client.ItemOverlayPacket;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -76,7 +77,7 @@ public final class RecoveryCompassItem extends Item {
         playUseEffects(serverLevel, oldPos);
         playUseEffects(serverLevel, pos);
 
-        NetworkManager.sendToPlayer(new RecoveryCompassTeleportPacketHandler(), ((ServerPlayer) player));
+        NetworkManager.sendToPlayer(new ItemOverlayPacket(BuiltInRegistries.ITEM.wrapAsHolder(this)), (ServerPlayer) player);
 
         player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
 

@@ -3,6 +3,7 @@ package com.dace.vanillaplus;
 import com.dace.vanillaplus.data.DataPackRegistry;
 import com.dace.vanillaplus.data.ReloadableDataManager;
 import com.dace.vanillaplus.data.StaticRegistry;
+import com.dace.vanillaplus.network.NetworkManager;
 import com.mojang.logging.LogUtils;
 import lombok.NonNull;
 import net.minecraftforge.fml.common.Mod;
@@ -27,5 +28,6 @@ public final class VanillaPlus {
         StaticRegistry.bootstrap(context.getModBusGroup());
         DataPackRegistry.bootstrap();
         ReloadableDataManager.bootstrap();
+        NetworkManager.bootstrap();
     }
 }

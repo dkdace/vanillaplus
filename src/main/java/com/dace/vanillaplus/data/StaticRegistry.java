@@ -73,7 +73,7 @@ public final class StaticRegistry<T> {
                 LOGGER.debug("Loaded {}", classInfo);
             }
         } catch (ClassNotFoundException | IOException ex) {
-            throw new IllegalStateException(ex);
+            throw new IllegalStateException("Cannot initialize StaticRegistry", ex);
         }
 
         REGISTRIES.forEach(deferredRegister -> deferredRegister.register(busGroup));

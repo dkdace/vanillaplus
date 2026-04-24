@@ -1,8 +1,8 @@
-package com.dace.vanillaplus.network.packet;
+package com.dace.vanillaplus.network.client;
 
 import com.dace.vanillaplus.extension.client.sounds.VPSoundEngine;
 import com.dace.vanillaplus.extension.client.sounds.VPSoundManager;
-import lombok.AllArgsConstructor;
+import com.dace.vanillaplus.network.VPPacket;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -10,18 +10,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
- * 효과음 정지 패킷을 처리하는 클래스.
+ * 효과음 정지 패킷 클래스.
+ *
+ * @param soundSource 효과음 유형
+ * @param seed        효과음 시드
  */
-@AllArgsConstructor
-public final class StopSoundPacketHandler implements PacketHandler {
-    /** 효과음 유형 */
-    private final SoundSource soundSource;
-    /** 효과음 시드 */
-    private final long seed;
-
-    public StopSoundPacketHandler(@NonNull RegistryFriendlyByteBuf buf) {
-        this.soundSource = buf.readEnum(SoundSource.class);
-        this.seed = buf.readVarLong();
+public record StopSoundPacket(@NonNull SoundSource soundSource, long seed) implements VPPacket {
+    public StopSoundPacket(@NonNull RegistryFriendlyByteBuf buf) {
+        this(buf.readEnum(SoundSource.class), buf.readVarLong());
     }
 
     @Override

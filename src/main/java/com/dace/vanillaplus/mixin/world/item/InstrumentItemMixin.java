@@ -4,7 +4,7 @@ import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPInstrument;
 import com.dace.vanillaplus.network.NetworkManager;
-import com.dace.vanillaplus.network.packet.StopSoundPacketHandler;
+import com.dace.vanillaplus.network.client.StopSoundPacket;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -70,7 +70,7 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
             if (entity.level() instanceof ServerLevel serverLevel) {
                 Long seed = stack.get(VPDataComponentTypes.SEED.get());
                 if (seed != null)
-                    NetworkManager.sendToLevel(new StopSoundPacketHandler(SoundSource.RECORDS, seed), serverLevel);
+                    NetworkManager.sendToLevel(new StopSoundPacket(SoundSource.RECORDS, seed), serverLevel);
             }
 
             if (entity instanceof Player player) {

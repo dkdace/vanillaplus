@@ -1,13 +1,13 @@
-package com.dace.vanillaplus.network.packet;
+package com.dace.vanillaplus.network;
 
 import lombok.NonNull;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
- * 패킷 처리기 인터페이스.
+ * 모드에서 사용하는 패킷 인터페이스.
  */
-public interface PacketHandler {
+public interface VPPacket {
     /**
      * 패킷을 인코딩한다.
      *

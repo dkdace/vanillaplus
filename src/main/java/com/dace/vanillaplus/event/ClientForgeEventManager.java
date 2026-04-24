@@ -5,7 +5,7 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.client.VPOptions;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
-import com.dace.vanillaplus.network.packet.PronePacketHandler;
+import com.dace.vanillaplus.network.server.PronePacket;
 import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -44,7 +44,7 @@ public final class ClientForgeEventManager {
         VPOptions vpOptions = VPOptions.cast(Minecraft.getInstance().options);
 
         VPPlayer.cast(event.getEntity()).setProneKeyDown(vpOptions.getKeyProne().isDown());
-        NetworkManager.sendToServer(new PronePacketHandler(vpOptions.getKeyProne().isDown()));
+        NetworkManager.sendToServer(new PronePacket(vpOptions.getKeyProne().isDown()));
     }
 
     @SubscribeEvent

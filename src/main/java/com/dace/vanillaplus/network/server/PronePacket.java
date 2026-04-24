@@ -1,21 +1,19 @@
-package com.dace.vanillaplus.network.packet;
+package com.dace.vanillaplus.network.server;
 
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
-import lombok.AllArgsConstructor;
+import com.dace.vanillaplus.network.VPPacket;
 import lombok.NonNull;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
- * 엎드리기 패킷을 처리하는 클래스.
+ * 엎드리기 패킷 클래스.
+ *
+ * @param isPressed 키 입력 여부
  */
-@AllArgsConstructor
-public final class PronePacketHandler implements PacketHandler {
-    /** 키 입력 여부 */
-    private boolean isPressed;
-
-    public PronePacketHandler(@NonNull RegistryFriendlyByteBuf buf) {
+public record PronePacket(boolean isPressed) implements VPPacket {
+    public PronePacket(@NonNull RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 

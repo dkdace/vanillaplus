@@ -1,20 +1,18 @@
-package com.dace.vanillaplus.network.packet;
+package com.dace.vanillaplus.network.client;
 
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
-import lombok.AllArgsConstructor;
+import com.dace.vanillaplus.network.VPPacket;
 import lombok.NonNull;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
- * showHeadOnLocatorBar 게임 규칙 변경 패킷을 처리하는 클래스.
+ * showHeadOnLocatorBar 게임 규칙 변경 패킷 클래스.
+ *
+ * @param isEnabled 활성화 여부
  */
-@AllArgsConstructor
-public final class ShowHeadOnLocatorBarPacketHandler implements PacketHandler {
-    /** 활성화 여부 */
-    private final boolean isEnabled;
-
-    public ShowHeadOnLocatorBarPacketHandler(@NonNull RegistryFriendlyByteBuf buf) {
+public record ShowHeadOnLocatorBarPacket(boolean isEnabled) implements VPPacket {
+    public ShowHeadOnLocatorBarPacket(@NonNull RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
