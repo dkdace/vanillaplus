@@ -6,9 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -57,9 +55,7 @@ public abstract class PlayerPredicateMixin {
                             .forGetter(playerPredicate -> ((PlayerPredicateMixin) (Object) playerPredicate).distanceToRespawn))
             .apply(instance, PlayerPredicateMixin::create));
     @Unique
-    @Getter
-    @Setter
-    private Optional<DistancePredicate> distanceToRespawn;
+    private Optional<DistancePredicate> distanceToRespawn = Optional.empty();
 
     @Unique
     @NonNull

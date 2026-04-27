@@ -92,7 +92,7 @@ public abstract class VillagerTradeMixin implements VPMixin<VillagerTrade> {
     @Final
     private Optional<HolderSet<Enchantment>> doubleTradePriceEnchantments;
     @Unique
-    private boolean multiplyXPByCost;
+    private boolean multiplyXPByCost = false;
 
     @Unique
     @NonNull

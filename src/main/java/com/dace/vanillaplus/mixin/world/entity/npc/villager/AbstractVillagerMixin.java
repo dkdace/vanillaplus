@@ -54,7 +54,7 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extend
             target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;addOffersFromItemListings(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/core/HolderSet;I)V"))
     private boolean redirectAddOffer(LootContext lootContext, MerchantOffers merchantOffers, HolderSet<VillagerTrade> potentialOffers,
                                      int numberOfOffers, @Local(name = "tradeSet") TradeSet tradeSet) {
-        List<TradeSetOffer> tradeSetOffers = ((VPTradeSet) tradeSet).getTradeSetOffers();
+        List<TradeSetOffer> tradeSetOffers = VPTradeSet.cast(tradeSet).getTradeSetOffers();
         if (tradeSetOffers == null)
             return true;
 
@@ -76,7 +76,7 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extend
             target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;addOffersFromItemListingsWithoutDuplicates(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/core/HolderSet;I)V"))
     private boolean redirectAddOfferWithoutDuplicates(LootContext lootContext, MerchantOffers merchantOffers, HolderSet<VillagerTrade> potentialOffers,
                                                       int numberOfOffers, @Local(name = "tradeSet") TradeSet tradeSet) {
-        List<TradeSetOffer> tradeSetOffers = ((VPTradeSet) tradeSet).getTradeSetOffers();
+        List<TradeSetOffer> tradeSetOffers = VPTradeSet.cast(tradeSet).getTradeSetOffers();
         if (tradeSetOffers == null)
             return true;
 
