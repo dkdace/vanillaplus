@@ -19,18 +19,18 @@ public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockE
     private static final Component COMPONENT_BARREL_LOOT = Component.translatable("container.barrel_loot");
 
     @Inject(method = "loadAdditional", at = @At("TAIL"))
-    private void loadAdditional(ValueInput valueInput, CallbackInfo ci) {
-        onLoadAdditional(valueInput);
+    private void loadAdditional(ValueInput input, CallbackInfo ci) {
+        onLoadAdditional(input);
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void saveAdditional(ValueOutput valueOutput, CallbackInfo ci) {
-        onSaveAdditional(valueOutput);
+    private void saveAdditional(ValueOutput output, CallbackInfo ci) {
+        onSaveAdditional(output);
     }
 
     @Inject(method = "updateBlockState", at = @At("HEAD"), cancellable = true)
-    private void cancelCloseIfAlwaysOpen(BlockState blockState, boolean isOpen, CallbackInfo ci) {
-        if (!isOpen && blockState.getValue(VPLootContainerBlock.ALWAYS_OPEN))
+    private void cancelCloseIfAlwaysOpen(BlockState state, boolean isOpen, CallbackInfo ci) {
+        if (!isOpen && state.getValue(VPLootContainerBlock.ALWAYS_OPEN))
             ci.cancel();
     }
 

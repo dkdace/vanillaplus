@@ -34,27 +34,6 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     @Unique
     private boolean isFlaming;
 
-    @Override
-    protected void onClientTick(CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().isEmpty())
-            return;
-
-        if (flameTicks++ < ROAR_DURATION)
-            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
-                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
-
-        playParticles();
-    }
-
-    @Override
-    public float getTurnSpeed() {
-        if (getVPEnderDragon().getDataModifier().isEmpty())
-            return super.getTurnSpeed();
-
-        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
-        return Math.min(distance, 40) / distance;
-    }
-
     @Unique
     private void playParticles() {
         Vec3 vec = dragon.getHeadLookVector(1).normalize().yRot((float) (-Math.PI / 4));
@@ -104,12 +83,33 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         serverLevel.addFreshEntity(flame);
     }
 
-    @Definition(id = "d0", local = @Local(type = double.class))
-    @Expression("d0 < ?")
+    @Override
+    protected void onClientTick(CallbackInfo ci) {
+        if (getVPEnderDragon().getDataModifier().isEmpty())
+            return;
+
+        if (flameTicks++ < ROAR_DURATION)
+            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
+                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
+
+        playParticles();
+    }
+
+    @Override
+    public float getTurnSpeed() {
+        if (getVPEnderDragon().getDataModifier().isEmpty())
+            return super.getTurnSpeed();
+
+        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
+        return Math.min(distance, 40) / distance;
+    }
+
+    @Definition(id = "distToTarget", local = @Local(type = double.class, name = "distToTarget"))
+    @Expression("distToTarget < ?")
     @Inject(method = "doServerTick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
-    private void performBreathAttack(ServerLevel serverLevel, CallbackInfo ci, @Local double distanceToSqr) {
+    private void performBreathAttack(ServerLevel level, CallbackInfo ci, @Local(name = "distToTarget") double distToTarget) {
         getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
-            if (distanceToSqr < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
+            if (distToTarget < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
                 isFlaming = true;
 
             if (!isFlaming || flameTicks++ % 4 != 0)
@@ -118,7 +118,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
             Vec3 pos = new Vec3(dragon.head.getX() - dragon.getX(), 0, dragon.head.getZ() - dragon.getZ()).normalize();
             float radius = enderDragonModifier.getPhaseInfo().getCharge().getFlameRadius();
 
-            createFlame(enderDragonModifier.getPhaseInfo().getCharge(), serverLevel, pos, radius);
+            createFlame(enderDragonModifier.getPhaseInfo().getCharge(), level, pos, radius);
         });
     }
 

@@ -20,26 +20,26 @@ public abstract class HealOrHarmMobEffectMixin extends MobEffectMixin<HealOrHarm
     }
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
-    private float modifyHealAmount0(float amount, @Local(argsOnly = true) int amplifier) {
-        return getAmount(amount, amplifier);
+    private float modifyHealAmount0(float heal, @Local(argsOnly = true) int amplification) {
+        return getAmount(heal, amplification);
     }
 
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
-    private float modifyHealAmount1(float amount, @Local(argsOnly = true) int amplifier, @Local(argsOnly = true) double multiplier) {
-        return (float) (getAmount(amount, amplifier) * multiplier);
+    private float modifyHealAmount1(float heal, @Local(argsOnly = true) int amplification, @Local(argsOnly = true) double scale) {
+        return (float) (getAmount(heal, amplification) * scale);
     }
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2)
-    private float modifyHarmAmount0(float amount, @Local(argsOnly = true) int amplifier) {
-        return getAmount(amount, amplifier);
+    private float modifyHarmAmount0(float damage, @Local(argsOnly = true) int amplification) {
+        return getAmount(damage, amplification);
     }
 
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2)
-    private float modifyHarmAmount1(float amount, @Local(argsOnly = true) int amplifier, @Local(argsOnly = true) double multiplier) {
-        return (float) (getAmount(amount, amplifier) * multiplier);
+    private float modifyHarmAmount1(float damage, @Local(argsOnly = true) int amplification, @Local(argsOnly = true) double scale) {
+        return (float) (getAmount(damage, amplification) * scale);
     }
 }

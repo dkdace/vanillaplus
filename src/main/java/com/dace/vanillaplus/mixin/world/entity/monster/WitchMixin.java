@@ -28,6 +28,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Witch.class)
 public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.LivingEntityModifier> {
     @Unique
+    private static final int SUPPORT_HEALING_HEALTH = 8;
+
+    @Unique
     private NearestAttackableWitchTargetGoal<IronGolem> attackIronGolemGoal;
     @Unique
     private NearestAttackableWitchTargetGoal<AbstractVillager> attackVillagersGoal;
@@ -70,7 +73,7 @@ public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.Livin
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "CONSTANT", args = "floatValue=4.0"))
     private float modifySupportHealthCondition(float health) {
-        return 8;
+        return SUPPORT_HEALING_HEALTH;
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "FIELD",

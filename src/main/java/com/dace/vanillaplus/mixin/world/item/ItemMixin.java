@@ -44,7 +44,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     private static <T extends ItemModifier> void applyModifier(@NonNull T dataModifier, @NonNull DataComponentMap.Builder.SimpleMap map) {
         PatchedDataComponentMap patchedDataComponentMap = PatchedDataComponentMap.fromPatch(map, dataModifier.getDataComponentPatch());
 
-        map.map().forEach((dataComponentType, value) -> {
+        map.map().forEach((dataComponentType, _) -> {
             Object newValue = patchedDataComponentMap.remove(dataComponentType);
             if (newValue == null)
                 map.map().remove(dataComponentType);
@@ -81,10 +81,10 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     }
 
     @Shadow
-    public abstract InteractionResult use(Level level, Player player, InteractionHand interactionHand);
+    public abstract InteractionResult use(Level level, Player player, InteractionHand hand);
 
     @Shadow
-    public abstract ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity);
+    public abstract ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity);
 
     @Override
     @NonNull
@@ -117,7 +117,7 @@ public abstract class ItemMixin<T extends Item, U extends ItemModifier> implemen
     }
 
     @ModifyReturnValue(method = "getUseDuration", at = @At(value = "RETURN", ordinal = 0))
-    private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity livingEntity) {
-        return (int) (duration * livingEntity.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
+    private int modifyEatingDuration(int duration, @Local(argsOnly = true) LivingEntity user) {
+        return (int) (duration * user.getAttributeValue(VPAttributes.EATING_TIME.getHolder().orElseThrow()));
     }
 }

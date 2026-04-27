@@ -27,15 +27,15 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
     @WrapWithCondition(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhaseManager;setPhase(Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhase;)V",
             ordinal = 1))
-    private boolean checkFireCount(EnderDragonPhaseManager instance, EnderDragonPhase<?> enderDragonPhase) {
+    private boolean checkFireCount(EnderDragonPhaseManager instance, EnderDragonPhase<?> target) {
         return getVPEnderDragon().getDataModifier().isEmpty() || ++fireCount >= maxFireCount;
     }
 
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
-    private void applyFireballVelocity(ServerLevel serverLevel, CallbackInfo ci, @Local DragonFireball dragonFireball) {
+    private void applyFireballVelocity(ServerLevel level, CallbackInfo ci, @Local(name = "entity") DragonFireball entity) {
         getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier ->
-                dragonFireball.accelerationPower *= enderDragonModifier.getPhaseInfo().getFireball().getVelocityMultiplier());
+                entity.accelerationPower *= enderDragonModifier.getPhaseInfo().getFireball().getVelocityMultiplier());
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getX()D",

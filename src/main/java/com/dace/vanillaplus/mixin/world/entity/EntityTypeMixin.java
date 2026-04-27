@@ -14,13 +14,13 @@ import java.util.Optional;
 
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier> implements VPModifiableData<EntityType<?>, U>, VPMixin<EntityType<?>> {
-    @Unique
-    @Nullable
-    private U dataModifier;
     @Mutable
     @Shadow
     @Final
     private EntityType.EntityFactory<T> factory;
+    @Unique
+    @Nullable
+    private U dataModifier;
 
     @Override
     @NonNull

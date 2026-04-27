@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class TridentItemMixin extends ItemMixin<TridentItem, ItemModifier.TridentModifier> {
     @Inject(method = "releaseUsing", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;startAutoSpinAttack(IFLnet/minecraft/world/item/ItemStack;)V"))
-    private void applyCooldownOnRiptide(ItemStack itemStack, Level level, LivingEntity livingEntity, int durationLeft,
-                                        CallbackInfoReturnable<Boolean> cir, @Local Player player) {
+    private void applyCooldownOnRiptide(ItemStack itemStack, Level level, LivingEntity entity, int remainingTime, CallbackInfoReturnable<Boolean> cir,
+                                        @Local(name = "player") Player player) {
         getDataModifier().ifPresent(tridentModifier ->
                 player.getCooldowns().addCooldown(itemStack, tridentModifier.getRiptideCooldown()));
     }

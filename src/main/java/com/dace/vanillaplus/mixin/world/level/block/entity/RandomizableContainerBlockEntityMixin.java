@@ -28,18 +28,6 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
     @Nullable
     protected ResourceKey<LootTable> lootTable;
 
-    @Override
-    public void onLoad() {
-        if (lootTable != null)
-            init(lootTable);
-    }
-
-    @Override
-    @Nullable
-    public LootTableReward getLootTableReward() {
-        return lootTableResourceKey == null ? null : ReloadableDataManager.LOOT_TABLE_REWARD.get(lootTableResourceKey).orElse(null);
-    }
-
     @Unique
     private void init(@NonNull ResourceKey<LootTable> lootTableResourceKey) {
         if (!(level instanceof ServerLevel serverLevel) || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
@@ -62,9 +50,21 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
         valueOutput.storeNullable("OriginalLootTable", LootTable.KEY_CODEC, lootTableResourceKey);
     }
 
+    @Override
+    public void onLoad() {
+        if (lootTable != null)
+            init(lootTable);
+    }
+
+    @Override
+    @Nullable
+    public LootTableReward getLootTableReward() {
+        return lootTableResourceKey == null ? null : ReloadableDataManager.LOOT_TABLE_REWARD.get(lootTableResourceKey).orElse(null);
+    }
+
     @Inject(method = "setLootTable", at = @At("TAIL"))
-    private void initOnSetLootTable(ResourceKey<LootTable> lootTableResourceKey, CallbackInfo ci) {
-        if (lootTableResourceKey != null)
-            init(lootTableResourceKey);
+    private void initOnSetLootTable(ResourceKey<LootTable> lootTable, CallbackInfo ci) {
+        if (lootTable != null)
+            init(lootTable);
     }
 }

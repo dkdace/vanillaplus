@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Pillager.class)
 public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, EntityModifier.LivingEntityModifier> {
     @Override
-    public ItemStack getProjectile(ItemStack weapon) {
-        ItemStack itemStack = super.getProjectile(weapon);
+    public ItemStack getProjectile(ItemStack heldWeapon) {
+        ItemStack itemStack = super.getProjectile(heldWeapon);
 
         if (level().isClientSide())
             return itemStack;
@@ -35,22 +35,22 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, Entit
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void setCanOpenDoors(EntityType<? extends Pillager> entityType, Level level, CallbackInfo ci) {
+    private void setCanOpenDoors(EntityType<? extends Pillager> type, Level level, CallbackInfo ci) {
         getNavigation().setCanOpenDoors(true);
     }
 
     @ModifyArg(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/illager/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
-    private float modifyBulletVelocity(float velocity) {
+    private float modifyBulletVelocity(float crossbowPower) {
         return getDataModifier()
                 .flatMap(livingEntityModifier -> livingEntityModifier.get(EntityModifierInterfaces.CROSSBOW_ATTACK_MOB)
                         .map(EntityModifier.CrossbowAttackMobInfo::getShootingPower))
-                .orElse(velocity);
+                .orElse(crossbowPower);
     }
 
     @Overwrite
-    public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
+    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
         getRaiderEffect(RaiderEffect.PillagerEffect.class).ifPresent(pillagerEffect ->
                 pillagerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis())));
     }

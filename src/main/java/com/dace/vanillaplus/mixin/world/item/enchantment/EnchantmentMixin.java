@@ -26,7 +26,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -43,26 +42,25 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     private LevelBasedValuePreset levelBasedValuePreset;
 
     @Shadow
-    @UnknownNullability
-    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity entity, DamageSource damageSource) {
-        return null;
+    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity victim, DamageSource source) {
+        throw new UnsupportedOperationException();
     }
 
     @Shadow
-    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext filterData, Enchantment.GenericAction<T> action) {
+    private static <T> void applyEffects(List<ConditionalEffect<T>> effects, LootContext filterData, Enchantment.GenericAction<T> action) {
     }
 
     @Shadow
-    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
+    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
                                                       ServerLevel serverLevel, int enchantmentLevel, ItemStack itemStack, Entity entity,
                                                       MutableFloat value);
 
     @Shadow
-    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> componentType, RandomSource randomSource,
-                                               int enchantmentLevel, MutableFloat value);
+    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> component, RandomSource random, int enchantmentLevel,
+                                               MutableFloat value);
 
     @Shadow
-    public abstract <T> List<T> getEffects(DataComponentType<List<T>> dataComponentType);
+    public abstract <T> List<T> getEffects(DataComponentType<List<T>> type);
 
     @Override
     @NonNull

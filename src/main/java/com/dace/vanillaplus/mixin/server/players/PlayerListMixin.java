@@ -19,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerListMixin implements VPMixin<PlayerList> {
     @Inject(method = "placeNewPlayer", at = @At(value = "NEW",
             target = "(Lnet/minecraft/world/Difficulty;Z)Lnet/minecraft/network/protocol/game/ClientboundChangeDifficultyPacket;"))
-    private void sendGameRulesOnJoin(Connection connection, ServerPlayer serverPlayer, CommonListenerCookie cookie, CallbackInfo ci,
-                                     @Local GameRules gameRules) {
-        NetworkManager.sendToPlayer(new ShowHeadOnLocatorBarPacket(gameRules.get(VPGameRules.SHOW_HEAD_ON_LOCATOR_BAR.get())), serverPlayer);
+    private void sendGameRulesOnJoin(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci,
+                                     @Local(name = "gameRules") GameRules gameRules) {
+        NetworkManager.sendToPlayer(new ShowHeadOnLocatorBarPacket(gameRules.get(VPGameRules.SHOW_HEAD_ON_LOCATOR_BAR.get())), player);
     }
 }

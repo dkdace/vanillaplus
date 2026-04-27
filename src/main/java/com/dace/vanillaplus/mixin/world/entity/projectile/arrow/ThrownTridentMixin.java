@@ -22,14 +22,13 @@ public abstract class ThrownTridentMixin extends AbstractArrowMixin<ThrownTriden
 
     @Redirect(method = "onHitEntity", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/projectile/arrow/ThrownTrident;deflect(Lnet/minecraft/world/entity/projectile/ProjectileDeflection;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/EntityReference;Z)Z"))
-    private boolean removeDeflect(ThrownTrident instance, ProjectileDeflection projectileDeflection, Entity entity,
-                                  EntityReference<Entity> entityReference, boolean deflectionByPlayer) {
+    private boolean removeDeflect(ThrownTrident instance, ProjectileDeflection deflection, Entity deflectingEntity, EntityReference<Entity> newOwner,
+                                  boolean byAttack) {
         return true;
     }
 
     @Redirect(method = "onHitEntity", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/projectile/arrow/ThrownTrident;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
-    private void removeHitSlowDown(ThrownTrident instance, Vec3 speed) {
-        // 미사용
+    private void removeHitSlowDown(ThrownTrident instance, Vec3 deltaMovement) {
     }
 }

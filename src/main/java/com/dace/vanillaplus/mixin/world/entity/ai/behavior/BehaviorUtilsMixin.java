@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class BehaviorUtilsMixin implements VPMixin<BehaviorUtils> {
     @ModifyExpressionValue(method = "isWithinAttackRange", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getDefaultProjectileRange()I"))
-    private static int modifyAttackRange(int attackRange, @Local(argsOnly = true) Mob mob) {
-        return VPEntity.cast(mob).getDataModifier()
+    private static int modifyAttackRange(int attackRange, @Local(argsOnly = true) Mob body) {
+        return VPEntity.cast(body).getDataModifier()
                 .flatMap(entityModifier -> entityModifier.get(EntityModifierInterfaces.CROSSBOW_ATTACK_MOB)
                         .map(EntityModifier.CrossbowAttackMobInfo::getShootingRange))
                 .orElse(attackRange);

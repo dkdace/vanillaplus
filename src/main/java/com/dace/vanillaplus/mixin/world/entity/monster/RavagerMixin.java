@@ -31,7 +31,7 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     private int roarTick;
 
     @ModifyReturnValue(method = "lambda$registerGoals$0", at = @At("RETURN"))
-    private static boolean modifyVillagerAttackGoalCondition(boolean original) {
+    private static boolean removeVillagerAttackGoalCondition(boolean original) {
         return true;
     }
 
@@ -39,19 +39,19 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     public abstract boolean hasLineOfSight(Entity entity);
 
     @Overwrite
-    public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
+    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
         getRaiderEffect(RaiderEffect.RavagerEffect.class).ifPresent(ravagerEffect ->
                 ravagerEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis())));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void addAdditionalSaveData(ValueOutput valueOutput, CallbackInfo ci) {
-        valueOutput.putInt("RoarCooldown", roarCooldown);
+    private void addAdditionalSaveData(ValueOutput output, CallbackInfo ci) {
+        output.putInt("RoarCooldown", roarCooldown);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void readAdditionalSaveData(ValueInput valueInput, CallbackInfo ci) {
-        roarCooldown = valueInput.getIntOr("RoarCooldown", 0);
+    private void readAdditionalSaveData(ValueInput input, CallbackInfo ci) {
+        roarCooldown = input.getIntOr("RoarCooldown", 0);
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE",

@@ -22,28 +22,26 @@ public abstract class CreativeModeTabsMixin implements VPMixin<CreativeModeTabs>
 
     @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;SWEET_BERRIES:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
-    private static void addGoldenCarrotToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output,
-                                               CallbackInfo ci) {
-        output.accept(Items.GLISTERING_MELON_SLICE);
+    private static void addGoldenCarrotToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
+        consumables.accept(Items.GLISTERING_MELON_SLICE);
     }
 
     @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;COOKIE:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
-    private static void addSugarToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
-        output.accept(Items.SUGAR);
+    private static void addSugarToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
+        consumables.accept(Items.SUGAR);
     }
 
     @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;CARROT:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
-    private static void addPoppedChorusFruitToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output,
+    private static void addPoppedChorusFruitToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables,
                                                     CallbackInfo ci) {
-        output.accept(Items.POPPED_CHORUS_FRUIT);
+        consumables.accept(Items.POPPED_CHORUS_FRUIT);
     }
 
     @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
-    private static void addMilkBottleToFoods(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output,
-                                             CallbackInfo ci) {
-        output.accept(VPItems.MILK_BOTTLE.get());
+    private static void addMilkBottleToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
+        consumables.accept(VPItems.MILK_BOTTLE.get());
     }
 }

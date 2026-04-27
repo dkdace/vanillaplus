@@ -6,11 +6,8 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -35,19 +32,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPiece> {
     @Inject(method = "postProcess", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/level/block/Blocks;CRAFTING_TABLE:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.GETSTATIC))
-    private void placeBrewingStand(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource randomSource,
-                                   BoundingBox boundingBox, ChunkPos chunkPos, BlockPos blockPos, CallbackInfo ci) {
-        placeBlock(level, Blocks.BREWING_STAND.defaultBlockState(), 2, 2, 6, boundingBox);
+    private void placeBrewingStand(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random,
+                                   BoundingBox chunkBB, ChunkPos chunkPos, BlockPos referencePos, CallbackInfo ci) {
+        placeBlock(level, Blocks.BREWING_STAND.defaultBlockState(), 2, 2, 6, chunkBB);
         if (!(level.getBlockEntity(getWorldPos(2, 2, 6)) instanceof BrewingStandBlockEntity brewingStandBlockEntity))
             return;
 
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
-            Item potionItem = BuiltInRegistries.ITEM.getRandomElementOf(Tags.Items.POTIONS, randomSource).map(Holder::value).orElse(null);
-
-            if (potionItem != null) {
-                ItemStack itemStack = PotionContents.createItemStack(potionItem, BuiltInRegistries.POTION.getRandom(randomSource).orElseThrow());
-                brewingStandBlockEntity.setItem(i, itemStack);
-            }
+            int index = i;
+            BuiltInRegistries.ITEM.getRandomElementOf(Tags.Items.POTIONS, random).ifPresent(potionItem ->
+                    BuiltInRegistries.POTION.getRandom(random).ifPresent(potionHolder ->
+                            brewingStandBlockEntity.setItem(index, PotionContents.createItemStack(potionItem.value(), potionHolder))));
         }
     }
 
@@ -56,12 +51,13 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
     @Definition(id = "defaultBlockState", method = "Lnet/minecraft/world/level/block/Block;defaultBlockState()Lnet/minecraft/world/level/block/state/BlockState;")
     @Expression("this.placeBlock(?, CAULDRON.defaultBlockState(), ?, ?, ?, ?)")
     @Redirect(method = "postProcess", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private void placePotionCauldron(SwampHutPiece instance, WorldGenLevel level, BlockState blockState, int x, int y, int z, BoundingBox boundingBox,
-                                     @Local(argsOnly = true) RandomSource randomSource) {
-        int levelValue = randomSource.nextInt(LayeredCauldronBlock.MAX_FILL_LEVEL) + 1;
-        placeBlock(level, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, levelValue), x, y, z, boundingBox);
+    private void placePotionCauldron(SwampHutPiece instance, WorldGenLevel level, BlockState blockState, int x, int y, int z, BoundingBox chunkBB,
+                                     @Local(argsOnly = true) RandomSource random) {
+        int levelValue = random.nextInt(LayeredCauldronBlock.MAX_FILL_LEVEL) + 1;
+        placeBlock(level, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, levelValue), x, y, z, chunkBB);
 
         if (level.getBlockEntity(getWorldPos(x, y, z)) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-            waterCauldronBlockEntity.overridePotionContents(new PotionContents(BuiltInRegistries.POTION.getRandom(randomSource).orElseThrow()));
+            BuiltInRegistries.POTION.getRandom(random).ifPresent(potionHolder ->
+                    waterCauldronBlockEntity.overridePotionContents(new PotionContents(potionHolder)));
     }
 }

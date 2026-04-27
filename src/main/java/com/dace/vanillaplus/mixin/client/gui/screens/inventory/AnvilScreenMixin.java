@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AnvilScreen.class)
 public abstract class AnvilScreenMixin extends AbstractContainerScreenMixin<AnvilScreen, AnvilMenu> {
-    @Definition(id = "i", local = @Local(type = int.class, ordinal = 2))
-    @Expression("i >= 40")
+    @Definition(id = "cost", local = @Local(type = int.class, name = "cost"))
+    @Expression("cost >= 40")
     @ModifyExpressionValue(method = "extractLabels", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyMaxCostCondition(boolean condition, @Local(name = "cost") int cost) {
         return VPModifiableData.getDataModifier(Blocks.ANVIL, BlockModifier.AnvilModifier.class)

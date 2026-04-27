@@ -13,22 +13,22 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(CrossbowItem.class)
 public abstract class CrossbowItemMixin extends ItemMixin<CrossbowItem, ItemModifier.CrossbowModifier> {
     @Shadow
-    private static float getShootingPower(ChargedProjectiles chargedProjectiles) {
+    private static float getShootingPower(ChargedProjectiles projectiles) {
         return 0;
     }
 
     @Redirect(method = "use", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/CrossbowItem;getShootingPower(Lnet/minecraft/world/item/component/ChargedProjectiles;)F"))
-    private float modifyShootingPower(ChargedProjectiles chargedProjectiles) {
+    private float modifyShootingPower(ChargedProjectiles projectiles) {
         return getDataModifier()
-                .map(crossbowModifier -> chargedProjectiles.contains(Items.FIREWORK_ROCKET)
+                .map(crossbowModifier -> projectiles.contains(Items.FIREWORK_ROCKET)
                         ? crossbowModifier.getShootingPowerFireworkRocket()
                         : crossbowModifier.getShootingPower())
-                .orElse(getShootingPower(chargedProjectiles));
+                .orElse(getShootingPower(projectiles));
     }
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))
-    private double modifyShootProjectileTargetYScale(double scale) {
-        return getDataModifier().isPresent() ? -0.25 : scale;
+    private double modifyShootProjectileTargetYProgress(double progress) {
+        return getDataModifier().isPresent() ? -0.25 : progress;
     }
 }

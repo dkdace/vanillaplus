@@ -14,12 +14,12 @@ public abstract class WitherMobEffectMixin extends MobEffectMixin<WitherMobEffec
     @Unique
     private static final String DEFINED_VALUE_NAME = "damage_per_tick";
 
-    @Definition(id = "p_298417_", local = @Local(type = int.class, ordinal = 1, argsOnly = true))
-    @Expression("40 >> p_298417_")
+    @Definition(id = "amplification", local = @Local(type = int.class, ordinal = 1, argsOnly = true))
+    @Expression("40 >> amplification")
     @ModifyExpressionValue(method = "shouldApplyEffectTickThisTick", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private int modifyTicks(int ticks, @Local(ordinal = 1, argsOnly = true) int amplifier) {
+    private int modifyInterval(int interval, @Local(ordinal = 1, argsOnly = true) int amplification) {
         return getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> (int) (1 / levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplifier + 1)))
-                .orElse(ticks);
+                .map(levelBasedValuePreset -> (int) (1 / levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplification + 1)))
+                .orElse(interval);
     }
 }

@@ -23,9 +23,9 @@ public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
     private DataSlot cost;
 
     @ModifyArg(method = "calculateIncreasedRepairCost", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(JJ)J"), index = 0)
-    private static long modifyIncreasedRepairCost(long cost, @Local(argsOnly = true) int oldCost) {
+    private static long modifyIncreasedRepairCost(long cost, @Local(argsOnly = true) int baseCost) {
         return VPModifiableData.getDataModifier(Blocks.ANVIL, BlockModifier.AnvilModifier.class)
-                .map(anvilModifier -> (long) (oldCost + anvilModifier.getCostPenalty()))
+                .map(anvilModifier -> (long) (baseCost + anvilModifier.getCostPenalty()))
                 .orElse(cost);
     }
 
@@ -40,9 +40,9 @@ public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
     }
 
     @ModifyArg(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/DataSlot;set(I)V", ordinal = 5))
-    private int modifyMaxCost(int maxCost) {
+    private int modifyMaxCost(int value) {
         return VPModifiableData.getDataModifier(Blocks.ANVIL, BlockModifier.AnvilModifier.class)
                 .map(anvilModifier -> anvilModifier.getMaxCost().orElse(cost.get()))
-                .orElse(maxCost);
+                .orElse(value);
     }
 }

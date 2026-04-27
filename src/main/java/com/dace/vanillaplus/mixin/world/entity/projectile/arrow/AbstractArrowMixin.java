@@ -46,23 +46,23 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends Enti
 
     @ModifyExpressionValue(method = "doKnockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    private double modifyKnockbackStrength(double original, @Local(argsOnly = true) LivingEntity livingEntity,
-                                           @Local(argsOnly = true) DamageSource damageSource) {
-        return VPAttributes.getFinalKnockbackResistance(livingEntity, damageSource);
+    private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) LivingEntity mob,
+                                             @Local(argsOnly = true) DamageSource damageSource) {
+        return VPAttributes.getFinalKnockbackResistance(mob, knockbackResistance, damageSource);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;DDDLnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V",
             at = @At("TAIL"))
-    private void modifyBaseDamage(EntityType<? extends AbstractArrow> entityType, double x, double y, double z, Level level, ItemStack pickupItemStack,
-                                  ItemStack weaponItemStack, CallbackInfo ci) {
-        if (weaponItemStack != null)
-            VPModifiableData.getDataModifier(weaponItemStack.getItem(), ItemModifier.ProjectileWeaponModifier.class)
+    private void modifyBaseDamage(EntityType<? extends AbstractArrow> type, double x, double y, double z, Level level, ItemStack pickupItemStack,
+                                  @Nullable ItemStack firedFromWeapon, CallbackInfo ci) {
+        if (firedFromWeapon != null)
+            VPModifiableData.getDataModifier(firedFromWeapon.getItem(), ItemModifier.ProjectileWeaponModifier.class)
                     .ifPresent(projectileWeaponModifier -> this.baseDamage = projectileWeaponModifier.getBaseDamage());
     }
 
-    @Definition(id = "livingentity", local = @Local(type = LivingEntity.class))
+    @Definition(id = "mob", local = @Local(type = LivingEntity.class, name = "mob"))
     @Definition(id = "Player", type = Player.class)
-    @Expression("livingentity instanceof Player")
+    @Expression("mob instanceof Player")
     @ModifyExpressionValue(method = "onHitEntity", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyHitSoundCondition(boolean original) {
         return true;
@@ -70,7 +70,7 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends Enti
 
     @ModifyArg(method = "onHitEntity", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;hurtOrSimulate(Lnet/minecraft/world/damagesource/DamageSource;F)Z"), index = 1)
-    private float modifyDamage(float damage, @Local float velocity, @Local double baseDamage) {
-        return (float) Math.clamp(velocity * baseDamage, 0, Integer.MAX_VALUE);
+    private float modifyDamage(float damage, @Local(name = "pow") float pow, @Local(name = "arrowDamage") double arrowDamage) {
+        return (float) Math.clamp(pow * arrowDamage, 0, Integer.MAX_VALUE);
     }
 }

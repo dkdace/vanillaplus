@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.advancements.criterion;
 
-import com.dace.vanillaplus.extension.advancements.critereon.VPPlayerPredicate;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -40,7 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Mixin(PlayerPredicate.class)
-public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
+public abstract class PlayerPredicateMixin {
     @Shadow
     @Final
     public static final MapCodec<PlayerPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
@@ -55,7 +54,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
                     EntityPredicate.CODEC.optionalFieldOf("looking_at").forGetter(PlayerPredicate::lookingAt),
                     InputPredicate.CODEC.optionalFieldOf("input").forGetter(PlayerPredicate::input),
                     DistancePredicate.CODEC.optionalFieldOf("distance_to_respawn")
-                            .forGetter(playerPredicate -> VPPlayerPredicate.cast(playerPredicate).getDistanceToRespawn()))
+                            .forGetter(playerPredicate -> ((PlayerPredicateMixin) (Object) playerPredicate).distanceToRespawn))
             .apply(instance, PlayerPredicateMixin::create));
     @Unique
     @Getter
@@ -70,7 +69,7 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
                                           Optional<EntityPredicate> lookingAt, Optional<InputPredicate> input,
                                           Optional<DistancePredicate> distanceToRespawn) {
         PlayerPredicate playerPredicate = new PlayerPredicate(level, foodPredicate, gameType, stats, recipes, advancements, lookingAt, input);
-        VPPlayerPredicate.cast(playerPredicate).setDistanceToRespawn(distanceToRespawn);
+        ((PlayerPredicateMixin) (Object) playerPredicate).distanceToRespawn = distanceToRespawn;
 
         return playerPredicate;
     }
@@ -102,12 +101,12 @@ public abstract class PlayerPredicateMixin implements VPPlayerPredicate {
     }
 
     @Inject(method = "matches", at = @At(value = "INVOKE", target = "Ljava/util/Optional;isPresent()Z", ordinal = 1), cancellable = true)
-    private void checkExtraConditions(Entity entity, ServerLevel serverLevel, Vec3 pos, CallbackInfoReturnable<Boolean> cir,
-                                      @Local ServerPlayer serverPlayer) {
+    private void checkExtraConditions(Entity entity, ServerLevel level, @Nullable Vec3 position, CallbackInfoReturnable<Boolean> cir,
+                                      @Local(name = "player") ServerPlayer player) {
         if (distanceToRespawn.map(target -> {
-            BlockPos respawnBlockPos = getValidRespawnBlockPos(serverPlayer);
+            BlockPos respawnBlockPos = getValidRespawnBlockPos(player);
 
-            return respawnBlockPos == null || !target.matches(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), respawnBlockPos.getX(),
+            return respawnBlockPos == null || !target.matches(player.getX(), player.getY(), player.getZ(), respawnBlockPos.getX(),
                     respawnBlockPos.getY(), respawnBlockPos.getZ());
         }).orElse(false))
             cir.setReturnValue(false);

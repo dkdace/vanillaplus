@@ -117,17 +117,18 @@ public abstract class VillagerTradeMixin implements VPMixin<VillagerTrade> {
     @ModifyExpressionValue(method = "getOffer", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;getInt(Lnet/minecraft/world/level/storage/loot/LootContext;)I",
             ordinal = 1))
-    private int multiplyXPByCost(int xp, @Local ItemCost itemCost) {
+    private int multiplyXPByCost(int xp, @Local(name = "itemCost") ItemCost itemCost) {
         return multiplyXPByCost ? xp * itemCost.count() : xp;
     }
 
     @Definition(id = "itemEnchantments", local = @Local(type = ItemEnchantments.class, name = "itemEnchantments"))
     @Expression("itemEnchantments != null")
     @ModifyExpressionValue(method = "getOffer", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean applyDoubleTradePriceForEnchantments(boolean condition, @Local ItemStack itemStack,
-                                                         @Local HolderSet<Enchantment> enchantmentHolderSet, @Local LocalIntRef additionalCost) {
-        ItemEnchantments itemEnchantments = itemStack.get(DataComponents.ENCHANTMENTS);
-        if (itemEnchantments != null && itemEnchantments.keySet().stream().anyMatch(enchantmentHolderSet::contains)) {
+    private boolean applyDoubleTradePriceForEnchantments(boolean condition, @Local(name = "result") ItemStack result,
+                                                         @Local(name = "enchantments") HolderSet<Enchantment> enchantments,
+                                                         @Local(name = "additionalCost") LocalIntRef additionalCost) {
+        ItemEnchantments itemEnchantments = result.get(DataComponents.ENCHANTMENTS);
+        if (itemEnchantments != null && itemEnchantments.keySet().stream().anyMatch(enchantments::contains)) {
             additionalCost.set(additionalCost.get() * 2);
             return false;
         }

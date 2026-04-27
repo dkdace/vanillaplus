@@ -14,8 +14,8 @@ public abstract class ItemEntityMixin extends EntityMixin<ItemEntity, EntityModi
     private static final int LIGHTNING_IMMUNE_DURATION = 8;
 
     @Override
-    public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt) {
+    public void thunderHit(ServerLevel level, LightningBolt lightningBolt) {
         if (tickCount > LIGHTNING_IMMUNE_DURATION)
-            super.thunderHit(serverLevel, lightningBolt);
+            super.thunderHit(level, lightningBolt);
     }
 }

@@ -9,7 +9,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.registries.DeferredRegister;
@@ -98,16 +97,15 @@ public final class VPAttributes {
     /**
      * 엔티티의 최종 밀치기 저항 수치를 반환한다.
      *
-     * @param livingEntity 대상 엔티티
-     * @param damageSource 피해 근원
+     * @param livingEntity        대상 엔티티
+     * @param knockbackResistance 기존 밀치기 저항
+     * @param damageSource        피해 근원
      * @return 밀치기 저항. 0~1 사이의 값
      */
-    public static double getFinalKnockbackResistance(@NonNull LivingEntity livingEntity, @Nullable DamageSource damageSource) {
-        double resistance = livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
-        double projectileResistance = damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
+    public static double getFinalKnockbackResistance(@NonNull LivingEntity livingEntity, double knockbackResistance,
+                                                     @Nullable DamageSource damageSource) {
+        return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
                 ? livingEntity.getAttributeValue(PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
-                : 0;
-
-        return Math.max(resistance, projectileResistance);
+                : 0);
     }
 }

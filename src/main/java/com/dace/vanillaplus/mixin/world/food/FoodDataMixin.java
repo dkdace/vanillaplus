@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(FoodData.class)
 public abstract class FoodDataMixin implements VPMixin<FoodData> {
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"))
-    private float modifyFoodExhaustion(float exhaustion, @Local(argsOnly = true) ServerPlayer player) {
-        return (float) (exhaustion * player.getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
+    private float modifyFoodExhaustion(float amount, @Local(argsOnly = true) ServerPlayer player) {
+        return (float) (amount * player.getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
     }
 }

@@ -21,16 +21,16 @@ import java.util.Optional;
 public abstract class EuclideanGameEventListenerRegistryMixin implements VPMixin<EuclideanGameEventListenerRegistry> {
     @Redirect(method = "visitInRangeListeners", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/gameevent/EuclideanGameEventListenerRegistry;getPostableListenerPosition(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/gameevent/GameEventListener;)Ljava/util/Optional;"))
-    private Optional<Vec3> redirectPostableListenerPosition(ServerLevel serverLevel, Vec3 pos, GameEventListener gameEventListener,
+    private Optional<Vec3> redirectPostableListenerPosition(ServerLevel level, Vec3 sourcePosition, GameEventListener listener,
                                                             @Local(argsOnly = true) GameEvent.Context context) {
-        return gameEventListener.getListenerSource().getPosition(serverLevel).map(targetPos -> {
-            double range = gameEventListener.getListenerRadius();
+        return listener.getListenerSource().getPosition(level).map(targetPos -> {
+            double range = listener.getListenerRadius();
 
             Entity entity = context.sourceEntity();
             if (entity instanceof LivingEntity livingEntity)
                 range *= livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow());
 
-            double distance = BlockPos.containing(targetPos).distSqr(BlockPos.containing(pos));
+            double distance = BlockPos.containing(targetPos).distSqr(BlockPos.containing(sourcePosition));
             return distance > range * range ? null : targetPos;
         });
     }

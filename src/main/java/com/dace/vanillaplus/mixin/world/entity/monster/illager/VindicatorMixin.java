@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(Vindicator.class)
 public abstract class VindicatorMixin extends AbstractIllagerMixin<Vindicator, EntityModifier.LivingEntityModifier> {
     @Overwrite
-    public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
+    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
         getRaiderEffect(RaiderEffect.VindicatorEffect.class).ifPresent(vindicatorEffect -> {
             setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
 

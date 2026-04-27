@@ -32,6 +32,5 @@ public abstract class AbstractDragonPhaseInstanceMixin implements VPMixin<Abstra
 
     @Inject(method = "doClientTick", at = @At("TAIL"))
     protected void onClientTick(CallbackInfo ci) {
-        // 미사용
     }
 }

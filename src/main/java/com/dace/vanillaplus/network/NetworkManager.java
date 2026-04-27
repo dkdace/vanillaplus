@@ -106,6 +106,15 @@ public final class NetworkManager {
     }
 
     /**
+     * 지정한 패킷을 모든 플레이어에게 전송한다.
+     *
+     * @param vpPacket 패킷
+     */
+    public static void broadcast(@NonNull VPPacket vpPacket) {
+        CHANNEL.send(vpPacket, PacketDistributor.ALL.noArg());
+    }
+
+    /**
      * 지정한 패킷을 특정 월드의 모든 플레이어에게 전송한다.
      *
      * @param vpPacket 패킷

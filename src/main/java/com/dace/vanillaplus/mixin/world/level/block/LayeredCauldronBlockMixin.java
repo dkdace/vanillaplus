@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -42,28 +43,35 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
     @Final
     public static IntegerProperty LEVEL;
 
+    @Unique
+    private static void addWater(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos) {
+        if (VPBlock.cast(state.getBlock()).getDataModifier().isPresent()
+                && level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
+            waterCauldronBlockEntity.addPotionContents(null);
+    }
+
     @Inject(method = "lowerFillLevel", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
-    private static void onLowerFillLevel(BlockState blockState, Level level, BlockPos blockPos, CallbackInfo ci) {
-        if (VPBlock.cast(blockState.getBlock()).getDataModifier().isPresent()
-                && level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
+    private static void onLowerFillLevel(BlockState state, Level level, BlockPos pos, CallbackInfo ci) {
+        if (VPBlock.cast(state.getBlock()).getDataModifier().isPresent()
+                && level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
             waterCauldronBlockEntity.onLowerFillLevel();
     }
 
     @Shadow
-    public abstract double getContentHeight(BlockState blockState);
+    protected abstract double getContentHeight(BlockState state);
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
-        return getThis() == Blocks.WATER_CAULDRON ? new WaterCauldronBlockEntity(blockPos, blockState) : null;
+    public BlockEntity newBlockEntity(@NonNull BlockPos worldPosition, @NonNull BlockState blockState) {
+        return getThis() == Blocks.WATER_CAULDRON ? new WaterCauldronBlockEntity(worldPosition, blockState) : null;
     }
 
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level level, @NonNull BlockState blockState,
-                                                                  @NonNull BlockEntityType<T> blockEntityType) {
-        if (blockEntityType == VPBlockEntityTypes.WATER_CAULDRON.get())
+                                                                  @NonNull BlockEntityType<T> type) {
+        if (type == VPBlockEntityTypes.WATER_CAULDRON.get())
             return (targetLevel, blockPos, targetBlockState, _) -> {
                 if (targetLevel instanceof ServerLevel serverLevel && targetBlockState.getValue(UPDATE_COLOR))
                     serverLevel.setBlockAndUpdate(blockPos, blockState.setValue(UPDATE_COLOR, false));
@@ -73,24 +81,24 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
-        if (VPBlock.cast(blockState.getBlock()).getDataModifier().isEmpty()
-                || !(level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity))
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (VPBlock.cast(state.getBlock()).getDataModifier().isEmpty()
+                || !(level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity))
             return;
 
-        Holder<MobEffect> mobEffectHolder = waterCauldronBlockEntity.getRandomMobEffect(randomSource);
+        Holder<MobEffect> mobEffectHolder = waterCauldronBlockEntity.getRandomMobEffect(random);
         if (mobEffectHolder == null)
             return;
 
         int color = mobEffectHolder.value().getColor();
-        float v = 0.75F + randomSource.nextFloat() * 0.25F;
+        float v = 0.75F + random.nextFloat() * 0.25F;
         float alpha = ARGB.alphaFloat(waterCauldronBlockEntity.getColor());
         float red = ARGB.redFloat(color) * v;
         float green = ARGB.greenFloat(color) * v;
         float blue = ARGB.blueFloat(color) * v;
-        double x = blockPos.getCenter().x() + randomSource.triangle(0, 0.25);
-        double y = blockPos.getY() + getContentHeight(blockState);
-        double z = blockPos.getCenter().z() + randomSource.triangle(0, 0.25);
+        double x = pos.getCenter().x() + random.triangle(0, 0.25);
+        double y = pos.getY() + getContentHeight(state);
+        double z = pos.getCenter().z() + random.triangle(0, 0.25);
 
         level.addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, ARGB.colorFromFloat(alpha, red, green, blue)), x, y, z, 0,
                 0.2, 0);
@@ -98,8 +106,8 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/LayeredCauldronBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
-    private BlockState modifyBlockState(BlockState blockState) {
-        return blockState.setValue(UPDATE_COLOR, false);
+    private BlockState modifyBlockState(BlockState state) {
+        return state.setValue(UPDATE_COLOR, false);
     }
 
     @ModifyVariable(method = "createBlockStateDefinition", at = @At(value = "INVOKE",
@@ -111,27 +119,21 @@ public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldr
 
     @Inject(method = "handlePrecipitation", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
-    private void addWaterOnRain(BlockState blockState, Level level, BlockPos blockPos, Biome.Precipitation precipitation, CallbackInfo ci) {
-        if (VPBlock.cast(blockState.getBlock()).getDataModifier().isPresent()
-                && level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-            waterCauldronBlockEntity.addPotionContents(null);
+    private void addWaterOnRain(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation, CallbackInfo ci) {
+        addWater(state, level, pos);
     }
 
     @Inject(method = "receiveStalactiteDrip", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;gameEvent(Lnet/minecraft/core/Holder;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/gameevent/GameEvent$Context;)V"))
-    private void addWaterOnStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid, CallbackInfo ci) {
-        if (VPBlock.cast(blockState.getBlock()).getDataModifier().isPresent()
-                && level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-            waterCauldronBlockEntity.addPotionContents(null);
+    private void addWaterOnStalactiteDrip(BlockState state, Level level, BlockPos pos, Fluid fluid, CallbackInfo ci) {
+        addWater(state, level, pos);
     }
 
     @Inject(method = "handleEntityOnFireInside", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/LayeredCauldronBlock;lowerFillLevel(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V",
             ordinal = 0, shift = At.Shift.AFTER))
-    private void addWaterOnPowderSnowMelt(BlockState blockState, Level level, BlockPos blockPos, CallbackInfo ci) {
-        if (VPBlock.cast(blockState.getBlock()).getDataModifier().isPresent())
-            for (int i = 0; i < level.getBlockState(blockPos).getValue(LEVEL); i++)
-                if (level.getBlockEntity(blockPos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-                    waterCauldronBlockEntity.addPotionContents(null);
+    private void addWaterOnPowderSnowMelt(BlockState state, Level level, BlockPos pos, CallbackInfo ci) {
+        for (int i = 0; i < level.getBlockState(pos).getValue(LEVEL); i++)
+            addWater(state, level, pos);
     }
 }

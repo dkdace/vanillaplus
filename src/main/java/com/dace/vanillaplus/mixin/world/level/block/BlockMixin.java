@@ -26,6 +26,13 @@ public abstract class BlockMixin<T extends Block, U extends BlockModifier> imple
     @Nullable
     private U dataModifier;
 
+    @Shadow
+    public abstract void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random);
+
+    @Shadow
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack destroyedWith) {
+    }
+
     @Override
     @NonNull
     public Optional<U> getDataModifier() {
@@ -36,14 +43,6 @@ public abstract class BlockMixin<T extends Block, U extends BlockModifier> imple
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
-    }
-
-    @Shadow
-    public abstract void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource);
-
-    @Shadow
-    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity,
-                              ItemStack tool) {
     }
 
     @Override

@@ -20,7 +20,7 @@ public abstract class EndSpikeFeatureMixin implements VPMixin<SpikeFeature> {
         }
 
         @ModifyExpressionValue(method = "load(Ljava/lang/Long;)Ljava/util/List;", at = @At(value = "CONSTANT", args = "intValue=3", ordinal = 0))
-        private int modifyRadiusDivider(int multiplier) {
+        private int modifyRadiusDivider(int divider) {
             return 4;
         }
 
@@ -29,11 +29,11 @@ public abstract class EndSpikeFeatureMixin implements VPMixin<SpikeFeature> {
             return 1;
         }
 
-        @Definition(id = "flag", local = @Local(type = boolean.class))
-        @Expression("flag")
+        @Definition(id = "guarded", local = @Local(type = boolean.class, name = "guarded"))
+        @Expression("guarded")
         @ModifyExpressionValue(method = "load(Ljava/lang/Long;)Ljava/util/List;", at = @At("MIXINEXTRAS:EXPRESSION"))
-        private boolean modifyGuardedCrystalCondition(boolean original, @Local(ordinal = 3) int l) {
-            return l == 2 || l == 4 || l == 6 || l == 8;
+        private boolean modifyGuardedCrystalCondition(boolean original, @Local(name = "size") int size) {
+            return size == 2 || size == 4 || size == 6 || size == 8;
         }
     }
 }

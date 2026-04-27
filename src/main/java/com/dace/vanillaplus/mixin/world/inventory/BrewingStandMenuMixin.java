@@ -14,7 +14,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipePropertySet;
-import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,6 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BrewingStandMenu.class)
 public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
+    @Unique
+    private static final int INGREDIENT_SLOT_X = 79;
+    @Unique
+    private static final int INGREDIENT_SLOT_Y = 17;
     @Shadow
     @Final
     private static int INGREDIENT_SLOT;
@@ -35,14 +38,14 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
 
     @ModifyArg(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/inventory/SimpleContainerData;<init>(I)V"))
-    private static int modifyContainerDataCount0(int size) {
+    private static int modifyContainerDataCount0(int count) {
         return VPBrewingStandBlockEntity.NUM_DATA_VALUES;
     }
 
     @ModifyArg(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu;checkContainerDataCount(Lnet/minecraft/world/inventory/ContainerData;I)V"),
             index = 1)
-    private static int modifyContainerDataCount1(int size) {
+    private static int modifyContainerDataCount1(int expected) {
         return VPBrewingStandBlockEntity.NUM_DATA_VALUES;
     }
 
@@ -53,15 +56,15 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
 
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V",
             at = @At("TAIL"))
-    private void setIngredientItemTest(int containerId, Inventory inventory, Container container, ContainerData containerData, CallbackInfo ci) {
+    private void setIngredientItemTest(int containerId, Inventory inventory, Container brewingStand, ContainerData brewingStandData, CallbackInfo ci) {
         ingredientItemTest = inventory.player.level().recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET);
     }
 
     @ModifyArg(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;",
                     ordinal = 3))
-    private Slot modifyIngredientSlot(Slot slot, @Local(argsOnly = true) Container container) {
-        return new Slot(container, INGREDIENT_SLOT, 79, 17) {
+    private Slot modifyIngredientSlot(Slot slot, @Local(argsOnly = true) Container brewingStand) {
+        return new Slot(brewingStand, INGREDIENT_SLOT, INGREDIENT_SLOT_X, INGREDIENT_SLOT_Y) {
             @Override
             public boolean mayPlace(@NonNull ItemStack itemStack) {
                 return ingredientItemTest.test(itemStack);
@@ -83,9 +86,9 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
 
         @Inject(method = "onTake", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/advancements/criterion/BrewedPotionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/core/Holder;)V"))
-        private void awardUsedRecipes(Player player, ItemStack itemStack, CallbackInfo ci) {
-            if (getThis().container instanceof BrewingStandBlockEntity brewingStandBlockEntity)
-                VPBrewingStandBlockEntity.cast(brewingStandBlockEntity).awardUsedRecipes(player);
+        private void awardUsedRecipes(Player player, ItemStack carried, CallbackInfo ci) {
+            if (getThis().container instanceof VPBrewingStandBlockEntity vpBrewingStandBlockEntity)
+                vpBrewingStandBlockEntity.awardUsedRecipes(player);
         }
     }
 }

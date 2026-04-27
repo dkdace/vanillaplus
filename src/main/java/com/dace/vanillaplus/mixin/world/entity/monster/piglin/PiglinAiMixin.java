@@ -22,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
     @Redirect(method = "getBarterResponseItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/storage/loot/LootTable;getRandomItems(Lnet/minecraft/world/level/storage/loot/LootParams;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"))
-    private static ObjectArrayList<ItemStack> modifyBarteringResult(LootTable lootTable, LootParams lootParams, @Local(argsOnly = true) Piglin piglin) {
-        Player player = piglin.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).orElse(null);
+    private static ObjectArrayList<ItemStack> modifyBarteringResult(LootTable instance, LootParams params, @Local(argsOnly = true) Piglin body) {
+        Player player = body.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).orElse(null);
         if (player == null)
-            return lootTable.getRandomItems(lootParams);
+            return instance.getRandomItems(params);
 
         MutableFloat value = new MutableFloat(1);
 
@@ -36,11 +36,11 @@ public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
         ObjectArrayList<ItemStack> itemStacks = new ObjectArrayList<>();
 
         int rolls = value.intValue();
-        if (piglin.getRandom().nextFloat() < value.floatValue() - rolls)
+        if (body.getRandom().nextFloat() < value.floatValue() - rolls)
             rolls++;
 
         for (int i = 0; i < rolls; i++)
-            itemStacks.addAll(lootTable.getRandomItems(lootParams));
+            itemStacks.addAll(instance.getRandomItems(params));
 
         return itemStacks;
     }

@@ -81,27 +81,27 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
     public abstract Level level();
 
     @Shadow
-    public abstract boolean closerThan(Entity entity, double distance);
+    public abstract boolean closerThan(Entity other, double distance);
 
     @Shadow
-    public abstract void playSound(SoundEvent soundEvent, float volume, float pitch);
+    public abstract void playSound(SoundEvent sound, float volume, float pitch);
 
     @Shadow
     @Nullable
-    public abstract ItemEntity spawnAtLocation(ServerLevel serverLevel, ItemLike item);
+    public abstract ItemEntity spawnAtLocation(ServerLevel level, ItemLike resource);
 
     @Shadow
     @Nullable
     public abstract LivingEntity getControllingPassenger();
 
     @Shadow
-    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
-                                             float explosionPower) {
+    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
+                                             float resistance) {
         return 0;
     }
 
     @Shadow
-    public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt) {
+    public void thunderHit(ServerLevel level, LightningBolt lightningBolt) {
     }
 
     @Override
@@ -116,28 +116,11 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
         this.dataModifier = dataModifier;
     }
 
-    @Unique
-    private float getFinalFootstepVolume(float volume) {
+    @ModifyArg(method = {"playStepSound", "playMuffledStepSound", "playCombinationStepSounds"}, at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    private float modifyFootstepVolume(float volume) {
         return getThis() instanceof LivingEntity livingEntity
                 ? (float) (volume * livingEntity.getAttributeValue(VPAttributes.VIBRATION_TRANSMIT_RANGE.getHolder().orElseThrow()))
                 : volume;
-    }
-
-    @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
-    private float modifyFootstepVolume0(float volume) {
-        return getFinalFootstepVolume(volume);
-    }
-
-    @ModifyArg(method = "playMuffledStepSound", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
-    private float modifyFootstepVolume1(float volume) {
-        return getFinalFootstepVolume(volume);
-    }
-
-    @ModifyArg(method = "playCombinationStepSounds", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
-    private float modifyFootstepVolume2(float volume) {
-        return getFinalFootstepVolume(volume);
     }
 }

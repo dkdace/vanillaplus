@@ -19,26 +19,25 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(IronGolem.class)
 public abstract class IronGolemMixin extends MobMixin<IronGolem, EntityModifier.LivingEntityModifier> {
     @Override
-    protected AABB getAttackBoundingBox(double range) {
-        return super.getAttackBoundingBox(range).inflate(0.5, 0.1, 0.5);
+    protected AABB getAttackBoundingBox(double horizontalExpansion) {
+        return super.getAttackBoundingBox(horizontalExpansion).inflate(0.5, 0.1, 0.5);
     }
 
-    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
-    private boolean modifyHealItems(boolean canHeal, @Local ItemStack itemStack) {
-        return canHeal || itemStack.is(Items.IRON_NUGGET);
+    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
+    private boolean modifyHealItems(boolean isIronIngot, @Local(name = "itemStack") ItemStack itemStack) {
+        return isIronIngot || itemStack.is(Items.IRON_NUGGET);
     }
 
     @ModifyArg(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/golem/IronGolem;heal(F)V"))
-    private float modifyHealAmount(float amount, @Local(argsOnly = true) Player player, @Local ItemStack itemStack) {
+    private float modifyHealAmount(float heal, @Local(argsOnly = true) Player player, @Local(name = "itemStack") ItemStack itemStack) {
         MutableFloat value = new MutableFloat(1);
 
-        EnchantmentHelper.runIterationOnEquipment(player, (enchantmentHolder, level, enchantedItemInUse) ->
+        EnchantmentHelper.runIterationOnEquipment(player, (enchantmentHolder, level, _) ->
                 VPEnchantment.cast(enchantmentHolder.value()).modifyIronGolemHealMultiplier(level, player, value));
 
         if (itemStack.is(Items.IRON_NUGGET))
-            amount /= 9;
+            heal /= 9;
 
-        return amount * value.floatValue();
+        return heal * value.floatValue();
     }
 }

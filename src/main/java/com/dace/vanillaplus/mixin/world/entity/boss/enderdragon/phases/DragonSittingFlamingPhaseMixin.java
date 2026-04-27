@@ -26,7 +26,7 @@ public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonPhase
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
-    private MobEffectInstance modifyFlameEffect(MobEffectInstance mobEffectInstance) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : mobEffectInstance;
+    private MobEffectInstance modifyFlameEffect(MobEffectInstance effect) {
+        return getVPEnderDragon().getDataModifier().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : effect;
     }
 }

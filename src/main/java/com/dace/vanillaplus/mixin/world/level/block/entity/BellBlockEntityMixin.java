@@ -12,26 +12,26 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class BellBlockEntityMixin extends BlockEntityMixin<BellBlockEntity> {
     @ModifyArg(method = "areRaidersNearby", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
-    private static double modifyRaiderDetectionRange(double range) {
+    private static double modifyRaiderDetectionRange(double distance) {
         return VPModifiableData.getDataModifier(Blocks.BELL, BlockModifier.BellModifier.class)
                 .map(BlockModifier.BellModifier::getRaiderDetectionRange)
-                .orElse((int) range);
+                .orElse((int) distance);
     }
 
     @ModifyArg(method = "isRaiderWithinRange", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
-    private static double modifyGlowRange0(double range) {
+    private static double modifyGlowRange0(double distance) {
         return VPModifiableData.getDataModifier(Blocks.BELL, BlockModifier.BellModifier.class)
                 .map(BlockModifier.BellModifier::getGlowRange)
-                .orElse((int) range);
+                .orElse((int) distance);
     }
 
     @ModifyArg(method = "lambda$showBellParticles$0", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/core/BlockPos;closerToCenterThan(Lnet/minecraft/core/Position;D)Z"), index = 1)
-    private static double modifyGlowRange1(double range) {
+    private static double modifyGlowRange1(double distance) {
         return VPModifiableData.getDataModifier(Blocks.BELL, BlockModifier.BellModifier.class)
                 .map(BlockModifier.BellModifier::getGlowRange)
-                .orElse((int) range);
+                .orElse((int) distance);
     }
 
     @ModifyArg(method = "glow", at = @At(value = "INVOKE",

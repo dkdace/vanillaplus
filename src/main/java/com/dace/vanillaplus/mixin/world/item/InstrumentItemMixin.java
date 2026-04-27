@@ -25,7 +25,6 @@ import net.minecraft.world.item.InstrumentItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,10 +36,15 @@ import java.util.Optional;
 
 @Mixin(InstrumentItem.class)
 public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, ItemModifier.InstrumentModifier> {
-    @Redirect(method = "play", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
-    private static void redirectPlaySound(Level level, Entity entity, Entity sourceEntity, SoundEvent soundEvent, SoundSource soundSource,
-                                          float volume, float pitch, @Local(argsOnly = true) Player player,
-                                          @Local(argsOnly = true) Instrument instrument) {
+    @Shadow
+    private static Optional<Holder<Instrument>> getInstrument(ItemStack itemStack) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Redirect(method = "play", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
+    private static void redirectPlaySound(Level level, Entity except, Entity sourceEntity, SoundEvent sound, SoundSource source, float volume,
+                                          float pitch, @Local(argsOnly = true) Player player, @Local(argsOnly = true) Instrument instrument) {
         if (!(level instanceof ServerLevel serverLevel) || VPInstrument.cast(instrument).getDataModifier().isEmpty())
             return;
 
@@ -48,7 +52,7 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
         long seed = serverLevel.getRandom().nextLong();
 
         itemStack.set(VPDataComponentTypes.SEED.get(), seed);
-        serverLevel.playSeededSound(null, sourceEntity, instrument.soundEvent(), soundSource, volume, pitch, seed);
+        serverLevel.playSeededSound(null, sourceEntity, instrument.soundEvent(), source, volume, pitch, seed);
     }
 
     @ModifyReturnValue(method = "getUseDuration", at = @At("RETURN"))
@@ -56,12 +60,6 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
         return VPModifiableData.getDataModifier(itemStack.getItem(), ItemModifier.InstrumentModifier.class)
                 .map(ItemModifier.InstrumentModifier::getUseDuration)
                 .orElse(duration);
-    }
-
-    @Shadow
-    @UnknownNullability
-    private static Optional<Holder<Instrument>> getInstrument(ItemStack itemStack) {
-        return Optional.empty();
     }
 
     @Override
@@ -106,10 +104,10 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
         return itemStack;
     }
 
-    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;play(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/Instrument;)V",
-            shift = At.Shift.AFTER), cancellable = true)
-    private void cancelAfterPlaySound(Level level, Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir,
-                                      @Local Instrument instrument) {
+    @Inject(method = "use", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/InstrumentItem;play(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/Instrument;)V", shift = At.Shift.AFTER), cancellable = true)
+    private void cancelAfterPlaySound(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir,
+                                      @Local(name = "instrument") Instrument instrument) {
         if (VPInstrument.cast(instrument).getDataModifier().isPresent())
             cir.setReturnValue(InteractionResult.CONSUME);
     }

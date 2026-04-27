@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(RaidCommand.class)
 public abstract class RaidCommandMixin implements VPMixin<RaidCommand> {
     @Redirect(method = "setRaidOmenLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raid;getMaxRaidOmenLevel()I"))
-    private static int modifyMaxRaidOmenLevel(Raid raid, @Local(argsOnly = true) CommandSourceStack commandSourceStack) {
-        return VPGameRules.getValue(VPGameRules.MAX_BAD_OMEN_LEVEL, commandSourceStack.getLevel());
+    private static int modifyMaxRaidOmenLevel(Raid raid, @Local(argsOnly = true) CommandSourceStack source) {
+        return VPGameRules.getValue(VPGameRules.MAX_BAD_OMEN_LEVEL, source.getLevel());
     }
 }

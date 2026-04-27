@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.UnknownNullability;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,9 +26,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ChestBlock.class)
 public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T, U> {
     @Shadow
-    @UnknownNullability
-    public static Direction getConnectedDirection(BlockState blockState) {
-        return null;
+    public static Direction getConnectedDirection(BlockState state) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -39,8 +37,8 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/ChestBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
-    private BlockState modifyBlockState(BlockState blockState) {
-        return blockState.setValue(LOOT, false).setValue(ALWAYS_OPEN, false);
+    private BlockState modifyBlockState(BlockState state) {
+        return state.setValue(LOOT, false).setValue(ALWAYS_OPEN, false);
     }
 
     @ModifyVariable(method = "createBlockStateDefinition", at = @At(value = "INVOKE",
@@ -52,14 +50,14 @@ public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModif
 
     @Inject(method = "useWithoutItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;openMenu(Lnet/minecraft/world/MenuProvider;)Ljava/util/OptionalInt;"))
-    protected void onOpen(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
+    protected void onOpen(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult,
                           CallbackInfoReturnable<InteractionResult> cir) {
-        awardLootTableReward(blockState, level, blockPos);
+        awardLootTableReward(state, level, pos);
 
-        if (blockState.getValue(ChestBlock.TYPE) == ChestType.SINGLE)
+        if (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE)
             return;
 
-        BlockPos connectedBlockPos = blockPos.relative(getConnectedDirection(blockState));
+        BlockPos connectedBlockPos = pos.relative(getConnectedDirection(state));
         awardLootTableReward(level.getBlockState(connectedBlockPos), level, connectedBlockPos);
     }
 }
