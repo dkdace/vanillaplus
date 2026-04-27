@@ -13,7 +13,6 @@ import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.dace.vanillaplus.world.item.PotionModifier;
 import com.dace.vanillaplus.world.item.effect.ArmorTrimEffect;
-import com.dace.vanillaplus.world.item.effect.InstrumentEffect;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
@@ -45,9 +44,6 @@ public final class DataPackRegistry {
     public static final ResourceKey<Registry<RaiderEffect>> RAIDER_EFFECT = create("raider_effect");
     /** 습격 웨이브 정보 */
     public static final ResourceKey<Registry<RaidWave>> RAID_WAVE = create("raid_wave");
-    /** 염소 뿔 효과 */
-    public static final ResourceKey<Registry<InstrumentEffect>> INSTRUMENT_EFFECT = create("instrument_effect",
-            InstrumentEffect.DIRECT_CODEC, Registries.INSTRUMENT);
     /** 갑옷 장식 재료 효과 */
     public static final ResourceKey<Registry<ArmorTrimEffect.TrimMaterialEffect>> TRIM_MATERIAL_EFFECT = create("trim_material_effect",
             ArmorTrimEffect.TrimMaterialEffect.DIRECT_CODEC, Registries.TRIM_MATERIAL);

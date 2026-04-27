@@ -57,6 +57,17 @@ public final class CodecUtil {
     }
 
     /**
+     * 초 단위의 시간 코덱을 틱 단위로 변환한다.
+     *
+     * @param codec 초 단위 시간 코덱
+     * @return {@link Codec}
+     */
+    @NonNull
+    public static Codec<Integer> secondsToTicks(@NonNull Codec<Float> codec) {
+        return codec.xmap(to -> (int) (to * 20.0), from -> from / 20F);
+    }
+
+    /**
      * 하위 코덱 요소를 관리하는 인터페이스.
      *
      * @param <T> {@link CodecComponent}를 상속받는 타입

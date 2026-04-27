@@ -29,8 +29,7 @@ public abstract class InstrumentComponentMixin implements VPMixin<InstrumentComp
     @Inject(method = "addToTooltip", at = @At("TAIL"))
     private void addEffectTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components,
                                   CallbackInfo ci) {
-        VPInstrument.cast(instrument.value()).getDataModifier().ifPresent(instrumentEffect ->
-                PotionContents.addPotionTooltip(Collections.singletonList(instrumentEffect.getMobEffectInstance()), consumer, 1,
-                        context.tickRate()));
+        VPInstrument.cast(instrument.value()).getMobEffectInstance().ifPresent(mobEffectInstance ->
+                PotionContents.addPotionTooltip(Collections.singletonList(mobEffectInstance), consumer, 1, context.tickRate()));
     }
 }

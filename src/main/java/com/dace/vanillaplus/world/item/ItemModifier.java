@@ -16,6 +16,8 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
+import java.util.Optional;
+
 /**
  * 아이템의 요소를 수정하는 아이템 수정자 클래스.
  */
@@ -178,27 +180,21 @@ public class ItemModifier implements CodecUtil.CodecComponent<ItemModifier> {
     /**
      * {@link InstrumentItem}의 아이템 수정자 클래스.
      */
+    @Getter
     public static final class InstrumentModifier extends ItemModifier {
         public static final MapCodec<InstrumentModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
                 createBaseCodec(instance)
-                        .and(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("use_duration_seconds", 1.5F)
-                                .forGetter(target -> target.useDurationSeconds))
+                        .and(CodecUtil.secondsToTicks(ExtraCodecs.POSITIVE_FLOAT).optionalFieldOf("use_duration_seconds")
+                                .forGetter(target -> target.useDuration))
                         .apply(instance, InstrumentModifier::new));
 
-        /** 지속시간 (초) */
-        private final float useDurationSeconds;
+        /** 지속시간 */
+        private final Optional<Integer> useDuration;
 
         private InstrumentModifier(@NonNull DataComponentPatch dataComponentPatch, @NonNull ItemAttributeModifiers itemAttributeModifiers,
-                                   float useDurationSeconds) {
+                                   Optional<Integer> useDuration) {
             super(dataComponentPatch, itemAttributeModifiers);
-            this.useDurationSeconds = useDurationSeconds;
-        }
-
-        /**
-         * @return 지속시간 (tick)
-         */
-        public int getUseDuration() {
-            return (int) (useDurationSeconds * 20.0);
+            this.useDuration = useDuration;
         }
 
         @Override

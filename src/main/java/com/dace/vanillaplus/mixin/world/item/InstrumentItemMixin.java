@@ -7,7 +7,9 @@ import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.client.StopSoundPacket;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -27,9 +29,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -41,74 +43,102 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
         throw new UnsupportedOperationException();
     }
 
-    @Redirect(method = "play", at = @At(value = "INVOKE",
+    @Unique
+    @NonNull
+    private static Optional<Integer> getUseDuration(@NonNull ItemStack itemStack) {
+        return VPModifiableData.getDataModifier(itemStack.getItem(), ItemModifier.InstrumentModifier.class)
+                .flatMap(ItemModifier.InstrumentModifier::getUseDuration);
+    }
+
+    @Unique
+    private static void applyEffects(@NonNull Instrument instrument, @NonNull Level level, @NonNull LivingEntity user) {
+        VPInstrument.cast(instrument).getMobEffectInstance().ifPresent(mobEffectInstance -> {
+            float range = instrument.range() / 2;
+            AABB aabb = user.getBoundingBox().inflate(range);
+
+            level.getEntitiesOfClass(LivingEntity.class, aabb, entity -> entity instanceof OwnableEntity ownableEntity
+                    && ownableEntity.getOwner() == user).forEach(entity -> {
+                if (aabb.distanceToSqr(entity.getBoundingBox()) < range * range)
+                    entity.addEffect(new MobEffectInstance(mobEffectInstance));
+            });
+        });
+    }
+
+    @Unique
+    private static void damageItem(@NonNull ItemStack itemStack, @NonNull LivingEntity user, @NonNull InteractionHand interactionHand) {
+        if (itemStack.isDamageableItem())
+            itemStack.hurtAndBreak(1, user, interactionHand);
+    }
+
+    @WrapWithCondition(method = "play", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
-    private static void redirectPlaySound(Level level, Entity except, Entity sourceEntity, SoundEvent sound, SoundSource source, float volume,
-                                          float pitch, @Local(argsOnly = true) Player player, @Local(argsOnly = true) Instrument instrument) {
-        if (!(level instanceof ServerLevel serverLevel) || VPInstrument.cast(instrument).getDataModifier().isEmpty())
-            return;
-
+    private static boolean redirectPlaySound(Level level, Entity except, Entity sourceEntity, SoundEvent sound, SoundSource source, float volume,
+                                             float pitch, @Local(argsOnly = true) Player player, @Local(argsOnly = true) Instrument instrument) {
         ItemStack itemStack = player.getUseItem();
-        long seed = serverLevel.getRandom().nextLong();
+        if (getUseDuration(itemStack).isEmpty())
+            return true;
 
-        itemStack.set(VPDataComponentTypes.SEED.get(), seed);
-        serverLevel.playSeededSound(null, sourceEntity, instrument.soundEvent(), source, volume, pitch, seed);
+        if (level instanceof ServerLevel serverLevel) {
+            long seed = serverLevel.getRandom().nextLong();
+
+            itemStack.set(VPDataComponentTypes.SEED.get(), seed);
+            serverLevel.playSeededSound(null, sourceEntity, instrument.soundEvent(), source, volume, pitch, seed);
+        }
+
+        return false;
     }
 
     @ModifyReturnValue(method = "getUseDuration", at = @At("RETURN"))
     private static int modifyUseDuration(int duration, @Local(argsOnly = true) ItemStack itemStack) {
-        return VPModifiableData.getDataModifier(itemStack.getItem(), ItemModifier.InstrumentModifier.class)
-                .map(ItemModifier.InstrumentModifier::getUseDuration)
-                .orElse(duration);
+        return getUseDuration(itemStack).orElse(duration);
     }
 
     @Override
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-        getInstrument(stack).ifPresent(instrumentHolder -> {
-            if (entity.level() instanceof ServerLevel serverLevel) {
-                Long seed = stack.get(VPDataComponentTypes.SEED.get());
-                if (seed != null)
-                    NetworkManager.sendToLevel(new StopSoundPacket(SoundSource.RECORDS, seed), serverLevel);
-            }
+        if (getUseDuration(stack).isEmpty())
+            return;
 
-            if (entity instanceof Player player) {
+        if (entity.level() instanceof ServerLevel serverLevel) {
+            Long seed = stack.get(VPDataComponentTypes.SEED.get());
+            if (seed != null)
+                NetworkManager.sendToLevel(new StopSoundPacket(SoundSource.RECORDS, seed), serverLevel);
+        }
+
+        if (entity instanceof Player player) {
+            getInstrument(stack).ifPresent(instrumentHolder -> {
                 player.getCooldowns().addCooldown(stack, (int) (instrumentHolder.value().useDuration() * 20.0));
-                player.awardStat(Stats.ITEM_USED.get(getThis()));
-            }
+                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+            });
+        }
 
-            if (stack.isDamageableItem())
-                stack.hurtAndBreak(1, entity, entity.getUsedItemHand());
-        });
+        damageItem(stack, entity, entity.getUsedItemHand());
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
-        if (!level.isClientSide())
-            getInstrument(itemStack).ifPresent(instrumentHolder -> {
-                itemStack.remove(VPDataComponentTypes.SEED.get());
-
-                Instrument instrument = instrumentHolder.value();
-
-                VPInstrument.cast(instrument).getDataModifier().ifPresent(instrumentEffect -> {
-                    float range = instrument.range() / 2;
-                    AABB aabb = livingEntity.getBoundingBox().inflate(range);
-
-                    level.getEntitiesOfClass(LivingEntity.class, aabb, entity -> entity instanceof OwnableEntity ownableEntity
-                            && ownableEntity.getOwner() == livingEntity).forEach(entity -> {
-                        if (aabb.distanceToSqr(entity.getBoundingBox()) < range * range)
-                            entity.addEffect(new MobEffectInstance(instrumentEffect.getMobEffectInstance()));
-                    });
-                });
-            });
+    public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
+        if (!level.isClientSide() && getUseDuration(itemStack).isPresent()) {
+            itemStack.remove(VPDataComponentTypes.SEED.get());
+            getInstrument(itemStack).ifPresent(instrumentHolder -> applyEffects(instrumentHolder.value(), level, entity));
+        }
 
         return itemStack;
     }
 
     @Inject(method = "use", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/InstrumentItem;play(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/Instrument;)V", shift = At.Shift.AFTER), cancellable = true)
-    private void cancelAfterPlaySound(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir,
-                                      @Local(name = "instrument") Instrument instrument) {
-        if (VPInstrument.cast(instrument).getDataModifier().isPresent())
+            target = "Lnet/minecraft/world/item/InstrumentItem;play(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/Instrument;)V",
+            shift = At.Shift.AFTER), cancellable = true)
+    private void cancelPlaySoundIfNoDuration(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir,
+                                             @Local(name = "itemStack") ItemStack itemStack) {
+        if (getUseDuration(itemStack).isPresent())
             cir.setReturnValue(InteractionResult.CONSUME);
+    }
+
+    @Inject(method = "use", at = @At(value = "RETURN", ordinal = 0))
+    private void applyEffectsIfNoDuration(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir,
+                                          @Local(name = "itemStack") ItemStack itemStack, @Local(name = "instrument") Instrument instrument) {
+        if (!level.isClientSide())
+            applyEffects(instrument, level, player);
+
+        damageItem(itemStack, player, hand);
     }
 }
