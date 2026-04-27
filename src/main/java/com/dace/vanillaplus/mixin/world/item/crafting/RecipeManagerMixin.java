@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.crafting;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
+import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipePropertySet;
@@ -29,8 +29,8 @@ public abstract class RecipeManagerMixin implements VPMixin<RecipeManager> {
     private static void addRecipePropertySets(CallbackInfo ci) {
         HashMap<ResourceKey<RecipePropertySet>, RecipeManager.IngredientExtractor> map = new HashMap<>(RECIPE_PROPERTY_SETS);
 
-        map.put(VPRecipeTypes.Brewing.INGREDIENT_SET, recipe -> recipe instanceof VPRecipeTypes.Brewing brewing
-                ? Optional.of(brewing.getIngredient())
+        map.put(BrewingRecipe.INGREDIENT_SET, recipe -> recipe instanceof BrewingRecipe brewingRecipe
+                ? Optional.of(brewingRecipe.getIngredient())
                 : Optional.empty());
 
         RECIPE_PROPERTY_SETS = Collections.unmodifiableMap(map);

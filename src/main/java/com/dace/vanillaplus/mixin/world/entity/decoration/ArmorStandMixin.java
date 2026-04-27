@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.decoration;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,16 +21,15 @@ public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand, Enti
     public abstract boolean showArms();
 
     @Shadow
-    public abstract void setShowArms(boolean isEnabled);
+    public abstract void setShowArms(boolean value);
 
     @Shadow
-    protected abstract boolean isDisabled(EquipmentSlot equipmentSlot);
+    protected abstract boolean isDisabled(EquipmentSlot slot);
 
     @Inject(method = "interact", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/decoration/ArmorStand;getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;"),
             cancellable = true)
-    private void toggleShowArmsOrSwapItems(Player player, InteractionHand interactionHand, Vec3 location,
-                                           CallbackInfoReturnable<InteractionResult> cir) {
+    private void toggleShowArmsOrSwapItems(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         boolean isShiftKeyDown = player.isShiftKeyDown();
         boolean isEmpty = true;
 

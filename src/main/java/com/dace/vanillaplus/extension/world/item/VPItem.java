@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.extension.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import lombok.NonNull;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.extensions.IForgeItem;
 
@@ -15,9 +14,4 @@ import net.minecraftforge.common.extensions.IForgeItem;
  * @see ItemModifier
  */
 public interface VPItem<T extends Item, U extends ItemModifier> extends VPMixin<T>, VPModifiableData<Item, U>, IForgeItem {
-    @NonNull
-    @SuppressWarnings("unchecked")
-    static <T extends Item, U extends ItemModifier> VPItem<T, U> cast(@NonNull T object) {
-        return (VPItem<T, U>) object;
-    }
 }

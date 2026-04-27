@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -20,16 +20,16 @@ public abstract class BeaconBlockEntityMixin extends BlockEntityMixin<BeaconBloc
     @Redirect(method = "applyEffects", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;getEntitiesOfClass(Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;"))
     @SuppressWarnings("unchecked")
-    private static List<Player> modifyEffectPlayerList(Level level, Class<Player> playerClass, AABB aabb) {
-        return (List<Player>) level.players();
+    private static List<Player> modifyEffectPlayerList(Level instance, Class<Player> baseClass, AABB bb) {
+        return (List<Player>) instance.players();
     }
 
     @WrapOperation(method = "applyEffects", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"))
-    private static boolean checkEffectRange(Player player, MobEffectInstance mobEffectInstance, Operation<Boolean> original, @Local AABB aabb) {
-        double beaconEffectRange = (player.getAttributeValue(VPAttributes.BEACON_EFFECT_RANGE.getHolder().orElseThrow()) - 1) * 0.5;
+    private static boolean checkEffectRange(Player instance, MobEffectInstance newEffect, Operation<Boolean> original, @Local(name = "bb") AABB bb) {
+        double beaconEffectRange = (instance.getAttributeValue(VPAttributes.BEACON_EFFECT_RANGE.getHolder().orElseThrow()) - 1) * 0.5;
 
-        return aabb.inflate(aabb.getXsize() * beaconEffectRange, 0, aabb.getZsize() * beaconEffectRange)
-                .intersects(player.getBoundingBox()) && original.call(player, mobEffectInstance);
+        return bb.inflate(bb.getXsize() * beaconEffectRange, 0, bb.getZsize() * beaconEffectRange)
+                .intersects(instance.getBoundingBox()) && original.call(instance, newEffect);
     }
 }

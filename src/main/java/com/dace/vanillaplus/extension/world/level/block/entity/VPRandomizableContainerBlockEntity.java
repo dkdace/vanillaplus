@@ -1,8 +1,7 @@
 package com.dace.vanillaplus.extension.world.level.block.entity;
 
-import com.dace.vanillaplus.data.LootTableReward;
 import com.dace.vanillaplus.extension.VPMixin;
-import lombok.NonNull;
+import com.dace.vanillaplus.world.LootTableReward;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,12 +11,6 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> {@link RandomizableContainerBlockEntity}를 상속받는 타입
  */
 public interface VPRandomizableContainerBlockEntity<T extends RandomizableContainerBlockEntity> extends VPMixin<T> {
-    @NonNull
-    @SuppressWarnings("unchecked")
-    static <T extends RandomizableContainerBlockEntity> VPRandomizableContainerBlockEntity<T> cast(@NonNull T object) {
-        return (VPRandomizableContainerBlockEntity<T>) object;
-    }
-
     /**
      * 노획물 테이블 보상을 반환한다.
      *

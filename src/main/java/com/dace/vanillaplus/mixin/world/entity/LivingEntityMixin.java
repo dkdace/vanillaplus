@@ -1,10 +1,10 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.VPTags;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -35,7 +35,10 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -58,13 +61,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     protected Brain<?> brain;
     @Shadow
     protected int attackStrengthTicker;
-    @Unique
-    @Nullable
-    private DamageSource lastDamageSourceForKnockback;
-    @Mutable
     @Shadow
     @Final
     private AttributeMap attributes;
+    @Unique
+    @Nullable
+    private DamageSource lastDamageSourceForKnockback;
 
     @Shadow
     public abstract void stopRiding();
@@ -78,23 +80,23 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract boolean hasLineOfSight(Entity target);
 
     @Shadow
-    public abstract ItemStack getItemBySlot(EquipmentSlot equipmentSlot);
+    public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
     @Shadow
-    public abstract void setItemSlot(EquipmentSlot equipmentSlot, ItemStack itemStack);
+    public abstract void setItemSlot(EquipmentSlot slot, ItemStack itemStack);
 
     @Shadow
     public abstract ItemStack getItemInHand(InteractionHand hand);
 
     @Shadow
-    public abstract double getAttributeValue(Holder<Attribute> attributeHolder);
+    public abstract double getAttributeValue(Holder<Attribute> attribute);
 
     @Shadow
     @Nullable
-    public abstract MobEffectInstance getEffect(Holder<MobEffect> mobEffectHolder);
+    public abstract MobEffectInstance getEffect(Holder<MobEffect> effect);
 
     @Shadow
-    protected abstract boolean shouldDropLoot(ServerLevel serverLevel);
+    protected abstract boolean shouldDropLoot(ServerLevel level);
 
     @Shadow
     public abstract float getHealth();
@@ -106,7 +108,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     public abstract boolean isAutoSpinAttack();
 
     @Shadow
-    public void die(DamageSource damageSource) {
+    public void die(DamageSource source) {
     }
 
     @Shadow
@@ -125,6 +127,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @Shadow
     public abstract void stopUsingItem();
 
+    @Unique
+    private float getFinalSpeed(float speed) {
+        LivingEntity controller = getControllingPassenger();
+        return controller == null
+                ? speed
+                : (float) (speed * controller.getAttributeValue(VPAttributes.VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow()));
+    }
+
     @Override
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
@@ -134,50 +144,40 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
             attributes.apply(dataModifier.getPackedAttributes());
     }
 
-    @Unique
-    private float getFinalSpeed(float speed) {
-        LivingEntity controller = getControllingPassenger();
-        return controller == null
-                ? speed
-                : (float) (speed * controller.getAttributeValue(VPAttributes.VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow()));
-    }
-
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
-    private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block block) {
+    private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
         return ClipContext.Block.VISUAL;
     }
 
-    @Definition(id = "deathprotection", local = @Local(type = DeathProtection.class))
-    @Expression("deathprotection != null")
+    @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))
+    @Expression("protection != null")
     @ModifyExpressionValue(method = "checkTotemDeathProtection", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
-    protected boolean canUseTotem(boolean canUse, @Local(ordinal = 1) ItemStack itemStack) {
-        return canUse;
+    protected boolean canUseTotem(boolean hasDeathProtection, @Local(name = "itemStack") ItemStack itemStack) {
+        return hasDeathProtection;
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
-    protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, @Local ItemStack itemStack) {
-        // 미사용
+    protected void onUseTotem(DamageSource killingDamage, CallbackInfoReturnable<Boolean> cir,
+                              @Local(name = "protectionItem") ItemStack protectionItem) {
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void setLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
-                                                 CallbackInfoReturnable<Boolean> cir) {
-        lastDamageSourceForKnockback = damageSource;
+    private void setLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        lastDamageSourceForKnockback = source;
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V",
             shift = At.Shift.AFTER))
-    private void removeLastDamageSourceForKnockback(ServerLevel serverLevel, DamageSource damageSource, float damage,
-                                                    CallbackInfoReturnable<Boolean> cir) {
+    private void removeLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         lastDamageSourceForKnockback = null;
     }
 
     @ModifyExpressionValue(method = "knockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    private double modifyKnockbackResistance(double original) {
-        return VPAttributes.getFinalKnockbackResistance(getThis(), lastDamageSourceForKnockback);
+    private double modifyKnockbackResistance(double knockbackResistance) {
+        return VPAttributes.getFinalKnockbackResistance(getThis(), knockbackResistance, lastDamageSourceForKnockback);
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))
@@ -186,16 +186,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return (float) (damageSource.is(VPTags.DamageTypes.ENVIRONMENTAL) ? damage * (1 - damageResistance) : damage);
     }
 
-    @Definition(id = "i", local = @Local(type = int.class))
-    @Expression("i")
+    @Definition(id = "absorbValue", local = @Local(type = int.class, name = "absorbValue"))
+    @Expression("absorbValue")
     @ModifyExpressionValue(method = "getDamageAfterMagicAbsorb", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private int modifyResistanceMultiplier(int multiplier) {
+    private int modifyResistanceMultiplier(int absorbValue) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
 
         return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
                 .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(RESISTANCE_DEFINED_VALUE_NAME,
                         mobEffectInstance.getAmplifier() + 1))
-                .orElse(multiplier);
+                .orElse(absorbValue);
     }
 
     @ModifyReturnValue(method = "getDamageAfterMagicAbsorb", at = @At(value = "RETURN", ordinal = 3))
@@ -205,7 +205,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
         MutableFloat value = new MutableFloat(1);
 
-        EnchantmentHelper.runIterationOnEquipment(getThis(), (enchantmentHolder, level, enchantedItemInUse) ->
+        EnchantmentHelper.runIterationOnEquipment(getThis(), (enchantmentHolder, level, _) ->
                 VPEnchantment.cast(enchantmentHolder.value()).modifyFinalIncomingDamageMultiplier(serverLevel, level, getThis(), damageSource, value));
 
         return damage * Math.max(value.floatValue(), 0);
@@ -219,7 +219,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
 
     @ModifyArg(method = "setSprinting", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
-    private AttributeModifier modifySprintingSpeed(AttributeModifier attributeModifier) {
+    private AttributeModifier modifySprintingSpeed(AttributeModifier modifier) {
         double sprintingSpeed = getAttributeValue(VPAttributes.SPRINTING_SPEED.getHolder().orElseThrow());
         return new AttributeModifier(SPRINTING_MODIFIER_ID, sprintingSpeed, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
@@ -227,44 +227,42 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @ModifyArg(method = "travelFallFlying", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"),
             index = 1)
-    private Vec3 modifyFallFlyingSpeed(Vec3 speed) {
-        return speed.scale(getAttributeValue(VPAttributes.ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow()));
+    private Vec3 modifyFallFlyingSpeed(Vec3 delta) {
+        return delta.scale(getAttributeValue(VPAttributes.ELYTRA_FLYING_SPEED_MULTIPLIER.getHolder().orElseThrow()));
     }
 
     @ModifyArg(method = "travelFlying(Lnet/minecraft/world/phys/Vec3;FFF)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
-    private float modifyFinalFlyingSpeed(float original) {
-        return getFinalSpeed(original);
+    private float modifyFinalFlyingSpeed(float speed) {
+        return getFinalSpeed(speed);
     }
 
     @ModifyExpressionValue(method = "getFrictionInfluencedSpeed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getSpeed()F"))
-    private float modifyFinalAirSpeed0(float original) {
-        return getFinalSpeed(original);
+    private float modifyFinalAirSpeed0(float speed) {
+        return getFinalSpeed(speed);
     }
 
     @ModifyExpressionValue(method = "getFrictionInfluencedSpeed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getFlyingSpeed()F"))
-    private float modifyFinalAirSpeed1(float original) {
-        return getFinalSpeed(original);
+    private float modifyFinalAirSpeed1(float speed) {
+        return getFinalSpeed(speed);
     }
 
     @ModifyArg(method = "travelInWater", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)
-    private float modifyFinalFluidSpeed(float original) {
-        return getFinalSpeed(original);
+    private float modifyFinalFluidSpeed(float speed) {
+        return getFinalSpeed(speed);
     }
 
     @Redirect(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
             ordinal = 0, opcode = Opcodes.PUTFIELD))
     private void removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
-        // 미사용
     }
 
     @Redirect(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
-    private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 speed) {
-        // 미사용
+    private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 deltaMovement) {
     }
 
     @Expression("0.1 * (? + 1.0)")

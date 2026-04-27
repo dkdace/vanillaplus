@@ -1,12 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
-import com.dace.vanillaplus.data.modifier.EnchantmentModifier;
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
+import com.dace.vanillaplus.world.LevelBasedValuePreset;
 import lombok.NonNull;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentMap;
+import lombok.Setter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -15,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
@@ -29,8 +26,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,71 +38,34 @@ import java.util.function.Consumer;
 public abstract class EnchantmentMixin implements VPEnchantment {
     @Unique
     @Nullable
-    private EnchantmentModifier dataModifier;
-    @Unique
-    @Nullable
+    @Setter
     private LevelBasedValuePreset levelBasedValuePreset;
-    @Shadow
-    @Final
-    private Enchantment.EnchantmentDefinition definition;
-    @Mutable
-    @Shadow
-    @Final
-    private HolderSet<Enchantment> exclusiveSet;
-    @Mutable
-    @Shadow
-    @Final
-    private DataComponentMap effects;
 
     @Shadow
-    @UnknownNullability
-    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity entity, DamageSource damageSource) {
-        return null;
+    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity victim, DamageSource source) {
+        throw new UnsupportedOperationException();
     }
 
     @Shadow
-    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext filterData, Enchantment.GenericAction<T> action) {
+    private static <T> void applyEffects(List<ConditionalEffect<T>> effects, LootContext filterData, Enchantment.GenericAction<T> action) {
     }
 
     @Shadow
-    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
+    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
                                                       ServerLevel serverLevel, int enchantmentLevel, ItemStack itemStack, Entity entity,
                                                       MutableFloat value);
 
     @Shadow
-    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> componentType, RandomSource randomSource,
-                                               int enchantmentLevel, MutableFloat value);
+    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> component, RandomSource random, int enchantmentLevel,
+                                               MutableFloat value);
 
     @Shadow
-    public abstract <T> List<T> getEffects(DataComponentType<List<T>> dataComponentType);
-
-    @Override
-    @NonNull
-    public Optional<EnchantmentModifier> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
-    }
-
-    @Override
-    public void setDataModifier(@Nullable EnchantmentModifier dataModifier) {
-        this.dataModifier = dataModifier;
-
-        if (dataModifier == null)
-            return;
-
-        dataModifier.getExclusiveSet().ifPresent(value -> this.exclusiveSet = value);
-        dataModifier.getEffects().ifPresent(value -> this.effects = value);
-        VPEnchantmentDefinition.cast(definition).set(dataModifier.getDefinition());
-    }
+    public abstract <T> List<T> getEffects(DataComponentType<List<T>> type);
 
     @Override
     @NonNull
     public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
         return Optional.ofNullable(levelBasedValuePreset);
-    }
-
-    @Override
-    public void setLevelBasedValuePreset(@Nullable LevelBasedValuePreset levelBasedValuePreset) {
-        this.levelBasedValuePreset = levelBasedValuePreset;
     }
 
     @Override
@@ -181,53 +142,5 @@ public abstract class EnchantmentMixin implements VPEnchantment {
         for (ConditionalEffect<EnchantmentEntityEffect> conditionalEffect : getEffects(VPEnchantmentEffectComponentTypes.POST_DAMAGE.get()))
             if (conditionalEffect.matches(lootContext))
                 conditionalEffect.effect().apply(serverLevel, enchantmentLevel, enchantedItemInUse, entity, entity.position());
-    }
-
-    @Mixin(Enchantment.EnchantmentDefinition.class)
-    public abstract static class EnchantmentDefinitionMixin implements VPEnchantmentDefinition {
-        @Mutable
-        @Shadow
-        @Final
-        private HolderSet<Item> supportedItems;
-        @Mutable
-        @Shadow
-        @Final
-        private Optional<HolderSet<Item>> primaryItems;
-        @Mutable
-        @Shadow
-        @Final
-        private int weight;
-        @Mutable
-        @Shadow
-        @Final
-        private int maxLevel;
-        @Mutable
-        @Shadow
-        @Final
-        private Enchantment.Cost minCost;
-        @Mutable
-        @Shadow
-        @Final
-        private Enchantment.Cost maxCost;
-        @Mutable
-        @Shadow
-        @Final
-        private int anvilCost;
-        @Mutable
-        @Shadow
-        @Final
-        private List<EquipmentSlotGroup> slots;
-
-        @Override
-        public void set(@NonNull EnchantmentModifier.EnchantmentDefinition enchantmentDefinition) {
-            enchantmentDefinition.supportedItems().ifPresent(value -> supportedItems = value);
-            enchantmentDefinition.primaryItems().ifPresent(value -> primaryItems = value);
-            enchantmentDefinition.weight().ifPresent(value -> weight = value);
-            enchantmentDefinition.maxLevel().ifPresent(value -> maxLevel = value);
-            enchantmentDefinition.minCost().ifPresent(value -> minCost = value);
-            enchantmentDefinition.maxCost().ifPresent(value -> maxCost = value);
-            enchantmentDefinition.anvilCost().ifPresent(value -> anvilCost = value);
-            enchantmentDefinition.slots().ifPresent(value -> slots = value);
-        }
     }
 }

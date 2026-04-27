@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class RepairItemRecipeMixin implements VPMixin<RepairItemRecipe> {
     @Inject(method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;)Lnet/minecraft/world/item/ItemStack;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V"))
-    private void resetRepairLimit(CraftingInput craftingInput, CallbackInfoReturnable<ItemStack> cir, @Local(ordinal = 2) ItemStack itemStack) {
+    private void resetRepairLimit(CraftingInput input, CallbackInfoReturnable<ItemStack> cir, @Local(name = "itemStack") ItemStack itemStack) {
         VPItemStack.cast(itemStack).setRepairLimit(0);
     }
 }

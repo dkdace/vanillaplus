@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.wanderingtrader;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.npc.villager.AbstractVillagerMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -13,8 +13,6 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
 import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,14 +42,7 @@ public abstract class WanderingTraderMixin extends AbstractVillagerMixin<Wanderi
     @Definition(id = "random", field = "Lnet/minecraft/world/entity/npc/wanderingtrader/WanderingTrader;random:Lnet/minecraft/util/RandomSource;")
     @Expression("3 + this.random.nextInt(4)")
     @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private int modifyRewardXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {
-        ItemCost itemCost = merchantOffer.getItemCostA();
-
-        if (itemCost.itemStack().is(Items.EMERALD)) {
-            int count = itemCost.count();
-            return 3 * count + random.nextInt(4 * count);
-        }
-
-        return xp;
+    private int modifyTradePlayerXP(int xp, @Local(argsOnly = true) MerchantOffer offer) {
+        return getTradePlayerXP(xp, offer);
     }
 }

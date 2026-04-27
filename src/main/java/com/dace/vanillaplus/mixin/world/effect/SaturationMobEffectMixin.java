@@ -13,9 +13,9 @@ public abstract class SaturationMobEffectMixin extends MobEffectMixin<Saturation
     private static final String DEFINED_VALUE_NAME = "food_per_tick";
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;eat(IF)V"), index = 0)
-    private int modifyFoodLevel(int foodLevelModifier, @Local(argsOnly = true) int amplifier) {
+    private int modifyFoodLevel(int food, @Local(argsOnly = true) int amplification) {
         return getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplifier + 1))
-                .orElse(foodLevelModifier);
+                .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplification + 1))
+                .orElse(food);
     }
 }

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
@@ -24,10 +24,10 @@ public abstract class DecoratedPotBlockMixin extends BlockMixin<DecoratedPotBloc
     public static BooleanProperty CRACKED;
 
     @Override
-    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack tool) {
-        if (tool.is(ItemTags.BREAKS_DECORATED_POTS) && !EnchantmentHelper.hasTag(tool, EnchantmentTags.PREVENTS_DECORATED_POT_SHATTERING))
-            blockState = blockState.setValue(CRACKED, true);
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack destroyedWith) {
+        if (destroyedWith.is(ItemTags.BREAKS_DECORATED_POTS) && !EnchantmentHelper.hasTag(destroyedWith, EnchantmentTags.PREVENTS_DECORATED_POT_SHATTERING))
+            state = state.setValue(CRACKED, true);
 
-        super.playerDestroy(level, player, blockPos, blockState, blockEntity, tool);
+        super.playerDestroy(level, player, pos, state, blockEntity, destroyedWith);
     }
 }

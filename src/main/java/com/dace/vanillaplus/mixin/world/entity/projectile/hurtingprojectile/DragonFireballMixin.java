@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.hurtingprojectile;
 
-import com.dace.vanillaplus.VPTags;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
@@ -31,24 +31,24 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
     private static final int MAX_EXPLOSION_RESISTANCE = 1;
 
     @Override
-    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos blockPos, BlockState blockState, FluidState fluidState,
-                                             float explosionPower) {
+    public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
+                                             float resistance) {
         if (getOwner() instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getDataModifier().isPresent())
-            return blockState.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? explosionPower : Math.min(MAX_EXPLOSION_RESISTANCE, explosionPower);
+            return block.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
 
-        return super.getBlockExplosionResistance(explosion, level, blockPos, blockState, fluidState, explosionPower);
+        return super.getBlockExplosionResistance(explosion, level, pos, block, fluid, resistance);
     }
 
     @ModifyExpressionValue(method = "onHit", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;ownedBy(Lnet/minecraft/world/entity/Entity;)Z"))
-    private boolean modifyHitCondition(boolean original, @Local(argsOnly = true) HitResult hitResult) {
+    private boolean modifyHitCondition(boolean ownedBy, @Local(argsOnly = true) HitResult hitResult) {
         return getOwner() instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getDataModifier().isPresent()
                 ? ((EntityHitResult) hitResult).getEntity().is(enderDragon)
-                : original;
+                : ownedBy;
     }
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setDuration(I)V"))
-    private int modifyFlameDuration(int duration, @Local Entity owner) {
+    private int modifyFlameDuration(int duration, @Local(name = "owner") Entity owner) {
         if (owner instanceof EnderDragon enderDragon)
             return VPEnderDragon.cast(enderDragon).getDataModifier()
                     .map(enderDragonModifier -> enderDragonModifier.getPhaseInfo().getFireball().getFlameDuration())
@@ -67,9 +67,9 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
-    private MobEffectInstance modifyFlameEffect(MobEffectInstance mobEffectInstance, @Local Entity owner) {
+    private MobEffectInstance modifyFlameEffect(MobEffectInstance effect, @Local(name = "owner") Entity owner) {
         return owner instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getDataModifier().isPresent()
                 ? VPEnderDragon.cast(enderDragon).getFlameMobEffectInstance()
-                : mobEffectInstance;
+                : effect;
     }
 }

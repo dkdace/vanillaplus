@@ -16,17 +16,25 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EnderDragonRenderer.class)
 public abstract class EnderDragonRendererMixin implements VPMixin<EnderDragonRenderer> {
+    @Unique
+    private static final int METEOR_BEAM_ANIMATION_TIME = 80;
+    @Unique
+    private static final float METEOR_BEAM_MAX_RADIUS = 2;
+    @Unique
+    private static final float METEOR_BEAM_MAX_GLOW_RADIUS = 4;
+
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submit(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"))
-    private void submitMeteorBeam(EnderDragonRenderState enderDragonRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector,
-                                  CameraRenderState cameraRenderState, CallbackInfo ci) {
-        VPEnderDragonRenderState vpEnderDragonRenderState = VPEnderDragonRenderState.cast(enderDragonRenderState);
+    private void submitMeteorBeam(EnderDragonRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera,
+                                  CallbackInfo ci) {
+        VPEnderDragonRenderState vpEnderDragonRenderState = VPEnderDragonRenderState.cast(state);
         BlockPos meteorPos = vpEnderDragonRenderState.getMeteorBeamPos();
         if (meteorPos == null)
             return;
@@ -48,18 +56,18 @@ public abstract class EnderDragonRendererMixin implements VPMixin<EnderDragonRen
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;F)V",
             at = @At("TAIL"))
-    private void extractMeteorBeam(EnderDragon enderDragon, EnderDragonRenderState enderDragonRenderState, float partialTick, CallbackInfo ci) {
-        VPEnderDragonRenderState vpEnderDragonRenderState = VPEnderDragonRenderState.cast(enderDragonRenderState);
-        BlockPos meteorPos = VPEnderDragon.cast(enderDragon).getMeteorPos();
+    private void extractMeteorBeam(EnderDragon entity, EnderDragonRenderState state, float partialTicks, CallbackInfo ci) {
+        VPEnderDragonRenderState vpEnderDragonRenderState = VPEnderDragonRenderState.cast(state);
+        BlockPos meteorPos = VPEnderDragon.cast(entity).getMeteorPos();
 
         vpEnderDragonRenderState.setMeteorBeamPos(meteorPos);
         if (meteorPos == null)
             return;
 
-        vpEnderDragonRenderState.setMeteorBeamAnimationTime(Math.floorMod(enderDragon.level().getGameTime(), 80) + partialTick);
+        vpEnderDragonRenderState.setMeteorBeamAnimationTime(Math.floorMod(entity.level().getGameTime(), METEOR_BEAM_ANIMATION_TIME) + partialTicks);
 
-        float height = (float) meteorPos.getY() / enderDragon.level().getMaxY();
-        vpEnderDragonRenderState.setMeteorBeamRadius(Mth.lerp(height, 0, 2));
-        vpEnderDragonRenderState.setMeteorBeamGlowRadius(Mth.lerp(height, 0, 4));
+        float height = (float) meteorPos.getY() / entity.level().getMaxY();
+        vpEnderDragonRenderState.setMeteorBeamRadius(Mth.lerp(height, 0, METEOR_BEAM_MAX_RADIUS));
+        vpEnderDragonRenderState.setMeteorBeamGlowRadius(Mth.lerp(height, 0, METEOR_BEAM_MAX_GLOW_RADIUS));
     }
 }

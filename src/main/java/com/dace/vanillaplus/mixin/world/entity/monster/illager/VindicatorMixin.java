@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.RaiderEffect;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.illager.Vindicator;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(Vindicator.class)
 public abstract class VindicatorMixin extends AbstractIllagerMixin<Vindicator, EntityModifier.LivingEntityModifier> {
     @Overwrite
-    public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
+    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
         getRaiderEffect(RaiderEffect.VindicatorEffect.class).ifPresent(vindicatorEffect -> {
             setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
 

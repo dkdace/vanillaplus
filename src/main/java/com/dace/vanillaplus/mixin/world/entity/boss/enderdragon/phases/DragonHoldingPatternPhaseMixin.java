@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -30,7 +30,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
     private static final double CHARGE_CHANCE_MAX_DISTANCE = 60;
 
     @Shadow
-    protected abstract void strafePlayer(Player player);
+    protected abstract void strafePlayer(Player playerNearestToEgg);
 
     @Unique
     private void performStrafeOrCharge(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo phaseInfo, @NonNull Player target) {
@@ -56,9 +56,8 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @Redirect(method = "findNewTarget", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;Lnet/minecraft/world/entity/LivingEntity;DDD)Lnet/minecraft/world/entity/player/Player;"))
-    private Player cancelDefaultStrafe(ServerLevel serverLevel, TargetingConditions targetingConditions, LivingEntity entity, double x, double y,
-                                       double z) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? null : serverLevel.getNearestPlayer(targetingConditions, entity, x, y, z);
+    private Player cancelDefaultStrafe(ServerLevel instance, TargetingConditions targetConditions, LivingEntity source, double x, double y, double z) {
+        return getVPEnderDragon().getDataModifier().isPresent() ? null : instance.getNearestPlayer(targetConditions, source, x, y, z);
     }
 
     @Definition(id = "dragon", field = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonHoldingPatternPhase;dragon:Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;")
@@ -66,20 +65,20 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
     @Expression("this.dragon.getRandom().nextInt(?) == 0")
     @ModifyExpressionValue(method = "findNewTarget", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
-    private boolean modifyLandingCondition(boolean original) {
+    private boolean modifyLandingCondition(boolean condition) {
         return getVPEnderDragon().getDataModifier()
                 .map(enderDragonModifier ->
                         enderDragonModifier.getPhaseInfo().getLandingChance().get(dragon) > dragon.getRandom().nextDouble())
-                .orElse(original);
+                .orElse(condition);
     }
 
     @Inject(method = "doServerTick", at = @At("TAIL"))
-    private void performAttack(ServerLevel serverLevel, CallbackInfo ci) {
+    private void performAttack(ServerLevel level, CallbackInfo ci) {
         getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
             if (getVPEnderDragon().getAttackCooldown() > 0 && getVPEnderDragon().getMeteorAttackCooldown() > 0)
                 return;
 
-            Player target = serverLevel.getNearestPlayer(getVPEnderDragon().getDefaultTargetingConditions(), dragon);
+            Player target = level.getNearestPlayer(getVPEnderDragon().getDefaultTargetingConditions(), dragon);
             if (target == null)
                 return;
 
@@ -92,7 +91,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @Redirect(method = "onCrystalDestroyed", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonHoldingPatternPhase;strafePlayer(Lnet/minecraft/world/entity/player/Player;)V"))
-    private void resetCooldownOnCrystalDestroyed(DragonHoldingPatternPhase dragonHoldingPatternPhase, Player player) {
+    private void resetCooldownOnCrystalDestroyed(DragonHoldingPatternPhase instance, Player playerNearestToEgg) {
         getVPEnderDragon().setAttackCooldown(0);
     }
 }

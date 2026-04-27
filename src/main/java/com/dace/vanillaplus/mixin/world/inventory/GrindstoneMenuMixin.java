@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GrindstoneMenu.class)
 public abstract class GrindstoneMenuMixin implements VPMixin<GrindstoneMenu> {
     @Inject(method = "mergeItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V"))
-    private void resetRepairLimit(ItemStack topItemStack, ItemStack bottomItemStack, CallbackInfoReturnable<ItemStack> cir,
-                                  @Local(ordinal = 2) ItemStack resultItemStack) {
-        VPItemStack.cast(resultItemStack).setRepairLimit(0);
+    private void resetRepairLimit(ItemStack input, ItemStack additional, CallbackInfoReturnable<ItemStack> cir,
+                                  @Local(name = "newItem") ItemStack newItem) {
+        VPItemStack.cast(newItem).setRepairLimit(0);
     }
 }

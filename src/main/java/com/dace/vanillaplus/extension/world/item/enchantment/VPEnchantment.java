@@ -1,10 +1,8 @@
 package com.dace.vanillaplus.extension.world.item.enchantment;
 
-import com.dace.vanillaplus.data.modifier.EnchantmentModifier;
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
 import lombok.NonNull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,10 +18,8 @@ import java.util.function.Consumer;
 
 /**
  * {@link Enchantment}를 확장하는 인터페이스.
- *
- * @see EnchantmentModifier
  */
-public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<Enchantment, EnchantmentModifier>, VPLevelBased<Enchantment> {
+public interface VPEnchantment extends VPMixin<Enchantment>, VPLevelBased<Enchantment> {
     @NonNull
     static VPEnchantment cast(@NonNull Enchantment object) {
         return (VPEnchantment) (Object) object;
@@ -138,21 +134,4 @@ public interface VPEnchantment extends VPMixin<Enchantment>, VPModifiableData<En
      */
     void runPostDamageEffects(@NonNull ServerLevel serverLevel, int enchantmentLevel, @NonNull EnchantedItemInUse enchantedItemInUse,
                               @NonNull Entity entity, @NonNull DamageSource damageSource);
-
-    /**
-     * {@link Enchantment.EnchantmentDefinition}를 확장하는 인터페이스.
-     */
-    interface VPEnchantmentDefinition extends VPMixin<VPEnchantment> {
-        @NonNull
-        static VPEnchantmentDefinition cast(@NonNull Enchantment.EnchantmentDefinition object) {
-            return (VPEnchantmentDefinition) (Object) object;
-        }
-
-        /**
-         * 수정자의 마법 부여 설정을 적용한다.
-         *
-         * @param enchantmentDefinition 마법 부여 설정
-         */
-        void set(@NonNull EnchantmentModifier.EnchantmentDefinition enchantmentDefinition);
-    }
 }

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.item.trading;
 
-import com.dace.vanillaplus.data.TradeSetOffer;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.TradeSetOffer;
 import net.minecraft.world.item.trading.TradeSet;
 import org.jetbrains.annotations.Nullable;
 

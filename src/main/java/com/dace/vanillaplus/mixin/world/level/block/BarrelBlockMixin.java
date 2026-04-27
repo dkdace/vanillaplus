@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
+import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -29,8 +29,8 @@ public abstract class BarrelBlockMixin<T extends BlockModifier> extends BlockMix
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/BarrelBlock;registerDefaultState(Lnet/minecraft/world/level/block/state/BlockState;)V"))
-    private BlockState modifyBlockState(BlockState blockState) {
-        return blockState.setValue(LOOT, false).setValue(ALWAYS_OPEN, false);
+    private BlockState modifyBlockState(BlockState state) {
+        return state.setValue(LOOT, false).setValue(ALWAYS_OPEN, false);
     }
 
     @ModifyVariable(method = "createBlockStateDefinition", at = @At(value = "INVOKE",
@@ -42,8 +42,8 @@ public abstract class BarrelBlockMixin<T extends BlockModifier> extends BlockMix
 
     @Inject(method = "useWithoutItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/player/Player;openMenu(Lnet/minecraft/world/MenuProvider;)Ljava/util/OptionalInt;"))
-    protected void onOpen(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult,
+    protected void onOpen(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult,
                           CallbackInfoReturnable<InteractionResult> cir) {
-        awardLootTableReward(blockState, level, blockPos);
+        awardLootTableReward(state, level, pos);
     }
 }

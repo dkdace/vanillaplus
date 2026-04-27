@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item.equipment.trim;
 
-import com.dace.vanillaplus.data.ArmorTrimEffect;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
+import com.dace.vanillaplus.world.item.effect.ArmorTrimEffect;
 import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.network.chat.Component;

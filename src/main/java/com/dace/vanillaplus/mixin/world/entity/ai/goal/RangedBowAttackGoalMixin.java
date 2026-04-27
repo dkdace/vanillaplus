@@ -21,7 +21,7 @@ public abstract class RangedBowAttackGoalMixin<T extends Mob & RangedAttackMob> 
 
     @Inject(method = "tick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Mob;lookAt(Lnet/minecraft/world/entity/Entity;FF)V", shift = At.Shift.AFTER))
-    private void lookAtTarget(CallbackInfo ci, @Local LivingEntity target) {
+    private void lookAtTarget(CallbackInfo ci, @Local(name = "target") LivingEntity target) {
         mob.getLookControl().setLookAt(target, 30, 30);
     }
 }

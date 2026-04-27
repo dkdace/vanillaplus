@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.world.item.ItemModifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,7 +25,7 @@ public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem, Item
         ItemStack itemstack = player.getItemInHand(interactionHand);
 
         if (level instanceof ServerLevel serverlevel)
-            Projectile.spawnProjectileFromRotation((serverLevel, livingEntity, itemStack) -> {
+            Projectile.spawnProjectileFromRotation((serverLevel, _, _) -> {
                 SmallFireball smallFireball = new SmallFireball(serverLevel, player, Vec3.ZERO);
                 smallFireball.setPos(player.getEyePosition());
 
@@ -41,7 +41,7 @@ public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem, Item
     }
 
     @Overwrite
-    public InteractionResult useOn(UseOnContext useOnContext) {
+    public InteractionResult useOn(UseOnContext context) {
         return InteractionResult.PASS;
     }
 }

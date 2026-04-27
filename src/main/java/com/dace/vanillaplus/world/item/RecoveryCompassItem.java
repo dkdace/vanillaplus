@@ -1,0 +1,112 @@
+package com.dace.vanillaplus.world.item;
+
+import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
+import com.dace.vanillaplus.network.NetworkManager;
+import com.dace.vanillaplus.network.client.ItemOverlayPacket;
+import lombok.NonNull;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Relative;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * 만회 나침반 아이템 클래스.
+ */
+public final class RecoveryCompassItem extends Item {
+    /** 컴포넌트 키 */
+    private static final Component COMPONENT_TELEPORT_NOT_VALID = Component.translatable("item.minecraft.recovery_compass.teleport_not_valid");
+
+    public RecoveryCompassItem(@NonNull Properties properties) {
+        super(properties);
+    }
+
+    /**
+     * 사용 효과를 재생한다.
+     *
+     * @param serverLevel 월드
+     * @param pos         위치
+     */
+    private static void playUseEffects(@NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
+        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), VPSoundEvents.RECOVERY_COMPASS_TELEPORT.get(), SoundSource.PLAYERS, 2,
+                1);
+        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 2, 0.5F);
+
+        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0, 0, 0, 0);
+    }
+
+    @Override
+    @NonNull
+    public InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand interactionHand) {
+        if (!(level instanceof ServerLevel serverLevel))
+            return InteractionResult.PASS;
+
+        GlobalPos lastDeathPos = player.getLastDeathLocation().orElse(null);
+        if (lastDeathPos == null)
+            return InteractionResult.FAIL;
+
+        Vec3 pos = getTeleportLocation(serverLevel, lastDeathPos);
+        if (pos == null) {
+            player.sendOverlayMessage(COMPONENT_TELEPORT_NOT_VALID);
+            return InteractionResult.FAIL;
+        }
+
+        Vec3 oldPos = player.position();
+
+        player.teleport(new TeleportTransition(serverLevel, pos, Vec3.ZERO, 0, 0, Relative.union(Relative.ROTATION, Relative.DELTA),
+                TeleportTransition.DO_NOTHING));
+
+        playUseEffects(serverLevel, oldPos);
+        playUseEffects(serverLevel, pos);
+
+        NetworkManager.sendToPlayer(new ItemOverlayPacket(BuiltInRegistries.ITEM.wrapAsHolder(this)), (ServerPlayer) player);
+
+        player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
+
+        player.resetFallDistance();
+        player.resetCurrentImpulseContext();
+
+        player.awardStat(Stats.ITEM_USED.get(this));
+        player.getItemInHand(interactionHand).consume(1, player);
+
+        return InteractionResult.SUCCESS_SERVER;
+    }
+
+    /**
+     * 이동할 위치를 반환한다.
+     *
+     * @param serverLevel 월드
+     * @param globalPos   전역 위치
+     * @return 이동할 위치. 이동할 수 없으면 {@code null} 반환
+     */
+    @Nullable
+    private Vec3 getTeleportLocation(@NonNull ServerLevel serverLevel, @NonNull GlobalPos globalPos) {
+        if (globalPos.dimension() != serverLevel.dimension())
+            return null;
+
+        BlockPos.MutableBlockPos blockPos = globalPos.pos().mutable();
+        while (blockPos.getY() > serverLevel.getMinY())
+            if (serverLevel.getBlockState(blockPos.move(Direction.DOWN)).blocksMotion())
+                return blockPos.move(Direction.UP).getBottomCenter();
+
+        return null;
+    }
+}

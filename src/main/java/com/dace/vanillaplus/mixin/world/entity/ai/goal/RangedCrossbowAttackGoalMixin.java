@@ -1,8 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.registryobject.EntityModifierInterfaces;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -34,19 +35,19 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Shadow
     private int seeTime;
 
-    @Definition(id = "pAttackRadius", local = @Local(type = float.class, argsOnly = true))
-    @Expression("pAttackRadius")
+    @Definition(id = "attackRadius", local = @Local(type = float.class, argsOnly = true))
+    @Expression("attackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
-    private float modifyAttackRadius(float radius, @Local(argsOnly = true) T monster) {
-        return VPEntity.cast(monster).getDataModifier()
-                .map(entityModifier -> entityModifier.getInterfaceInfoMap().get(EntityModifier.InterfaceInfoMap.CROSSBOW_ATTACK_MOB)
-                        .getShootingRange())
-                .orElse((int) radius);
+    private float modifyAttackRadius(float attackRadius, @Local(argsOnly = true) T mob) {
+        return VPEntity.cast(mob).getDataModifier()
+                .flatMap(entityModifier -> entityModifier.get(EntityModifierInterfaces.CROSSBOW_ATTACK_MOB)
+                        .map(EntityModifier.CrossbowAttackMobInfo::getShootingRange))
+                .orElse((int) attackRadius);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
-    private void backupIfTooClose(CallbackInfo ci, @Local LivingEntity target) {
+    private void backupIfTooClose(CallbackInfo ci, @Local(name = "target") LivingEntity target) {
         if (VPEntity.cast(mob).getDataModifier().isEmpty() || mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME
                 || !target.closerThan(mob, BACKUP_DISTANCE))
             return;

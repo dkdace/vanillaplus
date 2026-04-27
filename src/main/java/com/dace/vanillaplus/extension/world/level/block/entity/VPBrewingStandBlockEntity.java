@@ -1,11 +1,9 @@
 package com.dace.vanillaplus.extension.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import lombok.NonNull;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.RecipeCraftingHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 
 /**
@@ -38,10 +36,4 @@ public interface VPBrewingStandBlockEntity extends VPMixin<BrewingStandBlockEnti
      * @param player 대상 플레이어
      */
     void awardUsedRecipes(@NonNull Player player);
-
-    /**
-     * @return 제작법 캐시
-     */
-    @NonNull
-    RecipeManager.CachedCheck<VPRecipeTypes.Brewing.Input, ? extends VPRecipeTypes.Brewing> getQuickCheck();
 }

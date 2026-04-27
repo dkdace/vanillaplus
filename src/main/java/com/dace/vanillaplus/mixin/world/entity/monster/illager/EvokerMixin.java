@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.RaiderEffect;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.ReloadableDataManager;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +23,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void setCanOpenDoors(EntityType<? extends Evoker> entityType, Level level, CallbackInfo ci) {
+    private void setCanOpenDoors(EntityType<? extends Evoker> type, Level level, CallbackInfo ci) {
         getNavigation().setCanOpenDoors(true);
     }
 
@@ -36,8 +37,8 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, EntityMod
     public abstract static class EvokerSummonSpellGoalMixin {
         @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
-        private void applyRaidBuffsToVex(CallbackInfo ci, @Local Vex vex) {
-            RaiderEffect.getDataManager().get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
+        private void applyRaidBuffsToVex(CallbackInfo ci, @Local(name = "vex") Vex vex) {
+            ReloadableDataManager.RAIDER_EFFECT.get(EntityType.EVOKER, RaiderEffect.EvokerEffect.class).ifPresent(evokerEffect ->
                     evokerEffect.getVexMobEffectInfos().forEach(enchantItemInfo -> enchantItemInfo.applyMobEffect(vex)));
         }
     }

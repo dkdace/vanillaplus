@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.item;
 
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import lombok.NonNull;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;

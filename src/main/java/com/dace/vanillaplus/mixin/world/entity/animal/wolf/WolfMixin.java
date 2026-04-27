@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.animal.wolf;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,14 +45,13 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     public abstract LivingEntity getTarget();
 
     @Shadow
-    @UnknownNullability
-    protected AABB getAttackBoundingBox(double range) {
-        return null;
+    protected AABB getAttackBoundingBox(double horizontalExpansion) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void die(DamageSource damageSource) {
-        super.die(damageSource);
+    public void die(DamageSource source) {
+        super.die(source);
 
         if (!level().isClientSide())
             targetSelector.getAvailableGoals().forEach(wrappedGoal -> {
@@ -63,14 +61,14 @@ public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEnt
     }
 
     @Inject(method = "setAggressive", at = @At("HEAD"))
-    private void stopRidingIfAggressive(boolean isAggressive, CallbackInfo ci) {
-        if (isAggressive && getVehicle() instanceof VehicleEntity)
+    private void stopRidingIfAggressive(boolean flag, CallbackInfo ci) {
+        if (flag && getVehicle() instanceof VehicleEntity)
             stopRiding();
     }
 
     @Inject(method = "startRiding", at = @At("HEAD"), cancellable = true)
-    private void preventRidingIfAggressive(Entity vehicle, boolean force, boolean sendGameEvent, CallbackInfoReturnable<Boolean> cir) {
-        if (isAggressive() && vehicle instanceof VehicleEntity)
+    private void preventRidingIfAggressive(Entity entity, boolean force, boolean sendEventAndTriggers, CallbackInfoReturnable<Boolean> cir) {
+        if (isAggressive() && entity instanceof VehicleEntity)
             cir.setReturnValue(false);
     }
 

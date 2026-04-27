@@ -13,9 +13,9 @@ public abstract class HungerMobEffectMixin extends MobEffectMixin<HungerMobEffec
     private static final String DEFINED_VALUE_NAME = "exhaustion_per_tick";
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"))
-    private float modifyExhaustion(float exhaustion, @Local(argsOnly = true) int amplifier) {
+    private float modifyExhaustion(float amount, @Local(argsOnly = true) int amplification) {
         return getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplifier + 1))
-                .orElse(exhaustion);
+                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplification + 1))
+                .orElse(amount);
     }
 }

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.RaiderEffect;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.Illusioner;
@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Illusioner.class)
 public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.LivingEntityModifier> {
     @Override
-    public ItemStack getProjectile(ItemStack weapon) {
-        ItemStack itemStack = super.getProjectile(weapon);
+    public ItemStack getProjectile(ItemStack heldWeapon) {
+        ItemStack itemStack = super.getProjectile(heldWeapon);
 
         if (level().isClientSide())
             return itemStack;
@@ -33,12 +33,12 @@ public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, E
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void setCanOpenDoors(EntityType<? extends Illusioner> entityType, Level level, CallbackInfo ci) {
+    private void setCanOpenDoors(EntityType<? extends Illusioner> type, Level level, CallbackInfo ci) {
         getNavigation().setCanOpenDoors(true);
     }
 
     @Overwrite
-    public void applyRaidBuffs(ServerLevel serverLevel, int wave, boolean ignored) {
+    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
         getRaiderEffect(RaiderEffect.IllusionerEffect.class).ifPresent(illusionerEffect ->
                 illusionerEffect.getEnchantItemInfos().forEach(enchantItemEffect -> enchantItemEffect.applyEnchantment(getThis())));
     }

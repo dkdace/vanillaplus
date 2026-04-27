@@ -21,20 +21,19 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
     private static final int SCAN_DISTANCE_MAX = 14;
 
     @ModifyReturnValue(method = "lambda$new$0", at = @At("RETURN"))
-    private static boolean modifyScanTargetingConditionsSelector(boolean original, @Local(argsOnly = true) EnderDragon enderDragon,
-                                                                 @Local(argsOnly = true) LivingEntity entity) {
-        return VPEnderDragon.cast(enderDragon).getDataModifier().isPresent()
-                ? original && enderDragon.distanceToSqr(entity) > SCAN_DISTANCE_MIN * SCAN_DISTANCE_MIN
-                : original;
+    private static boolean modifyScanTargetingConditionsSelector(boolean condition, @Local(argsOnly = true) EnderDragon dragon,
+                                                                 @Local(argsOnly = true) LivingEntity target) {
+        return VPEnderDragon.cast(dragon).getDataModifier().isPresent()
+                ? condition && dragon.distanceToSqr(target) > SCAN_DISTANCE_MIN * SCAN_DISTANCE_MIN
+                : condition;
     }
 
     @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;selector(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions$Selector;)Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;"))
-    private static TargetingConditions modifyScanTargetingConditions(TargetingConditions targetingConditions,
-                                                                     @Local(argsOnly = true) EnderDragon enderDragon) {
-        return VPEnderDragon.cast(enderDragon).getDataModifier().isPresent()
-                ? targetingConditions.range(SCAN_DISTANCE_MAX).ignoreLineOfSight().ignoreInvisibilityTesting()
-                : targetingConditions;
+    private static TargetingConditions modifyScanTargetingConditions(TargetingConditions instance, @Local(argsOnly = true) EnderDragon dragon) {
+        return VPEnderDragon.cast(dragon).getDataModifier().isPresent()
+                ? instance.range(SCAN_DISTANCE_MAX).ignoreLineOfSight().ignoreInvisibilityTesting()
+                : instance;
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=25"))
@@ -60,7 +59,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;Lnet/minecraft/world/entity/LivingEntity;DDD)Lnet/minecraft/world/entity/player/Player;",
             ordinal = 1), index = 0)
-    private TargetingConditions modifyChargeTargetingConditions(TargetingConditions targetingConditions) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? getVPEnderDragon().getDefaultTargetingConditions() : targetingConditions;
+    private TargetingConditions modifyChargeTargetConditions(TargetingConditions targetConditions) {
+        return getVPEnderDragon().getDataModifier().isPresent() ? getVPEnderDragon().getDefaultTargetingConditions() : targetConditions;
     }
 }

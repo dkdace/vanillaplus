@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.color.item;
 
-import com.dace.vanillaplus.client.renderer.WaterCauldronRenderer;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import net.minecraft.client.color.item.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class PotionMixin implements VPMixin<Potion> {
     @ModifyArg(method = "calculate", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;opaque(I)I", ordinal = 0))
     private int modifyColor(int color) {
-        return WaterCauldronRenderer.getMixedColor(PotionContents.BASE_POTION_COLOR, color, 1);
+        return WaterCauldronBlockEntity.getMixedColor(PotionContents.BASE_POTION_COLOR, color, 1);
     }
 }

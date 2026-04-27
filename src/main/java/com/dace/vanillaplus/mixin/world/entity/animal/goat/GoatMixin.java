@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.animal.goat;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.registryobject.VPItems;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.registryobject.VPItems;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -15,15 +15,14 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Goat.class)
 public abstract class GoatMixin extends MobMixin<Goat, EntityModifier.LivingEntityModifier> {
-    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
-    private boolean modifyMilkItems(boolean canMilk, @Local ItemStack itemStack) {
-        return canMilk || itemStack.is(Items.GLASS_BOTTLE);
+    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
+    private boolean modifyMilkCondition(boolean isBucket, @Local(name = "heldItem") ItemStack heldItem) {
+        return isBucket || heldItem.is(Items.GLASS_BOTTLE);
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;",
             opcode = Opcodes.GETSTATIC))
-    private Item modifyMilkResult(Item item, @Local ItemStack itemStack) {
-        return itemStack.is(Items.GLASS_BOTTLE) ? VPItems.MILK_BOTTLE.get() : item;
+    private Item modifyMilkResult(Item item, @Local(name = "heldItem") ItemStack heldItem) {
+        return heldItem.is(Items.GLASS_BOTTLE) ? VPItems.MILK_BOTTLE.get() : item;
     }
 }

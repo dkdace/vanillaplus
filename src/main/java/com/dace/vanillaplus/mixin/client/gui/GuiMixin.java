@@ -20,9 +20,8 @@ public abstract class GuiMixin implements VPMixin<Gui> {
 
     @Inject(method = "renderSelectedItemName", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"))
-    private void applyEnchantmentStyle(GuiGraphicsExtractor guiGraphicsExtractor, int yShift, CallbackInfo ci,
-                                       @Local MutableComponent mutableComponent) {
+    private void applyEnchantedItemNameStyle(GuiGraphicsExtractor graphics, int yShift, CallbackInfo ci, @Local(name = "str") MutableComponent str) {
         if (lastToolHighlight.isEnchanted())
-            mutableComponent.withStyle(ChatFormatting.BOLD);
+            str.withStyle(ChatFormatting.BOLD);
     }
 }

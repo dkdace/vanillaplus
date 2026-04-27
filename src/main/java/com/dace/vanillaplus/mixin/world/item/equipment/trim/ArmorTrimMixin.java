@@ -31,15 +31,15 @@ public abstract class ArmorTrimMixin implements VPMixin<ArmorTrim> {
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
             shift = At.Shift.AFTER))
-    private void addTrimPatternEffectTooltip(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                             DataComponentGetter dataComponentGetter, CallbackInfo ci) {
-        VPTrimPattern.cast(pattern.value()).applyTooltip(componentConsumer);
+    private void addTrimPatternEffectTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag,
+                                             DataComponentGetter components, CallbackInfo ci) {
+        VPTrimPattern.cast(pattern.value()).applyTooltip(consumer);
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 2,
             shift = At.Shift.AFTER))
-    private void addTrimMaterialEffectTooltip(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                              DataComponentGetter dataComponentGetter, CallbackInfo ci) {
-        VPTrimMaterial.cast(material.value()).applyTooltip(componentConsumer);
+    private void addTrimMaterialEffectTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag,
+                                              DataComponentGetter components, CallbackInfo ci) {
+        VPTrimMaterial.cast(material.value()).applyTooltip(consumer);
     }
 }

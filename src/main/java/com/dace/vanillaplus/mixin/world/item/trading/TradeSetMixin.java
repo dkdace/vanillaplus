@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.trading;
 
-import com.dace.vanillaplus.data.TradeSetOffer;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
+import com.dace.vanillaplus.world.TradeSetOffer;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

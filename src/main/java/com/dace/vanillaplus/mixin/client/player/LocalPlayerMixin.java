@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.player;
 
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.mixin.world.entity.player.PlayerMixin;
-import com.dace.vanillaplus.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.Minecraft;
@@ -26,8 +26,8 @@ public abstract class LocalPlayerMixin extends PlayerMixin<LocalPlayer> {
     public abstract boolean isMovingSlowly();
 
     @ModifyReturnValue(method = "shouldStopRunSprinting", at = @At("RETURN"))
-    private boolean modifyStopSprintConditions(boolean original) {
-        return original || isMovingSlowly();
+    private boolean modifyStopSprintCondition(boolean condition) {
+        return condition || isMovingSlowly();
     }
 
     @ModifyExpressionValue(method = "raycastHitResult", at = @At(value = "INVOKE",
@@ -37,12 +37,13 @@ public abstract class LocalPlayerMixin extends PlayerMixin<LocalPlayer> {
     }
 
     @Inject(method = "swing", at = @At("HEAD"))
-    public void resetAttackStrengthOnSwing(InteractionHand interactionHand, CallbackInfo ci) {
+    public void resetAttackStrengthOnSwing(InteractionHand hand, CallbackInfo ci) {
         attackStrengthTicker = 0;
     }
 
-    @Inject(method = "drop", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;removeFromSelected(Z)Lnet/minecraft/world/item/ItemStack;", shift = At.Shift.AFTER))
-    private void stopDestroyingBlockOnDrop(boolean isFullStack, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "drop", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/player/Inventory;removeFromSelected(Z)Lnet/minecraft/world/item/ItemStack;", shift = At.Shift.AFTER))
+    private void stopDestroyingBlockOnDrop(boolean all, CallbackInfoReturnable<Boolean> cir) {
         MultiPlayerGameMode gameMode = minecraft.gameMode;
         if (gameMode != null)
             gameMode.stopDestroyBlock();

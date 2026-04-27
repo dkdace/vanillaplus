@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -15,9 +15,7 @@ import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.item.trading.TradeSet;
@@ -58,7 +56,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
 
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
-    private void rerollOffers(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir) {
+    private void rerollOffers(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
         MerchantOffers merchantOffers = getOffers();
         merchantOffers.clear();
 
@@ -66,7 +64,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
         for (int i = 1; i <= villagerData.level(); i++) {
             ResourceKey<TradeSet> tradeSetResourceKey = villagerData.profession().value().getTrades(i);
             if (tradeSetResourceKey != null)
-                addOffersFromTradeSet(serverLevel, merchantOffers, tradeSetResourceKey);
+                addOffersFromTradeSet(level, merchantOffers, tradeSetResourceKey);
         }
 
         resendOffersToTradingPlayer();
@@ -76,24 +74,17 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
     @Expression("3 + this.random.nextInt(4)")
     @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private int modifyRewardBaseXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {
-        ItemCost itemCost = merchantOffer.getItemCostA();
-
-        if (itemCost.itemStack().is(Items.EMERALD)) {
-            int count = itemCost.count();
-            return 3 * count + random.nextInt(4 * count);
-        }
-
-        return xp;
+    private int modifyTradePlayerXP(int xp, @Local(argsOnly = true) MerchantOffer offer) {
+        return getTradePlayerXP(xp, offer);
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
-    private boolean preventTradingIfClosed(boolean flag) {
-        return flag || isTradingClosed() || isTradingOutOfStock();
+    private boolean preventTradingIfClosed(boolean isEmpty) {
+        return isEmpty || isTradingClosed() || isTradingOutOfStock();
     }
 
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
-    private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sendClosedMessage(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (isTradingClosed())
             player.sendOverlayMessage(COMPONENT_CLOSED);
         else if (isTradingOutOfStock())
@@ -101,7 +92,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))
-    private void closeTrading(ServerLevel serverLevel, CallbackInfo ci) {
+    private void closeTrading(ServerLevel level, CallbackInfo ci) {
         if (!isTradingClosed())
             return;
 

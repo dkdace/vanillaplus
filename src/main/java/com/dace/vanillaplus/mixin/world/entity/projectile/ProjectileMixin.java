@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
+import com.dace.vanillaplus.world.entity.EntityModifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;
 import org.jetbrains.annotations.Nullable;

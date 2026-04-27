@@ -49,34 +49,32 @@ public abstract class PotionContentsMixin implements VPMixin<PotionContents> {
     @Redirect(method = "addPotionTooltip", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;",
             ordinal = 0))
-    private static MutableComponent modifyMobEffectColor(MutableComponent mutableComponent, ChatFormatting chatFormatting,
-                                                         @Local Holder<MobEffect> mobEffectHolder) {
-        int color = switch (mobEffectHolder.value().getCategory()) {
+    private static MutableComponent modifyMobEffectColor(MutableComponent line, ChatFormatting format,
+                                                         @Local(name = "mobEffect") Holder<MobEffect> mobEffect) {
+        return line.withColor(switch (mobEffect.value().getCategory()) {
             case BENEFICIAL -> COLOR_BENEFICIAL;
             case NEUTRAL -> COLOR_NEUTRAL;
             case HARMFUL -> COLOR_HARMFUL;
-        };
-
-        return mutableComponent.withColor(color);
+        });
     }
 
     @Redirect(method = "addPotionTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z"))
-    private static boolean removeAttributeDisplay(List<Pair<Holder<Attribute>, AttributeModifier>> list) {
+    private static boolean removeAttributeDisplay(List<Pair<Holder<Attribute>, AttributeModifier>> modifiers) {
         return true;
     }
 
     @Inject(method = "addPotionTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V",
             ordinal = 0, shift = At.Shift.AFTER))
-    private static void addEffectTooltip(Iterable<MobEffectInstance> mobEffectInstances, Consumer<Component> componentConsumer, float durationFactor,
-                                         float ticksPerSecond, CallbackInfo ci, @Local MobEffectInstance mobEffectInstance) {
-        MobEffect mobEffect = mobEffectInstance.getEffect().value();
+    private static void addEffectTooltip(Iterable<MobEffectInstance> effects, Consumer<Component> lines, float durationScale, float tickrate,
+                                         CallbackInfo ci, @Local(name = "effect") MobEffectInstance effect) {
+        MobEffect mobEffect = effect.getEffect().value();
 
         VPMobEffect.cast(mobEffect).getLevelBasedValuePreset().ifPresent(levelBasedValuePreset ->
-                levelBasedValuePreset.applyTooltip(componentConsumer, mobEffect.getDisplayName(), mobEffectInstance.getAmplifier() + 1));
+                levelBasedValuePreset.applyTooltip(lines, mobEffect.getDisplayName(), effect.getAmplifier() + 1));
 
-        mobEffect.createModifiers(mobEffectInstance.getAmplifier(), (attributeHolder, attributeModifier) ->
+        mobEffect.createModifiers(effect.getAmplifier(), (attributeHolder, attributeModifier) ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
-                        componentConsumer.accept(CommonComponents.space().append(component)), null, attributeHolder, attributeModifier));
+                        lines.accept(CommonComponents.space().append(component)), null, attributeHolder, attributeModifier));
     }
 
     @ModifyExpressionValue(method = "getColorOr", at = @At(value = "INVOKE",
