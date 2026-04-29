@@ -21,19 +21,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RandomizableContainerBlockEntity.class)
 public abstract class RandomizableContainerBlockEntityMixin<T extends RandomizableContainerBlockEntity> extends BlockEntityMixin<T> implements VPRandomizableContainerBlockEntity<T> {
-    @Unique
-    @Nullable
-    protected ResourceKey<LootTable> lootTableResourceKey;
     @Shadow
     @Nullable
     protected ResourceKey<LootTable> lootTable;
+    @Unique
+    @Nullable
+    protected ResourceKey<LootTable> originalLootTable;
 
     @Unique
-    private void init(@NonNull ResourceKey<LootTable> lootTableResourceKey) {
-        if (!(level instanceof ServerLevel serverLevel) || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+    private void init(@Nullable ResourceKey<LootTable> lootTableResourceKey) {
+        if (lootTableResourceKey == null || !(level instanceof ServerLevel serverLevel) || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
             return;
 
-        this.lootTableResourceKey = lootTableResourceKey;
+        this.originalLootTable = lootTableResourceKey;
         if (getLootTableReward() != null)
             serverLevel.setBlockAndUpdate(worldPosition, getBlockState().setValue(VPLootContainerBlock.LOOT, true));
 
@@ -42,29 +42,27 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
 
     @Unique
     protected void onLoadAdditional(@NonNull ValueInput valueInput) {
-        lootTableResourceKey = valueInput.read("OriginalLootTable", LootTable.KEY_CODEC).orElse(null);
+        originalLootTable = valueInput.read("OriginalLootTable", LootTable.KEY_CODEC).orElse(null);
     }
 
     @Unique
     protected void onSaveAdditional(@NonNull ValueOutput valueOutput) {
-        valueOutput.storeNullable("OriginalLootTable", LootTable.KEY_CODEC, lootTableResourceKey);
+        valueOutput.storeNullable("OriginalLootTable", LootTable.KEY_CODEC, originalLootTable);
     }
 
     @Override
     public void onLoad() {
-        if (lootTable != null)
-            init(lootTable);
+        init(lootTable);
     }
 
     @Override
     @Nullable
     public LootTableReward getLootTableReward() {
-        return lootTableResourceKey == null ? null : ReloadableDataManager.LOOT_TABLE_REWARD.get(lootTableResourceKey).orElse(null);
+        return originalLootTable == null ? null : ReloadableDataManager.LOOT_TABLE_REWARD.get(originalLootTable).orElse(null);
     }
 
     @Inject(method = "setLootTable", at = @At("TAIL"))
     private void initOnSetLootTable(ResourceKey<LootTable> lootTable, CallbackInfo ci) {
-        if (lootTable != null)
-            init(lootTable);
+        init(lootTable);
     }
 }

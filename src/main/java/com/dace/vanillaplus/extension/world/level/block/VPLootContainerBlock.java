@@ -39,7 +39,7 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
                 && level.getBlockEntity(blockPos) instanceof VPRandomizableContainerBlockEntity<?> vpRandomizableContainerBlockEntity) {
             LootTableReward lootTableReward = vpRandomizableContainerBlockEntity.getLootTableReward();
             if (lootTableReward != null)
-                return lootTableReward.getXpRange().sample(randomSource);
+                return lootTableReward.xpRange().sample(randomSource);
         }
 
         return 0;
