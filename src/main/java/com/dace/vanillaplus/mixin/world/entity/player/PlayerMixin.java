@@ -143,9 +143,9 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     private float modifyMiningFatigueMultiplier(float multiplier) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> 1 + levelBasedValuePreset.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
+                .map(mobEffectValues -> 1 + mobEffectValues.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier()))
                 .orElse(multiplier);
     }
 }

@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
+import com.dace.vanillaplus.world.item.enchantment.Described;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.component.DataComponentType;
@@ -32,6 +33,9 @@ public final class VPEnchantmentEffectComponentTypes {
 
     private static final DeferredRegister<DataComponentType<?>> REGISTRY = StaticRegistry.createDeferredRegister(Registries.ENCHANTMENT_EFFECT_COMPONENT_TYPE);
 
+    public static final RegistryObject<DataComponentType<List<Described>>> VALUES = create(
+            "values", builder -> builder
+                    .persistent(Described.TYPED_CODEC.codec().listOf()));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> XP_MULTIPLIER = create(
             "xp_multiplier", builder -> builder
                     .persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC),
@@ -60,8 +64,8 @@ public final class VPEnchantmentEffectComponentTypes {
                     .persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentValueEffect.CODEC),
                             CONTEXT_KEY_SET_ENCHANTED_ENTITY_TARGET)));
     public static final RegistryObject<DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> POST_DAMAGE = create(
-            "post_damage", builder -> builder.persistent(
-                    EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC),
+            "post_damage", builder -> builder
+                    .persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC),
                             LootContextParamSets.ENCHANTED_DAMAGE)));
 
     @NonNull

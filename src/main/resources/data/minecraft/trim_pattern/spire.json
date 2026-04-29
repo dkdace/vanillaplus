@@ -1,0 +1,23 @@
+{
+  "asset_id": "minecraft:spire",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.minecraft.spire"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.15,
+        "attribute": "minecraft:jump_strength",
+        "id": "vanillaplus:trim_pattern_effect.spire",
+        "operation": "add_multiplied_base"
+      },
+      {
+        "amount": 0.12,
+        "attribute": "vanillaplus:elytra_flying_speed_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.spire",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

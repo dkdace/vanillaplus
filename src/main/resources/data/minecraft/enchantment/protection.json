@@ -9,9 +9,19 @@
         "effect": {
           "type": "minecraft:add",
           "value": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/protection",
-            "name": "resistance"
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "description_value_multiplier": 4,
+            "value": {
+              "type": "minecraft:clamped",
+              "max": 20,
+              "min": 0,
+              "value": {
+                "type": "minecraft:linear",
+                "base": 1.0,
+                "per_level_above_first": 1.0
+              }
+            }
           }
         },
         "requirements": {

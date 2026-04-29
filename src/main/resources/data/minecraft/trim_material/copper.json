@@ -1,0 +1,20 @@
+{
+  "asset_name": "copper",
+  "description": {
+    "color": "#B4684D",
+    "translate": "trim_material.minecraft.copper"
+  },
+  "override_armor_assets": {
+    "minecraft:copper": "copper_darker"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.25,
+        "attribute": "minecraft:block_interaction_range",
+        "id": "vanillaplus:trim_material_effect.copper",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

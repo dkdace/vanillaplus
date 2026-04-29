@@ -11,15 +11,11 @@
           "type": "minecraft:damage_entity",
           "damage_type": "minecraft:thorns",
           "max_damage": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/thorns",
-            "name": "damage"
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "value": 5.0
           },
-          "min_damage": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/thorns",
-            "name": "damage"
-          }
+          "min_damage": 5.0
         },
         "enchanted": "victim",
         "requirements": {
@@ -29,9 +25,19 @@
               "chance": {
                 "type": "minecraft:enchantment_level",
                 "amount": {
-                  "type": "vanillaplus:preset",
-                  "value": "vanillaplus:enchantment/thorns",
-                  "name": "chance"
+                  "type": "vanillaplus:described",
+                  "description_index": 1,
+                  "description_value_multiplier": 100,
+                  "value": {
+                    "type": "minecraft:clamped",
+                    "max": 1,
+                    "min": 0,
+                    "value": {
+                      "type": "minecraft:linear",
+                      "base": 0.15,
+                      "per_level_above_first": 0.15
+                    }
+                  }
                 }
               },
               "condition": "minecraft:random_chance"

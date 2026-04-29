@@ -13,9 +13,9 @@ public abstract class HealOrHarmMobEffectMixin extends MobEffectMixin<HealOrHarm
     private static final String DEFINED_VALUE_NAME = "amount";
 
     @Unique
-    private float getAmount(float amount, int amplifier) {
-        return getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplifier + 1))
+    private float getAmount(float amount, int amplification) {
+        return getDataModifier()
+                .map(mobEffectValues -> mobEffectValues.calculate(DEFINED_VALUE_NAME, amplification))
                 .orElse(amount);
     }
 

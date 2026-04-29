@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.world.item.enchantment.effect;
 
+import com.dace.vanillaplus.extension.world.item.enchantment.VPLevelBasedProvider;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
@@ -12,13 +13,16 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 /**
  * 엔티티를 치유하는 마법 부여의 엔티티 효과 클래스.
  *
  * @param minAmount 최소 치유량
  * @param maxAmount 최대 치유량
  */
-public record HealEntity(@NonNull LevelBasedValue minAmount, @NonNull LevelBasedValue maxAmount) implements EnchantmentEntityEffect {
+public record HealEntity(@NonNull LevelBasedValue minAmount,
+                         @NonNull LevelBasedValue maxAmount) implements EnchantmentEntityEffect, VPLevelBasedProvider {
     /** JSON 코덱 */
     public static final MapCodec<HealEntity> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(LevelBasedValue.CODEC.fieldOf("min_amount").forGetter(HealEntity::minAmount),
@@ -37,5 +41,11 @@ public record HealEntity(@NonNull LevelBasedValue minAmount, @NonNull LevelBased
     @NonNull
     public MapCodec<HealEntity> codec() {
         return TYPED_CODEC;
+    }
+
+    @Override
+    @NonNull
+    public List<LevelBasedValue> getLevelBasedValues() {
+        return List.of(minAmount, maxAmount);
     }
 }

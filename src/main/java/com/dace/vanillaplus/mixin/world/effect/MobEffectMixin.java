@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.effect;
 
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
-import com.dace.vanillaplus.world.LevelBasedValuePreset;
+import com.dace.vanillaplus.world.MobEffectValues;
 import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.world.effect.MobEffect;
@@ -16,11 +16,11 @@ public abstract class MobEffectMixin<T extends MobEffect> implements VPMobEffect
     @Unique
     @Nullable
     @Setter
-    private LevelBasedValuePreset levelBasedValuePreset;
+    private MobEffectValues dataModifier;
 
     @Override
     @NonNull
-    public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
-        return Optional.ofNullable(levelBasedValuePreset);
+    public Optional<MobEffectValues> getDataModifier() {
+        return Optional.ofNullable(dataModifier);
     }
 }

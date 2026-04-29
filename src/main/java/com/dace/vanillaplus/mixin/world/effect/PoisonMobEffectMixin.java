@@ -18,8 +18,8 @@ public abstract class PoisonMobEffectMixin extends MobEffectMixin<PoisonMobEffec
     @Expression("25 >> amplification")
     @ModifyExpressionValue(method = "shouldApplyEffectTickThisTick", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyInterval(int interval, @Local(ordinal = 1, argsOnly = true) int amplification) {
-        return getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> (int) (1 / levelBasedValuePreset.calculate(DEFINED_VALUE_NAME, amplification + 1)))
+        return getDataModifier()
+                .map(mobEffectValues -> (int) (1 / mobEffectValues.calculate(DEFINED_VALUE_NAME, amplification)))
                 .orElse(interval);
     }
 }

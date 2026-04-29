@@ -1,0 +1,22 @@
+{
+  "asset_name": "lapis",
+  "description": {
+    "color": "#416E97",
+    "translate": "trim_material.minecraft.lapis"
+  },
+  "effects": {
+    "vanillaplus:xp_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "description_value_multiplier": 100,
+            "value": 0.08
+          }
+        }
+      }
+    ]
+  }
+}

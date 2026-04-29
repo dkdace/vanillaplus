@@ -33,8 +33,7 @@ public abstract class InstrumentMixin implements VPInstrument {
                     ComponentSerialization.CODEC.fieldOf("description").forGetter(Instrument::description),
                     MobEffectInstance.CODEC.optionalFieldOf("effect")
                             .forGetter(instrument -> ((InstrumentMixin) (Object) instrument).mobEffectInstance))
-            .apply(instance, InstrumentMixin::create)
-    );
+            .apply(instance, InstrumentMixin::create));
     @Shadow
     @Final
     public static final StreamCodec<RegistryFriendlyByteBuf, Instrument> DIRECT_STREAM_CODEC = StreamCodec.composite(
@@ -46,6 +45,7 @@ public abstract class InstrumentMixin implements VPInstrument {
             InstrumentMixin::create);
 
     @Unique
+    @NonNull
     @Getter
     private Optional<MobEffectInstance> mobEffectInstance = Optional.empty();
 

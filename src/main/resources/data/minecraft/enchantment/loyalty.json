@@ -9,9 +9,13 @@
         "effect": {
           "type": "minecraft:add",
           "value": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/loyalty",
-            "name": "speed_multiplier"
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "value": {
+              "type": "minecraft:linear",
+              "base": 1.0,
+              "per_level_above_first": 1.0
+            }
           }
         }
       }

@@ -192,9 +192,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private int modifyResistanceMultiplier(int absorbValue) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(RESISTANCE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
+                .map(mobEffectValues -> (int) mobEffectValues.calculate(RESISTANCE_DEFINED_VALUE_NAME,
+                        mobEffectInstance.getAmplifier()))
                 .orElse(absorbValue);
     }
 
@@ -270,9 +270,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private float modifyJumpBoostPower(float power) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(JUMP_BOOST_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
+                .map(mobEffectValues -> mobEffectValues.calculate(JUMP_BOOST_DEFINED_VALUE_NAME, mobEffectInstance.getAmplifier()))
                 .orElse(power);
     }
 }

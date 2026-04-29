@@ -12,9 +12,13 @@
             {
               "type": "minecraft:attribute",
               "amount": {
-                "type": "vanillaplus:preset",
-                "value": "vanillaplus:enchantment/soul_speed",
-                "name": "speed"
+                "type": "vanillaplus:described",
+                "description_index": 0,
+                "value": {
+                  "type": "minecraft:linear",
+                  "base": 0.0405,
+                  "per_level_above_first": 0.0105
+                }
               },
               "attribute": "minecraft:movement_speed",
               "id": "minecraft:enchantment.soul_speed",

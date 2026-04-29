@@ -1,0 +1,17 @@
+{
+  "asset_name": "amethyst",
+  "description": {
+    "color": "#9A5CC6",
+    "translate": "trim_material.minecraft.amethyst"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.12,
+        "attribute": "vanillaplus:hearing_range",
+        "id": "vanillaplus:trim_material_effect.amethyst",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

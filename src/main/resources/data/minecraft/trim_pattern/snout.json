@@ -1,0 +1,36 @@
+{
+  "asset_id": "minecraft:snout",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.minecraft.snout"
+  },
+  "effects": {
+    "vanillaplus:final_incoming_damage_multiplier": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:described",
+            "sentiment": "negative",
+            "description_index": 0,
+            "description_value_multiplier": 100,
+            "value": -0.15
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "attacker",
+          "predicate": {
+            "type": [
+              "minecraft:piglin",
+              "minecraft:piglin_brute",
+              "minecraft:hoglin",
+              "minecraft:zombified_piglin",
+              "minecraft:zoglin"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "asset_id": "minecraft:bolt",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.minecraft.bolt"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.05,
+        "attribute": "vanillaplus:attack_reach_multiplier",
+        "id": "vanillaplus:trim_pattern_effect.bolt",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

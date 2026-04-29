@@ -2,9 +2,11 @@ package com.dace.vanillaplus.mixin.world.item.enchantment;
 
 import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.LevelBasedValuePreset;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPLevelBasedProvider;
+import com.dace.vanillaplus.world.item.enchantment.Described;
 import lombok.NonNull;
-import lombok.Setter;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -25,21 +27,22 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin implements VPEnchantment {
     @Unique
-    @Nullable
-    @Setter
-    private LevelBasedValuePreset levelBasedValuePreset;
+    private final TreeSet<Described> describedLevelBasedValues = new TreeSet<>();
 
     @Shadow
     public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity victim, DamageSource source) {
@@ -62,16 +65,21 @@ public abstract class EnchantmentMixin implements VPEnchantment {
     @Shadow
     public abstract <T> List<T> getEffects(DataComponentType<List<T>> type);
 
-    @Override
-    @NonNull
-    public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
-        return Optional.ofNullable(levelBasedValuePreset);
+    @Unique
+    private void addDescribed(@NonNull Object value) {
+        switch (value) {
+            case VPLevelBasedProvider vpLevelBasedProvider -> vpLevelBasedProvider.getLevelBasedValues().forEach(this::addDescribed);
+            case Iterable<?> iterable -> iterable.forEach(this::addDescribed);
+            case Described described -> describedLevelBasedValues.add(described);
+            default -> {
+                // 미사용
+            }
+        }
     }
 
     @Override
     public void applyTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent, int level) {
-        if (levelBasedValuePreset != null)
-            levelBasedValuePreset.applyTooltip(componentConsumer, descriptionComponent, level);
+        describedLevelBasedValues.forEach(described -> described.applyTooltip(componentConsumer, descriptionComponent, level));
 
         getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
@@ -142,5 +150,11 @@ public abstract class EnchantmentMixin implements VPEnchantment {
         for (ConditionalEffect<EnchantmentEntityEffect> conditionalEffect : getEffects(VPEnchantmentEffectComponentTypes.POST_DAMAGE.get()))
             if (conditionalEffect.matches(lootContext))
                 conditionalEffect.effect().apply(serverLevel, enchantmentLevel, enchantedItemInUse, entity, entity.position());
+    }
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void setDescribedLevelBasedValues(Component description, Enchantment.EnchantmentDefinition definition, HolderSet<Enchantment> exclusiveSet,
+                                              DataComponentMap effects, CallbackInfo ci) {
+        effects.forEach(typedDataComponent -> addDescribed(typedDataComponent.value()));
     }
 }

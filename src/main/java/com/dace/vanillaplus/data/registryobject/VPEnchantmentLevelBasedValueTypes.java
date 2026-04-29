@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
+import com.dace.vanillaplus.world.item.enchantment.Described;
 import com.dace.vanillaplus.world.item.enchantment.Multiply;
-import com.dace.vanillaplus.world.item.enchantment.Preset;
 import com.mojang.serialization.MapCodec;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.registries.Registries;
@@ -18,7 +18,7 @@ public final class VPEnchantmentLevelBasedValueTypes {
     private static final DeferredRegister<MapCodec<? extends LevelBasedValue>> REGISTRY = StaticRegistry.createDeferredRegister(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
 
     static {
-        REGISTRY.register("preset", () -> Preset.TYPED_CODEC);
+        REGISTRY.register("described", () -> Described.TYPED_CODEC);
         REGISTRY.register("multiply", () -> Multiply.TYPED_CODEC);
     }
 }

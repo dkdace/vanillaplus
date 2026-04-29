@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.extension.world.item.enchantment;
 
 import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
-import com.dace.vanillaplus.extension.VPLevelBased;
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
 import net.minecraft.network.chat.Component;
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
 /**
  * {@link Enchantment}를 확장하는 인터페이스.
  */
-public interface VPEnchantment extends VPMixin<Enchantment>, VPLevelBased<Enchantment> {
+public interface VPEnchantment extends VPMixin<Enchantment> {
     @NonNull
     static VPEnchantment cast(@NonNull Enchantment object) {
         return (VPEnchantment) (Object) object;
