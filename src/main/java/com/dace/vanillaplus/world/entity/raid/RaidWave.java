@@ -1,47 +1,45 @@
 package com.dace.vanillaplus.world.entity.raid;
 
-import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.raid.Raider;
 import org.apache.commons.lang3.Validate;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * 습격 웨이브 정보를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class RaidWave {
     /** JSON 코덱 */
     public static final Codec<RaidWave> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Codec.unboundedMap(RaiderType.CODEC, ExtraCodecs.POSITIVE_INT).listOf().fieldOf("waves")
-                    .forGetter(raidWave -> raidWave.raiderCountMaps))
+            .group(RaiderGroup.CODEC.listOf().listOf().fieldOf("waves").forGetter(raidWave -> raidWave.raiderGroupsList))
             .apply(instance, RaidWave::new));
-    /** 습격대원 종류별 대원 수 목록 (습격대원 종류 : 대원 수) */
-    private final List<Map<RaiderType, Integer>> raiderCountMaps;
+    /** 웨이브별 습격대원 그룹 목록 */
+    private final List<List<RaiderGroup>> raiderGroupsList;
 
     /**
-     * 지정한 웨이브 번호에 해당하는 습격대원 종류별 대원 수 목록을 반환한다.
+     * 지정한 웨이브 번호에 해당하는 습격대원 그룹 목록을 반환한다.
      *
      * @param wave 웨이브 번호. 1 이상의 값
-     * @return 습격대원 종류별 대원 수 목록
+     * @return 습격대원 그룹 목록
      * @throws IllegalArgumentException 인자값이 유효하지 않으면 발생
      */
     @NonNull
     @UnmodifiableView
-    public Map<RaiderType, Integer> getRaiderCountMap(int wave) {
+    public List<RaiderGroup> getRaiderGroups(int wave) {
         Validate.isTrue(wave >= 1, "wave >= 1 (%d)", wave);
-        return raiderCountMaps.get(wave - 1);
+        return Collections.unmodifiableList(raiderGroupsList.get(Math.min(wave, raiderGroupsList.size()) - 1));
     }
 
     /**
@@ -50,35 +48,22 @@ public final class RaidWave {
      * @return 전체 웨이브 수
      */
     public int getTotalWaves() {
-        return raiderCountMaps.size();
+        return raiderGroupsList.size();
     }
 
     /**
-     * 습격대원 종류.
+     * 습격대원 그룹 클래스.
+     *
+     * @param entityType       엔티티 타입
+     * @param ridingEntityType 탑승 엔티티 타입
+     * @param count            엔티티 수
      */
-    @AllArgsConstructor
-    @Getter
-    public enum RaiderType {
-        PILLAGER(EntityType.PILLAGER),
-        VINDICATOR(EntityType.VINDICATOR),
-        WITCH(EntityType.WITCH),
-        RAVAGER(EntityType.RAVAGER),
-        EVOKER(EntityType.EVOKER),
-        ILLUSIONER(EntityType.ILLUSIONER),
-        RAVAGER_WITH_PILLAGER(EntityType.RAVAGER, EntityType.PILLAGER),
-        RAVAGER_WITH_VINDICATOR(EntityType.RAVAGER, EntityType.VINDICATOR),
-        RAVAGER_WITH_EVOKER(EntityType.RAVAGER, EntityType.EVOKER);
-
+    public record RaiderGroup(@NonNull EntityType<?> entityType, @NonNull Optional<EntityType<?>> ridingEntityType, int count) {
         /** JSON 코덱 */
-        private static final Codec<RaiderType> CODEC = CodecUtil.fromEnum(RaiderType.class);
-        /** 엔티티 타입 */
-        private final EntityType<? extends Raider> entityType;
-        /** 탑승 엔티티 타입 */
-        @Nullable
-        private final EntityType<? extends Raider> ridingEntityType;
-
-        RaiderType(@NonNull EntityType<? extends Raider> entityType) {
-            this(entityType, null);
-        }
+        private static final Codec<RaiderGroup> CODEC = RecordCodecBuilder.create(instance -> instance
+                .group(EntityType.CODEC.fieldOf("type").forGetter(RaiderGroup::entityType),
+                        EntityType.CODEC.optionalFieldOf("vehicle").forGetter(RaiderGroup::ridingEntityType),
+                        ExtraCodecs.POSITIVE_INT.fieldOf("count").forGetter(RaiderGroup::count))
+                .apply(instance, RaiderGroup::new));
     }
 }

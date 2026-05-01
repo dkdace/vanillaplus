@@ -33,6 +33,8 @@ public final class VPGameRules {
             GameRuleCategory.SPAWNING, false);
     public static final RegistryObject<GameRule<Integer>> MAX_BAD_OMEN_LEVEL = create("max_bad_omen_level",
             GameRuleCategory.MISC, MAX_POSSIBLE_BAD_OMEN_LEVEL, 1, MAX_POSSIBLE_BAD_OMEN_LEVEL);
+    public static final RegistryObject<GameRule<Integer>> RAID_TIME_LIMIT = create("raid_time_limit",
+            GameRuleCategory.MOBS, 180, 0, Integer.MAX_VALUE);
 
     @NonNull
     private static RegistryObject<GameRule<Boolean>> create(@NonNull String name, @NonNull GameRuleCategory gameRuleCategory, boolean defaultValue) {

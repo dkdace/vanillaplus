@@ -8,6 +8,8 @@ import com.dace.vanillaplus.world.entity.raid.RaidWave;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
@@ -18,18 +20,24 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Mixin(Raid.class)
@@ -40,9 +48,8 @@ public abstract class RaidMixin implements VPMixin<Raid> {
     @Unique
     private static final DynamicComponent COMPONENT_RAID_TIME_REMAINING = args ->
             Component.translatable("event.minecraft.raid.time_remaining", args);
-    @Shadow
-    @Final
-    private static final int RAID_TIMEOUT_TICKS = 3 * 60 * 20;
+    @Unique
+    private static final int TICK_RESET_THRESHOLD = 20;
 
     @Shadow
     @Final
@@ -59,6 +66,11 @@ public abstract class RaidMixin implements VPMixin<Raid> {
     @Shadow
     private long ticksActive;
 
+    @Unique
+    private static int getRaidTimeLimit(@NonNull ServerLevel serverLevel) {
+        return VPGameRules.getValue(VPGameRules.RAID_TIME_LIMIT, serverLevel) * 20;
+    }
+
     @Shadow
     protected abstract void setDirty(ServerLevel level);
 
@@ -71,17 +83,18 @@ public abstract class RaidMixin implements VPMixin<Raid> {
     @Shadow
     protected abstract boolean isFinalWave();
 
+    @Shadow
+    public abstract void updateBossbar();
+
     @Unique
     private void spawnRaiders(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull RaidWave raidWave, int wave) {
         boolean hasLeader = false;
 
-        for (Map.Entry<RaidWave.RaiderType, Integer> entry : raidWave.getRaiderCountMap(wave).entrySet()) {
-            for (int j = 0; j < entry.getValue(); j++) {
-                RaidWave.RaiderType raiderType = entry.getKey();
-                Raider raider = raiderType.getEntityType().create(serverLevel, EntitySpawnReason.EVENT);
-
-                if (raider == null)
-                    break;
+        for (RaidWave.RaiderGroup raiderGroup : raidWave.getRaiderGroups(wave))
+            for (int i = 0; i < raiderGroup.count(); i++) {
+                Entity entity = raiderGroup.entityType().create(serverLevel, EntitySpawnReason.EVENT);
+                if (!(entity instanceof Raider raider))
+                    continue;
 
                 joinRaid(serverLevel, wave, raider, blockPos, false);
 
@@ -91,26 +104,22 @@ public abstract class RaidMixin implements VPMixin<Raid> {
                     hasLeader = true;
                 }
 
-                spawnRidingRaider(serverLevel, blockPos, wave, raiderType, raider);
+                raiderGroup.ridingEntityType().ifPresent(entityType -> spawnRider(serverLevel, blockPos, wave, entityType, raider));
             }
-        }
     }
 
     @Unique
-    private void spawnRidingRaider(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, int wave, @NonNull RaidWave.RaiderType raiderType,
-                                   @NonNull Raider raider) {
-        EntityType<? extends Raider> ridingEntityType = raiderType.getRidingEntityType();
-        if (ridingEntityType == null)
+    private void spawnRider(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, int wave, @NonNull EntityType<?> entityType,
+                            @NonNull Raider vehicle) {
+        Entity rider = entityType.create(serverLevel, EntitySpawnReason.EVENT);
+        if (rider == null)
             return;
 
-        Raider ridingRaider = ridingEntityType.create(serverLevel, EntitySpawnReason.EVENT);
-        if (ridingRaider == null)
-            return;
+        if (rider instanceof Raider raider)
+            joinRaid(serverLevel, wave, raider, blockPos, false);
 
-        joinRaid(serverLevel, wave, ridingRaider, blockPos, false);
-
-        ridingRaider.snapTo(blockPos, 0, 0);
-        ridingRaider.startRiding(raider);
+        rider.snapTo(blockPos, 0, 0);
+        rider.startRiding(vehicle);
     }
 
     @ModifyArg(method = "absorbRaidOmen", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(III)I"), index = 2)
@@ -118,65 +127,74 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         return VPGameRules.getValue(VPGameRules.MAX_BAD_OMEN_LEVEL, player.level());
     }
 
-    @Overwrite
-    private boolean hasBonusWave() {
+    @ModifyReturnValue(method = "hasBonusWave", at = @At("RETURN"))
+    private boolean removeBonusWave(boolean hasBonusWave) {
         return false;
     }
 
-    @Overwrite
-    public int getNumGroups(Difficulty difficulty) {
-        return ReloadableDataManager.RAID_WAVE.get(difficulty).map(RaidWave::getTotalWaves).orElse(0);
-    }
-
-    @Definition(id = "i", local = @Local(type = int.class, ordinal = 0))
-    @Expression("i <= 2")
-    @ModifyExpressionValue(method = "tick", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean modifyRaidBarRaidersRemainingCondition(boolean original) {
-        return ticksActive <= 20;
+    @ModifyReturnValue(method = "getNumGroups", at = @At("RETURN"))
+    public int modifyNumGroups(int numGroups, @Local(argsOnly = true) Difficulty difficulty) {
+        return ReloadableDataManager.RAID_WAVE.get(difficulty).map(RaidWave::getTotalWaves).orElse(numGroups);
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/entity/raid/Raid;RAID_NAME_COMPONENT:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC))
-    private Component modifyRaidBarName(Component component, @Local int raiderCount) {
+    private Component modifyRaidBarName(Component component, @Local(name = "raidersAlive") int raidersAlive) {
         int wave = groupsSpawned;
-        if (raiderCount == 0 && !isFinalWave())
+        if (raidersAlive == 0 && !isFinalWave())
             wave++;
 
         return COMPONENT_RAID_WAVES.get(wave, numGroups);
     }
 
+    @Definition(id = "raidersAlive", local = @Local(type = int.class, name = "raidersAlive"))
+    @Expression("raidersAlive <= 2")
+    @ModifyExpressionValue(method = "tick", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean modifyRaiderCountingCondition(boolean original, @Local(argsOnly = true) ServerLevel level) {
+        return getRaidTimeLimit(level) <= 0 || ticksActive <= TICK_RESET_THRESHOLD;
+    }
+
     @ModifyArg(method = "tick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerBossEvent;setName(Lnet/minecraft/network/chat/Component;)V", ordinal = 2))
     private Component addRaidBarTimer(Component component, @Local(argsOnly = true) ServerLevel level) {
+        int raidTime = getRaidTimeLimit(level);
+        if (raidTime <= 0)
+            return component;
+
         Component timeComponent = COMPONENT_RAID_TIME_REMAINING.get(
-                StringUtil.formatTickDuration((int) (RAID_TIMEOUT_TICKS - ticksActive), level.tickRateManager().tickrate()));
+                StringUtil.formatTickDuration((int) (raidTime - ticksActive), level.tickRateManager().tickrate()));
 
         return component.copy().append(" - ").append(timeComponent);
     }
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/SharedConstants;DEBUG_RAIDS:Z", opcode = Opcodes.GETSTATIC))
-    private void setRaidBarProgress(ServerLevel level, CallbackInfo ci, @Local(name = "raidersAlive") int raidersAlive) {
-        if (raidersAlive > 0)
-            raidEvent.setProgress(ticksActive <= 20 ? 1 : 1 - (float) ticksActive / RAID_TIMEOUT_TICKS);
+    private void setRaidBarTimerProgress(ServerLevel level, CallbackInfo ci, @Local(name = "raidersAlive") int raidersAlive) {
+        int raidTime = getRaidTimeLimit(level);
+        if (raidTime > 0 && raidersAlive > 0)
+            raidEvent.setProgress(ticksActive <= TICK_RESET_THRESHOLD ? 1 : 1 - (float) ticksActive / raidTime);
     }
 
-    @Redirect(method = "updateBossbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerBossEvent;setProgress(F)V"))
-    private void removeDefaultRaidBarProgress(ServerBossEvent instance, float progress) {
+    @WrapWithCondition(method = {"spawnGroup", "removeFromRaid", "addWaveMob(Lnet/minecraft/server/level/ServerLevel;ILnet/minecraft/world/entity/raid/Raider;Z)Z"},
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raid;updateBossbar()V"))
+    private boolean removeUpdateBossbarCall(Raid instance, @Local(argsOnly = true) ServerLevel level) {
+        return getRaidTimeLimit(level) <= 0;
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "longValue=48000"))
-    private long modifyTimeoutCondition(long original) {
-        return RAID_TIMEOUT_TICKS;
+    private long modifyTimeoutCondition(long original, @Local(argsOnly = true) ServerLevel level) {
+        int raidTime = getRaidTimeLimit(level);
+        return raidTime <= 0 ? original : raidTime;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raid;hasMoreWaves()Z", ordinal = 0))
-    private void resetTimeoutIfNoRaiders(ServerLevel serverLevel, CallbackInfo ci) {
-        ticksActive = 0;
+    private void resetTicksIfNoRaiders(ServerLevel level, CallbackInfo ci) {
+        if (getRaidTimeLimit(level) > 0 && ticksActive > TICK_RESET_THRESHOLD)
+            ticksActive = 0;
     }
 
     @Inject(method = "updateRaiders", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raider;isRemoved()Z"))
-    private void resetTimeoutIfRaiderIsInVillage(ServerLevel serverLevel, CallbackInfo ci, @Local BlockPos raiderBlockPos) {
-        if (serverLevel.isVillage(raiderBlockPos))
+    private void resetTicksIfRaiderIsInVillage(ServerLevel level, CallbackInfo ci, @Local(name = "raiderPos") BlockPos raiderPos) {
+        if (getRaidTimeLimit(level) > 0 && level.isVillage(raiderPos))
             ticksActive = 0;
     }
 
@@ -196,16 +214,22 @@ public abstract class RaidMixin implements VPMixin<Raid> {
         args.set(5, 1000F);
     }
 
-    @Overwrite
-    private void spawnGroup(ServerLevel level, BlockPos pos) {
-        ticksActive = 0;
-        totalHealth = 0;
+    @Inject(method = "spawnGroup", at = @At("HEAD"), cancellable = true)
+    private void spawnGroup(ServerLevel level, BlockPos pos, CallbackInfo ci) {
+        ReloadableDataManager.RAID_WAVE.get(level.getCurrentDifficultyAt(pos).getDifficulty()).ifPresent(raidWave -> {
+            ticksActive = 0;
+            totalHealth = 0;
 
-        ReloadableDataManager.RAID_WAVE.get(level.getCurrentDifficultyAt(pos).getDifficulty()).ifPresent(raidWave ->
-                spawnRaiders(level, pos, raidWave, groupsSpawned + 1));
+            spawnRaiders(level, pos, raidWave, groupsSpawned + 1);
 
-        waveSpawnPos = Optional.empty();
-        groupsSpawned++;
-        setDirty(level);
+            waveSpawnPos = Optional.empty();
+            groupsSpawned++;
+            setDirty(level);
+
+            if (getRaidTimeLimit(level) <= 0)
+                updateBossbar();
+
+            ci.cancel();
+        });
     }
 }

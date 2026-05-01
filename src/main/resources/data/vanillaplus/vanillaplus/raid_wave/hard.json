@@ -1,52 +1,151 @@
 {
   "waves": [
-    {
-      "pillager": 6,
-      "vindicator": 2
-    },
-    {
-      "pillager": 5,
-      "vindicator": 4
-    },
-    {
-      "pillager": 6,
-      "vindicator": 4,
-      "witch": 1
-    },
-    {
-      "pillager": 5,
-      "vindicator": 3,
-      "witch": 1,
-      "ravager": 1
-    },
-    {
-      "pillager": 5,
-      "vindicator": 5,
-      "witch": 2,
-      "evoker": 1
-    },
-    {
-      "pillager": 5,
-      "vindicator": 5,
-      "witch": 1,
-      "evoker": 1,
-      "ravager_with_pillager": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 6,
-      "witch": 3,
-      "evoker": 2,
-      "illusioner": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 5,
-      "witch": 2,
-      "evoker": 2,
-      "illusioner": 2,
-      "ravager_with_vindicator": 1,
-      "ravager_with_evoker": 1
-    }
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 6
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 2
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 4
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 6
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 4
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 3
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 5
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 2
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 5
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "rider": "minecraft:pillager",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 6
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 3
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 2
+      },
+      {
+        "type": "minecraft:illusioner",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 5
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 2
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 2
+      },
+      {
+        "type": "minecraft:illusioner",
+        "count": 2
+      },
+      {
+        "type": "minecraft:ravager",
+        "rider": "minecraft:vindicator",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "rider": "minecraft:evoker",
+        "count": 1
+      }
+    ]
   ]
 }
