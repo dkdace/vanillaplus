@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.world.entity;
 
+import com.dace.vanillaplus.data.CodecComponent;
 import com.dace.vanillaplus.data.StaticRegistry;
-import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -30,7 +30,7 @@ import java.util.Optional;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class EntityModifier implements CodecUtil.CodecComponent<EntityModifier> {
+public class EntityModifier implements CodecComponent<EntityModifier> {
     /** 인터페이스 수정자 JSON 코덱 */
     private static final Codec<DataComponentMap> CODEC_INTERFACE_INFO_MAP = DataComponentMap.makeCodec(
             StaticRegistry.ENTITY_MODIFIER_INTERFACE.createCodec());

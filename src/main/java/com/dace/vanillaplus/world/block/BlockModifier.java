@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.world.block;
 
+import com.dace.vanillaplus.data.CodecComponent;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.MapCodec;
@@ -26,7 +27,7 @@ import java.util.Optional;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class BlockModifier implements CodecUtil.CodecComponent<BlockModifier> {
+public class BlockModifier implements CodecComponent<BlockModifier> {
     /** JSON 코덱 */
     public static final MapCodec<BlockModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> createBaseCodec(instance)
             .apply(instance, BlockModifier::new));

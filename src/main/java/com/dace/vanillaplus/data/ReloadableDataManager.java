@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.util.CodecUtil;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
@@ -38,7 +37,7 @@ public final class ReloadableDataManager<T, U> {
             DataPackRegistry.LOOT_TABLE_REWARD, LootTableReward.DIRECT_CODEC, IdentifierUtil::fromResourceKey);
     /** @see DataPackRegistry#RAIDER_EFFECT */
     public static final ReloadableDataManager<EntityType<?>, RaiderEffect> RAIDER_EFFECT = new ReloadableDataManager<>(
-            DataPackRegistry.RAIDER_EFFECT, CodecUtil.fromCodecRegistry(StaticRegistry.RAIDER_EFFECT_TYPE),
+            DataPackRegistry.RAIDER_EFFECT, CodecComponent.createCodec(StaticRegistry.RAIDER_EFFECT_TYPE),
             entityType -> IdentifierUtil.fromRegistry(BuiltInRegistries.ENTITY_TYPE, entityType));
     /** @see DataPackRegistry#RAID_WAVE */
     public static final ReloadableDataManager<Difficulty, RaidWave> RAID_WAVE = new ReloadableDataManager<>(

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.world.entity.raid;
 
-import com.dace.vanillaplus.util.CodecUtil;
+import com.dace.vanillaplus.data.CodecComponent;
 import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
@@ -45,7 +45,7 @@ import java.util.Optional;
  * 흉조 레벨에 따라 습격대 엔티티에게 적용되는 효과를 관리하는 클래스.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public abstract class RaiderEffect implements CodecUtil.CodecComponent<RaiderEffect> {
+public abstract class RaiderEffect implements CodecComponent<RaiderEffect> {
     /**
      * 효과 정보 클래스.
      */

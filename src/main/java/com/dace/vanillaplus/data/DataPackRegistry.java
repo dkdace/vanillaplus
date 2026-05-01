@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.util.CodecUtil;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.MobEffectValues;
@@ -44,13 +43,13 @@ public final class DataPackRegistry {
     public static final ResourceKey<Registry<RaidWave>> RAID_WAVE = create("raid_wave");
     /** 블록 수정자 */
     public static final ResourceKey<Registry<BlockModifier>> BLOCK_MODIFIER = create("modifier/block",
-            CodecUtil.fromCodecRegistry(StaticRegistry.BLOCK_MODIFIER_TYPE), Registries.BLOCK);
+            CodecComponent.createCodec(StaticRegistry.BLOCK_MODIFIER_TYPE), Registries.BLOCK);
     /** 엔티티 수정자 */
     public static final ResourceKey<Registry<EntityModifier>> ENTITY_MODIFIER = create("modifier/entity",
-            CodecUtil.fromCodecRegistry(StaticRegistry.ENTITY_MODIFIER_TYPE), Registries.ENTITY_TYPE);
+            CodecComponent.createCodec(StaticRegistry.ENTITY_MODIFIER_TYPE), Registries.ENTITY_TYPE);
     /** 아이템 수정자 */
     public static final ResourceKey<Registry<ItemModifier>> ITEM_MODIFIER = create("modifier/item",
-            CodecUtil.fromCodecRegistry(StaticRegistry.ITEM_MODIFIER_TYPE), Registries.ITEM);
+            CodecComponent.createCodec(StaticRegistry.ITEM_MODIFIER_TYPE), Registries.ITEM);
     /** 물약 수정자 */
     public static final ResourceKey<Registry<PotionModifier>> POTION_MODIFIER = create("modifier/potion",
             PotionModifier.DIRECT_CODEC, Registries.POTION);
