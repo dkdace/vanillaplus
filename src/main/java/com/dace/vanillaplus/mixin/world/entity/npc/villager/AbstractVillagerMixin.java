@@ -10,6 +10,7 @@ import lombok.NonNull;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.*;
@@ -60,7 +61,7 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extend
 
         int offersFound = 0;
         while (offersFound < numberOfOffers) {
-            TradeSetOffer tradeSetOffer = tradeSetOffers.get(lootContext.getRandom().nextInt(tradeSetOffers.size()));
+            TradeSetOffer tradeSetOffer = Util.getRandom(tradeSetOffers, lootContext.getRandom());
             MerchantOffer merchantOffer = tradeSetOffer.getRandomMerchantOffer(lootContext);
 
             if (merchantOffer != null) {

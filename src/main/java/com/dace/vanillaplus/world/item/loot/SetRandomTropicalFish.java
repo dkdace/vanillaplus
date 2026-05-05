@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.animal.fish.TropicalFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -35,7 +36,7 @@ public final class SetRandomTropicalFish extends LootItemConditionalFunction {
     @NonNull
     protected ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext context) {
         List<TropicalFish.Variant> variants = TropicalFish.COMMON_VARIANTS;
-        TropicalFish.Variant variant = variants.get(context.getRandom().nextInt(variants.size()));
+        TropicalFish.Variant variant = Util.getRandom(variants, context.getRandom());
 
         itemStack.set(DataComponents.TROPICAL_FISH_PATTERN, variant.pattern());
         itemStack.set(DataComponents.TROPICAL_FISH_BASE_COLOR, variant.baseColor());
