@@ -1,5 +1,5 @@
 {
   "type": "vanillaplus:anvil",
-  "cost_penalty": 0,
+  "increase_repair_cost": false,
   "max_cost": {}
 }

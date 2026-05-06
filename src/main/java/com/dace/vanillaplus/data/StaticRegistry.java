@@ -2,7 +2,7 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.IdentifierUtil;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.dace.vanillaplus.world.item.ItemModifier;
@@ -38,7 +38,9 @@ public final class StaticRegistry<T> {
     private static final HashSet<DeferredRegister<?>> REGISTRIES = new HashSet<>();
 
     /** 블록 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends BlockModifier>> BLOCK_MODIFIER_TYPE = new StaticRegistry<>("modifier/block/type");
+    public static final StaticRegistry<MapCodec<? extends BlockModifier>> BLOCK_MODIFIER_TYPE = new StaticRegistry<>("block_modifier/type");
+    /** 블록 수정자 데이터 요소 */
+    public static final StaticRegistry<Codec<?>> BLOCK_MODIFIER_COMPONENT_TYPE = new StaticRegistry<>("block_modifier/component_type");
     /** 엔티티 수정자 타입 */
     public static final StaticRegistry<MapCodec<? extends EntityModifier>> ENTITY_MODIFIER_TYPE = new StaticRegistry<>("modifier/entity/type");
     /** 엔티티 수정자 인터페이스 */

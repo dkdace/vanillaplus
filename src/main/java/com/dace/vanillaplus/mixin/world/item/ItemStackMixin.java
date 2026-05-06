@@ -6,7 +6,7 @@ import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
 import com.dace.vanillaplus.util.DynamicComponent;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.modifier.CakeBlockModifier;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.dace.vanillaplus.world.item.PotionModifier;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
@@ -37,7 +37,6 @@ import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffe
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
-import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -355,8 +354,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(VPDataComponentTypes.EXTRA_FOOD.get(), display, extraFood -> addExtraFoodTooltip(extraFood, builder));
 
         if (getThis().is(Items.CAKE))
-            VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).ifPresent(cakeModifier ->
-                    addFoodTooltip(cakeModifier.getFoodProperties(), builder));
+            CakeBlockModifier.get().getFoodProperties().ifPresent(foodProperties -> addFoodTooltip(foodProperties, builder));
 
         addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, display, providesTrimMaterial ->
                 addTrimMaterialTooltip(providesTrimMaterial, builder));

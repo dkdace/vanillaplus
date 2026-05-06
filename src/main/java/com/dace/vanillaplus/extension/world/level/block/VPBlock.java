@@ -2,7 +2,7 @@ package com.dace.vanillaplus.extension.world.level.block;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.extensions.IForgeBlock;

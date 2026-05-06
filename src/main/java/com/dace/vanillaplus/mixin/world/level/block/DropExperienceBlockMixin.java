@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.data.registryobject.BlockModifierComponentTypes;
+import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -23,6 +24,6 @@ public abstract class DropExperienceBlockMixin<T extends DropExperienceBlock, U 
         super.setDataModifier(dataModifier);
 
         if (dataModifier != null)
-            xpRange = dataModifier.getXpRange();
+            dataModifier.getComponents().get(BlockModifierComponentTypes.EXPERIENCE).ifPresent(intProvider -> xpRange = intProvider);
     }
 }

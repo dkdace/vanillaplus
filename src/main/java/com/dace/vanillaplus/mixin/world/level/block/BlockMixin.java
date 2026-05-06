@@ -1,14 +1,13 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,10 +42,5 @@ public abstract class BlockMixin<T extends Block, U extends BlockModifier> imple
     @MustBeInvokedByOverriders
     public void setDataModifier(@Nullable U dataModifier) {
         this.dataModifier = dataModifier;
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return getDataModifier().map(blockModifier -> silkTouchLevel == 0 ? blockModifier.getXpRange().sample(randomSource) : 0).orElse(0);
     }
 }

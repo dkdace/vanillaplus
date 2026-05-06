@@ -1,0 +1,10 @@
+{
+  "type": "vanillaplus:block",
+  "components": {
+    "vanillaplus:experience": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 32,
+      "min_inclusive": 26
+    }
+  }
+}

@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.world.block.modifier.*;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -12,9 +12,9 @@ import lombok.experimental.UtilityClass;
 public final class BlockModifierTypes {
     static {
         StaticRegistry.BLOCK_MODIFIER_TYPE.register("block", () -> BlockModifier.CODEC);
-        StaticRegistry.BLOCK_MODIFIER_TYPE.register("bell", () -> BlockModifier.BellModifier.CODEC);
-        StaticRegistry.BLOCK_MODIFIER_TYPE.register("water_cauldron", () -> BlockModifier.WaterCauldronModifier.CODEC);
-        StaticRegistry.BLOCK_MODIFIER_TYPE.register("cake", () -> BlockModifier.CakeModifier.CODEC);
-        StaticRegistry.BLOCK_MODIFIER_TYPE.register("anvil", () -> BlockModifier.AnvilModifier.CODEC);
+        StaticRegistry.BLOCK_MODIFIER_TYPE.register("bell", () -> BellBlockModifier.CODEC);
+        StaticRegistry.BLOCK_MODIFIER_TYPE.register("water_cauldron", () -> WaterCauldronBlockModifier.CODEC);
+        StaticRegistry.BLOCK_MODIFIER_TYPE.register("cake", () -> CakeBlockModifier.CODEC);
+        StaticRegistry.BLOCK_MODIFIER_TYPE.register("anvil", () -> AnvilBlockModifier.CODEC);
     }
 }

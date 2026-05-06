@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.world.block.BlockModifier;
 import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
+import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -20,7 +20,7 @@ public abstract class CauldronBlockMixin extends BlockMixin<CauldronBlock, Block
     @Unique
     private static void addWater(@NonNull Level level, @NonNull BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-            waterCauldronBlockEntity.addPotionContents(null);
+            waterCauldronBlockEntity.addPotion(null);
     }
 
     @Inject(method = "handlePrecipitation", at = @At(value = "INVOKE",

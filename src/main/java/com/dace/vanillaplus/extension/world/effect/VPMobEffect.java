@@ -5,13 +5,14 @@ import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.world.MobEffectValues;
 import lombok.NonNull;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.common.extensions.IForgeMobEffect;
 
 /**
  * {@link MobEffect}를 확장하는 인터페이스.
  *
  * @param <T> {@link MobEffect}를 상속받는 타입
  */
-public interface VPMobEffect<T extends MobEffect> extends VPMixin<T>, VPModifiableData<T, MobEffectValues> {
+public interface VPMobEffect<T extends MobEffect> extends VPMixin<T>, VPModifiableData<T, MobEffectValues>, IForgeMobEffect {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends MobEffect> VPMobEffect<T> cast(@NonNull T object) {
