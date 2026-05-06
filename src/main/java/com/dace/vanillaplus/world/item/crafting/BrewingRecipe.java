@@ -66,7 +66,7 @@ public abstract class BrewingRecipe implements Recipe<BrewingRecipe.Input> {
      */
     @NonNull
     public static HolderSet<Item> getPotionContainers() {
-        return BuiltInRegistries.ITEM.getOrThrow(Tags.Items.POTIONS);
+        return BuiltInRegistries.ITEM.getOrThrow(Tags.Items.POTIONS_BOTTLE);
     }
 
     @NonNull

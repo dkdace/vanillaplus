@@ -3,7 +3,12 @@ package com.dace.vanillaplus.mixin.world.inventory;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.inventory.VPBrewingStandMenu;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
+import com.dace.vanillaplus.world.block.modifier.BrewingStandBlockModifier;
 import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.world.Container;
@@ -14,7 +19,10 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipePropertySet;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -64,24 +72,27 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;",
                     ordinal = 3))
     private Slot modifyIngredientSlot(Slot slot, @Local(argsOnly = true) Container brewingStand) {
-        return new Slot(brewingStand, INGREDIENT_SLOT, INGREDIENT_SLOT_X, INGREDIENT_SLOT_Y) {
-            @Override
-            public boolean mayPlace(@NonNull ItemStack itemStack) {
-                return ingredientItemTest.test(itemStack);
-            }
-        };
+        return BrewingStandBlockModifier.get().isUseDataDrivenRecipe() ?
+                new Slot(brewingStand, INGREDIENT_SLOT, INGREDIENT_SLOT_X, INGREDIENT_SLOT_Y) {
+                    @Override
+                    public boolean mayPlace(@NonNull ItemStack itemStack) {
+                        return ingredientItemTest.test(itemStack);
+                    }
+                } : slot;
     }
 
     @Mixin(BrewingStandMenu.PotionSlot.class)
     public abstract static class PotionSlotMixin implements VPMixin<BrewingStandMenu.PotionSlot> {
-        @Overwrite
-        public static boolean mayPlaceItem(ItemStack itemStack) {
-            return itemStack.is(BrewingRecipe.getPotionContainers());
+        @ModifyReturnValue(method = "mayPlaceItem", at = @At("RETURN"))
+        private static boolean modifyPlaceableItem(boolean original, @Local(argsOnly = true) ItemStack itemStack) {
+            return BrewingStandBlockModifier.get().isUseDataDrivenRecipe() ? itemStack.is(BrewingRecipe.getPotionContainers()) : original;
         }
 
-        @Overwrite
-        public boolean mayPlace(ItemStack itemStack) {
-            return mayPlaceItem(itemStack);
+        @Definition(id = "potionBrewing", field = "Lnet/minecraft/world/inventory/BrewingStandMenu$PotionSlot;potionBrewing:Lnet/minecraft/world/item/alchemy/PotionBrewing;")
+        @Expression("this.potionBrewing != null")
+        @ModifyExpressionValue(method = "mayPlace", at = @At("MIXINEXTRAS:EXPRESSION"))
+        public boolean modifyPlaceCondition(boolean condition) {
+            return !BrewingStandBlockModifier.get().isUseDataDrivenRecipe() && condition;
         }
 
         @Inject(method = "onTake", at = @At(value = "INVOKE",

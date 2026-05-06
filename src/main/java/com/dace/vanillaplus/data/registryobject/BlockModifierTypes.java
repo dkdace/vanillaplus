@@ -16,5 +16,6 @@ public final class BlockModifierTypes {
         StaticRegistry.BLOCK_MODIFIER_TYPE.register("water_cauldron", () -> WaterCauldronBlockModifier.CODEC);
         StaticRegistry.BLOCK_MODIFIER_TYPE.register("cake", () -> CakeBlockModifier.CODEC);
         StaticRegistry.BLOCK_MODIFIER_TYPE.register("anvil", () -> AnvilBlockModifier.CODEC);
+        StaticRegistry.BLOCK_MODIFIER_TYPE.register("brewing_stand", () -> BrewingStandBlockModifier.CODEC);
     }
 }
