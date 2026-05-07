@@ -1,9 +1,10 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.RavagerModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Ravager.class)
-public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.RavagerModifier> {
+public abstract class RavagerMixin extends RaiderMixin<Ravager, RavagerModifier> {
     @Unique
     private static final int ROAR_DISTANCE = 5;
 
@@ -36,7 +37,13 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     }
 
     @Shadow
-    public abstract boolean hasLineOfSight(Entity entity);
+    public abstract boolean hasLineOfSight(Entity target);
+
+    @Override
+    @NonNull
+    public RavagerModifier getDefaultDataModifier() {
+        return RavagerModifier.DEFAULT;
+    }
 
     @Overwrite
     public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
@@ -64,20 +71,20 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, EntityModifier.R
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 1,
             opcode = Opcodes.PUTFIELD))
     private void setRoarCooldown(CallbackInfo ci) {
-        getDataModifier().ifPresent(ravagerModifier -> roarCooldown = ravagerModifier.getRoarCooldown());
+        getDataModifier().getRoarCooldown().ifPresent(cooldown -> roarCooldown = cooldown);
     }
 
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0,
             opcode = Opcodes.GETFIELD))
     private void performRoar(CallbackInfo ci) {
-        getDataModifier().ifPresent(ravagerModifier -> {
+        getDataModifier().getRoarCooldown().ifPresent(cooldown -> {
             LivingEntity target = getTarget();
             if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
                 return;
 
             playSound(SoundEvents.RAVAGER_ROAR, 1, 1);
             roarTick = 20;
-            roarCooldown = ravagerModifier.getRoarCooldown();
+            roarCooldown = cooldown;
         });
     }
 }

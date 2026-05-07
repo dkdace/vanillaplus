@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
-public abstract class MobMixin<T extends Mob, U extends EntityModifier.LivingEntityModifier> extends LivingEntityMixin<T, U> {
+public abstract class MobMixin<T extends Mob, U extends LivingEntityModifier> extends LivingEntityMixin<T, U> {
     @Shadow
     @Final
     public GoalSelector targetSelector;

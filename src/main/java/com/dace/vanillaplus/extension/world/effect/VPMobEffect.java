@@ -11,6 +11,7 @@ import net.minecraftforge.common.extensions.IForgeMobEffect;
  * {@link MobEffect}를 확장하는 인터페이스.
  *
  * @param <T> {@link MobEffect}를 상속받는 타입
+ * @see MobEffectValues
  */
 public interface VPMobEffect<T extends MobEffect> extends VPMixin<T>, VPModifiableData<T, MobEffectValues>, IForgeMobEffect {
     @NonNull

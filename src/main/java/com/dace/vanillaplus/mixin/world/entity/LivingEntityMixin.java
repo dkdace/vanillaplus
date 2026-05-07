@@ -4,12 +4,13 @@ import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -48,7 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
+public abstract class LivingEntityMixin<T extends LivingEntity, U extends LivingEntityModifier> extends EntityMixin<T, U> {
     @Unique
     private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
     @Unique
@@ -136,12 +137,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
-        super.setDataModifier(dataModifier);
+    @NonNull
+    public LivingEntityModifier getDefaultDataModifier() {
+        return LivingEntityModifier.DEFAULT;
+    }
 
-        if (dataModifier != null)
-            attributes.apply(dataModifier.getPackedAttributes());
+    @Override
+    @MustBeInvokedByOverriders
+    public void setDataModifier(@NonNull U dataModifier) {
+        super.setDataModifier(dataModifier);
+        attributes.apply(getDataModifier().getAttributes());
     }
 
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",

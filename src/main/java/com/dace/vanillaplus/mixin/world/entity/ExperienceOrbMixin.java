@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
-public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, EntityModifier.LivingEntityModifier> {
+public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, LivingEntityModifier> {
     @Shadow
     protected abstract int repairPlayerItems(ServerPlayer player, int amount);
 

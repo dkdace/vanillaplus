@@ -1,7 +1,7 @@
 {
   "type": "vanillaplus:living_entity",
-  "interfaces": {
-    "vanillaplus:crossbow_attack_mob": {
+  "components": {
+    "vanillaplus:crossbow_mob": {
       "shooting_power": 2.6,
       "shooting_range": 16
     }

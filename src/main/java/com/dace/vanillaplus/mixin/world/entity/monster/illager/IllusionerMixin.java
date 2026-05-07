@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Illusioner.class)
-public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, EntityModifier.LivingEntityModifier> {
+public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner, LivingEntityModifier> {
     @Override
     public ItemStack getProjectile(ItemStack heldWeapon) {
         ItemStack itemStack = super.getProjectile(heldWeapon);

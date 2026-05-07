@@ -28,33 +28,33 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhaseManager;setPhase(Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhase;)V",
             ordinal = 1))
     private boolean checkFireCount(EnderDragonPhaseManager instance, EnderDragonPhase<?> target) {
-        return getVPEnderDragon().getDataModifier().isEmpty() || ++fireCount >= maxFireCount;
+        return getVPEnderDragon().getDataModifier().getPhaseInfo().isEmpty() || ++fireCount >= maxFireCount;
     }
 
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private void applyFireballVelocity(ServerLevel level, CallbackInfo ci, @Local(name = "entity") DragonFireball entity) {
-        getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier ->
-                entity.accelerationPower *= enderDragonModifier.getPhaseInfo().getFireball().getVelocityMultiplier());
+        getVPEnderDragon().getDataModifier().getPhaseInfo().ifPresent(phaseInfo ->
+                entity.accelerationPower *= phaseInfo.fireball().velocityMultiplier());
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getX()D",
             ordinal = 2))
     private double modifyFireballTargetX(double x) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? dragon.getRandom().triangle(x, FIREBALL_TARGET_SPREAD) : x;
+        return getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent() ? dragon.getRandom().triangle(x, FIREBALL_TARGET_SPREAD) : x;
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getZ()D",
             ordinal = 2))
     private double modifyFireballTargetZ(double z) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? dragon.getRandom().triangle(z, FIREBALL_TARGET_SPREAD) : z;
+        return getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent() ? dragon.getRandom().triangle(z, FIREBALL_TARGET_SPREAD) : z;
     }
 
     @Inject(method = "begin", at = @At("TAIL"))
     private void resetFireCount(CallbackInfo ci) {
-        getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
+        getVPEnderDragon().getDataModifier().getPhaseInfo().ifPresent(phaseInfo -> {
             fireCount = 0;
-            maxFireCount = (int) enderDragonModifier.getPhaseInfo().getFireball().getMaxShots().get(dragon);
+            maxFireCount = (int) phaseInfo.fireball().maxShots().get(dragon);
         });
     }
 }

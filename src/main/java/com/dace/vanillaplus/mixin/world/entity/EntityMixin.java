@@ -2,7 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
@@ -106,13 +106,19 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
 
     @Override
     @NonNull
-    public Optional<U> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public EntityModifier getDefaultDataModifier() {
+        return EntityModifier.DEFAULT;
+    }
+
+    @Override
+    @NonNull
+    public final U getDataModifier() {
+        return Objects.requireNonNull(dataModifier);
     }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
+    public void setDataModifier(@NonNull U dataModifier) {
         this.dataModifier = dataModifier;
     }
 

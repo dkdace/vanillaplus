@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.decoration;
 
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ArmorStand.class)
-public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand, EntityModifier.LivingEntityModifier> {
+public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand, LivingEntityModifier> {
     @Shadow
     public abstract boolean showArms();
 

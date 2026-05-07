@@ -5,7 +5,7 @@ import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.MobEffectValues;
 import com.dace.vanillaplus.world.block.modifier.BlockModifier;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.dace.vanillaplus.world.item.ItemModifier;
@@ -45,7 +45,7 @@ public final class DataPackRegistry {
     public static final ResourceKey<Registry<BlockModifier>> BLOCK_MODIFIER = create("block_modifier",
             CodecComponent.createCodec(StaticRegistry.BLOCK_MODIFIER_TYPE), Registries.BLOCK);
     /** 엔티티 수정자 */
-    public static final ResourceKey<Registry<EntityModifier>> ENTITY_MODIFIER = create("modifier/entity",
+    public static final ResourceKey<Registry<EntityModifier>> ENTITY_MODIFIER = create("entity_modifier",
             CodecComponent.createCodec(StaticRegistry.ENTITY_MODIFIER_TYPE), Registries.ENTITY_TYPE);
     /** 아이템 수정자 */
     public static final ResourceKey<Registry<ItemModifier>> ITEM_MODIFIER = create("modifier/item",

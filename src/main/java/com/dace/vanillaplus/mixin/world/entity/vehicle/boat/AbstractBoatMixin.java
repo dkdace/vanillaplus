@@ -2,7 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.vehicle.boat;
 
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.mixin.world.entity.EntityMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import org.spongepowered.asm.mixin.Mixin;

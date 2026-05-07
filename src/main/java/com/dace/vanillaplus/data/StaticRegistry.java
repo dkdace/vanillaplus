@@ -3,7 +3,7 @@ package com.dace.vanillaplus.data;
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.block.modifier.BlockModifier;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.google.common.reflect.ClassPath;
@@ -12,7 +12,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import lombok.NonNull;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
@@ -42,9 +41,9 @@ public final class StaticRegistry<T> {
     /** 블록 수정자 데이터 요소 */
     public static final StaticRegistry<Codec<?>> BLOCK_MODIFIER_COMPONENT_TYPE = new StaticRegistry<>("block_modifier/component_type");
     /** 엔티티 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends EntityModifier>> ENTITY_MODIFIER_TYPE = new StaticRegistry<>("modifier/entity/type");
-    /** 엔티티 수정자 인터페이스 */
-    public static final StaticRegistry<DataComponentType<?>> ENTITY_MODIFIER_INTERFACE = new StaticRegistry<>("modifier/entity/interface");
+    public static final StaticRegistry<MapCodec<? extends EntityModifier>> ENTITY_MODIFIER_TYPE = new StaticRegistry<>("entity_modifier/type");
+    /** 엔티티 수정자 데이터 요소 */
+    public static final StaticRegistry<Codec<?>> ENTITY_MODIFIER_COMPONENT_TYPE = new StaticRegistry<>("entity_modifier/component_type");
     /** 아이템 수정자 타입 */
     public static final StaticRegistry<MapCodec<? extends ItemModifier>> ITEM_MODIFIER_TYPE = new StaticRegistry<>("modifier/item/type");
     /** 습격자 효과 타입 */

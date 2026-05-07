@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import lombok.NonNull;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -35,8 +35,10 @@ public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier
 
         factory = (entityType, level) -> {
             T entity = oldFactory.create(entityType, level);
-            if (entity != null)
-                VPEntity.cast(entity).setDataModifier(dataModifier);
+            if (entity != null) {
+                VPEntity<T, EntityModifier> vpEntity = VPEntity.cast(entity);
+                vpEntity.setDataModifier(dataModifier == null ? vpEntity.getDefaultDataModifier() : dataModifier);
+            }
 
             return entity;
         };

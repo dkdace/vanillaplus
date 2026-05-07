@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Witch.class)
-public abstract class WitchMixin extends RaiderMixin<Witch, EntityModifier.LivingEntityModifier> {
+public abstract class WitchMixin extends RaiderMixin<Witch, LivingEntityModifier> {
     @Unique
     private static final int SUPPORT_HEALING_HEALTH = 8;
 

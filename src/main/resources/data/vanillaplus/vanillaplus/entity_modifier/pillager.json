@@ -1,0 +1,10 @@
+{
+  "type": "vanillaplus:living_entity",
+  "components": {
+    "vanillaplus:crossbow_mob": {
+      "shooting_power": 2.6,
+      "shooting_range": 16,
+      "backup_distance": 7
+    }
+  }
+}
