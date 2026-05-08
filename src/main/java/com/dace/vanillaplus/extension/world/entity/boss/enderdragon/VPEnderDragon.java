@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension.world.entity.boss.enderdragon;
 
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.extension.world.entity.VPMob;
 import com.dace.vanillaplus.world.entity.modifier.EnderDragonModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
@@ -8,7 +8,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.extensions.IForgeLivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -16,11 +15,15 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see EnderDragonModifier
  */
-public interface VPEnderDragon extends VPEntity<EnderDragon, EnderDragonModifier>, IForgeLivingEntity {
+public interface VPEnderDragon extends VPMob<EnderDragon, EnderDragonModifier> {
     @NonNull
     static VPEnderDragon cast(@NonNull EnderDragon object) {
         return (VPEnderDragon) object;
     }
+
+    @Override
+    @NonNull
+    EnderDragonModifier getDefaultDataModifier();
 
     /**
      * 기본 대상 탐지 조건을 반환한다.

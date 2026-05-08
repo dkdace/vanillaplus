@@ -1,5 +1,5 @@
 {
-  "type": "vanillaplus:living_entity",
+  "type": "vanillaplus:mob",
   "attributes": [
     {
       "id": "minecraft:attack_damage",
@@ -9,5 +9,8 @@
       "id": "minecraft:movement_speed",
       "base": 0.5
     }
-  ]
+  ],
+  "can_see_through_transparent_blocks": true,
+  "prevent_riding_if_has_target": true,
+  "can_jump_at_target": true
 }

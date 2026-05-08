@@ -3,17 +3,21 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -49,7 +53,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin<T extends LivingEntity, U extends LivingEntityModifier> extends EntityMixin<T, U> {
+public abstract class LivingEntityMixin<T extends LivingEntity, U extends LivingEntityModifier> extends EntityMixin<T, U> implements VPLivingEntity<T, U> {
     @Unique
     private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
     @Unique
@@ -149,11 +153,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
         attributes.apply(getDataModifier().getAttributes());
     }
 
+    @Override
+    public double getFinalKnockbackResistance(double knockbackResistance, @Nullable DamageSource damageSource) {
+        return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
+                ? getAttributeValue(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
+                : 0);
+    }
+
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return ClipContext.Block.VISUAL;
+        return getDataModifier().canSeeThroughTransparentBlocks() ? ClipContext.Block.VISUAL : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))
@@ -182,7 +193,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
     @ModifyExpressionValue(method = "knockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double knockbackResistance) {
-        return VPAttributes.getFinalKnockbackResistance(getThis(), knockbackResistance, lastDamageSourceForKnockback);
+        return getFinalKnockbackResistance(knockbackResistance, lastDamageSourceForKnockback);
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))
@@ -216,10 +227,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
         return damage * Math.max(value.floatValue(), 0);
     }
 
-    @ModifyExpressionValue(method = "travelInWater", at = @At(value = "INVOKE",
+    @WrapOperation(method = "travelInWater", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D", ordinal = 0))
-    private double modifyWaterMovementEfficiencyValue(double value) {
-        return isAutoSpinAttack() ? 0 : value;
+    private double modifyWaterMovementEfficiencyValue(LivingEntity instance, Holder<Attribute> attribute, Operation<Double> original) {
+        return isAutoSpinAttack() ? 0 : original.call(instance, attribute);
     }
 
     @ModifyArg(method = "setSprinting", at = @At(value = "INVOKE",

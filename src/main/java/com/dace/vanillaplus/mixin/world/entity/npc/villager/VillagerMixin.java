@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, LivingEntityModifier> {
+public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, MobModifier> {
     @Unique
     private static final Component COMPONENT_CLOSED = Component.translatable("merchant.closed");
     @Unique

@@ -1,14 +1,14 @@
 package com.dace.vanillaplus.mixin.world.entity.animal.wolf;
 
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Wolf.class)
-public abstract class WolfMixin extends MobMixin<Wolf, LivingEntityModifier> {
+public abstract class WolfMixin extends MobMixin<Wolf, MobModifier> {
     @Redirect(method = "canMate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/wolf/Wolf;isTame()Z"))
     public boolean redirectTameCondition(Wolf wolf) {
         return !wolf.isAngry();

@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.raid;
 import com.dace.vanillaplus.data.ReloadableDataManager;
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.Optional;
 
 @Mixin(Raider.class)
-public abstract class RaiderMixin<T extends Raider, U extends LivingEntityModifier> extends MonsterMixin<T, U> {
+public abstract class RaiderMixin<T extends Raider, U extends MobModifier> extends MonsterMixin<T, U> {
     @Shadow
     @Nullable
     public abstract Raid getCurrentRaid();

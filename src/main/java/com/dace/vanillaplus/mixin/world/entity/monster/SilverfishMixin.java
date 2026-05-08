@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.monster.Silverfish;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Silverfish.class)
-public abstract class SilverfishMixin extends MonsterMixin<Silverfish, LivingEntityModifier> {
+public abstract class SilverfishMixin extends MonsterMixin<Silverfish, MobModifier> {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));

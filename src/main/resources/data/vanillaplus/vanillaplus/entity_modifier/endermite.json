@@ -1,9 +1,11 @@
 {
-  "type": "vanillaplus:living_entity",
+  "type": "vanillaplus:mob",
   "attributes": [
     {
       "id": "minecraft:fall_damage_multiplier",
       "base": 0
     }
-  ]
+  ],
+  "can_see_through_transparent_blocks": true,
+  "prevent_riding_if_has_target": true
 }

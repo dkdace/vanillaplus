@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Slime.class)
-public abstract class SlimeMixin extends MobMixin<Slime, LivingEntityModifier> {
+public abstract class SlimeMixin extends MobMixin<Slime, MobModifier> {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));

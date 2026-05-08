@@ -2,7 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.animal.goat;
 
 import com.dace.vanillaplus.data.registryobject.VPItems;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Goat.class)
-public abstract class GoatMixin extends MobMixin<Goat, LivingEntityModifier> {
+public abstract class GoatMixin extends MobMixin<Goat, MobModifier> {
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))
     private boolean modifyMilkCondition(boolean isBucket, @Local(name = "heldItem") ItemStack heldItem) {
         return isBucket || heldItem.is(Items.GLASS_BOTTLE);

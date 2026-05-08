@@ -1,9 +1,12 @@
 {
-  "type": "vanillaplus:living_entity",
+  "type": "vanillaplus:mob",
   "components": {
     "vanillaplus:crossbow_mob": {
       "shooting_power": 2.6,
       "shooting_range": 16
     }
-  }
+  },
+  "can_see_through_transparent_blocks": true,
+  "prevent_riding_if_has_target": true,
+  "can_jump_at_target": true
 }

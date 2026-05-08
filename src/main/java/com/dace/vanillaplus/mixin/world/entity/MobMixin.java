@@ -1,13 +1,14 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.extension.world.entity.VPMob;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -18,27 +19,23 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
-public abstract class MobMixin<T extends Mob, U extends LivingEntityModifier> extends LivingEntityMixin<T, U> {
+public abstract class MobMixin<T extends Mob, U extends MobModifier> extends LivingEntityMixin<T, U> implements VPMob<T, U> {
     @Shadow
     @Final
     public GoalSelector targetSelector;
     @Shadow
     @Final
     public GoalSelector goalSelector;
-    @Shadow
-    protected JumpControl jumpControl;
 
     @Shadow
     public abstract PathNavigation getNavigation();
-
-    @Shadow
-    public abstract boolean isAggressive();
 
     @Shadow
     @Nullable
@@ -47,6 +44,17 @@ public abstract class MobMixin<T extends Mob, U extends LivingEntityModifier> ex
     @Shadow
     protected AABB getAttackBoundingBox(double horizontalExpansion) {
         throw new UnsupportedOperationException();
+    }
+
+    @Unique
+    private boolean canStopRiding(@Nullable Entity vehicle) {
+        return getDataModifier().preventRidingIfHasTarget() && getTarget() != null && vehicle instanceof VehicleEntity;
+    }
+
+    @Override
+    @NonNull
+    public MobModifier getDefaultDataModifier() {
+        return MobModifier.DEFAULT;
     }
 
     @Override
@@ -60,33 +68,16 @@ public abstract class MobMixin<T extends Mob, U extends LivingEntityModifier> ex
             });
     }
 
-    @Inject(method = "setAggressive", at = @At("HEAD"))
-    private void stopRidingIfAggressive(boolean flag, CallbackInfo ci) {
-        if (flag && getVehicle() instanceof VehicleEntity)
+    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;aiStep()V", shift = At.Shift.AFTER))
+    private void stopRidingIfHasTarget(CallbackInfo ci) {
+        if (!level().isClientSide() && canStopRiding(getVehicle()))
             stopRiding();
     }
 
     @Inject(method = "startRiding", at = @At("HEAD"), cancellable = true)
-    private void preventRidingIfAggressive(Entity entity, boolean force, boolean sendEventAndTriggers, CallbackInfoReturnable<Boolean> cir) {
-        if (isAggressive() && entity instanceof VehicleEntity)
+    private void preventRidingIfHasTarget(Entity entity, boolean force, boolean sendEventAndTriggers, CallbackInfoReturnable<Boolean> cir) {
+        if (canStopRiding(entity))
             cir.setReturnValue(false);
-    }
-
-    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;aiStep()V", shift = At.Shift.AFTER))
-    private void jumpIfCannotReachTarget(CallbackInfo ci) {
-        if (level().isClientSide())
-            return;
-
-        LivingEntity target = getTarget();
-        if (target == null)
-            return;
-
-        double yDiff = target.getY() - getY();
-        double height = getBbHeight();
-
-        if (onGround() && yDiff > height && yDiff < height + 2
-                && position().horizontal().closerThan(target.position().horizontal(), getBbWidth() + 1.0))
-            jumpControl.jump();
     }
 
     @ModifyExpressionValue(method = "isWithinMeleeAttackRange", at = @At(value = "FIELD",

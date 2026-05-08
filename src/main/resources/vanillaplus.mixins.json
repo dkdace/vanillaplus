@@ -29,6 +29,7 @@
     "world.entity.LivingEntityMixin",
     "world.entity.MobMixin",
     "world.entity.ai.behavior.BehaviorUtilsMixin",
+    "world.entity.ai.control.MoveControlMixin",
     "world.entity.ai.goal.RangedBowAttackGoalMixin",
     "world.entity.ai.goal.RangedCrossbowAttackGoalMixin",
     "world.entity.ai.sensing.VillagerHostilesSensorMixin",

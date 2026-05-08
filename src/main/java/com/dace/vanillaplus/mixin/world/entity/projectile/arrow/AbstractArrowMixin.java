@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 
-import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
 import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.dace.vanillaplus.world.item.ItemModifier;
@@ -48,7 +48,7 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends Enti
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) LivingEntity mob,
                                              @Local(argsOnly = true) DamageSource damageSource) {
-        return VPAttributes.getFinalKnockbackResistance(mob, knockbackResistance, damageSource);
+        return VPLivingEntity.cast(mob).getFinalKnockbackResistance(knockbackResistance, damageSource);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;DDDLnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V",

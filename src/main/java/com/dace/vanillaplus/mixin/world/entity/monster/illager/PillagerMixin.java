@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
 import com.dace.vanillaplus.data.registryobject.EntityModifierComponentTypes;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.dace.vanillaplus.world.entity.modifier.component.CrossbowMobInfo;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Pillager.class)
-public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, LivingEntityModifier> {
+public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager, MobModifier> {
     @Override
     public ItemStack getProjectile(ItemStack heldWeapon) {
         ItemStack itemStack = super.getProjectile(heldWeapon);

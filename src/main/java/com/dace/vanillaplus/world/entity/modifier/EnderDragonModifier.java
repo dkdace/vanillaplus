@@ -5,73 +5,88 @@ import com.dace.vanillaplus.util.CodecUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
  * {@link EnderDragon}의 엔티티 수정자 클래스.
  */
 @EqualsAndHashCode(callSuper = true)
-@Getter
-public final class EnderDragonModifier extends LivingEntityModifier {
+public final class EnderDragonModifier extends MobModifier {
     /** 기본값 */
     public static final EnderDragonModifier DEFAULT = new EnderDragonModifier(EntityModifier.DEFAULT.getComponents(),
-            LivingEntityModifier.DEFAULT.getAttributes(), Optional.empty(), Optional.empty(), Optional.empty(),
-            0, 0, 0);
+            LivingEntityModifier.DEFAULT.getLivingEntityData(), MobModifier.DEFAULT.getMobData(), Data.DEFAULT);
     /** JSON 코덱 */
     public static final MapCodec<EnderDragonModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            createLivingEntityBaseCodec(instance)
-                    .and(instance.group(Experience.CODEC.optionalFieldOf("experience").forGetter(EnderDragonModifier::getExperience),
-                            HealthBasedValue.createCodec(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("movement_speed_multiplier")
-                                    .forGetter(EnderDragonModifier::getMovementSpeedMultiplier),
-                            PhaseInfo.CODEC.optionalFieldOf("phases").forGetter(EnderDragonModifier::getPhaseInfo),
-                            ExtraCodecs.floatRange(0, 1).optionalFieldOf("ender_pearl_drop_chance", DEFAULT.enderPearlDropChance)
-                                    .forGetter(EnderDragonModifier::getEnderPearlDropChance),
-                            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("max_ender_pearl_drops", DEFAULT.maxEnderPearlDrops)
-                                    .forGetter(EnderDragonModifier::getMaxEnderPearlDrops),
-                            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("endermite_count", DEFAULT.endermiteCount)
-                                    .forGetter(EnderDragonModifier::getEndermiteCount)))
+            createMobBaseCodec(instance)
+                    .and(Data.CODEC.forGetter(EnderDragonModifier::getEnderDragonData))
                     .apply(instance, EnderDragonModifier::new));
 
-    /** 드롭 경험치 정보 */
+    /** 데이터 */
     @NonNull
-    private final Optional<Experience> experience;
-    /** 이동속도 배수 */
-    @NonNull
-    private final Optional<HealthBasedValue<Float>> movementSpeedMultiplier;
-    /** 페이즈 정보 */
-    @NonNull
-    private final Optional<PhaseInfo> phaseInfo;
-    /** 피격 시 엔더 진주 드롭 확률 */
-    private final float enderPearlDropChance;
-    /** 최대 엔더 진주 드롭 횟수 */
-    private final int maxEnderPearlDrops;
-    /** 엔더 진주 드롭 시 생성되는 엔더마이트 수 */
-    private final int endermiteCount;
+    @Getter(AccessLevel.PACKAGE)
+    private final Data enderDragonData;
 
-    private EnderDragonModifier(@NonNull VPDataComponentMap interfaceInfoMap, @NonNull List<AttributeInstance.Packed> packedAttributes,
-                                @NonNull Optional<Experience> experience, @NonNull Optional<HealthBasedValue<Float>> movementSpeedMultiplier,
-                                @NonNull Optional<PhaseInfo> phaseInfo, float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount) {
-        super(interfaceInfoMap, packedAttributes);
+    private EnderDragonModifier(@NonNull VPDataComponentMap components, @NonNull LivingEntityModifier.Data livingEntityData,
+                                @NonNull MobModifier.Data mobData, @NonNull Data enderDragonData) {
+        super(components, livingEntityData, mobData);
+        this.enderDragonData = enderDragonData;
+    }
 
-        this.experience = experience;
-        this.movementSpeedMultiplier = movementSpeedMultiplier;
-        this.phaseInfo = phaseInfo;
-        this.enderPearlDropChance = enderPearlDropChance;
-        this.maxEnderPearlDrops = maxEnderPearlDrops;
-        this.endermiteCount = endermiteCount;
+    /**
+     * @return 드롭 경험치 정보
+     */
+    @NonNull
+    public Optional<Experience> getExperience() {
+        return enderDragonData.experience;
+    }
+
+    /**
+     * @return 이동속도 배수
+     */
+    @NonNull
+    public Optional<HealthBasedValue<Float>> getMovementSpeedMultiplier() {
+        return enderDragonData.movementSpeedMultiplier;
+    }
+
+    /**
+     * @return 페이즈 정보
+     */
+    @NonNull
+    public Optional<PhaseInfo> getPhaseInfo() {
+        return enderDragonData.phaseInfo;
+    }
+
+    /**
+     * @return 피격 시 엔더 진주 드롭 확률
+     */
+    public float getEnderPearlDropChance() {
+        return enderDragonData.enderPearlDropChance;
+    }
+
+    /**
+     * @return 최대 엔더 진주 드롭 횟수
+     */
+    public int getMaxEnderPearlDrops() {
+        return enderDragonData.maxEnderPearlDrops;
+    }
+
+    /**
+     * @return 엔더 진주 드롭 시 생성되는 엔더마이트 수
+     */
+    public int getEndermiteCount() {
+        return enderDragonData.endermiteCount;
     }
 
     @Override
     @NonNull
-    public MapCodec<? extends LivingEntityModifier> getCodec() {
+    public MapCodec<? extends MobModifier> getCodec() {
         return CODEC;
     }
 
@@ -184,5 +199,31 @@ public final class EnderDragonModifier extends LivingEntityModifier {
                                     .forGetter(Meteor::cooldown))
                     .apply(instance, Meteor::new));
         }
+    }
+
+    /**
+     * 데이터 클래스.
+     *
+     * @param enderPearlDropChance    피격 시 엔더 진주 드롭 확률
+     * @param maxEnderPearlDrops      최대 엔더 진주 드롭 횟수
+     * @param endermiteCount          엔더 진주 드롭 시 생성되는 엔더마이트 수
+     * @param experience              드롭 경험치 정보
+     * @param movementSpeedMultiplier 이동속도 배수
+     * @param phaseInfo               페이즈 정보
+     */
+    private record Data(float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount, @NonNull Optional<Experience> experience,
+                        @NonNull Optional<HealthBasedValue<Float>> movementSpeedMultiplier, @NonNull Optional<PhaseInfo> phaseInfo) {
+        private static final Data DEFAULT = new Data(0, 0, 0, Optional.empty(),
+                Optional.empty(), Optional.empty());
+
+        private static final MapCodec<Data> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+                .group(ExtraCodecs.floatRange(0, 1).fieldOf("ender_pearl_drop_chance").forGetter(Data::enderPearlDropChance),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("max_ender_pearl_drops").forGetter(Data::maxEnderPearlDrops),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("endermite_count").forGetter(Data::endermiteCount),
+                        Experience.CODEC.optionalFieldOf("experience").forGetter(Data::experience),
+                        HealthBasedValue.createCodec(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("movement_speed_multiplier")
+                                .forGetter(Data::movementSpeedMultiplier),
+                        PhaseInfo.CODEC.optionalFieldOf("phases").forGetter(Data::phaseInfo))
+                .apply(instance, Data::new));
     }
 }

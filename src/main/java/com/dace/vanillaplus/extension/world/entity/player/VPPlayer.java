@@ -1,17 +1,16 @@
 package com.dace.vanillaplus.extension.world.entity.player;
 
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import lombok.NonNull;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.extensions.IForgeLivingEntity;
 
 /**
  * {@link Player}를 확장하는 인터페이스.
  *
  * @param <T> {@link Player}를 상속받는 타입
  */
-public interface VPPlayer<T extends Player> extends VPEntity<T, LivingEntityModifier>, IForgeLivingEntity {
+public interface VPPlayer<T extends Player> extends VPLivingEntity<T, LivingEntityModifier> {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Player> VPPlayer<T> cast(@NonNull T object) {

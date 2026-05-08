@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
 import com.dace.vanillaplus.data.ReloadableDataManager;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
+import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Evoker.class)
-public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, LivingEntityModifier> {
+public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker, MobModifier> {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
         targetSelector.addGoal(1, getThis().new RaiderOpenDoorGoal(getThis()));

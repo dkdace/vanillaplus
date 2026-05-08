@@ -8,10 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Ravager;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,13 +17,13 @@ import java.util.Optional;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public final class RavagerModifier extends LivingEntityModifier {
+public final class RavagerModifier extends MobModifier {
     /** 기본값 */
     public static final RavagerModifier DEFAULT = new RavagerModifier(EntityModifier.DEFAULT.getComponents(),
-            LivingEntityModifier.DEFAULT.getAttributes(), Optional.empty());
+            LivingEntityModifier.DEFAULT.getLivingEntityData(), MobModifier.DEFAULT.getMobData(), Optional.empty());
     /** JSON 코덱 */
     public static final MapCodec<RavagerModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            createLivingEntityBaseCodec(instance)
+            createMobBaseCodec(instance)
                     .and(CodecUtil.secondsToTicks(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("roar_cooldown_seconds")
                             .forGetter(ravagerModifier -> ravagerModifier.roarCooldown))
                     .apply(instance, RavagerModifier::new));
@@ -34,15 +32,15 @@ public final class RavagerModifier extends LivingEntityModifier {
     @NonNull
     private final Optional<Integer> roarCooldown;
 
-    private RavagerModifier(@NonNull VPDataComponentMap components, @NonNull List<AttributeInstance.Packed> packedAttributes,
+    private RavagerModifier(@NonNull VPDataComponentMap components, @NonNull LivingEntityModifier.Data livingEntityData, @NonNull Data mobData,
                             @NonNull Optional<Integer> roarCooldown) {
-        super(components, packedAttributes);
+        super(components, livingEntityData, mobData);
         this.roarCooldown = roarCooldown;
     }
 
     @Override
     @NonNull
-    public MapCodec<? extends LivingEntityModifier> getCodec() {
+    public MapCodec<? extends MobModifier> getCodec() {
         return CODEC;
     }
 }
