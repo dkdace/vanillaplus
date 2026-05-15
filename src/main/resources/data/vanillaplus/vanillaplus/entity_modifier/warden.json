@@ -1,5 +1,0 @@
-{
-  "type": "vanillaplus:mob",
-  "prevent_riding_if_has_target": true,
-  "can_jump_at_target": true
-}

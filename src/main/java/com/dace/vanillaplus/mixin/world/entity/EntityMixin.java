@@ -1,8 +1,10 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
+import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityConfig;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,33 +23,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.util.Objects;
-
 @Mixin(Entity.class)
-public abstract class EntityMixin<T extends Entity, U extends EntityModifier> implements VPEntity<T, U> {
+public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     @Shadow
     public int tickCount;
     @Shadow
     @Final
     protected RandomSource random;
-    @Unique
-    @Nullable
-    private U dataModifier;
-
-    @Shadow
-    public abstract float getBbWidth();
-
-    @Shadow
-    public abstract float getBbHeight();
 
     @Shadow
     public abstract Vec3 position();
@@ -106,20 +95,9 @@ public abstract class EntityMixin<T extends Entity, U extends EntityModifier> im
 
     @Override
     @NonNull
-    public EntityModifier getDefaultDataModifier() {
-        return EntityModifier.DEFAULT;
-    }
-
-    @Override
-    @NonNull
-    public final U getDataModifier() {
-        return Objects.requireNonNull(dataModifier);
-    }
-
-    @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@NonNull U dataModifier) {
-        this.dataModifier = dataModifier;
+    public final VPDataComponentMap getConfigComponents() {
+        VPModifiableData<EntityType<?>, EntityConfig> entityConfig = VPModifiableData.cast(getType());
+        return entityConfig.getDataModifier().map(EntityConfig::getComponents).orElse(VPDataComponentMap.EMPTY);
     }
 
     @ModifyArg(method = {"playStepSound", "playMuffledStepSound", "playCombinationStepSounds"}, at = @At(value = "INVOKE",

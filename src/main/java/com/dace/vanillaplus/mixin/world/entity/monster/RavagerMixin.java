@@ -1,20 +1,22 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
-import com.dace.vanillaplus.world.entity.modifier.RavagerModifier;
-import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import lombok.NonNull;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Ravager.class)
-public abstract class RavagerMixin extends RaiderMixin<Ravager, RavagerModifier> {
+public abstract class RavagerMixin extends RaiderMixin<Ravager> {
     @Unique
     private static final int ROAR_DISTANCE = 5;
 
@@ -31,24 +33,22 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, RavagerModifier>
     @Shadow
     private int roarTick;
 
-    @ModifyReturnValue(method = "lambda$registerGoals$0", at = @At("RETURN"))
-    private static boolean removeVillagerAttackGoalCondition(boolean original) {
-        return true;
+    @WrapOperation(method = "registerGoals", at = @At(value = "NEW", target = "(Lnet/minecraft/world/entity/Mob;Ljava/lang/Class;ZLnet/minecraft/world/entity/ai/targeting/TargetingConditions$Selector;)Lnet/minecraft/world/entity/ai/goal/target/NearestAttackableTargetGoal;"))
+    private NearestAttackableTargetGoal<AbstractVillager> redirectVillagerAttackGoal(Mob mob, Class<AbstractVillager> targetType,
+                                                                                     boolean mustSee,
+                                                                                     TargetingConditions.Selector selector,
+                                                                                     Operation<NearestAttackableTargetGoal<AbstractVillager>> original) {
+        return getConfigComponents().get(EntityConfigComponentTypes.RAIDER).attackBabyVillagers()
+                ? new NearestAttackableTargetGoal<>(mob, AbstractVillager.class, true)
+                : original.call(mob, targetType, mustSee, selector);
     }
 
     @Shadow
     public abstract boolean hasLineOfSight(Entity target);
 
-    @Override
-    @NonNull
-    public RavagerModifier getDefaultDataModifier() {
-        return RavagerModifier.DEFAULT;
-    }
-
-    @Overwrite
-    public void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain) {
-        getRaiderEffect(RaiderEffect.RavagerEffect.class).ifPresent(ravagerEffect ->
-                ravagerEffect.getMobEffectInfos().forEach(mobEffectEffect -> mobEffectEffect.applyMobEffect(getThis())));
+    @Inject(method = "applyRaidBuffs", at = @At("TAIL"))
+    private void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain, CallbackInfo ci) {
+        applyCustomRaidBuffs();
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
@@ -71,13 +71,13 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager, RavagerModifier>
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 1,
             opcode = Opcodes.PUTFIELD))
     private void setRoarCooldown(CallbackInfo ci) {
-        getDataModifier().getRoarCooldown().ifPresent(cooldown -> roarCooldown = cooldown);
+        getConfigComponents().get(EntityConfigComponentTypes.RAVAGER).roarCooldown().ifPresent(cooldown -> roarCooldown = cooldown);
     }
 
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0,
             opcode = Opcodes.GETFIELD))
     private void performRoar(CallbackInfo ci) {
-        getDataModifier().getRoarCooldown().ifPresent(cooldown -> {
+        getConfigComponents().get(EntityConfigComponentTypes.RAVAGER).roarCooldown().ifPresent(cooldown -> {
             LivingEntity target = getTarget();
             if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
                 return;

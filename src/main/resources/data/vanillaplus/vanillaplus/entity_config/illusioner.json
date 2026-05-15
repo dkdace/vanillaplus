@@ -1,0 +1,59 @@
+{
+  "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "vanillaplus:sprinting_speed",
+        "base": 0
+      }
+    ],
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:raider": {
+      "attack_baby_villagers": true,
+      "always_open_doors": true,
+      "sprint_during_raids": true,
+      "use_data_driven_raid_equipment": true,
+      "ammo_modifiers": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.08,
+                  0.16,
+                  0.24,
+                  0.32,
+                  0.40,
+                  0.48
+                ]
+              }
+            }
+          },
+          "functions": [
+            {
+              "function": "minecraft:set_item",
+              "item": "minecraft:tipped_arrow"
+            },
+            {
+              "function": "minecraft:set_random_potion",
+              "options": [
+                "minecraft:slowness",
+                "minecraft:poison",
+                "minecraft:weakness"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

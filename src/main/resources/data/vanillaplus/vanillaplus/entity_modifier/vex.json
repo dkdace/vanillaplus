@@ -1,5 +1,0 @@
-{
-  "type": "vanillaplus:mob",
-  "can_see_through_transparent_blocks": true,
-  "prevent_riding_if_has_target": true
-}

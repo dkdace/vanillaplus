@@ -25,7 +25,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
     @ModifyReturnValue(method = "lambda$new$0", at = @At("RETURN"))
     private static boolean modifyScanTargetingConditionsSelector(boolean condition, @Local(argsOnly = true) EnderDragon dragon,
                                                                  @Local(argsOnly = true) LivingEntity target) {
-        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().isPresent()
+        return VPEnderDragon.cast(dragon).getEnderDragonConfig().phaseInfo().isPresent()
                 ? condition && dragon.distanceToSqr(target) > SCAN_DISTANCE_MIN * SCAN_DISTANCE_MIN
                 : condition;
     }
@@ -35,24 +35,24 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
     private static TargetingConditions modifyScanTargetingConditions(TargetingConditions instance, TargetingConditions.Selector selector,
                                                                      Operation<TargetingConditions> original,
                                                                      @Local(argsOnly = true) EnderDragon dragon) {
-        return VPEnderDragon.cast(dragon).getDataModifier().getPhaseInfo().isPresent()
+        return VPEnderDragon.cast(dragon).getEnderDragonConfig().phaseInfo().isPresent()
                 ? instance.range(SCAN_DISTANCE_MAX).ignoreLineOfSight().ignoreInvisibilityTesting()
                 : original.call(instance, selector);
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=25"))
     private int modifyScanDuration(int duration) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo().map(phaseInfo -> phaseInfo.sitting().scanDuration()).orElse(duration);
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().map(phaseInfo -> phaseInfo.sitting().scanDuration()).orElse(duration);
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "floatValue=0.8"))
     private float modifyRotationMultiplier(float multiplier) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent() ? 0.98F : multiplier;
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent() ? 0.98F : multiplier;
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=100"))
     private int modifyScanningIdleDuration(int duration) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo()
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo()
                 .map(phaseInfo -> (int) phaseInfo.sitting().scanIdleDuration().get(dragon))
                 .orElse(duration);
     }
@@ -61,7 +61,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonPhas
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;Lnet/minecraft/world/entity/LivingEntity;DDD)Lnet/minecraft/world/entity/player/Player;",
             ordinal = 1), index = 0)
     private TargetingConditions modifyChargeTargetConditions(TargetingConditions targetConditions) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent()
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent()
                 ? getVPEnderDragon().getDefaultTargetingConditions()
                 : targetConditions;
     }

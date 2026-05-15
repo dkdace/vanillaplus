@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(FireworkRocketEntity.class)
-public abstract class FireworkRocketEntityMixin extends ProjectileMixin<FireworkRocketEntity, EntityModifier> {
+public abstract class FireworkRocketEntityMixin extends ProjectileMixin<FireworkRocketEntity> {
     @ModifyArgs(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;",
             ordinal = 0))
     private void modifyElytraDeltaMovement(Args args, @Local(name = "lookAngle") Vec3 lookAngle, @Local(name = "movement") Vec3 movement) {

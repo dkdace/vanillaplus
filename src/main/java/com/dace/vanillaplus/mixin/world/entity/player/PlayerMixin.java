@@ -4,7 +4,6 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -37,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T, LivingEntityModifier> implements VPPlayer<T> {
+public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T> implements VPPlayer<T> {
     @Unique
     private static final String MINING_FATIGUE_DEFINED_VALUE_NAME = "mining_speed";
 

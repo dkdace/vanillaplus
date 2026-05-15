@@ -1,17 +1,17 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
-import com.dace.vanillaplus.world.entity.modifier.MobModifier;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AbstractIllager.class)
-public abstract class AbstractIllagerMixin<T extends AbstractIllager, U extends MobModifier> extends RaiderMixin<T, U> {
-    @Override
-    @Overwrite
-    public boolean canAttack(LivingEntity target) {
-        return super.canAttack(target);
+public abstract class AbstractIllagerMixin<T extends AbstractIllager> extends RaiderMixin<T> {
+    @WrapOperation(method = "canAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isBaby()Z"))
+    private boolean redirectCanAttackBaby(LivingEntity instance, Operation<Boolean> original) {
+        return !getRaiderConfig().attackBabyVillagers() && original.call(instance);
     }
 }

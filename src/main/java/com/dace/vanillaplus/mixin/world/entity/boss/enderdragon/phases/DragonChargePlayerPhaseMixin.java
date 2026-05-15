@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.world.entity.modifier.EnderDragonModifier;
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -52,7 +52,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     }
 
     @Unique
-    private void createFlame(@NonNull EnderDragonModifier.PhaseInfo.Charge charge, @NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
+    private void createFlame(@NonNull EnderDragonConfig.PhaseInfo.Charge charge, @NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
         float radius = charge.flameRadius();
         double x = dragon.head.getX() + pos.x() * radius / 2;
         double y = dragon.head.getY();
@@ -86,7 +86,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Override
     protected void onClientTick(CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().getPhaseInfo().isEmpty())
+        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isEmpty())
             return;
 
         if (flameTicks++ < ROAR_DURATION)
@@ -98,7 +98,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Override
     public float getTurnSpeed() {
-        if (getVPEnderDragon().getDataModifier().getPhaseInfo().isEmpty())
+        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isEmpty())
             return super.getTurnSpeed();
 
         float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
@@ -109,7 +109,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     @Expression("distToTarget < ?")
     @Inject(method = "doServerTick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private void performBreathAttack(ServerLevel level, CallbackInfo ci, @Local(name = "distToTarget") double distToTarget) {
-        getVPEnderDragon().getDataModifier().getPhaseInfo().ifPresent(phaseInfo -> {
+        getVPEnderDragon().getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo -> {
             if (distToTarget < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
                 isFlaming = true;
 

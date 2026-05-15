@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityReference;
@@ -13,11 +12,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ThrownTrident.class)
-public abstract class ThrownTridentMixin extends AbstractArrowMixin<ThrownTrident, EntityModifier> {
+public abstract class ThrownTridentMixin extends AbstractArrowMixin<ThrownTrident> {
     @Redirect(method = "onHitEntity", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/projectile/arrow/ThrownTrident;dealtDamage:Z",
             opcode = Opcodes.PUTFIELD))
-    private void addPiercedEntity(ThrownTrident instance, boolean value, @Local(ordinal = 0) Entity target) {
-        addPiercedEntity(target);
+    private void addPiercedEntity(ThrownTrident instance, boolean value, @Local(name = "entity") Entity entity) {
+        addPiercedEntity(entity);
     }
 
     @Redirect(method = "onHitEntity", at = @At(value = "INVOKE",

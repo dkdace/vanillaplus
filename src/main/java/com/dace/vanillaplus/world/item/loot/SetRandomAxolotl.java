@@ -18,7 +18,7 @@ import java.util.List;
  */
 public final class SetRandomAxolotl extends LootItemConditionalFunction {
     /** JSON 코덱 */
-    public static final MapCodec<SetRandomAxolotl> TYPE_CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final MapCodec<SetRandomAxolotl> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance ->
             commonFields(instance).apply(instance, SetRandomAxolotl::new));
 
     private SetRandomAxolotl(List<LootItemCondition> predicates) {
@@ -28,13 +28,13 @@ public final class SetRandomAxolotl extends LootItemConditionalFunction {
     @Override
     @NonNull
     public MapCodec<? extends LootItemConditionalFunction> codec() {
-        return TYPE_CODEC;
+        return TYPED_CODEC;
     }
 
     @Override
     @NonNull
-    protected ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext lootContext) {
-        itemStack.set(DataComponents.AXOLOTL_VARIANT, Axolotl.Variant.getCommonSpawnVariant(lootContext.getRandom()));
+    protected ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext context) {
+        itemStack.set(DataComponents.AXOLOTL_VARIANT, Axolotl.Variant.getCommonSpawnVariant(context.getRandom()));
         return itemStack;
     }
 }

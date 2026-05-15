@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -29,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier> extends ProjectileMixin<T, U> {
+public abstract class AbstractArrowMixin<T extends AbstractArrow> extends ProjectileMixin<T> {
     @Shadow
     private double baseDamage;
     @Shadow

@@ -3,19 +3,16 @@ package com.dace.vanillaplus.data;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
-import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
@@ -35,10 +32,6 @@ public final class ReloadableDataManager<T, U> {
     /** @see DataPackRegistry#LOOT_TABLE_REWARD */
     public static final ReloadableDataManager<ResourceKey<LootTable>, LootTableReward> LOOT_TABLE_REWARD = new ReloadableDataManager<>(
             DataPackRegistry.LOOT_TABLE_REWARD, LootTableReward.DIRECT_CODEC, IdentifierUtil::fromResourceKey);
-    /** @see DataPackRegistry#RAIDER_EFFECT */
-    public static final ReloadableDataManager<EntityType<?>, RaiderEffect> RAIDER_EFFECT = new ReloadableDataManager<>(
-            DataPackRegistry.RAIDER_EFFECT, CodecComponent.createCodec(StaticRegistry.RAIDER_EFFECT_TYPE),
-            entityType -> IdentifierUtil.fromRegistry(BuiltInRegistries.ENTITY_TYPE, entityType));
     /** @see DataPackRegistry#RAID_WAVE */
     public static final ReloadableDataManager<Difficulty, RaidWave> RAID_WAVE = new ReloadableDataManager<>(
             DataPackRegistry.RAID_WAVE, RaidWave.DIRECT_CODEC, difficulty -> IdentifierUtil.fromPath(difficulty.getSerializedName()));

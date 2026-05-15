@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DragonTakeoffPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @Inject(method = "begin", at = @At("TAIL"))
     private void playTakeoffEffects(CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent())
+        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent())
             for (int i = 0; i < 3; i++)
                 dragon.level().levelEvent(LevelEvent.PARTICLES_DRAGON_FIREBALL_SPLASH, dragon.blockPosition(), dragon.isSilent() ? -1 : 1);
     }

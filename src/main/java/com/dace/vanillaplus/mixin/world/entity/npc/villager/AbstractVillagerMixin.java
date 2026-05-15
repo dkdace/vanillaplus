@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.dace.vanillaplus.world.TradeSetOffer;
-import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extends MobModifier> extends MobMixin<T, U> {
+public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> {
     @Unique
     private static final int TRADE_XP_BASE = 3;
     @Unique

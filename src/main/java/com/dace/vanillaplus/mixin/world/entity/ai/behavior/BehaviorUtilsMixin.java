@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.behavior;
 
-import com.dace.vanillaplus.data.registryobject.EntityModifierComponentTypes;
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.modifier.component.CrossbowMobInfo;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.Mob;
@@ -16,8 +15,6 @@ public abstract class BehaviorUtilsMixin implements VPMixin<BehaviorUtils> {
     @ModifyExpressionValue(method = "isWithinAttackRange", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getDefaultProjectileRange()I"))
     private static int modifyAttackRange(int attackRange, @Local(argsOnly = true) Mob body) {
-        return VPEntity.cast(body).getDataModifier().getComponents().get(EntityModifierComponentTypes.CROSSBOW_ATTACK_MOB)
-                .map(CrossbowMobInfo::shootingRange)
-                .orElse(attackRange);
+        return VPLivingEntity.cast(body).getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).shootingRange().orElse(attackRange);
     }
 }

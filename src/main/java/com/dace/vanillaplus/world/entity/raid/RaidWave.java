@@ -62,7 +62,7 @@ public final class RaidWave {
         /** JSON 코덱 */
         private static final Codec<RaiderGroup> CODEC = RecordCodecBuilder.create(instance -> instance
                 .group(EntityType.CODEC.fieldOf("type").forGetter(RaiderGroup::entityType),
-                        EntityType.CODEC.optionalFieldOf("vehicle").forGetter(RaiderGroup::ridingEntityType),
+                        EntityType.CODEC.optionalFieldOf("rider").forGetter(RaiderGroup::ridingEntityType),
                         ExtraCodecs.POSITIVE_INT.fieldOf("count").forGetter(RaiderGroup::count))
                 .apply(instance, RaiderGroup::new));
     }

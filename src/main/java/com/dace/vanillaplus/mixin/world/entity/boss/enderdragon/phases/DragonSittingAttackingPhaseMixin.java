@@ -24,14 +24,14 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=40"))
     private int modifyRoaringDuration(int duration) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo()
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo()
                 .map(phaseInfo -> phaseInfo.sitting().spinAttackDuration() + 10)
                 .orElse(duration);
     }
 
     @Inject(method = "doServerTick", at = @At("TAIL"))
     private void spin(ServerLevel level, CallbackInfo ci) {
-        getVPEnderDragon().getDataModifier().getPhaseInfo().ifPresent(phaseInfo -> {
+        getVPEnderDragon().getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo -> {
             int spinAttackDuration = phaseInfo.sitting().spinAttackDuration();
 
             if (attackingTicks >= spinAttackDuration)
@@ -45,7 +45,7 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhaseManager;setPhase(Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhase;)V"))
     private void resetYRot(ServerLevel level, CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent())
+        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent())
             dragon.setYRot(yRot);
     }
 

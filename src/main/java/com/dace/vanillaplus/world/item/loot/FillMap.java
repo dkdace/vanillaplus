@@ -33,8 +33,8 @@ public final class FillMap extends LootItemConditionalFunction {
 
     @Override
     @NonNull
-    public ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext lootContext) {
-        BlockPos blockPos = BlockPos.containing(lootContext.getParameter(LootContextParams.ORIGIN));
-        return MapItem.create(lootContext.getLevel(), blockPos.getX(), blockPos.getZ(), (byte) 0, true, false);
+    public ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext context) {
+        BlockPos blockPos = BlockPos.containing(context.getParameter(LootContextParams.ORIGIN));
+        return MapItem.create(context.getLevel(), blockPos.getX(), blockPos.getZ(), (byte) 0, true, false);
     }
 }

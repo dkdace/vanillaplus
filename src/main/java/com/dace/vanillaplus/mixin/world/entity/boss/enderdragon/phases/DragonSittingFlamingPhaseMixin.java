@@ -11,19 +11,19 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=200"))
     private int modifyFlamingDuration(int duration) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo()
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo()
                 .map(phaseInfo -> (int) phaseInfo.sitting().flamingDuration().get(dragon))
                 .orElse(duration);
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setRadius(F)V"))
     private float modifyFlameRadius(float radius) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo().map(phaseInfo -> phaseInfo.sitting().flameRadius()).orElse(radius);
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().map(phaseInfo -> phaseInfo.sitting().flameRadius()).orElse(radius);
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
     private MobEffectInstance modifyFlameEffect(MobEffectInstance effect) {
-        return getVPEnderDragon().getDataModifier().getPhaseInfo().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : effect;
+        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : effect;
     }
 }

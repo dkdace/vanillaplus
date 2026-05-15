@@ -1,10 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
-import com.dace.vanillaplus.data.registryobject.EntityModifierComponentTypes;
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.modifier.component.CrossbowMobInfo;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -56,8 +55,6 @@ public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
             target = "Lnet/minecraft/world/entity/ai/behavior/BackUpIfTooClose;create(IF)Lnet/minecraft/world/entity/ai/behavior/OneShot;"),
             index = 0)
     private static int modifyBackupDistance(int tooCloseDistance, @Local(argsOnly = true) Piglin body) {
-        return VPEntity.cast(body).getDataModifier().getComponents().get(EntityModifierComponentTypes.CROSSBOW_ATTACK_MOB)
-                .map(CrossbowMobInfo::backupDistance)
-                .orElse(tooCloseDistance);
+        return VPLivingEntity.cast(body).getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).backupDistance().orElse(tooCloseDistance);
     }
 }

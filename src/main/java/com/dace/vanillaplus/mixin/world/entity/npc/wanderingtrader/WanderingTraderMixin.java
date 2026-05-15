@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.wanderingtrader;
 
 import com.dace.vanillaplus.mixin.world.entity.npc.villager.AbstractVillagerMixin;
-import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -21,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WanderingTrader.class)
-public abstract class WanderingTraderMixin extends AbstractVillagerMixin<WanderingTrader, MobModifier> {
+public abstract class WanderingTraderMixin extends AbstractVillagerMixin<WanderingTrader> {
     @Unique
     private static final float DISTANCE_MELEE = 8;
     @Unique

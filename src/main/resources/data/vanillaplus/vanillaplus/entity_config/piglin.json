@@ -1,0 +1,11 @@
+{
+  "components": {
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:crossbow_mob": {
+      "shooting_power": 2.6,
+      "shooting_range": 16
+    }
+  }
+}

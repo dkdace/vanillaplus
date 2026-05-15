@@ -5,9 +5,8 @@ import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.MobEffectValues;
 import com.dace.vanillaplus.world.block.modifier.BlockModifier;
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityConfig;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
-import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
 import com.dace.vanillaplus.world.item.ItemModifier;
 import com.dace.vanillaplus.world.item.PotionModifier;
 import com.mojang.logging.LogUtils;
@@ -37,16 +36,14 @@ public final class DataPackRegistry {
     /** 상태 효과 값 */
     public static final ResourceKey<Registry<MobEffectValues>> MOB_EFFECT_VALUES = create("mob_effect",
             MobEffectValues.DIRECT_CODEC, Registries.MOB_EFFECT);
-    /** 습격자 효과 */
-    public static final ResourceKey<Registry<RaiderEffect>> RAIDER_EFFECT = create("raider_effect");
     /** 습격 웨이브 정보 */
     public static final ResourceKey<Registry<RaidWave>> RAID_WAVE = create("raid_wave");
     /** 블록 수정자 */
     public static final ResourceKey<Registry<BlockModifier>> BLOCK_MODIFIER = create("block_modifier",
             CodecComponent.createCodec(StaticRegistry.BLOCK_MODIFIER_TYPE), Registries.BLOCK);
-    /** 엔티티 수정자 */
-    public static final ResourceKey<Registry<EntityModifier>> ENTITY_MODIFIER = create("entity_modifier",
-            CodecComponent.createCodec(StaticRegistry.ENTITY_MODIFIER_TYPE), Registries.ENTITY_TYPE);
+    /** 엔티티 설정 */
+    public static final ResourceKey<Registry<EntityConfig>> ENTITY_CONFIG = create("entity_config",
+            EntityConfig.DIRECT_CODEC, Registries.ENTITY_TYPE);
     /** 아이템 수정자 */
     public static final ResourceKey<Registry<ItemModifier>> ITEM_MODIFIER = create("modifier/item",
             CodecComponent.createCodec(StaticRegistry.ITEM_MODIFIER_TYPE), Registries.ITEM);

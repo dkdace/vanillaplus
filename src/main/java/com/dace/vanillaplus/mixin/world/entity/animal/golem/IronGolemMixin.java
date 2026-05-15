@@ -2,7 +2,6 @@ package com.dace.vanillaplus.mixin.world.entity.animal.golem;
 
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.world.entity.modifier.MobModifier;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.animal.golem.IronGolem;
@@ -17,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(IronGolem.class)
-public abstract class IronGolemMixin extends MobMixin<IronGolem, MobModifier> {
+public abstract class IronGolemMixin extends MobMixin<IronGolem> {
     @Override
     protected AABB getAttackBoundingBox(double horizontalExpansion) {
         return super.getAttackBoundingBox(horizontalExpansion).inflate(0.5, 0.1, 0.5);

@@ -1,0 +1,25 @@
+package com.dace.vanillaplus.world.entity.monster;
+
+import com.dace.vanillaplus.util.CodecUtil;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.NonNull;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.monster.Ravager;
+
+import java.util.Optional;
+
+/**
+ * {@link Ravager}의 엔티티 설정 데이터 요소 클래스.
+ *
+ * @param roarCooldown 포효 쿨타임
+ */
+public record RavagerConfig(@NonNull Optional<Integer> roarCooldown) {
+    /** 기본값 */
+    public static final RavagerConfig DEFAULT = new RavagerConfig(Optional.empty());
+    /** JSON 코덱 */
+    public static final Codec<RavagerConfig> CODEC = RecordCodecBuilder.create(instance -> instance
+            .group(CodecUtil.secondsToTicks(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("roar_cooldown_seconds")
+                    .forGetter(RavagerConfig::roarCooldown))
+            .apply(instance, RavagerConfig::new));
+}

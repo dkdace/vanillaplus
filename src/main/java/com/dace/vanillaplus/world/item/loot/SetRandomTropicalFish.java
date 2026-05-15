@@ -19,7 +19,7 @@ import java.util.List;
  */
 public final class SetRandomTropicalFish extends LootItemConditionalFunction {
     /** JSON 코덱 */
-    public static final MapCodec<SetRandomTropicalFish> TYPE_CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final MapCodec<SetRandomTropicalFish> TYPED_CODEC = RecordCodecBuilder.mapCodec(instance ->
             commonFields(instance).apply(instance, SetRandomTropicalFish::new));
 
     private SetRandomTropicalFish(@NonNull List<LootItemCondition> predicates) {
@@ -29,7 +29,7 @@ public final class SetRandomTropicalFish extends LootItemConditionalFunction {
     @Override
     @NonNull
     public MapCodec<? extends LootItemConditionalFunction> codec() {
-        return TYPE_CODEC;
+        return TYPED_CODEC;
     }
 
     @Override

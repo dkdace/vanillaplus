@@ -36,7 +36,7 @@ public final class CodecUtil {
      */
     @NonNull
     public static <T> Codec<Optional<T>> optional(@NonNull Codec<T> codec) {
-        return Codec.xor(codec, Codec.EMPTY.codec())
+        return Codec.either(codec, Codec.EMPTY.codec())
                 .xmap(to -> to.map(Optional::of, _ -> Optional.empty()),
                         from -> from.map(Either::<T, Unit>left).orElse(Either.right(Unit.INSTANCE)));
     }

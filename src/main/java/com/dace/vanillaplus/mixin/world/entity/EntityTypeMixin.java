@@ -2,45 +2,29 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.EntityConfig;
 import lombok.NonNull;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
 @Mixin(EntityType.class)
-public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier> implements VPModifiableData<EntityType<?>, U>, VPMixin<EntityType<?>> {
-    @Mutable
-    @Shadow
-    @Final
-    private EntityType.EntityFactory<T> factory;
+public abstract class EntityTypeMixin implements VPModifiableData<EntityType<?>, EntityConfig>, VPMixin<EntityType<?>> {
     @Unique
     @Nullable
-    private U dataModifier;
+    private EntityConfig dataModifier;
 
     @Override
     @NonNull
-    public Optional<U> getDataModifier() {
+    public Optional<EntityConfig> getDataModifier() {
         return Optional.ofNullable(dataModifier);
     }
 
     @Override
-    public void setDataModifier(@Nullable U dataModifier) {
+    public void setDataModifier(@Nullable EntityConfig dataModifier) {
         this.dataModifier = dataModifier;
-        EntityType.EntityFactory<T> oldFactory = factory;
-
-        factory = (entityType, level) -> {
-            T entity = oldFactory.create(entityType, level);
-            if (entity != null) {
-                VPEntity<T, EntityModifier> vpEntity = VPEntity.cast(entity);
-                vpEntity.setDataModifier(dataModifier == null ? vpEntity.getDefaultDataModifier() : dataModifier);
-            }
-
-            return entity;
-        };
     }
 }

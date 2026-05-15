@@ -1,11 +1,11 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.VPTags;
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.modifier.LivingEntityModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -13,7 +13,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +23,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -35,9 +35,9 @@ import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
-import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -48,12 +48,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin<T extends LivingEntity, U extends LivingEntityModifier> extends EntityMixin<T, U> implements VPLivingEntity<T, U> {
+public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMixin<T> implements VPLivingEntity<T> {
     @Unique
     private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
     @Unique
@@ -74,12 +75,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
     private DamageSource lastDamageSourceForKnockback;
 
     @Shadow
-    public abstract void stopRiding();
+    public abstract void setSprinting(boolean isSprinting);
 
     @Shadow
-    public boolean canAttack(LivingEntity target) {
-        return false;
-    }
+    public abstract void stopRiding();
 
     @Shadow
     public abstract boolean hasLineOfSight(Entity target);
@@ -117,11 +116,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
     }
 
     @Shadow
-    protected float getWaterSlowDown() {
-        return 0;
-    }
-
-    @Shadow
     public abstract AttackRange getAttackRangeWith(ItemStack weaponItem);
 
     @Shadow
@@ -141,30 +135,22 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Living
     }
 
     @Override
-    @NonNull
-    public LivingEntityModifier getDefaultDataModifier() {
-        return LivingEntityModifier.DEFAULT;
-    }
-
-    @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@NonNull U dataModifier) {
-        super.setDataModifier(dataModifier);
-        attributes.apply(getDataModifier().getAttributes());
-    }
-
-    @Override
     public double getFinalKnockbackResistance(double knockbackResistance, @Nullable DamageSource damageSource) {
         return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
                 ? getAttributeValue(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
                 : 0);
     }
 
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
+        attributes.apply(getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES));
+    }
+
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return getDataModifier().canSeeThroughTransparentBlocks() ? ClipContext.Block.VISUAL : blockCollidingContext;
+        return getConfigComponents().get(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS) ? ClipContext.Block.VISUAL : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))
