@@ -27,6 +27,7 @@ import java.util.Optional;
 @Mixin(TradeSet.class)
 public abstract class TradeSetMixin implements VPTradeSet {
     @Shadow
+    @Final
     public static final Codec<TradeSet> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.either(TradeSetOffer.CODEC.listOf(), RegistryCodecs.homogeneousList(Registries.VILLAGER_TRADE)).fieldOf("trades")
                             .forGetter(tradeSet -> {

@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
 import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.entity.npc.VPAbstractVillager;
+import com.dace.vanillaplus.extension.world.item.trading.VPMerchantOffer;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.dace.vanillaplus.world.TradeSetOffer;
@@ -14,8 +15,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.*;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,15 +46,12 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends 
     public abstract boolean isTrading();
 
     @Unique
-    protected int getTradePlayerXP(int xp, @NonNull MerchantOffer merchantOffer) {
-        ItemCost itemCost = merchantOffer.getItemCostA();
+    protected int getTradePlayerXP(int xp, @NonNull MerchantOffer offer) {
+        if (!VPMerchantOffer.cast(offer).isMultiplyRewardXPByCost())
+            return xp;
 
-        if (itemCost.itemStack().is(Items.EMERALD)) {
-            int count = itemCost.count();
-            return TRADE_XP_BASE * count + random.nextInt(TRADE_XP_RANDOM * count);
-        }
-
-        return xp;
+        int count = offer.getItemCostA().count();
+        return TRADE_XP_BASE * count + random.nextInt(TRADE_XP_RANDOM * count);
     }
 
     @Override
