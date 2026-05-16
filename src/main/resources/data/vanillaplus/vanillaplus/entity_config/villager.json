@@ -2,6 +2,31 @@
   "components": {
     "vanillaplus:see_through_transparent_blocks": true,
     "vanillaplus:prevent_riding_if_has_target": true,
-    "vanillaplus:jump_at_target_if_cannot_reach": true
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:npc": {
+      "avoid_entity_distances": {
+        "minecraft:zombie": 8,
+        "minecraft:husk": 8,
+        "minecraft:drowned": 8,
+        "minecraft:skeleton": 15,
+        "minecraft:stray": 15,
+        "minecraft:bogged": 15,
+        "minecraft:parched": 15,
+        "minecraft:wither_skeleton": 8,
+        "minecraft:spider": 8,
+        "minecraft:cave_spider": 8,
+        "minecraft:slime": 8,
+        "minecraft:magma_cube": 8,
+        "minecraft:silverfish": 8,
+        "minecraft:zoglin": 8,
+        "minecraft:pillager": 15,
+        "minecraft:vindicator": 8,
+        "minecraft:evoker": 12,
+        "minecraft:vex": 8,
+        "minecraft:ravager": 12,
+        "minecraft:illusioner": 15,
+        "minecraft:witch": 12
+      }
+    }
   }
 }

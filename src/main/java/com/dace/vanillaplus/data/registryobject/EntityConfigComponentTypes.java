@@ -4,6 +4,7 @@ import com.dace.vanillaplus.data.StaticRegistry;
 import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
+import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
 import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
@@ -31,6 +32,8 @@ public final class EntityConfigComponentTypes {
             "prevent_riding_if_has_target", Codec.BOOL, false);
     public static final RegistryObject<VPDataComponentMap.Key<Boolean>> JUMP_AT_TARGET_IF_CANNOT_REACH = create(
             "jump_at_target_if_cannot_reach", Codec.BOOL, false);
+    public static final RegistryObject<VPDataComponentMap.Key<NpcConfig>> NPC = create(
+            "npc", NpcConfig.CODEC, NpcConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<CrossbowMobConfig>> CROSSBOW_MOB = create(
             "crossbow_mob", CrossbowMobConfig.CODEC, CrossbowMobConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<RaiderConfig>> RAIDER = create(

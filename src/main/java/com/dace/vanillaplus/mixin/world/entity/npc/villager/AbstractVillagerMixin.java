@@ -1,8 +1,11 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.entity.npc.VPAbstractVillager;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.dace.vanillaplus.world.TradeSetOffer;
+import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> {
+public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> implements VPAbstractVillager<T> {
     @Unique
     private static final int TRADE_XP_BASE = 3;
     @Unique
@@ -33,6 +36,7 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends 
     protected abstract void addOffersFromTradeSet(ServerLevel level, MerchantOffers offers, ResourceKey<TradeSet> resourceKey);
 
     @Shadow
+    @NonNull
     public abstract MerchantOffers getOffers();
 
     @Shadow
@@ -48,6 +52,12 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends 
         }
 
         return xp;
+    }
+
+    @Override
+    @NonNull
+    public NpcConfig getNpcConfig() {
+        return getConfigComponents().get(EntityConfigComponentTypes.NPC);
     }
 
     @WrapWithCondition(method = "addOffersFromTradeSet", at = @At(value = "INVOKE",
