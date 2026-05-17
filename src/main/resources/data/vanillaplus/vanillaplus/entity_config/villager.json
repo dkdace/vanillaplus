@@ -27,6 +27,10 @@
         "minecraft:illusioner": 15,
         "minecraft:witch": 12
       }
+    },
+    "vanillaplus:villager": {
+      "close_trading_at_night": true,
+      "reroll_offers_everyday": true
     }
   }
 }

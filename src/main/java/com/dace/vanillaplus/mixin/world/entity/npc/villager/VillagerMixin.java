@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -45,17 +46,30 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
 
     @Unique
     private boolean isTradingClosed() {
-        return !getOffers().isEmpty() && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
+        return getConfigComponents().get(EntityConfigComponentTypes.VILLAGER).closeTradingAtNight() && !getOffers().isEmpty()
+                && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
     }
 
     @Unique
     private boolean isTradingOutOfStock() {
-        return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
+        if (!rerollOffersEveryday())
+            return false;
+
+        MerchantOffers merchantOffers = getOffers();
+        return !merchantOffers.isEmpty() && merchantOffers.stream().allMatch(MerchantOffer::isOutOfStock);
+    }
+
+    @Unique
+    private boolean rerollOffersEveryday() {
+        return getConfigComponents().get(EntityConfigComponentTypes.VILLAGER).rerollOffersEveryday();
     }
 
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
     private void rerollOffers(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
+        if (!rerollOffersEveryday())
+            return;
+
         MerchantOffers merchantOffers = getOffers();
         merchantOffers.clear();
 
@@ -78,12 +92,12 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
-    private boolean preventTradingIfClosed(boolean isEmpty) {
+    private boolean modifyNoTradingCondition(boolean isEmpty) {
         return isEmpty || isTradingClosed() || isTradingOutOfStock();
     }
 
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
-    private void sendClosedMessage(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sendNoTradingMessage(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (isTradingClosed())
             player.sendOverlayMessage(COMPONENT_CLOSED);
         else if (isTradingOutOfStock())
@@ -95,7 +109,8 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
         if (!isTradingClosed())
             return;
 
-        getOffers().forEach(MerchantOffer::setToOutOfStock);
+        if (rerollOffersEveryday())
+            getOffers().forEach(MerchantOffer::setToOutOfStock);
         if (isTrading())
             stopTrading();
     }

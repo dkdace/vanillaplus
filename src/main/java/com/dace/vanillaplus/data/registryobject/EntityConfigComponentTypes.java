@@ -7,6 +7,7 @@ import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
+import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
 import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
@@ -34,6 +35,8 @@ public final class EntityConfigComponentTypes {
             "jump_at_target_if_cannot_reach", Codec.BOOL, false);
     public static final RegistryObject<VPDataComponentMap.Key<NpcConfig>> NPC = create(
             "npc", NpcConfig.CODEC, NpcConfig.DEFAULT);
+    public static final RegistryObject<VPDataComponentMap.Key<VillagerConfig>> VILLAGER = create(
+            "villager", VillagerConfig.CODEC, VillagerConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<CrossbowMobConfig>> CROSSBOW_MOB = create(
             "crossbow_mob", CrossbowMobConfig.CODEC, CrossbowMobConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<RaiderConfig>> RAIDER = create(
