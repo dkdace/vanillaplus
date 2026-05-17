@@ -3,6 +3,7 @@ package com.dace.vanillaplus.data.registryobject;
 import com.dace.vanillaplus.data.StaticRegistry;
 import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
+import com.dace.vanillaplus.world.entity.animal.golem.IronGolemConfig;
 import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
@@ -35,10 +36,12 @@ public final class EntityConfigComponentTypes {
             "jump_at_target_if_cannot_reach", Codec.BOOL, false);
     public static final RegistryObject<VPDataComponentMap.Key<NpcConfig>> NPC = create(
             "npc", NpcConfig.CODEC, NpcConfig.DEFAULT);
-    public static final RegistryObject<VPDataComponentMap.Key<VillagerConfig>> VILLAGER = create(
-            "villager", VillagerConfig.CODEC, VillagerConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<CrossbowMobConfig>> CROSSBOW_MOB = create(
             "crossbow_mob", CrossbowMobConfig.CODEC, CrossbowMobConfig.DEFAULT);
+    public static final RegistryObject<VPDataComponentMap.Key<VillagerConfig>> VILLAGER = create(
+            "villager", VillagerConfig.CODEC, VillagerConfig.DEFAULT);
+    public static final RegistryObject<VPDataComponentMap.Key<IronGolemConfig>> IRON_GOLEM = create(
+            "iron_golem", IronGolemConfig.CODEC, IronGolemConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<RaiderConfig>> RAIDER = create(
             "raider", RaiderConfig.CODEC, RaiderConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<RavagerConfig>> RAVAGER = create(

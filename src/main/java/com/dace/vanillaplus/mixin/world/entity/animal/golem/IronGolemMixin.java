@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.animal.golem;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -19,7 +20,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class IronGolemMixin extends MobMixin<IronGolem> {
     @Override
     protected AABB getAttackBoundingBox(double horizontalExpansion) {
-        return super.getAttackBoundingBox(horizontalExpansion).inflate(0.5, 0.1, 0.5);
+        AABB aabb = super.getAttackBoundingBox(horizontalExpansion);
+
+        return getConfigComponents().get(EntityConfigComponentTypes.IRON_GOLEM).inflateAttackHitbox()
+                ? aabb.inflate(0.5, 0.1, 0.5)
+                : aabb;
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"))

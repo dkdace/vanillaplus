@@ -19,8 +19,8 @@ public abstract class AbstractCowMixin<T extends AbstractCow> extends MobMixin<T
         return isBucket || itemStack.is(Items.GLASS_BOTTLE);
     }
 
-    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;",
-            opcode = Opcodes.GETSTATIC))
+    @ModifyExpressionValue(method = "mobInteract", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
     private Item modifyMilkResult(Item item, @Local(name = "itemStack") ItemStack itemStack) {
         return itemStack.is(Items.GLASS_BOTTLE) ? VPItems.MILK_BOTTLE.get() : item;
     }
