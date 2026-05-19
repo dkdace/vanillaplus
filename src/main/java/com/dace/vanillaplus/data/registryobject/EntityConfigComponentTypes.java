@@ -5,6 +5,7 @@ import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.dace.vanillaplus.world.entity.animal.golem.IronGolemConfig;
 import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
+import com.dace.vanillaplus.world.entity.decoration.ArmorStandConfig;
 import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
@@ -38,6 +39,8 @@ public final class EntityConfigComponentTypes {
             "npc", NpcConfig.CODEC, NpcConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<CrossbowMobConfig>> CROSSBOW_MOB = create(
             "crossbow_mob", CrossbowMobConfig.CODEC, CrossbowMobConfig.DEFAULT);
+    public static final RegistryObject<VPDataComponentMap.Key<ArmorStandConfig>> ARMOR_STAND = create(
+            "armor_stand", ArmorStandConfig.CODEC, ArmorStandConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<VillagerConfig>> VILLAGER = create(
             "villager", VillagerConfig.CODEC, VillagerConfig.DEFAULT);
     public static final RegistryObject<VPDataComponentMap.Key<IronGolemConfig>> IRON_GOLEM = create(
