@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
-import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -24,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin<T extends ChestBlock, U extends BlockModifier> extends BlockMixin<T, U> implements VPLootContainerBlock<T, U> {
+public abstract class ChestBlockMixin<T extends ChestBlock> extends BlockMixin<T> implements VPLootContainerBlock<T> {
     @Shadow
     public static Direction getConnectedDirection(BlockState state) {
         throw new UnsupportedOperationException();

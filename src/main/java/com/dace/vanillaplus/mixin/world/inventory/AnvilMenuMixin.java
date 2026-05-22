@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.inventory;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.world.block.modifier.AnvilBlockModifier;
+import com.dace.vanillaplus.world.block.AnvilConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -22,7 +22,7 @@ public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
 
     @ModifyArg(method = "calculateIncreasedRepairCost", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(JJ)J"), index = 0)
     private static long modifyIncreasedRepairCost(long cost, @Local(argsOnly = true) int baseCost) {
-        return AnvilBlockModifier.get().isIncreaseRepairCost() ? cost : baseCost;
+        return AnvilConfig.get().increaseRepairCost() ? cost : baseCost;
     }
 
     @Definition(id = "cost", field = "Lnet/minecraft/world/inventory/AnvilMenu;cost:Lnet/minecraft/world/inventory/DataSlot;")
@@ -30,13 +30,11 @@ public abstract class AnvilMenuMixin implements VPMixin<AnvilMenu> {
     @Expression("this.cost.get() >= 40")
     @ModifyExpressionValue(method = "createResult", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyMaxCostCondition(boolean condition) {
-        return AnvilBlockModifier.get().getMaxCost()
-                .map(maxCost -> maxCost.map(value -> cost.get() > value).orElse(false))
-                .orElse(condition);
+        return AnvilConfig.get().maxCost().map(maxCost -> maxCost >= 0 && cost.get() > maxCost).orElse(condition);
     }
 
     @ModifyArg(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/DataSlot;set(I)V", ordinal = 5))
     private int modifyMaxCost(int value) {
-        return AnvilBlockModifier.get().getMaxCost().map(maxCost -> maxCost.orElse(cost.get())).orElse(value);
+        return AnvilConfig.get().maxCost().map(maxCost -> maxCost >= 0 ? maxCost : cost.get()).orElse(value);
     }
 }

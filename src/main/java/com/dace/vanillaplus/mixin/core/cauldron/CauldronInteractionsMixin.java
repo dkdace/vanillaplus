@@ -2,8 +2,8 @@ package com.dace.vanillaplus.mixin.core.cauldron;
 
 import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.block.WaterCauldronConfig;
 import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
-import com.dace.vanillaplus.world.block.modifier.WaterCauldronBlockModifier;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -54,7 +54,7 @@ public abstract class CauldronInteractionsMixin implements VPMixin<CauldronInter
 
     @Unique
     private static boolean canContainOnlyWater() {
-        return WaterCauldronBlockModifier.get().getMaxPotionEffects() <= 0;
+        return WaterCauldronConfig.get().maxPotionEffects() <= 0;
     }
 
     @Unique
@@ -62,7 +62,7 @@ public abstract class CauldronInteractionsMixin implements VPMixin<CauldronInter
     private static InteractionResult getArrowInteractionResult(@NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos,
                                                                @NonNull Player player, @NonNull InteractionHand interactionHand,
                                                                @NonNull ItemStack itemStack) {
-        int maxTippedArrowCount = WaterCauldronBlockModifier.get().getMaxTippedArrowCount();
+        int maxTippedArrowCount = WaterCauldronConfig.get().maxTippedArrowCount();
         if (maxTippedArrowCount <= 0)
             return InteractionResult.TRY_WITH_EMPTY_HAND;
 

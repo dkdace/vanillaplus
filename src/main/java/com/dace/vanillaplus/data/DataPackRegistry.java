@@ -4,7 +4,7 @@ import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.MobEffectValues;
-import com.dace.vanillaplus.world.block.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockConfig;
 import com.dace.vanillaplus.world.entity.EntityConfig;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
 import com.dace.vanillaplus.world.item.ItemModifier;
@@ -38,9 +38,9 @@ public final class DataPackRegistry {
             MobEffectValues.DIRECT_CODEC, Registries.MOB_EFFECT);
     /** 습격 웨이브 정보 */
     public static final ResourceKey<Registry<RaidWave>> RAID_WAVE = create("raid_wave");
-    /** 블록 수정자 */
-    public static final ResourceKey<Registry<BlockModifier>> BLOCK_MODIFIER = create("block_modifier",
-            CodecComponent.createCodec(StaticRegistry.BLOCK_MODIFIER_TYPE), Registries.BLOCK);
+    /** 블록 설정 */
+    public static final ResourceKey<Registry<BlockConfig>> BLOCK_CONFIG = create("block_config",
+            BlockConfig.DIRECT_CODEC, Registries.BLOCK);
     /** 엔티티 설정 */
     public static final ResourceKey<Registry<EntityConfig>> ENTITY_CONFIG = create("entity_config",
             EntityConfig.DIRECT_CODEC, Registries.ENTITY_TYPE);

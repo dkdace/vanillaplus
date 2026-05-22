@@ -1,7 +1,0 @@
-{
-  "type": "vanillaplus:cake",
-  "food": {
-    "nutrition": 2,
-    "saturation": 1.2
-  }
-}

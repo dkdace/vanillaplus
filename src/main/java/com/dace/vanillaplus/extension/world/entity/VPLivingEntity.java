@@ -2,7 +2,9 @@ package com.dace.vanillaplus.extension.world.entity;
 
 import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Attackable;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.waypoints.WaypointTransmitter;
 import net.minecraftforge.common.extensions.IForgeLivingEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> {@link LivingEntity}를 상속받는 타입
  */
-public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, IForgeLivingEntity {
+public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, Attackable, WaypointTransmitter, IForgeLivingEntity {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends LivingEntity> VPLivingEntity<T> cast(@NonNull T object) {

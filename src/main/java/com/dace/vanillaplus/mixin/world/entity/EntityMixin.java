@@ -97,7 +97,7 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     @NonNull
     public final VPDataComponentMap getConfigComponents() {
         VPModifiableData<EntityType<?>, EntityConfig> entityConfig = VPModifiableData.cast(getType());
-        return entityConfig.getDataModifier().map(EntityConfig::getComponents).orElse(VPDataComponentMap.EMPTY);
+        return entityConfig.getDataModifier().map(EntityConfig::components).orElse(VPDataComponentMap.EMPTY);
     }
 
     @ModifyArg(method = {"playStepSound", "playMuffledStepSound", "playCombinationStepSounds"}, at = @At(value = "INVOKE",

@@ -3,7 +3,7 @@ package com.dace.vanillaplus.mixin.world.inventory;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.inventory.VPBrewingStandMenu;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
-import com.dace.vanillaplus.world.block.modifier.BrewingStandBlockModifier;
+import com.dace.vanillaplus.world.block.BrewingStandConfig;
 import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -72,7 +72,7 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;",
                     ordinal = 3))
     private Slot modifyIngredientSlot(Slot slot, @Local(argsOnly = true) Container brewingStand) {
-        return BrewingStandBlockModifier.get().isUseDataDrivenRecipe() ?
+        return BrewingStandConfig.get().useDataDrivenRecipe() ?
                 new Slot(brewingStand, INGREDIENT_SLOT, INGREDIENT_SLOT_X, INGREDIENT_SLOT_Y) {
                     @Override
                     public boolean mayPlace(@NonNull ItemStack itemStack) {
@@ -85,14 +85,14 @@ public abstract class BrewingStandMenuMixin implements VPBrewingStandMenu {
     public abstract static class PotionSlotMixin implements VPMixin<BrewingStandMenu.PotionSlot> {
         @ModifyReturnValue(method = "mayPlaceItem", at = @At("RETURN"))
         private static boolean modifyPlaceableItem(boolean original, @Local(argsOnly = true) ItemStack itemStack) {
-            return BrewingStandBlockModifier.get().isUseDataDrivenRecipe() ? itemStack.is(BrewingRecipe.getPotionContainers()) : original;
+            return BrewingStandConfig.get().useDataDrivenRecipe() ? itemStack.is(BrewingRecipe.getPotionContainers()) : original;
         }
 
         @Definition(id = "potionBrewing", field = "Lnet/minecraft/world/inventory/BrewingStandMenu$PotionSlot;potionBrewing:Lnet/minecraft/world/item/alchemy/PotionBrewing;")
         @Expression("this.potionBrewing != null")
         @ModifyExpressionValue(method = "mayPlace", at = @At("MIXINEXTRAS:EXPRESSION"))
         public boolean modifyPlaceCondition(boolean condition) {
-            return !BrewingStandBlockModifier.get().isUseDataDrivenRecipe() && condition;
+            return !BrewingStandConfig.get().useDataDrivenRecipe() && condition;
         }
 
         @Inject(method = "onTake", at = @At(value = "INVOKE",

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.client.gui.screens.inventory;
 
-import com.dace.vanillaplus.world.block.modifier.AnvilBlockModifier;
+import com.dace.vanillaplus.world.block.AnvilConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -16,8 +16,6 @@ public abstract class AnvilScreenMixin extends AbstractContainerScreenMixin<Anvi
     @Expression("cost >= 40")
     @ModifyExpressionValue(method = "extractLabels", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyMaxCostCondition(boolean condition, @Local(name = "cost") int cost) {
-        return AnvilBlockModifier.get().getMaxCost()
-                .map(maxCost -> maxCost.map(value -> cost > value).orElse(false))
-                .orElse(condition);
+        return AnvilConfig.get().maxCost().map(maxCost -> maxCost >= 0 && cost > maxCost).orElse(condition);
     }
 }

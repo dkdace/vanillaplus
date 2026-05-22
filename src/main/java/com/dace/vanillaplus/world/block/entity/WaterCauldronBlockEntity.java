@@ -3,7 +3,7 @@ package com.dace.vanillaplus.world.block.entity;
 import com.dace.vanillaplus.data.registryobject.VPBlockEntityTypes;
 import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
 import com.dace.vanillaplus.util.ColorUtil;
-import com.dace.vanillaplus.world.block.modifier.WaterCauldronBlockModifier;
+import com.dace.vanillaplus.world.block.WaterCauldronConfig;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -135,7 +135,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
      * @param potionContents 물약 내용물
      */
     public void addPotion(@Nullable PotionContents potionContents) {
-        int maxPotionEffects = WaterCauldronBlockModifier.get().getMaxPotionEffects();
+        int maxPotionEffects = WaterCauldronConfig.get().maxPotionEffects();
         if (maxPotionEffects <= 0)
             return;
 
@@ -153,7 +153,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
      * @param previousLevel 이전 내용물 레벨
      */
     public void fillWater(int previousLevel) {
-        int maxPotionEffects = WaterCauldronBlockModifier.get().getMaxPotionEffects();
+        int maxPotionEffects = WaterCauldronConfig.get().maxPotionEffects();
         if (maxPotionEffects <= 0)
             return;
 
@@ -171,7 +171,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
      *
      * @param potionContents   추가할 물약 내용물
      * @param levelValue       내용물 레벨
-     * @param maxPotionEffects {@link WaterCauldronBlockModifier#getMaxPotionEffects()}
+     * @param maxPotionEffects {@link WaterCauldronConfig#maxPotionEffects()}
      * @return 혼합된 물약 내용물
      */
     @Nullable

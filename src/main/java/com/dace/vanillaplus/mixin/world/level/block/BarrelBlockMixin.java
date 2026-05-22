@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
-import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -21,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BarrelBlock.class)
-public abstract class BarrelBlockMixin<T extends BlockModifier> extends BlockMixin<BarrelBlock, T> implements VPLootContainerBlock<BarrelBlock, T> {
+public abstract class BarrelBlockMixin extends BlockMixin<BarrelBlock> implements VPLootContainerBlock<BarrelBlock> {
     @Override
     public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
         return getXP(state, level, randomSource, pos);

@@ -2,7 +2,7 @@ package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.data.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
-import com.dace.vanillaplus.world.block.modifier.BrewingStandBlockModifier;
+import com.dace.vanillaplus.world.block.BrewingStandConfig;
 import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -81,7 +81,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;isBrewable(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/core/NonNullList;)Z"))
     private static boolean redirectIsBrewable(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Operation<Boolean> original,
                                               @Local(argsOnly = true) Level level, @Local(argsOnly = true) BrewingStandBlockEntity entity) {
-        if (!BrewingStandBlockModifier.get().isUseDataDrivenRecipe())
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
             return original.call(potionBrewing, items);
 
         ItemStack ingredient = items.get(INGREDIENT_SLOT);
@@ -101,7 +101,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @ModifyExpressionValue(method = "serverTick", at = @At(value = "CONSTANT", args = "intValue=400"))
     private static int modifyBrewingDuration(int duration, @Local(argsOnly = true) Level level,
                                              @Local(argsOnly = true) BrewingStandBlockEntity entity) {
-        if (!BrewingStandBlockModifier.get().isUseDataDrivenRecipe())
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
             return duration;
 
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
@@ -121,7 +121,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;mix(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))
     private static ItemStack redirectResult(PotionBrewing instance, ItemStack ingredient, ItemStack source, Operation<ItemStack> original,
                                             @Local(argsOnly = true) Level level, @Local(argsOnly = true) BlockPos pos) {
-        if (!BrewingStandBlockModifier.get().isUseDataDrivenRecipe())
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
             return original.call(instance, ingredient, source);
 
         BrewingStandBlockEntity brewingStandBlockEntity = (BrewingStandBlockEntity) Objects.requireNonNull(level.getBlockEntity(pos));
@@ -153,13 +153,13 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     public void setRecipeUsed(@Nullable RecipeHolder<?> recipeUsed) {
-        if (BrewingStandBlockModifier.get().isUseDataDrivenRecipe() && recipeUsed != null)
+        if (BrewingStandConfig.get().useDataDrivenRecipe() && recipeUsed != null)
             recipesUsed.addTo(recipeUsed.id(), 1);
     }
 
     @Override
     public boolean setRecipeUsed(@NonNull ServerPlayer player, @NonNull RecipeHolder<?> recipe) {
-        return BrewingStandBlockModifier.get().isUseDataDrivenRecipe() && VPBrewingStandBlockEntity.super.setRecipeUsed(player, recipe);
+        return BrewingStandConfig.get().useDataDrivenRecipe() && VPBrewingStandBlockEntity.super.setRecipeUsed(player, recipe);
     }
 
     @Override
@@ -168,7 +168,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     public void awardUsedRecipes(@NonNull Player player) {
-        if (!BrewingStandBlockModifier.get().isUseDataDrivenRecipe() || !(player.level() instanceof ServerLevel serverLevel))
+        if (!BrewingStandConfig.get().useDataDrivenRecipe() || !(player.level() instanceof ServerLevel serverLevel))
             return;
 
         List<RecipeHolder<?>> list = getRecipesToAward(serverLevel);
@@ -181,7 +181,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     protected void onPreRemoveSideEffects(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (BrewingStandBlockModifier.get().isUseDataDrivenRecipe() && level instanceof ServerLevel serverlevel)
+        if (BrewingStandConfig.get().useDataDrivenRecipe() && level instanceof ServerLevel serverlevel)
             getRecipesToAward(serverlevel);
     }
 
@@ -207,7 +207,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @WrapOperation(method = "canPlaceItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean redirectIsIngredient(PotionBrewing instance, ItemStack ingredient, Operation<Boolean> original) {
-        return BrewingStandBlockModifier.get().isUseDataDrivenRecipe()
+        return BrewingStandConfig.get().useDataDrivenRecipe()
                 ? ((ServerLevel) Objects.requireNonNull(level)).recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET).test(ingredient)
                 : original.call(instance, ingredient);
     }
@@ -215,7 +215,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @WrapOperation(method = "canPlaceItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isValidInput(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean redirectIsValidInput(PotionBrewing instance, ItemStack stack, Operation<Boolean> original) {
-        return BrewingStandBlockModifier.get().isUseDataDrivenRecipe()
+        return BrewingStandConfig.get().useDataDrivenRecipe()
                 ? BrewingStandMenu.PotionSlot.mayPlaceItem(stack)
                 : original.call(instance, stack);
     }

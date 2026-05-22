@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.level.block;
 import com.dace.vanillaplus.data.registryobject.VPBlockEntityTypes;
 import com.dace.vanillaplus.extension.world.level.block.VPLayeredCauldronBlock;
 import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
-import com.dace.vanillaplus.world.block.modifier.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LayeredCauldronBlock.class)
-public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldronBlock, BlockModifier> implements VPLayeredCauldronBlock<BlockModifier> {
+public abstract class LayeredCauldronBlockMixin extends BlockMixin<LayeredCauldronBlock> implements VPLayeredCauldronBlock, EntityBlock {
     @Unique
     private static void addWater(@NonNull Level level, @NonNull BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)

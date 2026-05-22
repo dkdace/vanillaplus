@@ -1,7 +1,5 @@
 package com.dace.vanillaplus.util;
 
-import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -36,9 +34,7 @@ public final class CodecUtil {
      */
     @NonNull
     public static <T> Codec<Optional<T>> optional(@NonNull Codec<T> codec) {
-        return Codec.either(codec, Codec.EMPTY.codec())
-                .xmap(to -> to.map(Optional::of, _ -> Optional.empty()),
-                        from -> from.map(Either::<T, Unit>left).orElse(Either.right(Unit.INSTANCE)));
+        return codec.xmap(Optional::ofNullable, optional -> optional.orElse(null));
     }
 
     /**

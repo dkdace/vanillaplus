@@ -1,7 +1,8 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
+import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
-import com.dace.vanillaplus.world.block.modifier.BlockModifier;
+import com.dace.vanillaplus.world.block.BlockConfig;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -20,10 +21,10 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Optional;
 
 @Mixin(Block.class)
-public abstract class BlockMixin<T extends Block, U extends BlockModifier> implements VPBlock<T, U> {
+public abstract class BlockMixin<T extends Block> implements VPBlock<T> {
     @Unique
     @Nullable
-    private U dataModifier;
+    private BlockConfig dataModifier;
 
     @Shadow
     public abstract void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random);
@@ -34,13 +35,19 @@ public abstract class BlockMixin<T extends Block, U extends BlockModifier> imple
 
     @Override
     @NonNull
-    public Optional<U> getDataModifier() {
+    public final VPDataComponentMap getConfigComponents() {
+        return getDataModifier().map(BlockConfig::components).orElse(VPDataComponentMap.EMPTY);
+    }
+
+    @Override
+    @NonNull
+    public final Optional<BlockConfig> getDataModifier() {
         return Optional.ofNullable(dataModifier);
     }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
+    public void setDataModifier(@Nullable BlockConfig dataModifier) {
         this.dataModifier = dataModifier;
     }
 }
