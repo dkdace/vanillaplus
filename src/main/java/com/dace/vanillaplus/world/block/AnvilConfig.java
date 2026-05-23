@@ -28,6 +28,6 @@ public record AnvilConfig(boolean increaseRepairCost, @NonNull Optional<Integer>
 
     @NonNull
     public static AnvilConfig get() {
-        return VPBlock.cast(Blocks.ANVIL).getConfigComponents().get(BlockConfigComponentTypes.ANVIL);
+        return VPBlock.cast(Blocks.ANVIL).getConfigComponents().getOrDefault(BlockConfigComponentTypes.ANVIL, DEFAULT);
     }
 }

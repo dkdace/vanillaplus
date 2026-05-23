@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.decoration;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
 import com.dace.vanillaplus.world.entity.decoration.ArmorStandConfig;
 import lombok.NonNull;
@@ -53,8 +52,8 @@ public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand> {
     @Inject(method = "interact", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/decoration/ArmorStand;getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;"),
             cancellable = true)
-    private void toggleShowArmsOrSwapItems(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
-        ArmorStandConfig armorStandConfig = getConfigComponents().get(EntityConfigComponentTypes.ARMOR_STAND);
+    private void addInteractions(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
+        ArmorStandConfig armorStandConfig = ArmorStandConfig.get();
         boolean isDone = false;
 
         if (armorStandConfig.enableQuickSwap() && player.isShiftKeyDown()) {

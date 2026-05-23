@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -36,21 +35,18 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Expression("attackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyAttackRadius(float attackRadius, @Local(argsOnly = true) T mob) {
-        return VPLivingEntity.cast(mob).getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).shootingRange()
-                .map(Integer::floatValue)
-                .orElse(attackRadius);
+        return VPLivingEntity.cast(mob).getCrossbowMobConfig().shootingRange().map(Integer::floatValue).orElse(attackRadius);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
     private void backupIfTooClose(CallbackInfo ci, @Local(name = "target") LivingEntity target) {
-        VPLivingEntity.cast(mob).getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).backupDistance()
-                .ifPresent(backupDistance -> {
-                    if (mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME || !target.closerThan(mob, backupDistance))
-                        return;
+        VPLivingEntity.cast(mob).getCrossbowMobConfig().backupDistance().ifPresent(backupDistance -> {
+            if (mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME || !target.closerThan(mob, backupDistance))
+                return;
 
-                    mob.getMoveControl().strafe(-0.75F, 0);
-                    mob.setYRot(Mth.rotateIfNecessary(mob.getYRot(), mob.yHeadRot, 0));
-                });
+            mob.getMoveControl().strafe(-0.75F, 0);
+            mob.setYRot(Mth.rotateIfNecessary(mob.getYRot(), mob.yHeadRot, 0));
+        });
     }
 }

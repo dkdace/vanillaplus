@@ -1,7 +1,11 @@
 package com.dace.vanillaplus.world.entity.animal.golem;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.NonNull;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 
 /**
@@ -17,4 +21,9 @@ public record IronGolemConfig(boolean inflateAttackHitbox) {
             .group(Codec.BOOL.optionalFieldOf("inflate_attack_hitbox", DEFAULT.inflateAttackHitbox)
                     .forGetter(IronGolemConfig::inflateAttackHitbox))
             .apply(instance, IronGolemConfig::new));
+
+    @NonNull
+    public static IronGolemConfig get() {
+        return VPEntityType.cast(EntityType.IRON_GOLEM).getConfigComponents().getOrDefault(EntityConfigComponentTypes.IRON_GOLEM, DEFAULT);
+    }
 }

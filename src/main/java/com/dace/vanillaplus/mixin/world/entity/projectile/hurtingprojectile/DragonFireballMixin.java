@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.projectile.hurtingprojectile;
 import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -33,7 +34,7 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
     @Override
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
                                              float resistance) {
-        if (getOwner() instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getEnderDragonConfig().phaseInfo().isPresent())
+        if (getOwner() instanceof EnderDragon && EnderDragonConfig.get().phaseInfo().isPresent())
             return block.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
 
         return super.getBlockExplosionResistance(explosion, level, pos, block, fluid, resistance);
@@ -43,32 +44,29 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
             target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;ownedBy(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean redirectHitCondition(DragonFireball instance, Entity entity, Operation<Boolean> original,
                                          @Local(argsOnly = true) HitResult hitResult) {
-        return getOwner() instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getEnderDragonConfig().phaseInfo().isPresent()
+        return getOwner() instanceof EnderDragon enderDragon && EnderDragonConfig.get().phaseInfo().isPresent()
                 ? ((EntityHitResult) hitResult).getEntity().is(enderDragon)
                 : original.call(instance, entity);
     }
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setDuration(I)V"))
     private int modifyFlameDuration(int duration, @Local(name = "owner") Entity owner) {
-        if (owner instanceof EnderDragon enderDragon)
-            return VPEnderDragon.cast(enderDragon).getEnderDragonConfig().phaseInfo()
-                    .map(phaseInfo -> phaseInfo.fireball().flameDuration())
-                    .orElse(duration);
-
-        return duration;
+        return owner instanceof EnderDragon
+                ? EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.fireball().flameDuration()).orElse(duration)
+                : duration;
     }
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/hurtingprojectile/DragonFireball;discard()V"))
     private void explode(HitResult hitResult, CallbackInfo ci) {
-        if (getOwner() instanceof EnderDragon enderDragon)
-            VPEnderDragon.cast(enderDragon).getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo ->
+        if (getOwner() instanceof EnderDragon)
+            EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo ->
                     level().explode(getThis(), getX(), getY(), getZ(), phaseInfo.fireball().explosionRadius(), Level.ExplosionInteraction.MOB));
     }
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
     private MobEffectInstance modifyFlameEffect(MobEffectInstance effect, @Local(name = "owner") Entity owner) {
-        return owner instanceof EnderDragon enderDragon && VPEnderDragon.cast(enderDragon).getEnderDragonConfig().phaseInfo().isPresent()
+        return owner instanceof EnderDragon enderDragon && EnderDragonConfig.get().phaseInfo().isPresent()
                 ? VPEnderDragon.cast(enderDragon).getFlameMobEffectInstance()
                 : effect;
     }

@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonTakeoffPhase;
 import net.minecraft.world.level.block.LevelEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DragonTakeoffPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @Inject(method = "begin", at = @At("TAIL"))
     private void playTakeoffEffects(CallbackInfo ci) {
-        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent())
+        if (EnderDragonConfig.get().phaseInfo().isPresent())
             for (int i = 0; i < 3; i++)
                 dragon.level().levelEvent(LevelEvent.PARTICLES_DRAGON_FIREBALL_SPLASH, dragon.blockPosition(), dragon.isSilent() ? -1 : 1);
     }

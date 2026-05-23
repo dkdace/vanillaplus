@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +12,6 @@ public abstract class PiglinMixin extends MonsterMixin<Piglin> {
             target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float crossbowPower) {
-        return getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).shootingPower().orElse(crossbowPower);
+        return getCrossbowMobConfig().shootingPower().orElse(crossbowPower);
     }
 }

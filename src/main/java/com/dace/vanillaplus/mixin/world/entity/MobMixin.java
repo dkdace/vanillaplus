@@ -59,7 +59,7 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
 
     @Unique
     private boolean canStopRiding(@Nullable Entity vehicle) {
-        return getConfigComponents().get(EntityConfigComponentTypes.PREVENT_RIDING_IF_HAS_TARGET) && getTarget() != null
+        return getConfigComponents().getBoolean(EntityConfigComponentTypes.PREVENT_RIDING_IF_HAS_TARGET) && getTarget() != null
                 && vehicle instanceof VehicleEntity;
     }
 

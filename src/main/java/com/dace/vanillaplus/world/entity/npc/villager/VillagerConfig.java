@@ -1,7 +1,11 @@
 package com.dace.vanillaplus.world.entity.npc.villager;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.NonNull;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.Villager;
 
 /**
@@ -20,4 +24,9 @@ public record VillagerConfig(boolean closeTradingAtNight, boolean rerollOffersEv
                     Codec.BOOL.optionalFieldOf("reroll_offers_everyday", DEFAULT.rerollOffersEveryday)
                             .forGetter(VillagerConfig::rerollOffersEveryday))
             .apply(instance, VillagerConfig::new));
+
+    @NonNull
+    public static VillagerConfig get() {
+        return VPEntityType.cast(EntityType.VILLAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.VILLAGER, DEFAULT);
+    }
 }

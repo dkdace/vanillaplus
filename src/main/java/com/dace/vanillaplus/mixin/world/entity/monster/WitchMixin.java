@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.entity.ai.goal.VPRangedAttackGoal;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
@@ -93,19 +92,19 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "CONSTANT", args = "floatValue=4.0"))
     private float modifySupportHealthCondition(float health) {
-        return getConfigComponents().get(EntityConfigComponentTypes.WITCH).supportPotionModifiers().isEmpty() ? health : SUPPORT_HEALING_HEALTH;
+        return WitchConfig.get().supportPotionModifiers().isEmpty() ? health : SUPPORT_HEALING_HEALTH;
     }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack modifyPotionSelf(ItemStack itemStack) {
-        return getConfigComponents().get(EntityConfigComponentTypes.WITCH).selfPotionModifiers().apply(getThis(), itemStack);
+        return WitchConfig.get().selfPotionModifiers().apply(getThis(), itemStack);
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack modifyPotionThrow(ItemStack itemStack, @Local(argsOnly = true) LivingEntity target) {
-        WitchConfig witchConfig = getConfigComponents().get(EntityConfigComponentTypes.WITCH);
+        WitchConfig witchConfig = WitchConfig.get();
         return (target instanceof Raider ? witchConfig.supportPotionModifiers() : witchConfig.attackPotionModifiers()).apply(getThis(), itemStack);
     }
 
@@ -114,7 +113,7 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
         if (rangedAttackGoal == null)
             return;
 
-        float multiplier = getConfigComponents().get(EntityConfigComponentTypes.WITCH).attackCooldownMultipliers().apply(getThis(), 1F);
+        float multiplier = WitchConfig.get().attackCooldownMultipliers().apply(getThis(), 1F);
 
         VPRangedAttackGoal vpRangedAttackGoal = VPRangedAttackGoal.cast(rangedAttackGoal);
         vpRangedAttackGoal.setMinAttackCooldown((int) (attackCooldown * multiplier));

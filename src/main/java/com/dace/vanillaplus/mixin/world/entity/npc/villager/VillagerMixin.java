@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -46,28 +46,23 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
 
     @Unique
     private boolean isTradingClosed() {
-        return getConfigComponents().get(EntityConfigComponentTypes.VILLAGER).closeTradingAtNight() && !getOffers().isEmpty()
+        return VillagerConfig.get().closeTradingAtNight() && !getOffers().isEmpty()
                 && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
     }
 
     @Unique
     private boolean isTradingOutOfStock() {
-        if (!rerollOffersEveryday())
+        if (!VillagerConfig.get().rerollOffersEveryday())
             return false;
 
         MerchantOffers merchantOffers = getOffers();
         return !merchantOffers.isEmpty() && merchantOffers.stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
-    @Unique
-    private boolean rerollOffersEveryday() {
-        return getConfigComponents().get(EntityConfigComponentTypes.VILLAGER).rerollOffersEveryday();
-    }
-
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
     private void rerollOffers(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
-        if (!rerollOffersEveryday())
+        if (!VillagerConfig.get().rerollOffersEveryday())
             return;
 
         MerchantOffers merchantOffers = getOffers();
@@ -109,7 +104,7 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
         if (!isTradingClosed())
             return;
 
-        if (rerollOffersEveryday())
+        if (VillagerConfig.get().rerollOffersEveryday())
             getOffers().forEach(MerchantOffer::setToOutOfStock);
         if (isTrading())
             stopTrading();

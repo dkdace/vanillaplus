@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -28,31 +29,30 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhaseManager;setPhase(Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhase;)V",
             ordinal = 1))
     private boolean checkFireCount(EnderDragonPhaseManager instance, EnderDragonPhase<?> target) {
-        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isEmpty() || ++fireCount >= maxFireCount;
+        return EnderDragonConfig.get().phaseInfo().isEmpty() || ++fireCount >= maxFireCount;
     }
 
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private void applyFireballVelocity(ServerLevel level, CallbackInfo ci, @Local(name = "entity") DragonFireball entity) {
-        getVPEnderDragon().getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo ->
-                entity.accelerationPower *= phaseInfo.fireball().velocityMultiplier());
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> entity.accelerationPower *= phaseInfo.fireball().velocityMultiplier());
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getX()D",
             ordinal = 2))
     private double modifyFireballTargetX(double x) {
-        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent() ? dragon.getRandom().triangle(x, FIREBALL_TARGET_SPREAD) : x;
+        return EnderDragonConfig.get().phaseInfo().isPresent() ? dragon.getRandom().triangle(x, FIREBALL_TARGET_SPREAD) : x;
     }
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getZ()D",
             ordinal = 2))
     private double modifyFireballTargetZ(double z) {
-        return getVPEnderDragon().getEnderDragonConfig().phaseInfo().isPresent() ? dragon.getRandom().triangle(z, FIREBALL_TARGET_SPREAD) : z;
+        return EnderDragonConfig.get().phaseInfo().isPresent() ? dragon.getRandom().triangle(z, FIREBALL_TARGET_SPREAD) : z;
     }
 
     @Inject(method = "begin", at = @At("TAIL"))
     private void resetFireCount(CallbackInfo ci) {
-        getVPEnderDragon().getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo -> {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
             fireCount = 0;
             maxFireCount = (int) phaseInfo.fireball().maxShots().get(dragon);
         });

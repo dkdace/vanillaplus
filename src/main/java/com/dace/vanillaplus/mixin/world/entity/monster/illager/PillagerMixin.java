@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
@@ -35,6 +34,6 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager> {
             target = "Lnet/minecraft/world/entity/monster/illager/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float crossbowPower) {
-        return getConfigComponents().get(EntityConfigComponentTypes.CROSSBOW_MOB).shootingPower().orElse(crossbowPower);
+        return getCrossbowMobConfig().shootingPower().orElse(crossbowPower);
     }
 }

@@ -2,9 +2,8 @@ package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.EntityConfig;
+import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -96,8 +95,7 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     @Override
     @NonNull
     public final VPDataComponentMap getConfigComponents() {
-        VPModifiableData<EntityType<?>, EntityConfig> entityConfig = VPModifiableData.cast(getType());
-        return entityConfig.getDataModifier().map(EntityConfig::components).orElse(VPDataComponentMap.EMPTY);
+        return VPEntityType.cast(getType()).getConfigComponents();
     }
 
     @ModifyArg(method = {"playStepSound", "playMuffledStepSound", "playCombinationStepSounds"}, at = @At(value = "INVOKE",

@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.entity.raid.VPRaider;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -29,7 +28,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker> {
     @Override
     @Nullable
     public EquipmentSlot resolveSlot(@NonNull ItemStack toEquip, @NonNull List<EquipmentSlot> alreadyInsertedIntoSlots) {
-        if (!getConfigComponents().get(EntityConfigComponentTypes.RAIDER).useDataDrivenRaidEquipment())
+        if (!getRaiderConfig().useDataDrivenRaidEquipment())
             return super.resolveSlot(toEquip, alreadyInsertedIntoSlots);
 
         if (!toEquip.isEmpty()) {

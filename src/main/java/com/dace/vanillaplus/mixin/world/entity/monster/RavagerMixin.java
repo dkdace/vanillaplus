@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
+import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +38,7 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager> {
                                                                                      boolean mustSee,
                                                                                      TargetingConditions.Selector selector,
                                                                                      Operation<NearestAttackableTargetGoal<AbstractVillager>> original) {
-        return getConfigComponents().get(EntityConfigComponentTypes.RAIDER).attackBabyVillagers()
+        return getRaiderConfig().attackBabyVillagers()
                 ? new NearestAttackableTargetGoal<>(mob, AbstractVillager.class, true)
                 : original.call(mob, targetType, mustSee, selector);
     }
@@ -71,13 +71,13 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager> {
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;roarTick:I", ordinal = 1,
             opcode = Opcodes.PUTFIELD))
     private void setRoarCooldown(CallbackInfo ci) {
-        getConfigComponents().get(EntityConfigComponentTypes.RAVAGER).roarCooldown().ifPresent(cooldown -> roarCooldown = cooldown);
+        RavagerConfig.get().roarCooldown().ifPresent(cooldown -> roarCooldown = cooldown);
     }
 
     @Inject(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/Ravager;stunnedTick:I", ordinal = 0,
             opcode = Opcodes.GETFIELD))
     private void performRoar(CallbackInfo ci) {
-        getConfigComponents().get(EntityConfigComponentTypes.RAVAGER).roarCooldown().ifPresent(cooldown -> {
+        RavagerConfig.get().roarCooldown().ifPresent(cooldown -> {
             LivingEntity target = getTarget();
             if (target == null || roarCooldown > 0 || !closerThan(target, ROAR_DISTANCE) || !hasLineOfSight(target))
                 return;

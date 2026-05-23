@@ -6,6 +6,7 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -13,6 +14,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -135,6 +137,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     }
 
     @Override
+    @NonNull
+    public CrossbowMobConfig getCrossbowMobConfig() {
+        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.CROSSBOW_MOB, CrossbowMobConfig.DEFAULT);
+    }
+
+    @Override
     public double getFinalKnockbackResistance(double knockbackResistance, @Nullable DamageSource damageSource) {
         return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
                 ? getAttributeValue(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
@@ -143,14 +151,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
-        attributes.apply(getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES));
+        getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES).ifPresent(attributes::apply);
     }
 
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return getConfigComponents().get(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS) ? ClipContext.Block.VISUAL : blockCollidingContext;
+        return getConfigComponents().getBoolean(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS)
+                ? ClipContext.Block.VISUAL
+                : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))

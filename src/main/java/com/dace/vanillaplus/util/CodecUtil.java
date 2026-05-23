@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * {@link Codec} 관련 기능을 제공하는 클래스.
@@ -23,18 +22,6 @@ public final class CodecUtil {
     public static <E extends Enum<E>> Codec<E> fromEnum(@NonNull Class<E> enumClass) {
         return Codec.stringResolver(to -> to.toString().toLowerCase(Locale.ROOT),
                 from -> Enum.valueOf(enumClass, from.toUpperCase(Locale.ROOT)));
-    }
-
-    /**
-     * 지정한 코덱에 {@link Optional}을 적용하여 반환한다.
-     *
-     * @param codec 코덱
-     * @param <T>   값의 타입
-     * @return {@link Codec}
-     */
-    @NonNull
-    public static <T> Codec<Optional<T>> optional(@NonNull Codec<T> codec) {
-        return codec.xmap(Optional::ofNullable, optional -> optional.orElse(null));
     }
 
     /**

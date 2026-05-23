@@ -34,9 +34,9 @@ public final class StaticRegistry<T> {
     private static final HashSet<DeferredRegister<?>> REGISTRIES = new HashSet<>();
 
     /** 블록 설정 데이터 요소 타입 */
-    public static final StaticRegistry<VPDataComponentMap.Key<?>> BLOCK_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("block_config/component_type");
+    public static final StaticRegistry<Codec<?>> BLOCK_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("block_config/component_type");
     /** 엔티티 설정 데이터 요소 타입 */
-    public static final StaticRegistry<VPDataComponentMap.Key<?>> ENTITY_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("entity_config/component_type");
+    public static final StaticRegistry<Codec<?>> ENTITY_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("entity_config/component_type");
     /** 아이템 수정자 타입 */
     public static final StaticRegistry<MapCodec<? extends ItemModifier>> ITEM_MODIFIER_TYPE = new StaticRegistry<>("modifier/item/type");
 

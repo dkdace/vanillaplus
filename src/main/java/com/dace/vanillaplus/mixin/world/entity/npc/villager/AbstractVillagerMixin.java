@@ -57,7 +57,7 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends 
     @Override
     @NonNull
     public NpcConfig getNpcConfig() {
-        return getConfigComponents().get(EntityConfigComponentTypes.NPC);
+        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.NPC, NpcConfig.DEFAULT);
     }
 
     @WrapWithCondition(method = "addOffersFromTradeSet", at = @At(value = "INVOKE",

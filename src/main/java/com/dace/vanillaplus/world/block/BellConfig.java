@@ -33,6 +33,6 @@ public record BellConfig(@NonNull Optional<Integer> raiderDetectionRange, @NonNu
 
     @NonNull
     public static BellConfig get() {
-        return VPBlock.cast(Blocks.BELL).getConfigComponents().get(BlockConfigComponentTypes.BELL);
+        return VPBlock.cast(Blocks.BELL).getConfigComponents().getOrDefault(BlockConfigComponentTypes.BELL, DEFAULT);
     }
 }

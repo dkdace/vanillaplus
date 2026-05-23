@@ -27,6 +27,6 @@ public record WaterCauldronConfig(int maxPotionEffects, int maxTippedArrowCount)
 
     @NonNull
     public static WaterCauldronConfig get() {
-        return VPBlock.cast(Blocks.WATER_CAULDRON).getConfigComponents().get(BlockConfigComponentTypes.WATER_CAULDRON);
+        return VPBlock.cast(Blocks.WATER_CAULDRON).getConfigComponents().getOrDefault(BlockConfigComponentTypes.WATER_CAULDRON, DEFAULT);
     }
 }

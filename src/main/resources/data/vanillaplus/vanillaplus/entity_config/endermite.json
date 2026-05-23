@@ -1,5 +1,11 @@
 {
   "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "minecraft:fall_damage_multiplier",
+        "base": 0
+      }
+    ],
     "vanillaplus:see_through_transparent_blocks": true,
     "vanillaplus:prevent_riding_if_has_target": true
   }

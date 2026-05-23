@@ -1,11 +1,14 @@
 package com.dace.vanillaplus.world.entity.boss.enderdragon;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import com.dace.vanillaplus.util.CodecUtil;
 import com.dace.vanillaplus.world.entity.HealthBasedValue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 
 import java.util.Optional;
@@ -35,6 +38,11 @@ public record EnderDragonConfig(float enderPearlDropChance, int maxEnderPearlDro
                             .forGetter(EnderDragonConfig::movementSpeedMultiplier),
                     PhaseInfo.CODEC.optionalFieldOf("phases").forGetter(EnderDragonConfig::phaseInfo))
             .apply(instance, EnderDragonConfig::new));
+
+    @NonNull
+    public static EnderDragonConfig get() {
+        return VPEntityType.cast(EntityType.ENDER_DRAGON).getConfigComponents().getOrDefault(EntityConfigComponentTypes.ENDER_DRAGON, DEFAULT);
+    }
 
     /**
      * 드롭 경험치 정보 클래스.

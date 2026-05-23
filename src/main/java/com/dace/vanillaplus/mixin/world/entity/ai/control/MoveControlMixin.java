@@ -23,7 +23,7 @@ public abstract class MoveControlMixin implements VPMixin<MoveControl> {
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void jumpIfCannotReachTarget(CallbackInfo ci) {
-        if (!VPLivingEntity.cast(mob).getConfigComponents().get(EntityConfigComponentTypes.JUMP_AT_TARGET_IF_CANNOT_REACH))
+        if (!VPLivingEntity.cast(mob).getConfigComponents().getBoolean(EntityConfigComponentTypes.JUMP_AT_TARGET_IF_CANNOT_REACH))
             return;
 
         LivingEntity target = mob.getTarget();

@@ -24,6 +24,6 @@ public record BrewingStandConfig(boolean useDataDrivenRecipe) {
 
     @NonNull
     public static BrewingStandConfig get() {
-        return VPBlock.cast(Blocks.BREWING_STAND).getConfigComponents().get(BlockConfigComponentTypes.BREWING_STAND);
+        return VPBlock.cast(Blocks.BREWING_STAND).getConfigComponents().getOrDefault(BlockConfigComponentTypes.BREWING_STAND, DEFAULT);
     }
 }

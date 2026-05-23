@@ -51,7 +51,7 @@ public abstract class RaiderMixin<T extends Raider> extends MonsterMixin<T> impl
     @Override
     @NonNull
     public RaiderConfig getRaiderConfig() {
-        return getConfigComponents().get(EntityConfigComponentTypes.RAIDER);
+        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAIDER, RaiderConfig.DEFAULT);
     }
 
     @Override

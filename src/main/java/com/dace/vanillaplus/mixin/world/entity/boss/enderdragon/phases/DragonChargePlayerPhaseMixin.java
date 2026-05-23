@@ -86,7 +86,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Override
     protected void onClientTick(CallbackInfo ci) {
-        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return;
 
         if (flameTicks++ < ROAR_DURATION)
@@ -98,7 +98,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Override
     public float getTurnSpeed() {
-        if (getVPEnderDragon().getEnderDragonConfig().phaseInfo().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return super.getTurnSpeed();
 
         float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
@@ -109,7 +109,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     @Expression("distToTarget < ?")
     @Inject(method = "doServerTick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private void performBreathAttack(ServerLevel level, CallbackInfo ci, @Local(name = "distToTarget") double distToTarget) {
-        getVPEnderDragon().getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo -> {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
             if (distToTarget < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
                 isFlaming = true;
 

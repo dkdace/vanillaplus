@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon;
 
 import com.dace.vanillaplus.data.VPTags;
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
@@ -95,7 +94,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
 
     @Unique
     private float getMovementSpeed(float velocity, @NonNull DragonPhaseInstance dragonPhaseInstance) {
-        return getEnderDragonConfig().movementSpeedMultiplier()
+        return EnderDragonConfig.get().movementSpeedMultiplier()
                 .map(movementSpeedMultiplier -> dragonPhaseInstance.getPhase() == EnderDragonPhase.DYING
                         ? null
                         : velocity * movementSpeedMultiplier.get(getThis()))
@@ -104,7 +103,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
 
     @Unique
     private void spawnEndermites(@NonNull ServerLevel level) {
-        for (int i = 0; i < getEnderDragonConfig().endermiteCount(); i++) {
+        for (int i = 0; i < EnderDragonConfig.get().endermiteCount(); i++) {
             Endermite endermite = EntityType.ENDERMITE.create(level, EntitySpawnReason.MOB_SUMMONED);
 
             if (endermite != null) {
@@ -150,15 +149,9 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     }
 
     @Override
-    @NonNull
-    public EnderDragonConfig getEnderDragonConfig() {
-        return getConfigComponents().get(EntityConfigComponentTypes.ENDER_DRAGON);
-    }
-
-    @Override
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
                                              float resistance) {
-        if (getEnderDragonConfig().phaseInfo().isPresent())
+        if (EnderDragonConfig.get().phaseInfo().isPresent())
             return block.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
 
         return super.getBlockExplosionResistance(explosion, level, pos, block, fluid, resistance);
@@ -207,13 +200,13 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;DDD)Lnet/minecraft/world/entity/player/Player;"),
             index = 0)
     private TargetingConditions modifyCrystalDestroyTargetConditions(TargetingConditions targetConditions) {
-        return getEnderDragonConfig().phaseInfo().isPresent() ? getDefaultTargetingConditions() : targetConditions;
+        return EnderDragonConfig.get().phaseInfo().isPresent() ? getDefaultTargetingConditions() : targetConditions;
     }
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;"),
             index = 1)
     private double modifyUpwardVelocityMultiplier(double velocity, @Local(name = "currentPhase") DragonPhaseInstance currentPhase) {
-        if (getEnderDragonConfig().phaseInfo().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return velocity;
 
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = currentPhase.getPhase();
@@ -275,7 +268,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     @Expression("this.hurtTime == 0")
     @ModifyExpressionValue(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyMeleeAttackCondition(boolean condition) {
-        if (getEnderDragonConfig().phaseInfo().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return condition;
 
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = phaseManager.getCurrentPhase().getPhase();
@@ -285,15 +278,15 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     @ModifyExpressionValue(method = "hurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/boss/enderdragon/EnderDragonPart;Lnet/minecraft/world/damagesource/DamageSource;F)Z",
             at = @At(value = "CONSTANT", args = "floatValue=0.25"))
     private float modifySittingAllowedDamageRatio(float allowedDamageRatio) {
-        return getEnderDragonConfig().phaseInfo().map(phaseInfo -> phaseInfo.sitting().allowedDamageRatio()).orElse(allowedDamageRatio);
+        return EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.sitting().allowedDamageRatio()).orElse(allowedDamageRatio);
     }
 
     @Inject(method = "reallyHurt", at = @At("TAIL"))
     private void onHurt(ServerLevel level, DamageSource source, float damage, CallbackInfo ci) {
-        if (enderPearlDropCount >= getEnderDragonConfig().maxEnderPearlDrops() || !shouldDropLoot(level))
+        if (enderPearlDropCount >= EnderDragonConfig.get().maxEnderPearlDrops() || !shouldDropLoot(level))
             return;
 
-        enderPearlDropRate += getEnderDragonConfig().enderPearlDropChance();
+        enderPearlDropRate += EnderDragonConfig.get().enderPearlDropChance();
         if (enderPearlDropRate <= random.nextDouble())
             return;
 
@@ -311,7 +304,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonPhaseInstance;doServerTick(Lnet/minecraft/server/level/ServerLevel;)V",
             ordinal = 0))
     private void tickAttack(CallbackInfo ci, @Local(name = "level") ServerLevel level) {
-        getEnderDragonConfig().phaseInfo().ifPresent(phaseInfo -> {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
             level.players().stream().filter(this::hasLineOfSight).forEach(targets::add);
             targets.removeIf(target -> !level.players().contains(target));
 
@@ -328,11 +321,11 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=12000"))
     private int modifyDropXPFirst(int xp) {
-        return getEnderDragonConfig().experience().map(EnderDragonConfig.Experience::first).orElse(xp);
+        return EnderDragonConfig.get().experience().map(EnderDragonConfig.Experience::first).orElse(xp);
     }
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=500"))
     private int modifyDropXPSecond(int xp) {
-        return getEnderDragonConfig().experience().map(EnderDragonConfig.Experience::second).orElse(xp);
+        return EnderDragonConfig.get().experience().map(EnderDragonConfig.Experience::second).orElse(xp);
     }
 }
