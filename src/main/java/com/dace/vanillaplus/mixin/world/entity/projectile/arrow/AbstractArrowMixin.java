@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
-import com.dace.vanillaplus.world.item.ItemModifier;
+import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -55,8 +54,7 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow> extends Projec
     private void modifyBaseDamage(EntityType<? extends AbstractArrow> type, double x, double y, double z, Level level, ItemStack pickupItemStack,
                                   @Nullable ItemStack firedFromWeapon, CallbackInfo ci) {
         if (firedFromWeapon != null)
-            VPModifiableData.getDataModifier(firedFromWeapon.getItem(), ItemModifier.ProjectileWeaponModifier.class)
-                    .ifPresent(projectileWeaponModifier -> this.baseDamage = projectileWeaponModifier.getBaseDamage());
+            ProjectileWeaponConfig.get(firedFromWeapon.getItem()).baseDamage().ifPresent(value -> baseDamage = value);
     }
 
     @Definition(id = "mob", local = @Local(type = LivingEntity.class, name = "mob"))

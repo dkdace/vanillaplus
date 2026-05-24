@@ -1,0 +1,8 @@
+{
+  "components": {
+    "vanillaplus:firework_rocket": {
+      "flight_add_speed_multiplier": 1.2,
+      "flight_final_speed_multiplier": 0.25
+    }
+  }
+}

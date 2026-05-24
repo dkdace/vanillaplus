@@ -30,7 +30,7 @@ public abstract class RandomizableContainerBlockEntityMixin<T extends Randomizab
 
     @Unique
     private void init(@Nullable ResourceKey<LootTable> lootTableResourceKey) {
-        if (lootTableResourceKey == null || !(level instanceof ServerLevel serverLevel) || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
+        if (!(level instanceof ServerLevel serverLevel) || lootTableResourceKey == null || !getBlockState().hasProperty(VPLootContainerBlock.LOOT))
             return;
 
         this.originalLootTable = lootTableResourceKey;

@@ -1,0 +1,7 @@
+{
+  "item_components": {
+    "minecraft:use_cooldown": {
+      "seconds": 0.5
+    }
+  }
+}

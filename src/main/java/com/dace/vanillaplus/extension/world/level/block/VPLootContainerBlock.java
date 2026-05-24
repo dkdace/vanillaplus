@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 /**
- * 모드에서 사용하는 보관함 블록(상자, 통 등)을 확장하는 인터페이스.
+ * 전리품을 제공하는 보관함 블록(상자, 통 등)을 확장하는 인터페이스.
  *
  * @param <T> {@link BaseEntityBlock}를 상속받는 타입
  */

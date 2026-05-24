@@ -9,6 +9,7 @@ import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
 import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
+import com.dace.vanillaplus.world.entity.projectile.FireworkRocketConfig;
 import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
@@ -36,6 +37,8 @@ public final class EntityConfigComponentTypes {
             "npc", () -> NpcConfig.CODEC);
     public static final RegistryObject<Codec<CrossbowMobConfig>> CROSSBOW_MOB = create(
             "crossbow_mob", () -> CrossbowMobConfig.CODEC);
+    public static final RegistryObject<Codec<FireworkRocketConfig>> FIREWORK_ROCKET = create(
+            "firework_rocket", () -> FireworkRocketConfig.CODEC);
     public static final RegistryObject<Codec<ArmorStandConfig>> ARMOR_STAND = create(
             "armor_stand", () -> ArmorStandConfig.CODEC);
     public static final RegistryObject<Codec<VillagerConfig>> VILLAGER = create(

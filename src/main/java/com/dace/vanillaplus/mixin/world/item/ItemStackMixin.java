@@ -2,14 +2,13 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.registryobject.BlockConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.dace.vanillaplus.util.DynamicComponent;
-import com.dace.vanillaplus.world.item.ItemModifier;
 import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -256,15 +255,16 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Unique
     private static void addProjectileWeaponTooltip(@NonNull ProjectileWeaponItem projectileWeaponItem, @NonNull Consumer<Component> componentConsumer) {
-        VPModifiableData.getDataModifier(projectileWeaponItem, ItemModifier.ProjectileWeaponModifier.class)
-                .ifPresent(projectileWeaponModifier -> {
-                    componentConsumer.accept(Component.empty());
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT);
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
-                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage())));
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
-                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower())));
-                });
+        ProjectileWeaponConfig projectileWeaponConfig = ProjectileWeaponConfig.get(projectileWeaponItem);
+        if (projectileWeaponConfig == ProjectileWeaponConfig.DEFAULT)
+            return;
+
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT);
+        projectileWeaponConfig.baseDamage().ifPresent(baseDamage -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(baseDamage))));
+        projectileWeaponConfig.shootingPower().ifPresent(shootingPower -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(shootingPower))));
     }
 
     @Unique

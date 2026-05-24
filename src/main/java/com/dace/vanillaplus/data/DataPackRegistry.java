@@ -7,7 +7,7 @@ import com.dace.vanillaplus.world.MobEffectValues;
 import com.dace.vanillaplus.world.block.BlockConfig;
 import com.dace.vanillaplus.world.entity.EntityConfig;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
-import com.dace.vanillaplus.world.item.ItemModifier;
+import com.dace.vanillaplus.world.item.ItemConfig;
 import com.dace.vanillaplus.world.item.PotionModifier;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
@@ -44,9 +44,9 @@ public final class DataPackRegistry {
     /** 엔티티 설정 */
     public static final ResourceKey<Registry<EntityConfig>> ENTITY_CONFIG = create("entity_config",
             EntityConfig.DIRECT_CODEC, Registries.ENTITY_TYPE);
-    /** 아이템 수정자 */
-    public static final ResourceKey<Registry<ItemModifier>> ITEM_MODIFIER = create("modifier/item",
-            CodecComponent.createCodec(StaticRegistry.ITEM_MODIFIER_TYPE), Registries.ITEM);
+    /** 아이템 설정 */
+    public static final ResourceKey<Registry<ItemConfig>> ITEM_CONFIG = create("item_config",
+            ItemConfig.DIRECT_CODEC, Registries.ITEM);
     /** 물약 수정자 */
     public static final ResourceKey<Registry<PotionModifier>> POTION_MODIFIER = create("modifier/potion",
             PotionModifier.DIRECT_CODEC, Registries.POTION);

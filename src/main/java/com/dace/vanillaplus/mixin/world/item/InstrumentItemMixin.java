@@ -1,11 +1,10 @@
 package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPInstrument;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.client.StopSoundPacket;
-import com.dace.vanillaplus.world.item.ItemModifier;
+import com.dace.vanillaplus.world.item.InstrumentConfig;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -37,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(InstrumentItem.class)
-public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, ItemModifier.InstrumentModifier> {
+public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem> {
     @Shadow
     private static Optional<Holder<Instrument>> getInstrument(ItemStack itemStack) {
         throw new UnsupportedOperationException();
@@ -46,8 +45,7 @@ public abstract class InstrumentItemMixin extends ItemMixin<InstrumentItem, Item
     @Unique
     @NonNull
     private static Optional<Integer> getUseDuration(@NonNull ItemStack itemStack) {
-        return VPModifiableData.getDataModifier(itemStack.getItem(), ItemModifier.InstrumentModifier.class)
-                .flatMap(ItemModifier.InstrumentModifier::getUseDuration);
+        return InstrumentConfig.get(itemStack.getItem()).useDuration();
     }
 
     @Unique

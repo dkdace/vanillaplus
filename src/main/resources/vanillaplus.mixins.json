@@ -9,6 +9,8 @@
     "advancements.criterion.LocationPredicateMixin",
     "advancements.criterion.PlayerPredicateMixin",
     "core.cauldron.CauldronInteractionsMixin",
+    "core.component.DataComponentInitializersMixin",
+    "core.component.DataComponentInitializersMixin$BakedEntryMixin",
     "server.MinecraftServerMixin",
     "server.commands.RaidCommandMixin",
     "server.level.ServerLevelMixin",

@@ -2,7 +2,6 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.IdentifierUtil;
-import com.dace.vanillaplus.world.item.ItemModifier;
 import com.google.common.reflect.ClassPath;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
@@ -37,8 +36,8 @@ public final class StaticRegistry<T> {
     public static final StaticRegistry<Codec<?>> BLOCK_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("block_config/component_type");
     /** 엔티티 설정 데이터 요소 타입 */
     public static final StaticRegistry<Codec<?>> ENTITY_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("entity_config/component_type");
-    /** 아이템 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends ItemModifier>> ITEM_MODIFIER_TYPE = new StaticRegistry<>("modifier/item/type");
+    /** 아이템 설정 데이터 요소 타입 */
+    public static final StaticRegistry<Codec<?>> ITEM_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("item_config/component_type");
 
     /** {@link com.dace.vanillaplus.data.registryobject} 패키지 */
     private static final String PACKAGE = "com.dace.vanillaplus.data.registryobject";

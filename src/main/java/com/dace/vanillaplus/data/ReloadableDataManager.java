@@ -79,17 +79,4 @@ public final class ReloadableDataManager<T, U> {
     public Optional<U> get(@NonNull T key) {
         return Optional.ofNullable(dataMap.get(mappingFunction.apply(key)));
     }
-
-    /**
-     * 지정한 키에 해당하는 데이터를 하위 클래스로 캐스팅하여 반환한다.
-     *
-     * @param <V>       모드 데이터를 상속받는 하위 클래스의 타입
-     * @param castClass 캐스팅 대상 클래스
-     * @param key       데이터를 가져올 때 사용할 키
-     * @return 키에 해당하는 데이터. {@code castClass}로 캐스팅하여 반환
-     */
-    @NonNull
-    public <V extends U> Optional<V> get(@NonNull T key, @NonNull Class<V> castClass) {
-        return get(key).map(value -> castClass.isInstance(value) ? castClass.cast(value) : null);
-    }
 }

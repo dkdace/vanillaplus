@@ -6,7 +6,6 @@ import com.dace.vanillaplus.util.ColorUtil;
 import com.dace.vanillaplus.world.block.WaterCauldronConfig;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -51,8 +50,8 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
     private static final float WATER_COLOR_MIN_ALPHA = 0.5F;
 
     /** 물약 내용물 */
+    @NonNull
     @Getter
-    @Setter
     private PotionContents potionContents = DEFAULT_POTION_CONTENTS;
 
     public WaterCauldronBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
@@ -130,6 +129,14 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
     }
 
     /**
+     * @param potionContents 물약 내용물
+     */
+    public void setPotionContents(@NonNull PotionContents potionContents) {
+        if (WaterCauldronConfig.get().maxPotionEffects() > 0)
+            this.potionContents = potionContents;
+    }
+
+    /**
      * 가마솥에 물약을 추가한다.
      *
      * @param potionContents 물약 내용물
@@ -142,8 +149,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
         if (potionContents == null)
             potionContents = DEFAULT_POTION_CONTENTS;
 
-        this.potionContents = mixPotionContents(potionContents, getBlockState().getValue(LayeredCauldronBlock.LEVEL), maxPotionEffects);
-        if (this.potionContents != null)
+        if (mixPotionContents(potionContents, getBlockState().getValue(LayeredCauldronBlock.LEVEL), maxPotionEffects))
             setChanged();
     }
 
@@ -158,8 +164,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
             return;
 
         for (int i = previousLevel; i < LayeredCauldronBlock.MAX_FILL_LEVEL; i++) {
-            potionContents = mixPotionContents(DEFAULT_POTION_CONTENTS, i + 1, maxPotionEffects);
-            if (potionContents == null)
+            if (!mixPotionContents(DEFAULT_POTION_CONTENTS, i + 1, maxPotionEffects))
                 return;
         }
 
@@ -172,10 +177,9 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
      * @param potionContents   추가할 물약 내용물
      * @param levelValue       내용물 레벨
      * @param maxPotionEffects {@link WaterCauldronConfig#maxPotionEffects()}
-     * @return 혼합된 물약 내용물
+     * @return 성공 여부
      */
-    @Nullable
-    private PotionContents mixPotionContents(@NonNull PotionContents potionContents, int levelValue, int maxPotionEffects) {
+    private boolean mixPotionContents(@NonNull PotionContents potionContents, int levelValue, int maxPotionEffects) {
         Optional<Holder<Potion>> newPotion = potionContents.potion();
         List<MobEffectInstance> newCustomEffects = potionContents.customEffects();
         Optional<Integer> newColor = potionContents.customColor();
@@ -194,14 +198,15 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
 
                 if (newCustomEffects.size() > maxPotionEffects) {
                     explode();
-                    return null;
+                    return false;
                 }
 
                 newPotion = newCustomEffects.isEmpty() ? Optional.of(Potions.WATER) : Optional.empty();
             }
         }
 
-        return new PotionContents(newPotion, newColor, newCustomEffects, Optional.empty());
+        this.potionContents = new PotionContents(newPotion, newColor, newCustomEffects, Optional.empty());
+        return true;
     }
 
     /**

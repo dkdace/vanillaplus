@@ -1,0 +1,27 @@
+{
+  "item_components": {
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 3.0,
+        "id": "minecraft:armor.boots",
+        "operation": "add_value",
+        "slot": "feet"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 2.0,
+        "id": "minecraft:armor.boots",
+        "operation": "add_value",
+        "slot": "feet"
+      },
+      {
+        "type": "vanillaplus:food_exhaustion_multiplier",
+        "amount": 0.03,
+        "id": "minecraft:armor.boots",
+        "operation": "add_multiplied_base",
+        "slot": "feet"
+      }
+    ]
+  }
+}

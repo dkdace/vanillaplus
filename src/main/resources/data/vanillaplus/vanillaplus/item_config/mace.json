@@ -1,0 +1,7 @@
+{
+  "item_components": {
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 2
+    }
+  }
+}

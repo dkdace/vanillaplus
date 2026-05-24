@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.world.item.ItemModifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(FireChargeItem.class)
-public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem, ItemModifier> {
+public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem> {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemstack = player.getItemInHand(interactionHand);

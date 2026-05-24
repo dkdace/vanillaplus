@@ -1,27 +1,23 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile;
 
-import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.world.item.ItemModifier;
-import com.llamalad7.mixinextras.sugar.Local;
+import com.dace.vanillaplus.world.entity.projectile.FireworkRocketConfig;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(FireworkRocketEntity.class)
 public abstract class FireworkRocketEntityMixin extends ProjectileMixin<FireworkRocketEntity> {
-    @ModifyArgs(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;",
-            ordinal = 0))
-    private void modifyElytraDeltaMovement(Args args, @Local(name = "lookAngle") Vec3 lookAngle, @Local(name = "movement") Vec3 movement) {
-        VPModifiableData.getDataModifier(Items.ELYTRA, ItemModifier.ElytraModifier.class).ifPresent(elytraModifier ->
-                args.setAll(lookAngle.x() * 0.1 + (lookAngle.x() * elytraModifier.getFireworkAddSpeedMultiplier() - movement.x())
-                                * elytraModifier.getFireworkFinalSpeedModifier(),
-                        lookAngle.y() * 0.1 + (lookAngle.y() * elytraModifier.getFireworkAddSpeedMultiplier() - movement.y())
-                                * elytraModifier.getFireworkFinalSpeedModifier(),
-                        lookAngle.z() * 0.1 + (lookAngle.z() * elytraModifier.getFireworkAddSpeedMultiplier() - movement.z())
-                                * elytraModifier.getFireworkFinalSpeedModifier()));
+    @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "doubleValue=1.5"))
+    private double modifyFlightAddSpeedMultiplier(double power) {
+        return FireworkRocketConfig.get().flightAddSpeedMultiplier().map(Float::doubleValue).orElse(power);
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "doubleValue=0.5"),
+            slice = @Slice(to = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/LivingEntity;getHandHoldingItemAngle(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/phys/Vec3;")))
+    private double modifyFlightFinalSpeedMultiplier(double power) {
+        return FireworkRocketConfig.get().flightFinalSpeedModifier().map(Float::doubleValue).orElse(power);
     }
 }
