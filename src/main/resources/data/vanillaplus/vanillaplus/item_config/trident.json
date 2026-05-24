@@ -40,7 +40,9 @@
   },
   "components": {
     "vanillaplus:trident": {
-      "riptide_cooldown_seconds": 2
+      "riptide_cooldown_seconds": 2,
+      "riptide_piercing": true,
+      "projectile_piercing": true
     }
   }
 }

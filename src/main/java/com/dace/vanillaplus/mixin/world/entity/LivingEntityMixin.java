@@ -7,10 +7,12 @@ import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
+import com.dace.vanillaplus.world.item.TridentConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -49,7 +51,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -267,14 +268,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
         return getFinalSpeed(speed);
     }
 
-    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
+    @WrapWithCondition(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
             ordinal = 0, opcode = Opcodes.PUTFIELD))
-    private void removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
+    private boolean removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
+        return !TridentConfig.get().riptidePiercing();
     }
 
-    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
+    @WrapWithCondition(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
-    private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 deltaMovement) {
+    private boolean removeAutoSpinAttackCollision(LivingEntity instance, Vec3 deltaMovement) {
+        return !TridentConfig.get().riptidePiercing();
     }
 
     @Expression("0.1 * (? + 1.0)")
