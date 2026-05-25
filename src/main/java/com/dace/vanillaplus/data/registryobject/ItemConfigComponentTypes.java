@@ -1,10 +1,7 @@
 package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
-import com.dace.vanillaplus.world.item.CrossbowConfig;
-import com.dace.vanillaplus.world.item.InstrumentConfig;
-import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
-import com.dace.vanillaplus.world.item.TridentConfig;
+import com.dace.vanillaplus.world.item.*;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -25,6 +22,8 @@ public final class ItemConfigComponentTypes {
             "trident", () -> TridentConfig.CODEC);
     public static final RegistryObject<Codec<InstrumentConfig>> INSTRUMENT = create(
             "instrument", () -> InstrumentConfig.CODEC);
+    public static final RegistryObject<Codec<RecoveryCompassConfig>> RECOVERY_COMPASS = create(
+            "recovery_compass", () -> RecoveryCompassConfig.CODEC);
 
     @NonNull
     private static <T> RegistryObject<Codec<T>> create(@NonNull String name, @NonNull Supplier<Codec<T>> onCodec) {
