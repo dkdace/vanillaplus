@@ -5,9 +5,9 @@ import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.dace.vanillaplus.world.entity.animal.golem.IronGolemConfig;
 import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.dace.vanillaplus.world.entity.decoration.ArmorStandConfig;
-import com.dace.vanillaplus.world.entity.monster.NpcConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
 import com.dace.vanillaplus.world.entity.projectile.FireworkRocketConfig;
 import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
@@ -33,6 +33,8 @@ public final class EntityConfigComponentTypes {
             "prevent_riding_if_has_target", () -> Codec.BOOL);
     public static final RegistryObject<Codec<Boolean>> JUMP_AT_TARGET_IF_CANNOT_REACH = create(
             "jump_at_target_if_cannot_reach", () -> Codec.BOOL);
+    public static final RegistryObject<Codec<Boolean>> ATTACK_NPCS = create(
+            "attack_npcs", () -> Codec.BOOL);
     public static final RegistryObject<Codec<NpcConfig>> NPC = create(
             "npc", () -> NpcConfig.CODEC);
     public static final RegistryObject<Codec<CrossbowMobConfig>> CROSSBOW_MOB = create(

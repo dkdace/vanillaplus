@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.extension.world.entity.ai.goal.VPRangedAttackGoal;
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
@@ -38,9 +39,19 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
     @Unique
     private int attackCooldown;
     @Unique
+    @Nullable
     private NearestAttackableWitchTargetGoal<IronGolem> attackIronGolemGoal;
     @Unique
+    @Nullable
     private NearestAttackableWitchTargetGoal<AbstractVillager> attackVillagersGoal;
+
+    @Unique
+    private void setCanAttack(boolean canAttack) {
+        if (attackVillagersGoal != null)
+            attackVillagersGoal.setCanAttack(canAttack);
+        if (attackIronGolemGoal != null)
+            attackIronGolemGoal.setCanAttack(canAttack);
+    }
 
     @Inject(method = "applyRaidBuffs", at = @At("TAIL"))
     private void applyRaidBuffs(ServerLevel level, int wave, boolean isCaptain, CallbackInfo ci) {
@@ -51,6 +62,9 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
     private void addGoals(CallbackInfo ci) {
         if (getRaiderConfig().alwaysOpenDoors())
             goalSelector.addGoal(2, new OpenDoorGoal(getThis(), false));
+
+        if (!getConfigComponents().getBoolean(EntityConfigComponentTypes.ATTACK_NPCS))
+            return;
 
         attackVillagersGoal = new NearestAttackableWitchTargetGoal<>(getThis(), AbstractVillager.class, 10, true, false,
                 null);
@@ -79,15 +93,13 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
     @Inject(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/goal/target/NearestAttackableWitchTargetGoal;setCanAttack(Z)V", ordinal = 0))
     private void setAttackGoalCanAttackTrue(CallbackInfo ci) {
-        attackVillagersGoal.setCanAttack(true);
-        attackIronGolemGoal.setCanAttack(true);
+        setCanAttack(true);
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/goal/target/NearestAttackableWitchTargetGoal;setCanAttack(Z)V", ordinal = 1))
     private void setAttackGoalCanAttackFalse(CallbackInfo ci) {
-        attackVillagersGoal.setCanAttack(false);
-        attackIronGolemGoal.setCanAttack(false);
+        setCanAttack(false);
     }
 
     @ModifyExpressionValue(method = "performRangedAttack", at = @At(value = "CONSTANT", args = "floatValue=4.0"))

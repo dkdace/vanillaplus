@@ -5,7 +5,6 @@ import com.dace.vanillaplus.util.IdentifierUtil;
 import com.google.common.reflect.ClassPath;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import lombok.NonNull;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

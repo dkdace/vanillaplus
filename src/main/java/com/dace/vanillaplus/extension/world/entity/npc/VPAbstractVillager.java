@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.extension.world.entity.npc;
 
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
-import com.dace.vanillaplus.world.entity.monster.NpcConfig;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import lombok.NonNull;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;

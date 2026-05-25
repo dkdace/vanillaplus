@@ -6,7 +6,7 @@ import com.dace.vanillaplus.extension.world.item.trading.VPMerchantOffer;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.dace.vanillaplus.world.TradeSetOffer;
-import com.dace.vanillaplus.world.entity.monster.NpcConfig;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;

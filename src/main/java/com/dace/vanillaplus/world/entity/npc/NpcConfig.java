@@ -1,4 +1,4 @@
-package com.dace.vanillaplus.world.entity.monster;
+package com.dace.vanillaplus.world.entity.npc;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

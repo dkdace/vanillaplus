@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.skeleton;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AbstractSkeletonMixin<T extends AbstractSkeleton> extends MonsterMixin<T> {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addVillagerAttackGoal(CallbackInfo ci) {
-        targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));
+        if (getConfigComponents().getBoolean(EntityConfigComponentTypes.ATTACK_NPCS))
+            targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(getThis(), AbstractVillager.class, true));
     }
 }
