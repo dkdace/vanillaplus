@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 public record TridentConfig(@NonNull Optional<Integer> riptideCooldown, boolean riptidePiercing, boolean projectilePiercing) {
     /** 기본값 */
-    public static final TridentConfig DEFAULT = new TridentConfig(Optional.empty(), false, false);
+    private static final TridentConfig DEFAULT = new TridentConfig(Optional.empty(), false, false);
     /** JSON 코덱 */
     public static final Codec<TridentConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(CodecUtil.secondsToTicks(ExtraCodecs.POSITIVE_FLOAT).optionalFieldOf("riptide_cooldown_seconds")
@@ -30,6 +30,9 @@ public record TridentConfig(@NonNull Optional<Integer> riptideCooldown, boolean 
                     Codec.BOOL.optionalFieldOf("projectile_piercing", DEFAULT.projectilePiercing).forGetter(TridentConfig::projectilePiercing))
             .apply(instance, TridentConfig::new));
 
+    /**
+     * @return {@link TridentConfig}
+     */
     @NonNull
     public static TridentConfig get() {
         return VPItem.cast(Items.TRIDENT).getConfigComponents().getOrDefault(ItemConfigComponentTypes.TRIDENT, DEFAULT);

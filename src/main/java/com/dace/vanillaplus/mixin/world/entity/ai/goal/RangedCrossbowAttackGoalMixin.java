@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.goal;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
+import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -35,13 +35,13 @@ public abstract class RangedCrossbowAttackGoalMixin<T extends Monster & RangedAt
     @Expression("attackRadius")
     @ModifyExpressionValue(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyAttackRadius(float attackRadius, @Local(argsOnly = true) T mob) {
-        return VPLivingEntity.cast(mob).getCrossbowMobConfig().shootingRange().map(Integer::floatValue).orElse(attackRadius);
+        return CrossbowMobConfig.get(mob).shootingRange().map(Integer::floatValue).orElse(attackRadius);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;stop()V",
             shift = At.Shift.AFTER))
     private void backupIfTooClose(CallbackInfo ci, @Local(name = "target") LivingEntity target) {
-        VPLivingEntity.cast(mob).getCrossbowMobConfig().backupDistance().ifPresent(backupDistance -> {
+        CrossbowMobConfig.get(mob).backupDistance().ifPresent(backupDistance -> {
             if (mob.getControlledVehicle() != null || seeTime < BACKUP_SEE_TIME || !target.closerThan(mob, backupDistance))
                 return;
 

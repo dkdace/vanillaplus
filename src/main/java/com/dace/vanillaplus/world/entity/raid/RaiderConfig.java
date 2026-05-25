@@ -1,11 +1,14 @@
 package com.dace.vanillaplus.world.entity.raid;
 
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.entity.VPEntity;
 import com.dace.vanillaplus.world.entity.config.ConditionalModifierList;
 import com.dace.vanillaplus.world.entity.config.ItemFunctionsModifier;
 import com.dace.vanillaplus.world.entity.config.MobEffectModifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +29,7 @@ public record RaiderConfig(boolean attackBabyVillagers, boolean alwaysOpenDoors,
                            @NonNull ConditionalModifierList<MobEffectModifier, LivingEntity> raidSummonedMobEffects,
                            @NonNull ConditionalModifierList<ItemFunctionsModifier, ItemStack> ammoModifiers) {
     /** 기본값 */
-    public static final RaiderConfig DEFAULT = new RaiderConfig(false, false, false,
+    private static final RaiderConfig DEFAULT = new RaiderConfig(false, false, false,
             false, ConditionalModifierList.empty(), ConditionalModifierList.empty(), ConditionalModifierList.empty());
     /** JSON 코덱 */
     public static final Codec<RaiderConfig> CODEC = RecordCodecBuilder.create(instance -> instance
@@ -43,4 +46,13 @@ public record RaiderConfig(boolean attackBabyVillagers, boolean alwaysOpenDoors,
                     ConditionalModifierList.createCodec(ItemFunctionsModifier.CODEC).optionalFieldOf("ammo_modifiers", DEFAULT.ammoModifiers)
                             .forGetter(RaiderConfig::ammoModifiers))
             .apply(instance, RaiderConfig::new));
+
+    /**
+     * @param entity 대상 엔티티
+     * @return {@link RaiderConfig}
+     */
+    @NonNull
+    public static RaiderConfig get(@NonNull Entity entity) {
+        return VPEntity.cast(entity).getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAIDER, DEFAULT);
+    }
 }

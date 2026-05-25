@@ -15,13 +15,16 @@ import net.minecraft.world.entity.animal.golem.IronGolem;
  */
 public record IronGolemConfig(boolean inflateAttackHitbox) {
     /** 기본값 */
-    public static final IronGolemConfig DEFAULT = new IronGolemConfig(false);
+    private static final IronGolemConfig DEFAULT = new IronGolemConfig(false);
     /** JSON 코덱 */
     public static final Codec<IronGolemConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.BOOL.optionalFieldOf("inflate_attack_hitbox", DEFAULT.inflateAttackHitbox)
                     .forGetter(IronGolemConfig::inflateAttackHitbox))
             .apply(instance, IronGolemConfig::new));
 
+    /**
+     * @return {@link IronGolemConfig}
+     */
     @NonNull
     public static IronGolemConfig get() {
         return VPEntityType.cast(EntityType.IRON_GOLEM).getConfigComponents().getOrDefault(EntityConfigComponentTypes.IRON_GOLEM, DEFAULT);

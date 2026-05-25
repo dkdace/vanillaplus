@@ -1,12 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
-import com.dace.vanillaplus.extension.world.entity.npc.VPAbstractVillager;
 import com.dace.vanillaplus.extension.world.item.trading.VPMerchantOffer;
 import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
 import com.dace.vanillaplus.world.TradeSetOffer;
-import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -14,11 +11,9 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Util;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
-import net.minecraft.world.item.trading.TradeSet;
-import net.minecraft.world.item.trading.VillagerTrade;
+import net.minecraft.world.item.trading.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> implements VPAbstractVillager<T> {
+public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> implements Merchant, InventoryCarrier {
     @Unique
     private static final int TRADE_XP_BASE = 3;
     @Unique
@@ -52,12 +47,6 @@ public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends 
 
         int count = offer.getItemCostA().count();
         return TRADE_XP_BASE * count + random.nextInt(TRADE_XP_RANDOM * count);
-    }
-
-    @Override
-    @NonNull
-    public NpcConfig getNpcConfig() {
-        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.NPC, NpcConfig.DEFAULT);
     }
 
     @WrapWithCondition(method = "addOffersFromTradeSet", at = @At(value = "INVOKE",

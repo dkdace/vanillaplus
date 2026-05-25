@@ -18,8 +18,6 @@ import java.util.Optional;
  * @param flightFinalSpeedModifier 비행 최종 속도 배수
  */
 public record FireworkRocketConfig(@NonNull Optional<Float> flightAddSpeedMultiplier, @NonNull Optional<Float> flightFinalSpeedModifier) {
-    /** 기본값 */
-    public static final FireworkRocketConfig DEFAULT = new FireworkRocketConfig(Optional.empty(), Optional.empty());
     /** JSON 코덱 */
     public static final Codec<FireworkRocketConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("flight_add_speed_multiplier")
@@ -27,7 +25,12 @@ public record FireworkRocketConfig(@NonNull Optional<Float> flightAddSpeedMultip
                     ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("flight_final_speed_multiplier")
                             .forGetter(FireworkRocketConfig::flightFinalSpeedModifier))
             .apply(instance, FireworkRocketConfig::new));
+    /** 기본값 */
+    private static final FireworkRocketConfig DEFAULT = new FireworkRocketConfig(Optional.empty(), Optional.empty());
 
+    /**
+     * @return {@link FireworkRocketConfig}
+     */
     @NonNull
     public static FireworkRocketConfig get() {
         return VPEntityType.cast(EntityType.FIREWORK_ROCKET).getConfigComponents().getOrDefault(EntityConfigComponentTypes.FIREWORK_ROCKET, DEFAULT);

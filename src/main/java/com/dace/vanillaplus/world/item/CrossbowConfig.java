@@ -17,14 +17,17 @@ import java.util.Optional;
  * @param shootingPowerFireworkRocket 폭죽 발사 속력
  */
 public record CrossbowConfig(@NonNull Optional<Float> shootingPowerFireworkRocket) {
-    /** 기본값 */
-    public static final CrossbowConfig DEFAULT = new CrossbowConfig(Optional.empty());
     /** JSON 코덱 */
     public static final Codec<CrossbowConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power_firework_rocket")
                     .forGetter(CrossbowConfig::shootingPowerFireworkRocket))
             .apply(instance, CrossbowConfig::new));
+    /** 기본값 */
+    private static final CrossbowConfig DEFAULT = new CrossbowConfig(Optional.empty());
 
+    /**
+     * @return {@link CrossbowConfig}
+     */
     @NonNull
     public static CrossbowConfig get() {
         return VPItem.cast(Items.CROSSBOW).getConfigComponents().getOrDefault(ItemConfigComponentTypes.CROSSBOW, DEFAULT);

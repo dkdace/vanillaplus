@@ -18,14 +18,17 @@ import java.util.Optional;
  * @param roarCooldown 포효 쿨타임
  */
 public record RavagerConfig(@NonNull Optional<Integer> roarCooldown) {
-    /** 기본값 */
-    public static final RavagerConfig DEFAULT = new RavagerConfig(Optional.empty());
     /** JSON 코덱 */
     public static final Codec<RavagerConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(CodecUtil.secondsToTicks(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("roar_cooldown_seconds")
                     .forGetter(RavagerConfig::roarCooldown))
             .apply(instance, RavagerConfig::new));
+    /** 기본값 */
+    private static final RavagerConfig DEFAULT = new RavagerConfig(Optional.empty());
 
+    /**
+     * @return {@link RavagerConfig}
+     */
     @NonNull
     public static RavagerConfig get() {
         return VPEntityType.cast(EntityType.RAVAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAVAGER, DEFAULT);

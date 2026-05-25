@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Blocks;
  */
 public record WaterCauldronConfig(int maxPotionEffects, int maxTippedArrowCount) {
     /** 기본값 */
-    public static final WaterCauldronConfig DEFAULT = new WaterCauldronConfig(0, 0);
+    private static final WaterCauldronConfig DEFAULT = new WaterCauldronConfig(0, 0);
     /** JSON 코덱 */
     public static final Codec<WaterCauldronConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("max_potion_effects", DEFAULT.maxPotionEffects)
@@ -25,6 +25,9 @@ public record WaterCauldronConfig(int maxPotionEffects, int maxTippedArrowCount)
                             .forGetter(WaterCauldronConfig::maxTippedArrowCount))
             .apply(instance, WaterCauldronConfig::new));
 
+    /**
+     * @return {@link WaterCauldronConfig}
+     */
     @NonNull
     public static WaterCauldronConfig get() {
         return VPBlock.cast(Blocks.WATER_CAULDRON).getConfigComponents().getOrDefault(BlockConfigComponentTypes.WATER_CAULDRON, DEFAULT);

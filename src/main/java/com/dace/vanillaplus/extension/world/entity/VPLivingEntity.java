@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.extension.world.entity;
 
-import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Attackable;
@@ -20,12 +19,6 @@ public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, Att
     static <T extends LivingEntity> VPLivingEntity<T> cast(@NonNull T object) {
         return (VPLivingEntity<T>) object;
     }
-
-    /**
-     * @see CrossbowMobConfig
-     */
-    @NonNull
-    CrossbowMobConfig getCrossbowMobConfig();
 
     /**
      * 엔티티의 최종 밀치기 저항 수치를 반환한다.

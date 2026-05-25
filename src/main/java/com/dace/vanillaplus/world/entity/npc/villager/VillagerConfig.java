@@ -16,7 +16,7 @@ import net.minecraft.world.entity.npc.villager.Villager;
  */
 public record VillagerConfig(boolean closeTradingAtNight, boolean rerollOffersEveryday) {
     /** 기본값 */
-    public static final VillagerConfig DEFAULT = new VillagerConfig(false, false);
+    private static final VillagerConfig DEFAULT = new VillagerConfig(false, false);
     /** JSON 코덱 */
     public static final Codec<VillagerConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.BOOL.optionalFieldOf("close_trading_at_night", DEFAULT.closeTradingAtNight)
@@ -25,6 +25,9 @@ public record VillagerConfig(boolean closeTradingAtNight, boolean rerollOffersEv
                             .forGetter(VillagerConfig::rerollOffersEveryday))
             .apply(instance, VillagerConfig::new));
 
+    /**
+     * @return {@link VillagerConfig}
+     */
     @NonNull
     public static VillagerConfig get() {
         return VPEntityType.cast(EntityType.VILLAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.VILLAGER, DEFAULT);

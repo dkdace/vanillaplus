@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
-import com.dace.vanillaplus.extension.world.entity.raid.VPRaider;
+import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponents;
@@ -28,7 +28,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker> {
     @Override
     @Nullable
     public EquipmentSlot resolveSlot(@NonNull ItemStack toEquip, @NonNull List<EquipmentSlot> alreadyInsertedIntoSlots) {
-        if (!getRaiderConfig().useDataDrivenRaidEquipment())
+        if (!RaiderConfig.get(getThis()).useDataDrivenRaidEquipment())
             return super.resolveSlot(toEquip, alreadyInsertedIntoSlots);
 
         if (!toEquip.isEmpty()) {
@@ -54,13 +54,13 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker> {
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             targetSelector.addGoal(7, new OpenDoorGoal(getThis(), false));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void setCanOpenDoors(EntityType<? extends Evoker> type, Level level, CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             getNavigation().setCanOpenDoors(true);
     }
 
@@ -73,7 +73,7 @@ public abstract class EvokerMixin extends AbstractIllagerMixin<Evoker> {
         @Inject(method = "performSpellCasting", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/monster/Vex;setBoundOrigin(Lnet/minecraft/core/BlockPos;)V"))
         private void applyRaidBuffsToVex(CallbackInfo ci, @Local(name = "vex") Vex vex) {
-            VPRaider.cast(this$0).getRaiderConfig().raidSummonedMobEffects().apply(this$0, vex);
+            RaiderConfig.get(this$0).raidSummonedMobEffects().apply(this$0, vex);
         }
     }
 }

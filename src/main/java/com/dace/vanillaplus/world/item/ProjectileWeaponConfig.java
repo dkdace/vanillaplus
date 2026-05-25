@@ -18,14 +18,18 @@ import java.util.Optional;
  * @param shootingPower 화살 발사 속력
  */
 public record ProjectileWeaponConfig(@NonNull Optional<Float> baseDamage, @NonNull Optional<Float> shootingPower) {
-    /** 기본값 */
-    public static final ProjectileWeaponConfig DEFAULT = new ProjectileWeaponConfig(Optional.empty(), Optional.empty());
     /** JSON 코덱 */
     public static final Codec<ProjectileWeaponConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("base_damage").forGetter(ProjectileWeaponConfig::baseDamage),
                     ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("shooting_power").forGetter(ProjectileWeaponConfig::shootingPower))
             .apply(instance, ProjectileWeaponConfig::new));
+    /** 기본값 */
+    private static final ProjectileWeaponConfig DEFAULT = new ProjectileWeaponConfig(Optional.empty(), Optional.empty());
 
+    /**
+     * @param item 대상 아이템
+     * @return {@link ProjectileWeaponConfig}
+     */
     @NonNull
     public static ProjectileWeaponConfig get(@NonNull Item item) {
         return VPItem.cast(item).getConfigComponents().getOrDefault(ItemConfigComponentTypes.PROJECTILE_WEAPON, DEFAULT);

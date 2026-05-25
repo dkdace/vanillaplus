@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -54,6 +54,6 @@ public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
             target = "Lnet/minecraft/world/entity/ai/behavior/BackUpIfTooClose;create(IF)Lnet/minecraft/world/entity/ai/behavior/OneShot;"),
             index = 0)
     private static int modifyBackupDistance(int tooCloseDistance, @Local(argsOnly = true) Piglin body) {
-        return VPLivingEntity.cast(body).getCrossbowMobConfig().backupDistance().orElse(tooCloseDistance);
+        return CrossbowMobConfig.get(body).backupDistance().orElse(tooCloseDistance);
     }
 }

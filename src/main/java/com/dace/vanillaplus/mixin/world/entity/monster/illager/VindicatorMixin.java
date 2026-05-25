@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
+import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -23,13 +24,13 @@ public abstract class VindicatorMixin extends AbstractIllagerMixin<Vindicator> {
     @ModifyArg(method = "registerGoals", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V", ordinal = 3), index = 1)
     private Goal modifyOpenDoorGoal(Goal goal) {
-        return getRaiderConfig().alwaysOpenDoors() ? new OpenDoorGoal(getThis(), false) : goal;
+        return RaiderConfig.get(getThis()).alwaysOpenDoors() ? new OpenDoorGoal(getThis(), false) : goal;
     }
 
     @Definition(id = "hasGroundPathNavigation", method = "Lnet/minecraft/world/entity/ai/util/GoalUtils;hasGroundPathNavigation(Lnet/minecraft/world/entity/Mob;)Z")
     @Expression("hasGroundPathNavigation(this)")
     @ModifyExpressionValue(method = "customServerAiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean removeCanOpenDoorsCondition(boolean hasGroundPathNavigation) {
-        return !getRaiderConfig().alwaysOpenDoors() && hasGroundPathNavigation;
+        return !RaiderConfig.get(getThis()).alwaysOpenDoors() && hasGroundPathNavigation;
     }
 }

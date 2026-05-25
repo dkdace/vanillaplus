@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.entity.monster;
 
 import com.dace.vanillaplus.mixin.world.entity.raid.RaiderMixin;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
+import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +39,7 @@ public abstract class RavagerMixin extends RaiderMixin<Ravager> {
                                                                                      boolean mustSee,
                                                                                      TargetingConditions.Selector selector,
                                                                                      Operation<NearestAttackableTargetGoal<AbstractVillager>> original) {
-        return getRaiderConfig().attackBabyVillagers()
+        return RaiderConfig.get(getThis()).attackBabyVillagers()
                 ? new NearestAttackableTargetGoal<>(mob, AbstractVillager.class, true)
                 : original.call(mob, targetType, mustSee, selector);
     }

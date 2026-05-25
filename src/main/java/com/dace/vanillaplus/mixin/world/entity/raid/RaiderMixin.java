@@ -1,14 +1,11 @@
 package com.dace.vanillaplus.mixin.world.entity.raid;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
-import com.dace.vanillaplus.extension.world.entity.raid.VPRaider;
 import com.dace.vanillaplus.mixin.world.entity.monster.MonsterMixin;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Collections;
 
 @Mixin(Raider.class)
-public abstract class RaiderMixin<T extends Raider> extends MonsterMixin<T> implements VPRaider<T> {
+public abstract class RaiderMixin<T extends Raider> extends MonsterMixin<T> {
     @Unique
     private static final String LOOT_TABLE_RAID_EQUIPMENT_PREFIX = "equipment/raid/";
     @Unique
@@ -42,21 +39,15 @@ public abstract class RaiderMixin<T extends Raider> extends MonsterMixin<T> impl
 
     @Unique
     protected void applyCustomRaidBuffs() {
-        getRaiderConfig().raidMobEffects().apply(getThis(), getThis());
+        RaiderConfig.get(getThis()).raidMobEffects().apply(getThis(), getThis());
 
         if (raidEquipmentResourceKey != null)
             equip(raidEquipmentResourceKey, Collections.emptyMap());
     }
 
     @Override
-    @NonNull
-    public RaiderConfig getRaiderConfig() {
-        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAIDER, RaiderConfig.DEFAULT);
-    }
-
-    @Override
     protected void customServerAiStep(ServerLevel level) {
-        if (!getRaiderConfig().sprintDuringRaids())
+        if (!RaiderConfig.get(getThis()).sprintDuringRaids())
             return;
 
         MoveControl moveControl = getMoveControl();
@@ -65,12 +56,12 @@ public abstract class RaiderMixin<T extends Raider> extends MonsterMixin<T> impl
 
     @Override
     public ItemStack getProjectile(ItemStack heldWeapon) {
-        return getRaiderConfig().ammoModifiers().apply(getThis(), super.getProjectile(heldWeapon));
+        return RaiderConfig.get(getThis()).ammoModifiers().apply(getThis(), super.getProjectile(heldWeapon));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void setLootTableRaidEquipment(EntityType<? extends Raider> type, Level level, CallbackInfo ci) {
-        if (getRaiderConfig().useDataDrivenRaidEquipment())
+        if (RaiderConfig.get(getThis()).useDataDrivenRaidEquipment())
             raidEquipmentResourceKey = ResourceKey.create(Registries.LOOT_TABLE,
                     IdentifierUtil.fromPath(EntityType.getKey(getType()).getPath()).withPrefix(LOOT_TABLE_RAID_EQUIPMENT_PREFIX));
     }

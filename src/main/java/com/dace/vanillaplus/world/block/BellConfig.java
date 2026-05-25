@@ -21,8 +21,6 @@ import java.util.Optional;
  */
 public record BellConfig(@NonNull Optional<Integer> raiderDetectionRange, @NonNull Optional<Integer> glowRange,
                          @NonNull Optional<Integer> glowDuration) {
-    /** 기본값 */
-    public static final BellConfig DEFAULT = new BellConfig(Optional.empty(), Optional.empty(), Optional.empty());
     /** JSON 코덱 */
     public static final Codec<BellConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("raider_detection_range").forGetter(BellConfig::raiderDetectionRange),
@@ -30,7 +28,13 @@ public record BellConfig(@NonNull Optional<Integer> raiderDetectionRange, @NonNu
                     CodecUtil.secondsToTicks(ExtraCodecs.NON_NEGATIVE_FLOAT).optionalFieldOf("glow_duration_seconds")
                             .forGetter(BellConfig::glowDuration))
             .apply(instance, BellConfig::new));
+    /** 기본값 */
+    private static final BellConfig DEFAULT = new BellConfig(Optional.empty(), Optional.empty(),
+            Optional.empty());
 
+    /**
+     * @return {@link BellConfig}
+     */
     @NonNull
     public static BellConfig get() {
         return VPBlock.cast(Blocks.BELL).getConfigComponents().getOrDefault(BlockConfigComponentTypes.BELL, DEFAULT);

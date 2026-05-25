@@ -26,7 +26,7 @@ public record WitchConfig(@NonNull ConditionalModifierList<NumberModifier<Float>
                           @NonNull ConditionalModifierList<ItemFunctionsModifier, ItemStack> supportPotionModifiers,
                           @NonNull ConditionalModifierList<ItemFunctionsModifier, ItemStack> attackPotionModifiers) {
     /** 기본값 */
-    public static final WitchConfig DEFAULT = new WitchConfig(ConditionalModifierList.empty(), ConditionalModifierList.empty(),
+    private static final WitchConfig DEFAULT = new WitchConfig(ConditionalModifierList.empty(), ConditionalModifierList.empty(),
             ConditionalModifierList.empty(), ConditionalModifierList.empty());
     /** JSON 코덱 */
     public static final Codec<WitchConfig> CODEC = RecordCodecBuilder.create(instance -> instance
@@ -43,6 +43,9 @@ public record WitchConfig(@NonNull ConditionalModifierList<NumberModifier<Float>
                             .forGetter(WitchConfig::attackPotionModifiers))
             .apply(instance, WitchConfig::new));
 
+    /**
+     * @return {@link WitchConfig}
+     */
     @NonNull
     public static WitchConfig get() {
         return VPEntityType.cast(EntityType.WITCH).getConfigComponents().getOrDefault(EntityConfigComponentTypes.WITCH, DEFAULT);

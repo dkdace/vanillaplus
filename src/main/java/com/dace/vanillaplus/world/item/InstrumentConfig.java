@@ -18,14 +18,18 @@ import java.util.Optional;
  * @param useDuration 지속시간
  */
 public record InstrumentConfig(@NonNull Optional<Integer> useDuration) {
-    /** 기본값 */
-    public static final InstrumentConfig DEFAULT = new InstrumentConfig(Optional.empty());
     /** JSON 코덱 */
     public static final Codec<InstrumentConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(CodecUtil.secondsToTicks(ExtraCodecs.POSITIVE_FLOAT).optionalFieldOf("use_duration_seconds")
                     .forGetter(InstrumentConfig::useDuration))
             .apply(instance, InstrumentConfig::new));
+    /** 기본값 */
+    private static final InstrumentConfig DEFAULT = new InstrumentConfig(Optional.empty());
 
+    /**
+     * @param item 대상 아이템
+     * @return {@link InstrumentConfig}
+     */
     @NonNull
     public static InstrumentConfig get(@NonNull Item item) {
         return VPItem.cast(item).getConfigComponents().getOrDefault(ItemConfigComponentTypes.INSTRUMENT, DEFAULT);

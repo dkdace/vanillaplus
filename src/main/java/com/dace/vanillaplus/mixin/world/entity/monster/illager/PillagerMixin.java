@@ -1,5 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
+import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
+import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
@@ -20,13 +22,13 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager> {
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             targetSelector.addGoal(3, new OpenDoorGoal(getThis(), false));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void setCanOpenDoors(EntityType<? extends Pillager> type, Level level, CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             getNavigation().setCanOpenDoors(true);
     }
 
@@ -34,6 +36,6 @@ public abstract class PillagerMixin extends AbstractIllagerMixin<Pillager> {
             target = "Lnet/minecraft/world/entity/monster/illager/Pillager;performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V"),
             index = 1)
     private float modifyBulletVelocity(float crossbowPower) {
-        return getCrossbowMobConfig().shootingPower().orElse(crossbowPower);
+        return CrossbowMobConfig.get(getThis()).shootingPower().orElse(crossbowPower);
     }
 }

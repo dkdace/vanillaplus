@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.sensing;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.npc.VPAbstractVillager;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +21,7 @@ public abstract class VillagerHostilesSensorMixin implements VPMixin<VillagerHos
         if (!(body instanceof AbstractVillager abstractVillager))
             return;
 
-        Map<EntityType<?>, Integer> avoidEntityDistanceMap = VPAbstractVillager.cast(abstractVillager).getNpcConfig().avoidEntityDistanceMap();
+        Map<EntityType<?>, Integer> avoidEntityDistanceMap = NpcConfig.get(abstractVillager).avoidEntityDistanceMap();
         if (avoidEntityDistanceMap.isEmpty())
             return;
 

@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.monster.illager;
 
+import com.dace.vanillaplus.world.entity.raid.RaiderConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
@@ -19,13 +20,13 @@ public abstract class IllusionerMixin extends AbstractIllagerMixin<Illusioner> {
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addOpenDoorGoal(CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             targetSelector.addGoal(6, new OpenDoorGoal(getThis(), false));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void setCanOpenDoors(EntityType<? extends Illusioner> type, Level level, CallbackInfo ci) {
-        if (getRaiderConfig().alwaysOpenDoors())
+        if (RaiderConfig.get(getThis()).alwaysOpenDoors())
             getNavigation().setCanOpenDoors(true);
     }
 }

@@ -16,13 +16,16 @@ import net.minecraft.world.entity.decoration.ArmorStand;
  */
 public record ArmorStandConfig(boolean enableQuickSwap, boolean hasToggleableArms) {
     /** 기본값 */
-    public static final ArmorStandConfig DEFAULT = new ArmorStandConfig(false, false);
+    private static final ArmorStandConfig DEFAULT = new ArmorStandConfig(false, false);
     /** JSON 코덱 */
     public static final Codec<ArmorStandConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.BOOL.optionalFieldOf("enable_quick_swap", DEFAULT.enableQuickSwap).forGetter(ArmorStandConfig::enableQuickSwap),
                     Codec.BOOL.optionalFieldOf("has_toggleable_arms", DEFAULT.hasToggleableArms).forGetter(ArmorStandConfig::hasToggleableArms))
             .apply(instance, ArmorStandConfig::new));
 
+    /**
+     * @return {@link ArmorStandConfig}
+     */
     @NonNull
     public static ArmorStandConfig get() {
         return VPEntityType.cast(EntityType.ARMOR_STAND).getConfigComponents().getOrDefault(EntityConfigComponentTypes.ARMOR_STAND, DEFAULT);

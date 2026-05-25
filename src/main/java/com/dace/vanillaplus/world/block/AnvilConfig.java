@@ -19,13 +19,16 @@ import java.util.Optional;
  */
 public record AnvilConfig(boolean increaseRepairCost, @NonNull Optional<Integer> maxCost) {
     /** 기본값 */
-    public static final AnvilConfig DEFAULT = new AnvilConfig(true, Optional.empty());
+    private static final AnvilConfig DEFAULT = new AnvilConfig(true, Optional.empty());
     /** JSON 코덱 */
     public static final Codec<AnvilConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.BOOL.optionalFieldOf("increase_repair_cost", DEFAULT.increaseRepairCost).forGetter(AnvilConfig::increaseRepairCost),
                     ExtraCodecs.intRange(-1, Integer.MAX_VALUE).optionalFieldOf("max_cost").forGetter(AnvilConfig::maxCost))
             .apply(instance, AnvilConfig::new));
 
+    /**
+     * @return {@link AnvilConfig}
+     */
     @NonNull
     public static AnvilConfig get() {
         return VPBlock.cast(Blocks.ANVIL).getConfigComponents().getOrDefault(BlockConfigComponentTypes.ANVIL, DEFAULT);

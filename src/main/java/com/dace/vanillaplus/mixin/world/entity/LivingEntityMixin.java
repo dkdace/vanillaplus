@@ -6,7 +6,6 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
 import com.dace.vanillaplus.world.item.TridentConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -16,7 +15,6 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -135,12 +133,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
         return controller == null
                 ? speed
                 : (float) (speed * controller.getAttributeValue(VPAttributes.VEHICLE_SPEED_MULTIPLIER.getHolder().orElseThrow()));
-    }
-
-    @Override
-    @NonNull
-    public CrossbowMobConfig getCrossbowMobConfig() {
-        return getConfigComponents().getOrDefault(EntityConfigComponentTypes.CROSSBOW_MOB, CrossbowMobConfig.DEFAULT);
     }
 
     @Override

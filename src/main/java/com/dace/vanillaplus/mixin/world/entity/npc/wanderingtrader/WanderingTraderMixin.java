@@ -1,6 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.wanderingtrader;
 
 import com.dace.vanillaplus.mixin.world.entity.npc.villager.AbstractVillagerMixin;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
@@ -27,15 +29,22 @@ import java.util.Map;
 @Mixin(WanderingTrader.class)
 public abstract class WanderingTraderMixin extends AbstractVillagerMixin<WanderingTrader> {
     @WrapOperation(method = "registerGoals", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V"))
+            target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V"),
+            slice = @Slice(
+                    from = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",
+                            ordinal = 4),
+                    to = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",
+                            ordinal = 10)))
     private void removeDefaultAvoidEntityGoals(GoalSelector instance, int prio, Goal goal, Operation<Void> original) {
-        if (!(goal instanceof AvoidEntityGoal<?>) || getNpcConfig().avoidEntityDistanceMap().isEmpty())
+        if (NpcConfig.get(getThis()).avoidEntityDistanceMap().isEmpty())
             original.call(instance, prio, goal);
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void addAvoidEntityGoals(CallbackInfo ci) {
-        Map<EntityType<?>, Integer> avoidEntityDistanceMap = getNpcConfig().avoidEntityDistanceMap();
+        Map<EntityType<?>, Integer> avoidEntityDistanceMap = NpcConfig.get(getThis()).avoidEntityDistanceMap();
         if (avoidEntityDistanceMap.isEmpty())
             return;
 

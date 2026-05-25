@@ -25,9 +25,6 @@ import java.util.Optional;
  */
 public record EnderDragonConfig(float enderPearlDropChance, int maxEnderPearlDrops, int endermiteCount, @NonNull Optional<Experience> experience,
                                 @NonNull Optional<HealthBasedValue<Float>> movementSpeedMultiplier, @NonNull Optional<PhaseInfo> phaseInfo) {
-    /** 기본값 */
-    public static final EnderDragonConfig DEFAULT = new EnderDragonConfig(0, 0, 0,
-            Optional.empty(), Optional.empty(), Optional.empty());
     /** JSON 코덱 */
     public static final Codec<EnderDragonConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.floatRange(0, 1).fieldOf("ender_pearl_drop_chance").forGetter(EnderDragonConfig::enderPearlDropChance),
@@ -38,7 +35,13 @@ public record EnderDragonConfig(float enderPearlDropChance, int maxEnderPearlDro
                             .forGetter(EnderDragonConfig::movementSpeedMultiplier),
                     PhaseInfo.CODEC.optionalFieldOf("phases").forGetter(EnderDragonConfig::phaseInfo))
             .apply(instance, EnderDragonConfig::new));
+    /** 기본값 */
+    private static final EnderDragonConfig DEFAULT = new EnderDragonConfig(0, 0, 0,
+            Optional.empty(), Optional.empty(), Optional.empty());
 
+    /**
+     * @return {@link EnderDragonConfig}
+     */
     @NonNull
     public static EnderDragonConfig get() {
         return VPEntityType.cast(EntityType.ENDER_DRAGON).getConfigComponents().getOrDefault(EntityConfigComponentTypes.ENDER_DRAGON, DEFAULT);

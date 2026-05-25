@@ -49,6 +49,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -256,15 +257,17 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Unique
     private static void addProjectileWeaponTooltip(@NonNull ProjectileWeaponItem projectileWeaponItem, @NonNull Consumer<Component> componentConsumer) {
         ProjectileWeaponConfig projectileWeaponConfig = ProjectileWeaponConfig.get(projectileWeaponItem);
-        if (projectileWeaponConfig == ProjectileWeaponConfig.DEFAULT)
+        Optional<Float> baseDamage = projectileWeaponConfig.baseDamage();
+        Optional<Float> shootingPower = projectileWeaponConfig.shootingPower();
+        if (baseDamage.isEmpty() && shootingPower.isEmpty())
             return;
 
         componentConsumer.accept(Component.empty());
         componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT);
-        projectileWeaponConfig.baseDamage().ifPresent(baseDamage -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(baseDamage))));
-        projectileWeaponConfig.shootingPower().ifPresent(shootingPower -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
-                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(shootingPower))));
+        baseDamage.ifPresent(value -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
+        shootingPower.ifPresent(value -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
     }
 
     @Unique

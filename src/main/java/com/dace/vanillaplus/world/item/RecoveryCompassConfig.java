@@ -27,6 +27,9 @@ public record RecoveryCompassConfig(boolean enableTeleport, @NonNull List<Consum
                             .forGetter(RecoveryCompassConfig::teleportEffects))
             .apply(instance, RecoveryCompassConfig::new));
 
+    /**
+     * @return {@link RecoveryCompassConfig}
+     */
     @NonNull
     public static RecoveryCompassConfig get() {
         return VPItem.cast(Items.RECOVERY_COMPASS).getConfigComponents().getOrDefault(ItemConfigComponentTypes.RECOVERY_COMPASS, DEFAULT);

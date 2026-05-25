@@ -15,13 +15,16 @@ import net.minecraft.world.level.block.BrewingStandBlock;
  */
 public record BrewingStandConfig(boolean useDataDrivenRecipe) {
     /** 기본값 */
-    public static final BrewingStandConfig DEFAULT = new BrewingStandConfig(false);
+    private static final BrewingStandConfig DEFAULT = new BrewingStandConfig(false);
     /** JSON 코덱 */
     public static final Codec<BrewingStandConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.BOOL.optionalFieldOf("use_data_driven_recipe", DEFAULT.useDataDrivenRecipe)
                     .forGetter(BrewingStandConfig::useDataDrivenRecipe))
             .apply(instance, BrewingStandConfig::new));
 
+    /**
+     * @return {@link BrewingStandConfig}
+     */
     @NonNull
     public static BrewingStandConfig get() {
         return VPBlock.cast(Blocks.BREWING_STAND).getConfigComponents().getOrDefault(BlockConfigComponentTypes.BREWING_STAND, DEFAULT);
