@@ -57,7 +57,9 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
     }
 
     @Shadow
-    public abstract InteractionResult use(Level level, Player player, InteractionHand hand);
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        throw new UnsupportedOperationException();
+    }
 
     @Shadow
     public abstract ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity);

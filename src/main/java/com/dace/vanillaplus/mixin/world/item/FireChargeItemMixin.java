@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.world.item.FireChargeConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,12 +16,21 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FireChargeItem.class)
 public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem> {
+    @Unique
+    private static final float PROJECTILE_SHOOT_POWER = 1.5F;
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
+        if (!FireChargeConfig.get().enableThrowing())
+            return super.use(level, player, interactionHand);
+
         ItemStack itemstack = player.getItemInHand(interactionHand);
 
         if (level instanceof ServerLevel serverlevel)
@@ -29,7 +39,7 @@ public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem> {
                 smallFireball.setPos(player.getEyePosition());
 
                 return smallFireball;
-            }, serverlevel, itemstack, player, 0, 1.5F, 1);
+            }, serverlevel, itemstack, player, 0, PROJECTILE_SHOOT_POWER, 1);
 
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.NEUTRAL, 1,
                 (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1);
@@ -39,8 +49,9 @@ public abstract class FireChargeItemMixin extends ItemMixin<FireChargeItem> {
         return InteractionResult.SUCCESS;
     }
 
-    @Overwrite
-    public InteractionResult useOn(UseOnContext context) {
-        return InteractionResult.PASS;
+    @Inject(method = "useOn", at = @At("HEAD"), cancellable = true)
+    public void cancelDefaultUse(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+        if (FireChargeConfig.get().enableThrowing())
+            cir.setReturnValue(InteractionResult.PASS);
     }
 }

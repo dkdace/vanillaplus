@@ -24,6 +24,8 @@ public final class ItemConfigComponentTypes {
             "instrument", () -> InstrumentConfig.CODEC);
     public static final RegistryObject<Codec<RecoveryCompassConfig>> RECOVERY_COMPASS = create(
             "recovery_compass", () -> RecoveryCompassConfig.CODEC);
+    public static final RegistryObject<Codec<FireChargeConfig>> FIRE_CHARGE = create(
+            "fire_charge", () -> FireChargeConfig.CODEC);
 
     @NonNull
     private static <T> RegistryObject<Codec<T>> create(@NonNull String name, @NonNull Supplier<Codec<T>> onCodec) {
