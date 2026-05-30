@@ -8,7 +8,7 @@ import com.dace.vanillaplus.world.block.BlockConfig;
 import com.dace.vanillaplus.world.entity.EntityConfig;
 import com.dace.vanillaplus.world.entity.raid.RaidWave;
 import com.dace.vanillaplus.world.item.ItemConfig;
-import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.PotionConfig;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
@@ -48,8 +48,8 @@ public final class DataPackRegistry {
     public static final ResourceKey<Registry<ItemConfig>> ITEM_CONFIG = create("item_config",
             ItemConfig.DIRECT_CODEC, Registries.ITEM);
     /** 물약 수정자 */
-    public static final ResourceKey<Registry<PotionModifier>> POTION_MODIFIER = create("modifier/potion",
-            PotionModifier.DIRECT_CODEC, Registries.POTION);
+    public static final ResourceKey<Registry<PotionConfig>> POTION_CONFIG = create("potion_config",
+            PotionConfig.DIRECT_CODEC, Registries.POTION);
 
     public static void bootstrap() {
         LOGGER.info("Initialized");

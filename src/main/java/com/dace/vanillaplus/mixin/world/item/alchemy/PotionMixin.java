@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item.alchemy;
 
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
-import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.PotionConfig;
 import lombok.NonNull;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public abstract class PotionMixin implements VPPotion {
     @Unique
     @Nullable
-    private PotionModifier dataModifier;
+    private PotionConfig dataModifier;
     @Mutable
     @Shadow
     @Final
@@ -23,14 +23,14 @@ public abstract class PotionMixin implements VPPotion {
 
     @Override
     @NonNull
-    public Optional<PotionModifier> getDataModifier() {
+    public Optional<PotionConfig> getDataModifier() {
         return Optional.ofNullable(dataModifier);
     }
 
-    public void setDataModifier(@Nullable PotionModifier dataModifier) {
+    public void setDataModifier(@Nullable PotionConfig dataModifier) {
         this.dataModifier = dataModifier;
 
         if (dataModifier != null)
-            effects = dataModifier.getEffects();
+            effects = dataModifier.effects();
     }
 }

@@ -7,7 +7,7 @@ import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.dace.vanillaplus.util.DynamicComponent;
-import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.PotionConfig;
 import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
@@ -333,7 +333,7 @@ public abstract class ItemStackMixin implements VPItemStack {
             return isFoil;
 
         return potionContents.potion().flatMap(potionHolder ->
-                VPPotion.cast(potionHolder.value()).getDataModifier().map(PotionModifier::isGlistering)).orElse(isFoil);
+                VPPotion.cast(potionHolder.value()).getDataModifier().map(PotionConfig::isGlistering)).orElse(isFoil);
     }
 
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",

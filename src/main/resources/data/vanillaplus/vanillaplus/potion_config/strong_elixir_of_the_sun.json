@@ -1,6 +1,6 @@
 {
   "color": -1353432,
-  "glistering": true,
+  "is_glistering": true,
   "effects": [
     {
       "id": "minecraft:night_vision",

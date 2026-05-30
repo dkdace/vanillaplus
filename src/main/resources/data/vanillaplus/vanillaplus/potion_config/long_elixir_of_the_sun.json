@@ -1,18 +1,18 @@
 {
   "color": -1353432,
-  "glistering": true,
+  "is_glistering": true,
   "effects": [
     {
       "id": "minecraft:night_vision",
-      "duration": 6000
+      "duration": 14400
     },
     {
       "id": "minecraft:fire_resistance",
-      "duration": 6000
+      "duration": 14400
     },
     {
       "id": "minecraft:haste",
-      "duration": 6000,
+      "duration": 14400,
       "amplifier": 1
     }
   ]

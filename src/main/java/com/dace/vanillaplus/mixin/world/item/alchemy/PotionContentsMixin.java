@@ -82,6 +82,6 @@ public abstract class PotionContentsMixin implements VPMixin<PotionContents> {
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;getColorOptional(Ljava/lang/Iterable;)Ljava/util/OptionalInt;"))
     private OptionalInt modifyColor(OptionalInt color) {
         return potion.flatMap(potionHolder -> VPPotion.cast(potionHolder.value()).getDataModifier()
-                .flatMap(potionModifier -> potionModifier.getColor().map(OptionalInt::of))).orElse(color);
+                .flatMap(potionModifier -> potionModifier.color().map(OptionalInt::of))).orElse(color);
     }
 }
