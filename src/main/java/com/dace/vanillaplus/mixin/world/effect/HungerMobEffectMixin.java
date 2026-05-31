@@ -16,6 +16,6 @@ public abstract class HungerMobEffectMixin extends MobEffectMixin<HungerMobEffec
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"))
     private float modifyExhaustion(float amount, @Local(argsOnly = true) int amplification) {
-        return getValues().calculate(VALUE_ID, amplification).orElse(amount);
+        return getConfig().calculate(VALUE_ID, amplification).orElse(amount);
     }
 }

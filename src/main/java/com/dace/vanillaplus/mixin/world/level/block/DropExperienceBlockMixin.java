@@ -20,8 +20,8 @@ public abstract class DropExperienceBlockMixin<T extends DropExperienceBlock> ex
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable BlockConfig dataModifier) {
-        super.setDataModifier(dataModifier);
+    public void setConfig(@Nullable BlockConfig config) {
+        super.setConfig(config);
         getConfigComponents().get(BlockConfigComponentTypes.EXPERIENCE).ifPresent(experience -> xpRange = experience);
     }
 }

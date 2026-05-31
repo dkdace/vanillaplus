@@ -18,13 +18,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(Block.class)
 public abstract class BlockMixin<T extends Block> implements VPBlock<T> {
     @Unique
     @Nullable
-    private BlockConfig dataModifier;
+    private BlockConfig config;
 
     @Shadow
     public abstract void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random);
@@ -36,18 +36,18 @@ public abstract class BlockMixin<T extends Block> implements VPBlock<T> {
     @Override
     @NonNull
     public final VPDataComponentMap getConfigComponents() {
-        return getDataModifier().map(BlockConfig::components).orElse(VPDataComponentMap.EMPTY);
+        return getConfig().components();
     }
 
     @Override
     @NonNull
-    public final Optional<BlockConfig> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public final BlockConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
     }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable BlockConfig dataModifier) {
-        this.dataModifier = dataModifier;
+    public void setConfig(@Nullable BlockConfig config) {
+        this.config = config == null ? BlockConfig.DEFAULT : config;
     }
 }

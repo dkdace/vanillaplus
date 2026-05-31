@@ -23,6 +23,6 @@ public abstract class CrossbowItemMixin extends ItemMixin<CrossbowItem> {
 
     @ModifyArg(method = "shootProjectile", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getY(D)D"))
     private double modifyShootProjectileTargetYProgress(double progress) {
-        return getDataModifier().isPresent() ? -0.25 : progress;
+        return ProjectileWeaponConfig.get(getThis()).shootingPower().isPresent() ? -0.25 : progress;
     }
 }

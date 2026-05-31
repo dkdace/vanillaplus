@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.data;
 
-import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.VPConfigurable;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.LootTableReward;
 import com.dace.vanillaplus.world.MobEffectValues;
@@ -74,24 +74,24 @@ public final class DataPackRegistry {
         ResourceKey<Registry<T>> registryKey = create(name, codec);
 
         ServerAboutToStartEvent.BUS.addListener(event ->
-                applyDataModifiers(registryKey, event.getServer().registryAccess(), targetRegistryKey));
+                applyConfigs(registryKey, event.getServer().registryAccess(), targetRegistryKey));
         ClientPlayerNetworkEvent.LoggingIn.BUS.addListener(event ->
-                applyDataModifiers(registryKey, event.getPlayer().registryAccess(), targetRegistryKey));
+                applyConfigs(registryKey, event.getPlayer().registryAccess(), targetRegistryKey));
 
         return registryKey;
     }
 
-    private static <T, U> void applyDataModifiers(@NonNull ResourceKey<Registry<T>> registryKey, @NonNull HolderLookup.Provider registries,
-                                                  @NonNull ResourceKey<Registry<U>> targetRegistryKey) {
+    private static <T, U> void applyConfigs(@NonNull ResourceKey<Registry<T>> registryKey, @NonNull HolderLookup.Provider registries,
+                                            @NonNull ResourceKey<Registry<U>> targetRegistryKey) {
         registries.lookupOrThrow(targetRegistryKey).listElements().forEach(element -> {
-            T dataModifier = registries.get(ResourceKey.create(registryKey, IdentifierUtil.fromResourceKey(element.key())))
+            T config = registries.get(ResourceKey.create(registryKey, IdentifierUtil.fromResourceKey(element.key())))
                     .map(Holder::value)
                     .orElse(null);
 
-            VPModifiableData.cast(element.value()).setDataModifier(dataModifier);
+            VPConfigurable.cast(element.value()).setConfig(config);
 
-            if (dataModifier != null)
-                LOGGER.debug("Applied DataModifier to {}", element.key());
+            if (config != null)
+                LOGGER.debug("Applied Config to {}", element.key());
         });
     }
 }

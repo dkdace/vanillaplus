@@ -21,7 +21,7 @@ public final class MobEffectValues {
                     .forGetter(mobEffectValues -> mobEffectValues.describedMap))
             .apply(instance, MobEffectValues::new));
     /** 기본값 */
-    public static final MobEffectValues EMPTY = new MobEffectValues(Collections.emptyMap());
+    public static final MobEffectValues DEFAULT = new MobEffectValues(Collections.emptyMap());
 
     /** 식별자별 레벨 기반 값 목록 (식별자 : 레벨 기반 값) */
     @NonNull

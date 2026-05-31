@@ -14,9 +14,11 @@ import lombok.NonNull;
  * @see EntityConfigComponentTypes
  */
 public record EntityConfig(@NonNull VPDataComponentMap components) {
+    /** 기본값 */
+    public static final EntityConfig DEFAULT = new EntityConfig(VPDataComponentMap.EMPTY);
     /** JSON 코덱 */
     public static final Codec<EntityConfig> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(VPDataComponentMap.createCodec(StaticRegistry.ENTITY_CONFIG_COMPONENT_TYPE)
-                    .optionalFieldOf("components", VPDataComponentMap.EMPTY).forGetter(EntityConfig::components))
+            .group(VPDataComponentMap.createCodec(StaticRegistry.ENTITY_CONFIG_COMPONENT_TYPE).optionalFieldOf("components", DEFAULT.components)
+                    .forGetter(EntityConfig::components))
             .apply(instance, EntityConfig::new));
 }

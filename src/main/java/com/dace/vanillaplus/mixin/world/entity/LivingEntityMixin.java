@@ -198,7 +198,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private int modifyResistanceMultiplier(int absorbValue) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
                 .calculate(RESISTANCE_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
                 .map(Float::intValue)
                 .orElse(absorbValue);
@@ -278,7 +278,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private float modifyJumpBoostPower(float power) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
                 .calculate(JUMP_STRENGTH_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
                 .orElse(power);
     }

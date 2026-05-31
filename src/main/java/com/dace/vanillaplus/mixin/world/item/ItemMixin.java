@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(Item.class)
 public abstract class ItemMixin<T extends Item> implements VPItem<T> {
@@ -38,7 +38,7 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
     private Holder.Reference<Item> builtInRegistryHolder;
     @Unique
     @Nullable
-    private ItemConfig dataModifier;
+    private ItemConfig config;
 
     @Unique
     private static void applyDataComponentPatch(@NonNull DataComponentMap.Builder.SimpleMap map, @NonNull DataComponentPatch dataComponentPatch) {
@@ -66,20 +66,20 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
 
     @Override
     @NonNull
-    public VPDataComponentMap getConfigComponents() {
-        return getDataModifier().map(ItemConfig::components).orElse(VPDataComponentMap.EMPTY);
+    public final VPDataComponentMap getConfigComponents() {
+        return getConfig().components();
     }
 
     @Override
     @NonNull
-    public Optional<ItemConfig> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public final ItemConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
     }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable ItemConfig dataModifier) {
-        this.dataModifier = dataModifier;
+    public void setConfig(@Nullable ItemConfig config) {
+        this.config = config == null ? ItemConfig.DEFAULT : config;
         applyConfigItemComponents();
     }
 
@@ -95,7 +95,7 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
             map.map().put(VPDataComponentTypes.REPAIR_WITH_XP.get(), RepairWithXP.DEFAULT);
         }
 
-        getDataModifier().ifPresent(itemConfig -> applyDataComponentPatch(map, itemConfig.dataComponentPatch()));
+        getConfig().dataComponentPatch().ifPresent(dataComponentPatch -> applyDataComponentPatch(map, dataComponentPatch));
     }
 
     @Override

@@ -9,28 +9,28 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin implements VPEntityType {
     @Unique
     @Nullable
-    private EntityConfig dataModifier;
+    private EntityConfig config;
 
     @Override
     @NonNull
     public VPDataComponentMap getConfigComponents() {
-        return getDataModifier().map(EntityConfig::components).orElse(VPDataComponentMap.EMPTY);
+        return getConfig().components();
     }
 
     @Override
     @NonNull
-    public Optional<EntityConfig> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public EntityConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
     }
 
     @Override
-    public void setDataModifier(@Nullable EntityConfig dataModifier) {
-        this.dataModifier = dataModifier;
+    public void setConfig(@Nullable EntityConfig config) {
+        this.config = config == null ? EntityConfig.DEFAULT : config;
     }
 }

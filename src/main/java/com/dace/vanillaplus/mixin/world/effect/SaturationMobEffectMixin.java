@@ -16,6 +16,6 @@ public abstract class SaturationMobEffectMixin extends MobEffectMixin<Saturation
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;eat(IF)V"), index = 0)
     private int modifyFoodLevel(int food, @Local(argsOnly = true) int amplification) {
-        return getValues().calculate(VALUE_ID, amplification).map(Float::intValue).orElse(food);
+        return getConfig().calculate(VALUE_ID, amplification).map(Float::intValue).orElse(food);
     }
 }

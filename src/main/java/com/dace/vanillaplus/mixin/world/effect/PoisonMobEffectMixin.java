@@ -20,6 +20,6 @@ public abstract class PoisonMobEffectMixin extends MobEffectMixin<PoisonMobEffec
     @Expression("25 >> amplification")
     @ModifyExpressionValue(method = "shouldApplyEffectTickThisTick", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyInterval(int interval, @Local(ordinal = 1, argsOnly = true) int amplification) {
-        return getValues().calculate(VALUE_ID, amplification).map(value -> (int) (1 / value)).orElse(interval);
+        return getConfig().calculate(VALUE_ID, amplification).map(value -> (int) (1 / value)).orElse(interval);
     }
 }

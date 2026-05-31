@@ -101,17 +101,17 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
         return entities;
     }
 
-    @Redirect(method = "doSweepAttack", at = @At(value = "INVOKE",
+    @ModifyExpressionValue(method = "doSweepAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getSweepHitBox(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/AABB;"))
-    private AABB modifySweepHitbox(ItemStack instance, Player player, Entity target) {
-        double sweepingRange = player.getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
-        return target.getBoundingBox().inflate(sweepingRange, 0.25, sweepingRange);
+    private AABB modifySweepHitbox(AABB aabb) {
+        double sweepingRange = getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
+        return aabb.inflate(aabb.getXsize() * sweepingRange, 0, aabb.getZsize() * sweepingRange);
     }
 
     @Definition(id = "distanceToSqr", method = "Lnet/minecraft/world/entity/player/Player;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D")
     @Expression("this.distanceToSqr(?) < ?")
     @ModifyExpressionValue(method = "doSweepAttack", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean redirectSweepDistanceCheck(boolean original, @Local(name = "nearby") LivingEntity nearby) {
+    private boolean modifySweepDistanceCheck(boolean original, @Local(name = "nearby") LivingEntity nearby) {
         double yRot = Math.toRadians(-getYRot() + 90);
         double distance = Math.cos(yRot) * (getX() - nearby.getX()) - Math.sin(yRot) * (getZ() - nearby.getZ());
 
@@ -144,7 +144,7 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
     private float modifyMiningFatigueMultiplier(float multiplier) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
                 .calculate(MINING_SPEED_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
                 .map(value -> value + 1)
                 .orElse(multiplier);

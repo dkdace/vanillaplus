@@ -9,13 +9,13 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(Potion.class)
 public abstract class PotionMixin implements VPPotion {
     @Unique
     @Nullable
-    private PotionConfig dataModifier;
+    private PotionConfig config;
     @Mutable
     @Shadow
     @Final
@@ -23,14 +23,12 @@ public abstract class PotionMixin implements VPPotion {
 
     @Override
     @NonNull
-    public Optional<PotionConfig> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public PotionConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
     }
 
-    public void setDataModifier(@Nullable PotionConfig dataModifier) {
-        this.dataModifier = dataModifier;
-
-        if (dataModifier != null)
-            effects = dataModifier.effects();
+    public void setConfig(@Nullable PotionConfig config) {
+        this.config = config == null ? PotionConfig.DEFAULT : config;
+        getConfig().effects().ifPresent(mobEffectInstances -> this.effects = mobEffectInstances);
     }
 }

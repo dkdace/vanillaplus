@@ -3,7 +3,6 @@ package com.dace.vanillaplus.mixin.world.item.alchemy;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
-import com.dace.vanillaplus.world.MobEffectValues;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
@@ -70,8 +69,8 @@ public abstract class PotionContentsMixin implements VPMixin<PotionContents> {
                                          CallbackInfo ci, @Local(name = "effect") MobEffectInstance effect) {
         MobEffect mobEffect = effect.getEffect().value();
 
-        VPMobEffect.cast(mobEffect).getDataModifier().map(MobEffectValues::getValues).ifPresent(describeds ->
-                describeds.forEach(described -> described.applyTooltip(lines, mobEffect.getDisplayName(), effect.getAmplifier() + 1)));
+        VPMobEffect.cast(mobEffect).getConfig().getValues().forEach(described ->
+                described.applyTooltip(lines, mobEffect.getDisplayName(), effect.getAmplifier() + 1));
 
         mobEffect.createModifiers(effect.getAmplifier(), (attributeHolder, attributeModifier) ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
@@ -81,7 +80,7 @@ public abstract class PotionContentsMixin implements VPMixin<PotionContents> {
     @ModifyExpressionValue(method = "getColorOr", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;getColorOptional(Ljava/lang/Iterable;)Ljava/util/OptionalInt;"))
     private OptionalInt modifyColor(OptionalInt color) {
-        return potion.flatMap(potionHolder -> VPPotion.cast(potionHolder.value()).getDataModifier()
-                .flatMap(potionModifier -> potionModifier.color().map(OptionalInt::of))).orElse(color);
+        return potion.flatMap(potionHolder -> VPPotion.cast(potionHolder.value()).getConfig().color().map(OptionalInt::of))
+                .orElse(color);
     }
 }

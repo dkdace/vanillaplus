@@ -8,6 +8,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.core.component.DataComponentPatch;
 
+import java.util.Optional;
+
 /**
  * 아이템의 요소를 수정하는 아이템 설정 클래스.
  *
@@ -15,12 +17,13 @@ import net.minecraft.core.component.DataComponentPatch;
  * @param components         데이터 요소 목록
  * @see ItemConfigComponentTypes
  */
-public record ItemConfig(@NonNull DataComponentPatch dataComponentPatch, @NonNull VPDataComponentMap components) {
+public record ItemConfig(@NonNull Optional<DataComponentPatch> dataComponentPatch, @NonNull VPDataComponentMap components) {
+    /** 기본값 */
+    public static final ItemConfig DEFAULT = new ItemConfig(Optional.empty(), VPDataComponentMap.EMPTY);
     /** JSON 코덱 */
     public static final Codec<ItemConfig> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(DataComponentPatch.CODEC.optionalFieldOf("item_components", DataComponentPatch.EMPTY)
-                            .forGetter(ItemConfig::dataComponentPatch),
-                    VPDataComponentMap.createCodec(StaticRegistry.ITEM_CONFIG_COMPONENT_TYPE)
-                            .optionalFieldOf("components", VPDataComponentMap.EMPTY).forGetter(ItemConfig::components))
+            .group(DataComponentPatch.CODEC.optionalFieldOf("item_components").forGetter(ItemConfig::dataComponentPatch),
+                    VPDataComponentMap.createCodec(StaticRegistry.ITEM_CONFIG_COMPONENT_TYPE).optionalFieldOf("components", DEFAULT.components)
+                            .forGetter(ItemConfig::components))
             .apply(instance, ItemConfig::new));
 }

@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.extension.world.item;
 
 import com.dace.vanillaplus.data.VPDataComponentMap;
+import com.dace.vanillaplus.extension.VPConfigurable;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.world.item.ItemConfig;
 import lombok.NonNull;
 import net.minecraft.world.item.Item;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.extensions.IForgeItem;
  * @param <T> {@link Item}을 상속받는 타입
  * @see ItemConfig
  */
-public interface VPItem<T extends Item> extends VPMixin<T>, VPModifiableData<Item, ItemConfig>, IForgeItem {
+public interface VPItem<T extends Item> extends VPMixin<T>, VPConfigurable<Item, ItemConfig>, IForgeItem {
     @NonNull
     @SuppressWarnings("unchecked")
     static <T extends Item> VPItem<T> cast(@NonNull T object) {

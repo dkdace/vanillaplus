@@ -18,25 +18,25 @@ public abstract class HealOrHarmMobEffectMixin extends MobEffectMixin<HealOrHarm
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
     private float modifyHealAmount0(float heal, @Local(argsOnly = true) int amplification) {
-        return getValues().calculate(HEAL_VALUE_ID, amplification).orElse(heal);
+        return getConfig().calculate(HEAL_VALUE_ID, amplification).orElse(heal);
     }
 
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;heal(F)V"))
     private float modifyHealAmount1(float heal, @Local(argsOnly = true) int amplification, @Local(argsOnly = true) double scale) {
-        return getValues().calculate(HEAL_VALUE_ID, amplification).map(value -> (float) (value * scale)).orElse(heal);
+        return getConfig().calculate(HEAL_VALUE_ID, amplification).map(value -> (float) (value * scale)).orElse(heal);
     }
 
     @ModifyArg(method = "applyEffectTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2)
     private float modifyHarmAmount0(float damage, @Local(argsOnly = true) int amplification) {
-        return getValues().calculate(DAMAGE_VALUE_ID, amplification).orElse(damage);
+        return getConfig().calculate(DAMAGE_VALUE_ID, amplification).orElse(damage);
     }
 
     @ModifyArg(method = "applyInstantenousEffect", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
             index = 2)
     private float modifyHarmAmount1(float damage, @Local(argsOnly = true) int amplification, @Local(argsOnly = true) double scale) {
-        return getValues().calculate(DAMAGE_VALUE_ID, amplification).map(value -> (float) (value * scale)).orElse(damage);
+        return getConfig().calculate(DAMAGE_VALUE_ID, amplification).map(value -> (float) (value * scale)).orElse(damage);
     }
 }
