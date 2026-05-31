@@ -12,7 +12,6 @@
         "minecraft:stray": 15,
         "minecraft:bogged": 15,
         "minecraft:parched": 15,
-        "minecraft:wither_skeleton": 8,
         "minecraft:spider": 8,
         "minecraft:cave_spider": 8,
         "minecraft:slime": 8,
@@ -26,6 +25,10 @@
         "minecraft:illusioner": 15,
         "minecraft:witch": 12
       }
+    },
+    "vanillaplus:villager": {
+      "close_trading_at_night": true,
+      "reroll_offers_everyday": true
     }
   }
 }

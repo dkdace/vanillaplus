@@ -85,6 +85,9 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
 
     @Override
     public final void applyConfigItemComponents() {
+        if (config == null)
+            return;
+
         DataComponentMap components = builtInRegistryHolder.components();
         if (!(components instanceof DataComponentMap.Builder.SimpleMap map))
             return;
@@ -95,7 +98,7 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
             map.map().put(VPDataComponentTypes.REPAIR_WITH_XP.get(), RepairWithXP.DEFAULT);
         }
 
-        getConfig().dataComponentPatch().ifPresent(dataComponentPatch -> applyDataComponentPatch(map, dataComponentPatch));
+        config.dataComponentPatch().ifPresent(dataComponentPatch -> applyDataComponentPatch(map, dataComponentPatch));
     }
 
     @Override

@@ -31,7 +31,7 @@ import java.util.function.Function;
 public final class ReloadableDataManager<T, U> {
     /** @see DataPackRegistry#LOOT_TABLE_REWARD */
     public static final ReloadableDataManager<ResourceKey<LootTable>, LootTableReward> LOOT_TABLE_REWARD = new ReloadableDataManager<>(
-            DataPackRegistry.LOOT_TABLE_REWARD, LootTableReward.DIRECT_CODEC, IdentifierUtil::fromResourceKey);
+            DataPackRegistry.LOOT_TABLE_REWARD, LootTableReward.DIRECT_CODEC, ResourceKey::identifier);
     /** @see DataPackRegistry#RAID_WAVE */
     public static final ReloadableDataManager<Difficulty, RaidWave> RAID_WAVE = new ReloadableDataManager<>(
             DataPackRegistry.RAID_WAVE, RaidWave.DIRECT_CODEC, difficulty -> IdentifierUtil.fromPath(difficulty.getSerializedName()));

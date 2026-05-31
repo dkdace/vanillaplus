@@ -84,9 +84,7 @@ public final class DataPackRegistry {
     private static <T, U> void applyConfigs(@NonNull ResourceKey<Registry<T>> registryKey, @NonNull HolderLookup.Provider registries,
                                             @NonNull ResourceKey<Registry<U>> targetRegistryKey) {
         registries.lookupOrThrow(targetRegistryKey).listElements().forEach(element -> {
-            T config = registries.get(ResourceKey.create(registryKey, IdentifierUtil.fromResourceKey(element.key())))
-                    .map(Holder::value)
-                    .orElse(null);
+            T config = registries.get(ResourceKey.create(registryKey, element.key().identifier())).map(Holder::value).orElse(null);
 
             VPConfigurable.cast(element.value()).setConfig(config);
 
