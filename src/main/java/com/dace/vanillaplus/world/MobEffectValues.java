@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -16,14 +17,17 @@ import java.util.*;
 public final class MobEffectValues {
     /** JSON 코덱 */
     public static final Codec<MobEffectValues> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Codec.unboundedMap(Codec.STRING, Described.TYPED_CODEC.codec()).fieldOf("values")
+            .group(Codec.unboundedMap(Identifier.CODEC, Described.TYPED_CODEC.codec()).fieldOf("values")
                     .forGetter(mobEffectValues -> mobEffectValues.describedMap))
             .apply(instance, MobEffectValues::new));
-    /** 이름별 레벨 기반 값 목록 (이름 : 레벨 기반 값) */
-    @NonNull
-    private final TreeMap<String, Described> describedMap;
+    /** 기본값 */
+    public static final MobEffectValues EMPTY = new MobEffectValues(Collections.emptyMap());
 
-    private MobEffectValues(@NonNull Map<String, Described> describedMap) {
+    /** 식별자별 레벨 기반 값 목록 (식별자 : 레벨 기반 값) */
+    @NonNull
+    private final TreeMap<Identifier, Described> describedMap;
+
+    private MobEffectValues(@NonNull Map<Identifier, Described> describedMap) {
         this.describedMap = new TreeMap<>(Comparator.comparing(describedMap::get));
         this.describedMap.putAll(describedMap);
     }
@@ -45,9 +49,10 @@ public final class MobEffectValues {
      * @param name      이름
      * @param amplifier 효과 레벨
      * @return 계산된 값
-     * @throws NullPointerException 해당하는 상태 효과 값이 존재하지 않으면 발생
      */
-    public float calculate(@NonNull String name, int amplifier) {
-        return Objects.requireNonNull(describedMap.get(name)).calculate(amplifier + 1);
+    @NonNull
+    public Optional<Float> calculate(@NonNull Identifier name, int amplifier) {
+        Described described = describedMap.get(name);
+        return described == null ? Optional.empty() : Optional.of(described.calculate(amplifier + 1));
     }
 }

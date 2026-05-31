@@ -19,4 +19,10 @@ public interface VPMobEffect<T extends MobEffect> extends VPMixin<T>, VPModifiab
     static <T extends MobEffect> VPMobEffect<T> cast(@NonNull T object) {
         return (VPMobEffect<T>) object;
     }
+
+    /**
+     * @see MobEffectValues
+     */
+    @NonNull
+    MobEffectValues getValues();
 }

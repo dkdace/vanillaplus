@@ -6,6 +6,7 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.item.TridentConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -57,9 +58,9 @@ import java.util.Objects;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMixin<T> implements VPLivingEntity<T> {
     @Unique
-    private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
+    private static final Identifier RESISTANCE_EFFECT_VALUE_ID = IdentifierUtil.fromPath("resistance");
     @Unique
-    private static final String JUMP_BOOST_DEFINED_VALUE_NAME = "power";
+    private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -197,9 +198,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private int modifyResistanceMultiplier(int absorbValue) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
-                .map(mobEffectValues -> (int) mobEffectValues.calculate(RESISTANCE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier()))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+                .calculate(RESISTANCE_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
+                .map(Float::intValue)
                 .orElse(absorbValue);
     }
 
@@ -277,8 +278,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private float modifyJumpBoostPower(float power) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
-                .map(mobEffectValues -> mobEffectValues.calculate(JUMP_BOOST_DEFINED_VALUE_NAME, mobEffectInstance.getAmplifier()))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+                .calculate(JUMP_STRENGTH_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
                 .orElse(power);
     }
 }

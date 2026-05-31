@@ -4,12 +4,14 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +40,7 @@ import java.util.Objects;
 @Mixin(Player.class)
 public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T> implements VPPlayer<T> {
     @Unique
-    private static final String MINING_FATIGUE_DEFINED_VALUE_NAME = "mining_speed";
+    private static final Identifier MINING_SPEED_EFFECT_VALUE_ID = IdentifierUtil.fromPath("mining_speed");
 
     @Unique
     protected boolean isProneKeyDown = false;
@@ -142,9 +144,9 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
     private float modifyMiningFatigueMultiplier(float multiplier) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getDataModifier()
-                .map(mobEffectValues -> 1 + mobEffectValues.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier()))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getValues()
+                .calculate(MINING_SPEED_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
+                .map(value -> value + 1)
                 .orElse(multiplier);
     }
 }

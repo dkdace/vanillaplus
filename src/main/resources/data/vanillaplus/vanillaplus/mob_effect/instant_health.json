@@ -1,6 +1,6 @@
 {
   "values": {
-    "amount": {
+    "vanillaplus:heal": {
       "description_index": 0,
       "value": {
         "type": "vanillaplus:multiply",

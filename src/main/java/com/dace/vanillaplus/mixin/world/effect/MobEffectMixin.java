@@ -23,4 +23,10 @@ public abstract class MobEffectMixin<T extends MobEffect> implements VPMobEffect
     public Optional<MobEffectValues> getDataModifier() {
         return Optional.ofNullable(dataModifier);
     }
+
+    @Override
+    @NonNull
+    public MobEffectValues getValues() {
+        return getDataModifier().orElse(MobEffectValues.EMPTY);
+    }
 }
