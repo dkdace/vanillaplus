@@ -1,14 +1,13 @@
 package com.dace.vanillaplus.mixin.world.item;
 
+import com.dace.vanillaplus.data.registryobject.BlockConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
-import com.dace.vanillaplus.extension.VPModifiableData;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
+import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.dace.vanillaplus.util.DynamicComponent;
-import com.dace.vanillaplus.world.block.BlockModifier;
-import com.dace.vanillaplus.world.item.ItemModifier;
-import com.dace.vanillaplus.world.item.PotionModifier;
+import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -49,6 +48,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -255,15 +255,18 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Unique
     private static void addProjectileWeaponTooltip(@NonNull ProjectileWeaponItem projectileWeaponItem, @NonNull Consumer<Component> componentConsumer) {
-        VPModifiableData.getDataModifier(projectileWeaponItem, ItemModifier.ProjectileWeaponModifier.class)
-                .ifPresent(projectileWeaponModifier -> {
-                    componentConsumer.accept(Component.empty());
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT);
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
-                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getBaseDamage())));
-                    componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
-                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(projectileWeaponModifier.getShootingPower())));
-                });
+        ProjectileWeaponConfig projectileWeaponConfig = ProjectileWeaponConfig.get(projectileWeaponItem);
+        Optional<Float> baseDamage = projectileWeaponConfig.baseDamage();
+        Optional<Float> shootingPower = projectileWeaponConfig.shootingPower();
+        if (baseDamage.isEmpty() && shootingPower.isEmpty())
+            return;
+
+        componentConsumer.accept(Component.empty());
+        componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_WHEN_SHOOT);
+        baseDamage.ifPresent(value -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_BASE_DAMAGE.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
+        shootingPower.ifPresent(value -> componentConsumer.accept(COMPONENT_PROJECTILE_WEAPON_SPEED.get(
+                ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
     }
 
     @Unique
@@ -328,8 +331,9 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (potionContents == null)
             return isFoil;
 
-        return potionContents.potion().flatMap(potionHolder ->
-                VPPotion.cast(potionHolder.value()).getDataModifier().map(PotionModifier::isGlistering)).orElse(isFoil);
+        return potionContents.potion()
+                .map(potionHolder -> VPPotion.cast(potionHolder.value()).getConfig().isGlistering())
+                .orElse(isFoil);
     }
 
     @Inject(method = {"getStyledHoverName", "getDisplayName"}, at = @At(value = "INVOKE",
@@ -355,8 +359,8 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(VPDataComponentTypes.EXTRA_FOOD.get(), display, extraFood -> addExtraFoodTooltip(extraFood, builder));
 
         if (getThis().is(Items.CAKE))
-            VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).ifPresent(cakeModifier ->
-                    addFoodTooltip(cakeModifier.getFoodProperties(), builder));
+            VPBlock.cast(Blocks.CAKE).getConfigComponents().get(BlockConfigComponentTypes.FOOD).ifPresent(foodProperties ->
+                    addFoodTooltip(foodProperties, builder));
 
         addTooltip(DataComponents.PROVIDES_TRIM_MATERIAL, display, providesTrimMaterial ->
                 addTrimMaterialTooltip(providesTrimMaterial, builder));

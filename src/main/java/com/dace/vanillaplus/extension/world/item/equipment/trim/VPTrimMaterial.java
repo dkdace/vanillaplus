@@ -1,21 +1,20 @@
 package com.dace.vanillaplus.extension.world.item.equipment.trim;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.world.item.effect.ArmorTrimEffect;
 import lombok.NonNull;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.TooltipProvider;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
  * {@link TrimMaterial}를 확장하는 인터페이스.
- *
- * @see ArmorTrimEffect.TrimMaterialEffect
  */
-public interface VPTrimMaterial extends VPMixin<TrimMaterial>, VPModifiableData<TrimMaterial, ArmorTrimEffect.TrimMaterialEffect> {
+public interface VPTrimMaterial extends VPMixin<TrimMaterial> {
     @NonNull
     static VPTrimMaterial cast(@NonNull TrimMaterial object) {
         return (VPTrimMaterial) (Object) object;
@@ -27,4 +26,10 @@ public interface VPTrimMaterial extends VPMixin<TrimMaterial>, VPModifiableData<
      * @param componentConsumer {@link TooltipProvider}의 텍스트 요소 Consumer
      */
     void applyTooltip(@NonNull Consumer<Component> componentConsumer);
+
+    /**
+     * @return 마법 부여 홀더 인스턴스
+     */
+    @NonNull
+    Optional<Holder<Enchantment>> getEnchantmentHolder();
 }

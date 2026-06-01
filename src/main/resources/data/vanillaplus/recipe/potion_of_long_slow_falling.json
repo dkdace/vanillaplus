@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:slow_falling",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_slow_falling"
+}

@@ -30,9 +30,7 @@ import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 양조기를 사용하는 물약 양조법을 나타내는 클래스.
@@ -66,22 +64,14 @@ public abstract class BrewingRecipe implements Recipe<BrewingRecipe.Input> {
      */
     @NonNull
     public static HolderSet<Item> getPotionContainers() {
-        return BuiltInRegistries.ITEM.getOrThrow(Tags.Items.POTIONS);
-    }
-
-    @NonNull
-    private static SlotDisplay.ItemStackSlotDisplay createPotionDisplay(@NonNull Item item, @NonNull Holder<Potion> potionHolder) {
-        return new SlotDisplay.ItemStackSlotDisplay(
-                new ItemStackTemplate(item, DataComponentPatch.builder().set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder)).build()));
+        return BuiltInRegistries.ITEM.getOrThrow(Tags.Items.POTIONS_BOTTLE);
     }
 
     /**
      * @return 기반 아이템
      */
     @NonNull
-    public Ingredient getBase() {
-        return Ingredient.of(getPotionContainers());
-    }
+    public abstract Ingredient getBase();
 
     @Override
     @MustBeInvokedByOverriders
@@ -159,6 +149,12 @@ public abstract class BrewingRecipe implements Recipe<BrewingRecipe.Input> {
             this.resultPotion = resultPotion;
         }
 
+        @NonNull
+        private static SlotDisplay.ItemStackSlotDisplay createPotionDisplay(@NonNull Item item, @NonNull Holder<Potion> potionHolder) {
+            return new SlotDisplay.ItemStackSlotDisplay(
+                    new ItemStackTemplate(item, DataComponentPatch.builder().set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder)).build()));
+        }
+
         @Override
         @NonNull
         public RecipeSerializer<? extends BrewingRecipe> getSerializer() {
@@ -172,6 +168,12 @@ public abstract class BrewingRecipe implements Recipe<BrewingRecipe.Input> {
 
             PotionContents potionContents = input.base.get(DataComponents.POTION_CONTENTS);
             return potionContents != null && potionContents.is(basePotion);
+        }
+
+        @Override
+        @NonNull
+        public Ingredient getBase() {
+            return Ingredient.of(getPotionContainers());
         }
 
         @Override
@@ -250,85 +252,6 @@ public abstract class BrewingRecipe implements Recipe<BrewingRecipe.Input> {
         public List<RecipeDisplay> display() {
             return List.of(new BrewingRecipeDisplay(new SlotDisplay.WithAnyPotion(base.display()), super.ingredient.display(),
                     new SlotDisplay.WithAnyPotion(new SlotDisplay.ItemStackSlotDisplay(result)), CRAFTING_STATION));
-        }
-    }
-
-    /**
-     * 투입 물약과 산출 물약이 1:1로 매핑된 양조법 클래스.
-     *
-     * @deprecated 확장성을 위해 제거 예정. {@link Mix}로 대체 가능
-     */
-    @Deprecated
-    public static final class Mapped extends BrewingRecipe {
-        private static final MapCodec<Mapped> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(CommonInfo.MAP_CODEC.forGetter(mapped -> mapped.commonInfo),
-                        Ingredient.CODEC.fieldOf("ingredient").forGetter(BrewingRecipe::getIngredient),
-                        Codec.unboundedMap(Potion.CODEC, Potion.CODEC).fieldOf("result_map").forGetter(mapped -> mapped.resultPotionMap),
-                        Codec.INT.optionalFieldOf("brewingtime", DEFAULT_BREWING_TIME).forGetter(BrewingRecipe::getBrewingTime))
-                .apply(instance, Mapped::new));
-        private static final StreamCodec<RegistryFriendlyByteBuf, Mapped> STREAM_CODEC = StreamCodec.composite(
-                CommonInfo.STREAM_CODEC, mapped -> mapped.commonInfo,
-                Ingredient.CONTENTS_STREAM_CODEC, BrewingRecipe::getIngredient,
-                ByteBufCodecs.map(HashMap::new, Potion.STREAM_CODEC, Potion.STREAM_CODEC), mapped -> mapped.resultPotionMap,
-                ByteBufCodecs.INT, BrewingRecipe::getBrewingTime,
-                Mapped::new);
-        /** 직렬화 처리기 */
-        public static final RecipeSerializer<Mapped> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
-
-        /** 입력 물약 : 출력 물약 */
-        private final Map<Holder<Potion>, Holder<Potion>> resultPotionMap;
-
-        private Mapped(@NonNull CommonInfo commonInfo, @NonNull Ingredient ingredient, @NonNull Map<Holder<Potion>, Holder<Potion>> resultPotionMap,
-                       int brewingTime) {
-            super(commonInfo, ingredient, brewingTime);
-            this.resultPotionMap = resultPotionMap;
-        }
-
-        @Override
-        @NonNull
-        public RecipeSerializer<? extends BrewingRecipe> getSerializer() {
-            return SERIALIZER;
-        }
-
-        @Override
-        public boolean matches(@NonNull Input input, @NonNull Level level) {
-            if (!super.matches(input, level))
-                return false;
-
-            return getResult(input.base) != null;
-        }
-
-        @Override
-        @NonNull
-        public ItemStack assemble(@NonNull Input input) {
-            ItemStack itemStack = getResult(input.base);
-            return itemStack == null ? input.base : itemStack;
-        }
-
-        @Nullable
-        public ItemStack getResult(@NonNull ItemStack itemStack) {
-            PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-
-            return potionContents.potion().map(potionHolder -> {
-                Holder<Potion> resultPotionHolder = resultPotionMap.get(potionHolder);
-                if (resultPotionHolder == null)
-                    return null;
-
-                ItemStack resultItemStack = itemStack.copy();
-                resultItemStack.set(DataComponents.POTION_CONTENTS, new PotionContents(resultPotionHolder));
-
-                return resultItemStack;
-            }).orElse(null);
-        }
-
-        @Override
-        @NonNull
-        public List<RecipeDisplay> display() {
-            return getPotionContainers().stream()
-                    .flatMap(itemHolder -> resultPotionMap.entrySet().stream().map(entry ->
-                            (RecipeDisplay) new BrewingRecipeDisplay(createPotionDisplay(itemHolder.value(), entry.getKey()),
-                                    super.ingredient.display(), createPotionDisplay(itemHolder.value(), entry.getValue()), CRAFTING_STATION)))
-                    .toList();
         }
     }
 

@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:long_strength",
+  "ingredient": "minecraft:fermented_spider_eye",
+  "result": "minecraft:long_weakness"
+}

@@ -3,9 +3,10 @@ package com.dace.vanillaplus.mixin.world.entity;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.EntityModifier;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -13,21 +14,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Predicate;
 
 @Mixin(ExperienceOrb.class)
-public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, EntityModifier.LivingEntityModifier> {
-    @Shadow
-    protected abstract int repairPlayerItems(ServerPlayer player, int amount);
-
-    @Redirect(method = "playerTouch", at = @At(value = "INVOKE",
+public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb> {
+    @WrapOperation(method = "playerTouch", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ExperienceOrb;repairPlayerItems(Lnet/minecraft/server/level/ServerPlayer;I)I"))
-    private int healWithXPBeforeRepair(ExperienceOrb instance, ServerPlayer player, int amount) {
+    private int healWithXPBeforeRepair(ExperienceOrb instance, ServerPlayer player, int amount, Operation<Integer> original) {
         MutableFloat value = new MutableFloat(0);
 
         EnchantmentHelper.runIterationOnEquipment(player, (enchantmentHolder, level, enchantedItemInUse) ->
@@ -40,7 +36,7 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
             amount -= (int) (healAmount / value.floatValue());
         }
 
-        return repairPlayerItems(player, amount);
+        return original.call(instance, player, amount);
     }
 
     @ModifyArg(method = "repairPlayerItems", at = @At(value = "INVOKE",
@@ -71,14 +67,14 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb, Enti
     }
 
     @ModifyExpressionValue(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
-    private int modifyRepairValue(int original, @Local(argsOnly = true) ServerPlayer player, @Local(name = "itemStack") ItemStack itemStack) {
+    private int modifyRepairValue(int repair, @Local(argsOnly = true) ServerPlayer player, @Local(name = "itemStack") ItemStack itemStack) {
         if (!itemStack.has(VPDataComponentTypes.REPAIR_WITH_XP.get()) || player.hasInfiniteMaterials())
-            return original;
+            return repair;
 
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);
 
         int repairLimit = vpItemStack.getRepairLimit();
-        int finalValue = Math.min(original, vpItemStack.getMaxRepairLimit() - repairLimit);
+        int finalValue = Math.min(repair, vpItemStack.getMaxRepairLimit() - repairLimit);
         vpItemStack.setRepairLimit(repairLimit + finalValue);
 
         return finalValue;

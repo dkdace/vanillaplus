@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:harming",
+  "ingredient": "minecraft:glowstone_dust",
+  "result": "minecraft:strong_harming"
+}

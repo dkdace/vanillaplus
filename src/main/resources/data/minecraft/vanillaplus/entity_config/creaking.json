@@ -1,0 +1,17 @@
+{
+  "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "minecraft:attack_damage",
+        "base": 6
+      },
+      {
+        "id": "minecraft:movement_speed",
+        "base": 0.5
+      }
+    ],
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true
+  }
+}

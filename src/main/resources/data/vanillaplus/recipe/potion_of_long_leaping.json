@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:leaping",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_leaping"
+}

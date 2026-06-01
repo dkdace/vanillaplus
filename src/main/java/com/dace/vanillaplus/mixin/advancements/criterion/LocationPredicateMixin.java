@@ -3,9 +3,7 @@ package com.dace.vanillaplus.mixin.advancements.criterion;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.FluidPredicate;
 import net.minecraft.advancements.criterion.LightPredicate;
@@ -47,8 +45,6 @@ public abstract class LocationPredicateMixin {
                             .forGetter(locationPredicate -> ((LocationPredicateMixin) (Object) locationPredicate).precipitation))
             .apply(instance, LocationPredicateMixin::create));
     @Unique
-    @Getter
-    @Setter
     private Optional<Biome.Precipitation> precipitation = Optional.empty();
 
     @Unique

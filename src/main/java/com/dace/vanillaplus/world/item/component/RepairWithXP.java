@@ -29,8 +29,7 @@ import java.util.function.Function;
 public record RepairWithXP(float maxRepairLimitRatio, @NonNull Optional<Holder<Item>> requiredItem, int barColor) {
     /** JSON 코덱 */
     public static final Codec<RepairWithXP> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(ExtraCodecs.floatRange(0, 1).fieldOf("max_repair_limit_ratio")
-                            .forGetter(RepairWithXP::maxRepairLimitRatio),
+            .group(ExtraCodecs.floatRange(0, 1).fieldOf("max_repair_limit_ratio").forGetter(RepairWithXP::maxRepairLimitRatio),
                     Item.CODEC.optionalFieldOf("required_item").forGetter(RepairWithXP::requiredItem),
                     ExtraCodecs.RGB_COLOR_CODEC.xmap(ARGB::opaque, Function.identity()).fieldOf("bar_color").forGetter(RepairWithXP::barColor))
             .apply(instance, RepairWithXP::new));

@@ -1,44 +1,36 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.data.VPDataComponentMap;
+import com.dace.vanillaplus.extension.world.entity.VPEntityType;
+import com.dace.vanillaplus.world.entity.EntityConfig;
 import lombok.NonNull;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(EntityType.class)
-public abstract class EntityTypeMixin<T extends Entity, U extends EntityModifier> implements VPModifiableData<EntityType<?>, U>, VPMixin<EntityType<?>> {
-    @Mutable
-    @Shadow
-    @Final
-    private EntityType.EntityFactory<T> factory;
+public abstract class EntityTypeMixin implements VPEntityType {
     @Unique
     @Nullable
-    private U dataModifier;
+    private EntityConfig config;
 
     @Override
     @NonNull
-    public Optional<U> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public VPDataComponentMap getConfigComponents() {
+        return getConfig().components();
     }
 
     @Override
-    public void setDataModifier(@Nullable U dataModifier) {
-        this.dataModifier = dataModifier;
-        EntityType.EntityFactory<T> oldFactory = factory;
+    @NonNull
+    public EntityConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
+    }
 
-        factory = (entityType, level) -> {
-            T entity = oldFactory.create(entityType, level);
-            if (entity != null)
-                VPEntity.cast(entity).setDataModifier(dataModifier);
-
-            return entity;
-        };
+    @Override
+    public void setConfig(@Nullable EntityConfig config) {
+        this.config = config == null ? EntityConfig.DEFAULT : config;
     }
 }

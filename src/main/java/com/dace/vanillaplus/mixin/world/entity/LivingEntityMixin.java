@@ -1,24 +1,32 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.VPTags;
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.util.IdentifierUtil;
+import com.dace.vanillaplus.world.item.TridentConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -30,9 +38,9 @@ import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
-import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -42,17 +50,17 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin<T extends LivingEntity, U extends EntityModifier.LivingEntityModifier> extends EntityMixin<T, U> {
+public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMixin<T> implements VPLivingEntity<T> {
     @Unique
-    private static final String RESISTANCE_DEFINED_VALUE_NAME = "resistance";
+    private static final Identifier RESISTANCE_EFFECT_VALUE_ID = IdentifierUtil.fromPath("resistance");
     @Unique
-    private static final String JUMP_BOOST_DEFINED_VALUE_NAME = "power";
+    private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -69,12 +77,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private DamageSource lastDamageSourceForKnockback;
 
     @Shadow
-    public abstract void stopRiding();
+    public abstract void setSprinting(boolean isSprinting);
 
     @Shadow
-    public boolean canAttack(LivingEntity target) {
-        return false;
-    }
+    public abstract void stopRiding();
 
     @Shadow
     public abstract boolean hasLineOfSight(Entity target);
@@ -112,11 +118,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Shadow
-    protected float getWaterSlowDown() {
-        return 0;
-    }
-
-    @Shadow
     public abstract AttackRange getAttackRangeWith(ItemStack weaponItem);
 
     @Shadow
@@ -136,19 +137,24 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     }
 
     @Override
-    @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
-        super.setDataModifier(dataModifier);
+    public double getFinalKnockbackResistance(double knockbackResistance, @Nullable DamageSource damageSource) {
+        return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
+                ? getAttributeValue(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
+                : 0);
+    }
 
-        if (dataModifier != null)
-            attributes.apply(dataModifier.getPackedAttributes());
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
+        getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES).ifPresent(attributes::apply);
     }
 
     @ModifyArg(method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return ClipContext.Block.VISUAL;
+        return getConfigComponents().getBoolean(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS)
+                ? ClipContext.Block.VISUAL
+                : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))
@@ -177,7 +183,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     @ModifyExpressionValue(method = "knockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double knockbackResistance) {
-        return VPAttributes.getFinalKnockbackResistance(getThis(), knockbackResistance, lastDamageSourceForKnockback);
+        return getFinalKnockbackResistance(knockbackResistance, lastDamageSourceForKnockback);
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))
@@ -192,9 +198,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private int modifyResistanceMultiplier(int absorbValue) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> (int) levelBasedValuePreset.calculate(RESISTANCE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
+                .calculate(RESISTANCE_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
+                .map(Float::intValue)
                 .orElse(absorbValue);
     }
 
@@ -211,10 +217,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return damage * Math.max(value.floatValue(), 0);
     }
 
-    @ModifyExpressionValue(method = "travelInWater", at = @At(value = "INVOKE",
+    @WrapOperation(method = "travelInWater", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D", ordinal = 0))
-    private double modifyWaterMovementEfficiencyValue(double value) {
-        return isAutoSpinAttack() ? 0 : value;
+    private double modifyWaterMovementEfficiencyValue(LivingEntity instance, Holder<Attribute> attribute, Operation<Double> original) {
+        return isAutoSpinAttack() ? 0 : original.call(instance, attribute);
     }
 
     @ModifyArg(method = "setSprinting", at = @At(value = "INVOKE",
@@ -255,14 +261,16 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
         return getFinalSpeed(speed);
     }
 
-    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
+    @WrapWithCondition(method = "checkAutoSpinAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;autoSpinAttackTicks:I",
             ordinal = 0, opcode = Opcodes.PUTFIELD))
-    private void removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
+    private boolean removeAutoSpinAttackTickReset(LivingEntity instance, int value) {
+        return !TridentConfig.get().riptidePiercing();
     }
 
-    @Redirect(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
+    @WrapWithCondition(method = "checkAutoSpinAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
-    private void removeAutoSpinAttackCollision(LivingEntity instance, Vec3 deltaMovement) {
+    private boolean removeAutoSpinAttackCollision(LivingEntity instance, Vec3 deltaMovement) {
+        return !TridentConfig.get().riptidePiercing();
     }
 
     @Expression("0.1 * (? + 1.0)")
@@ -270,9 +278,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity, U extends Entity
     private float modifyJumpBoostPower(float power) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.JUMP_BOOST));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> levelBasedValuePreset.calculate(JUMP_BOOST_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
+                .calculate(JUMP_STRENGTH_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
                 .orElse(power);
     }
 }

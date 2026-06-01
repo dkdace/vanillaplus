@@ -1,22 +1,52 @@
 {
   "waves": [
-    {
-      "pillager": 4
-    },
-    {
-      "pillager": 3,
-      "vindicator": 2
-    },
-    {
-      "pillager": 4,
-      "vindicator": 2,
-      "witch": 1
-    },
-    {
-      "pillager": 3,
-      "vindicator": 1,
-      "witch": 1,
-      "ravager": 1
-    }
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 3
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 2
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 2
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 3
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 1
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "count": 1
+      }
+    ]
   ]
 }

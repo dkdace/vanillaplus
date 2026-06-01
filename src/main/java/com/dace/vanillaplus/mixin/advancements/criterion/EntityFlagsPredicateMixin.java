@@ -2,9 +2,7 @@ package com.dace.vanillaplus.mixin.advancements.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.advancements.criterion.EntityFlagsPredicate;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,13 +37,9 @@ public abstract class EntityFlagsPredicateMixin {
             .apply(instance, EntityFlagsPredicateMixin::create));
 
     @Unique
-    @Getter
-    @Setter
-    private Optional<Boolean> isSpinAttacking;
+    private Optional<Boolean> isSpinAttacking = Optional.empty();
     @Unique
-    @Getter
-    @Setter
-    private Optional<Boolean> isInRain;
+    private Optional<Boolean> isInRain = Optional.empty();
 
     @Unique
     @NonNull

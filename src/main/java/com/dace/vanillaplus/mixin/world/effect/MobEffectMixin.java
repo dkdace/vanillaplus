@@ -1,26 +1,31 @@
 package com.dace.vanillaplus.mixin.world.effect;
 
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
-import com.dace.vanillaplus.world.LevelBasedValuePreset;
+import com.dace.vanillaplus.world.MobEffectValues;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.world.effect.MobEffect;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(MobEffect.class)
 public abstract class MobEffectMixin<T extends MobEffect> implements VPMobEffect<T> {
     @Unique
     @Nullable
-    @Setter
-    private LevelBasedValuePreset levelBasedValuePreset;
+    private MobEffectValues config;
 
     @Override
     @NonNull
-    public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
-        return Optional.ofNullable(levelBasedValuePreset);
+    public final MobEffectValues getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
+    }
+
+    @Override
+    @MustBeInvokedByOverriders
+    public void setConfig(@Nullable MobEffectValues config) {
+        this.config = config == null ? MobEffectValues.DEFAULT : config;
     }
 }

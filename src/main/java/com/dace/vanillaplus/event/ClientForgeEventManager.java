@@ -70,7 +70,7 @@ public final class ClientForgeEventManager {
                 int averageWaterColor = BiomeColors.getAverageWaterColor(level, pos);
 
                 return level.getBlockEntity(pos) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity
-                        ? WaterCauldronBlockEntity.getMixedColor(averageWaterColor, waterCauldronBlockEntity.getColor(), 0.5F)
+                        ? waterCauldronBlockEntity.getWaterColor(averageWaterColor)
                         : averageWaterColor;
             }
         }), Blocks.WATER_CAULDRON);

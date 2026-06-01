@@ -1,0 +1,8 @@
+{
+  "components": {
+    "vanillaplus:food": {
+      "nutrition": 2,
+      "saturation": 1.2
+    }
+  }
+}

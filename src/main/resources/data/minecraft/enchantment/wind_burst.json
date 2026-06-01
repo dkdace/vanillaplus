@@ -12,9 +12,21 @@
           "block_interaction": "trigger",
           "immune_blocks": "#minecraft:blocks_wind_charge_explosions",
           "knockback_multiplier": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/wind_burst",
-            "name": "power"
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "value": {
+              "type": "minecraft:lookup",
+              "fallback": {
+                "type": "minecraft:linear",
+                "base": 1.5,
+                "per_level_above_first": 0.35
+              },
+              "values": [
+                1.2,
+                1.75,
+                2.2
+              ]
+            }
           },
           "large_particle": {
             "type": "minecraft:gust_emitter_large"

@@ -10,6 +10,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.VillagerTrade;
@@ -77,7 +78,7 @@ public abstract class TradeSetOffer {
         @Override
         @NonNull
         HolderSet<VillagerTrade> getHolderSet(@NonNull RandomSource randomSource) {
-            return tradeSetOffers.get(randomSource.nextInt(tradeSetOffers.size())).getHolderSet(randomSource);
+            return Util.getRandom(tradeSetOffers, randomSource).getHolderSet(randomSource);
         }
     }
 }

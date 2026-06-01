@@ -1,0 +1,252 @@
+{
+  "type": "minecraft:equipment",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:crossbow",
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0.25,
+                        0.5,
+                        0.75
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:quick_charge": 1
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0.2,
+                        0.4,
+                        0.6,
+                        0.8
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:quick_charge": 2
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0.17,
+                        0.34,
+                        0.51,
+                        0.68,
+                        0.85
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:quick_charge": 3
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4,
+                        0.5,
+                        0.6
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:multishot": 1
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:enchantments": [
+                    {
+                      "enchantments": "minecraft:multishot"
+                    }
+                  ]
+                }
+              },
+              "on_fail": [
+                {
+                  "function": "minecraft:set_enchantments",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:random_chance",
+                      "chance": {
+                        "type": "vanillaplus:bad_omen_level",
+                        "amount": {
+                          "type": "minecraft:lookup",
+                          "fallback": 1,
+                          "values": [
+                            0,
+                            0.17,
+                            0.34,
+                            0.51,
+                            0.68,
+                            0.85
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "enchantments": {
+                    "minecraft:piercing": 1
+                  }
+                },
+                {
+                  "function": "minecraft:set_enchantments",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:random_chance",
+                      "chance": {
+                        "type": "vanillaplus:bad_omen_level",
+                        "amount": {
+                          "type": "minecraft:lookup",
+                          "fallback": 1,
+                          "values": [
+                            0,
+                            0,
+                            0.17,
+                            0.34,
+                            0.51,
+                            0.68,
+                            0.85
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "enchantments": {
+                    "minecraft:piercing": 2
+                  }
+                },
+                {
+                  "function": "minecraft:set_enchantments",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:random_chance",
+                      "chance": {
+                        "type": "vanillaplus:bad_omen_level",
+                        "amount": {
+                          "type": "minecraft:lookup",
+                          "fallback": 1,
+                          "values": [
+                            0,
+                            0,
+                            0,
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5,
+                            0.6,
+                            0.7
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "enchantments": {
+                    "minecraft:piercing": 3
+                  }
+                },
+                {
+                  "function": "minecraft:set_enchantments",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:random_chance",
+                      "chance": {
+                        "type": "vanillaplus:bad_omen_level",
+                        "amount": {
+                          "type": "minecraft:lookup",
+                          "fallback": 1,
+                          "values": [
+                            0,
+                            0,
+                            0,
+                            0,
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5,
+                            0.6
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "enchantments": {
+                    "minecraft:piercing": 4
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "vanillaplus:equipment/raid/pillager"
+}

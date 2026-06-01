@@ -4,7 +4,7 @@ import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.data.registryobject.VPSoundEvents;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -59,7 +59,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @Mixin(EnderDragon.class)
-public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModifier.EnderDragonModifier> implements VPEnderDragon {
+public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements VPEnderDragon {
     @Unique
     private static final int MAX_EXPLOSION_RESISTANCE = 1;
     @Unique
@@ -93,14 +93,17 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     public abstract SoundSource getSoundSource();
 
     @Unique
-    private float getMovementSpeedMultiplier(@NonNull EntityModifier.EnderDragonModifier enderDragonModifier,
-                                             @NonNull DragonPhaseInstance dragonPhaseInstance) {
-        return dragonPhaseInstance.getPhase() == EnderDragonPhase.DYING ? 1 : (float) enderDragonModifier.getMovementSpeedMultiplier().get(getThis());
+    private float getMovementSpeed(float velocity, @NonNull DragonPhaseInstance dragonPhaseInstance) {
+        return EnderDragonConfig.get().movementSpeedMultiplier()
+                .map(movementSpeedMultiplier -> dragonPhaseInstance.getPhase() == EnderDragonPhase.DYING
+                        ? null
+                        : velocity * movementSpeedMultiplier.get(getThis()))
+                .orElse(velocity);
     }
 
     @Unique
-    private void spawnEndermites(@NonNull EntityModifier.EnderDragonModifier enderDragonModifier, @NonNull ServerLevel level) {
-        for (int i = 0; i < enderDragonModifier.getEndermiteCount(); i++) {
+    private void spawnEndermites(@NonNull ServerLevel level) {
+        for (int i = 0; i < EnderDragonConfig.get().endermiteCount(); i++) {
             Endermite endermite = EntityType.ENDERMITE.create(level, EntitySpawnReason.MOB_SUMMONED);
 
             if (endermite != null) {
@@ -128,11 +131,8 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     }
 
     @Unique
-    private void stepMeteorServer(@NonNull EntityModifier.EnderDragonModifier enderDragonModifier, @NonNull ServerLevel level,
-                                  @NonNull BlockPos meteorPos) {
-        int velocity = enderDragonModifier.getPhaseInfo().getMeteor().getVelocity();
-
-        for (int i = 0; i < velocity; i++) {
+    private void stepMeteorServer(@NonNull EnderDragonConfig.PhaseInfo.Meteor meteor, @NonNull ServerLevel level, @NonNull BlockPos meteorPos) {
+        for (int i = 0; i < meteor.velocity(); i++) {
             if (meteorPos.getY() > level.getMinY() && level.isEmptyBlock(meteorPos)) {
                 meteorPos = meteorPos.below();
                 setMeteorPos(meteorPos);
@@ -141,8 +141,8 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
             }
 
             setMeteorPos(null);
-            level().explode(getThis(), meteorPos.getX(), meteorPos.getY() + 1, meteorPos.getZ(),
-                    enderDragonModifier.getPhaseInfo().getMeteor().getExplosionRadius(), Level.ExplosionInteraction.MOB);
+            level().explode(getThis(), meteorPos.getX(), meteorPos.getY() + 1.0, meteorPos.getZ(), meteor.explosionRadius(),
+                    Level.ExplosionInteraction.MOB);
 
             return;
         }
@@ -151,7 +151,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @Override
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
                                              float resistance) {
-        if (getDataModifier().isPresent())
+        if (EnderDragonConfig.get().phaseInfo().isPresent())
             return block.is(VPTags.Blocks.DRAGON_EXPLOSION_IMMUNE) ? resistance : Math.min(MAX_EXPLOSION_RESISTANCE, resistance);
 
         return super.getBlockExplosionResistance(explosion, level, pos, block, fluid, resistance);
@@ -200,13 +200,13 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
             target = "Lnet/minecraft/server/level/ServerLevel;getNearestPlayer(Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;DDD)Lnet/minecraft/world/entity/player/Player;"),
             index = 0)
     private TargetingConditions modifyCrystalDestroyTargetConditions(TargetingConditions targetConditions) {
-        return getDataModifier().isPresent() ? getDefaultTargetingConditions() : targetConditions;
+        return EnderDragonConfig.get().phaseInfo().isPresent() ? getDefaultTargetingConditions() : targetConditions;
     }
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;"),
             index = 1)
     private double modifyUpwardVelocityMultiplier(double velocity, @Local(name = "currentPhase") DragonPhaseInstance currentPhase) {
-        if (getDataModifier().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return velocity;
 
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = currentPhase.getPhase();
@@ -221,17 +221,13 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "CONSTANT", args = "floatValue=0.06", ordinal = 1))
     private float setMovementVelocityMultiplier(float velocity, @Local(name = "currentPhase") DragonPhaseInstance currentPhase) {
-        return getDataModifier()
-                .map(enderDragonModifier -> velocity * getMovementSpeedMultiplier(enderDragonModifier, currentPhase))
-                .orElse(velocity);
+        return getMovementSpeed(velocity, currentPhase);
     }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonPhaseInstance;getTurnSpeed()F"))
     private float setTurnVelocityMultiplier(float velocity, @Local(name = "currentPhase") DragonPhaseInstance currentPhase) {
-        return getDataModifier()
-                .map(enderDragonModifier -> velocity * getMovementSpeedMultiplier(enderDragonModifier, currentPhase))
-                .orElse(velocity);
+        return getMovementSpeed(velocity, currentPhase);
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
@@ -272,7 +268,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
     @Expression("this.hurtTime == 0")
     @ModifyExpressionValue(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyMeleeAttackCondition(boolean condition) {
-        if (getDataModifier().isEmpty())
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
             return condition;
 
         EnderDragonPhase<? extends DragonPhaseInstance> enderDragonPhase = phaseManager.getCurrentPhase().getPhase();
@@ -281,38 +277,34 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
     @ModifyExpressionValue(method = "hurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/boss/enderdragon/EnderDragonPart;Lnet/minecraft/world/damagesource/DamageSource;F)Z",
             at = @At(value = "CONSTANT", args = "floatValue=0.25"))
-    private float modifySittingAllowedDamage(float allowedDamage) {
-        return getDataModifier()
-                .map(enderDragonModifier -> enderDragonModifier.getPhaseInfo().getSitting().getAllowedDamageRatio())
-                .orElse(allowedDamage);
+    private float modifySittingAllowedDamageRatio(float allowedDamageRatio) {
+        return EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.sitting().allowedDamageRatio()).orElse(allowedDamageRatio);
     }
 
     @Inject(method = "reallyHurt", at = @At("TAIL"))
     private void onHurt(ServerLevel level, DamageSource source, float damage, CallbackInfo ci) {
-        getDataModifier().ifPresent(enderDragonModifier -> {
-            if (!shouldDropLoot(level) || enderPearlDropCount >= enderDragonModifier.getMaxEnderPearlDrops())
-                return;
+        if (enderPearlDropCount >= EnderDragonConfig.get().maxEnderPearlDrops() || !shouldDropLoot(level))
+            return;
 
-            enderPearlDropRate += enderDragonModifier.getEnderPearlDropChance();
-            if (enderPearlDropRate <= random.nextDouble())
-                return;
+        enderPearlDropRate += EnderDragonConfig.get().enderPearlDropChance();
+        if (enderPearlDropRate <= random.nextDouble())
+            return;
 
-            enderPearlDropRate = 0;
-            enderPearlDropCount++;
+        enderPearlDropRate = 0;
+        enderPearlDropCount++;
 
-            spawnAtLocation(level, Items.ENDER_PEARL);
-            spawnEndermites(enderDragonModifier, level);
+        spawnAtLocation(level, Items.ENDER_PEARL);
+        spawnEndermites(level);
 
-            level.playSound(null, getX(), getY(), getZ(), VPSoundEvents.ENDER_DRAGON_DROP_PEARL.get(), getSoundSource(), 5,
-                    1 + random.nextFloat() * 0.2F);
-        });
+        level.playSound(null, getX(), getY(), getZ(), VPSoundEvents.ENDER_DRAGON_DROP_PEARL.get(), getSoundSource(), 5,
+                1 + random.nextFloat() * 0.2F);
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonPhaseInstance;doServerTick(Lnet/minecraft/server/level/ServerLevel;)V",
             ordinal = 0))
     private void tickAttack(CallbackInfo ci, @Local(name = "level") ServerLevel level) {
-        getDataModifier().ifPresent(enderDragonModifier -> {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
             level.players().stream().filter(this::hasLineOfSight).forEach(targets::add);
             targets.removeIf(target -> !level.players().contains(target));
 
@@ -323,17 +315,17 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon, EntityModif
 
             BlockPos meteorPos = getMeteorPos();
             if (meteorPos != null)
-                stepMeteorServer(enderDragonModifier, level, meteorPos);
+                stepMeteorServer(phaseInfo.meteor(), level, meteorPos);
         });
     }
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=12000"))
     private int modifyDropXPFirst(int xp) {
-        return getDataModifier().map(enderDragonModifier -> enderDragonModifier.getExperience().getFirst()).orElse(xp);
+        return EnderDragonConfig.get().experience().map(EnderDragonConfig.Experience::first).orElse(xp);
     }
 
     @ModifyExpressionValue(method = "tickDeath", at = @At(value = "CONSTANT", args = "intValue=500"))
     private int modifyDropXPSecond(int xp) {
-        return getDataModifier().map(enderDragonModifier -> enderDragonModifier.getExperience().getSecond()).orElse(xp);
+        return EnderDragonConfig.get().experience().map(EnderDragonConfig.Experience::second).orElse(xp);
     }
 }

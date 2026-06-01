@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:weakness",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_weakness"
+}

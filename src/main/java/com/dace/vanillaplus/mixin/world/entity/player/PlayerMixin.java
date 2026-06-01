@@ -4,13 +4,14 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -37,9 +38,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T, EntityModifier.LivingEntityModifier> implements VPPlayer<T> {
+public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T> implements VPPlayer<T> {
     @Unique
-    private static final String MINING_FATIGUE_DEFINED_VALUE_NAME = "mining_speed";
+    private static final Identifier MINING_SPEED_EFFECT_VALUE_ID = IdentifierUtil.fromPath("mining_speed");
 
     @Unique
     protected boolean isProneKeyDown = false;
@@ -100,17 +101,17 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
         return entities;
     }
 
-    @Redirect(method = "doSweepAttack", at = @At(value = "INVOKE",
+    @ModifyExpressionValue(method = "doSweepAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getSweepHitBox(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/AABB;"))
-    private AABB modifySweepHitbox(ItemStack instance, Player player, Entity target) {
-        double sweepingRange = player.getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
-        return target.getBoundingBox().inflate(sweepingRange, 0.25, sweepingRange);
+    private AABB modifySweepHitbox(AABB aabb) {
+        double sweepingRange = getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
+        return aabb.inflate(aabb.getXsize() * sweepingRange, 0, aabb.getZsize() * sweepingRange);
     }
 
     @Definition(id = "distanceToSqr", method = "Lnet/minecraft/world/entity/player/Player;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D")
     @Expression("this.distanceToSqr(?) < ?")
     @ModifyExpressionValue(method = "doSweepAttack", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean redirectSweepDistanceCheck(boolean original, @Local(name = "nearby") LivingEntity nearby) {
+    private boolean modifySweepDistanceCheck(boolean original, @Local(name = "nearby") LivingEntity nearby) {
         double yRot = Math.toRadians(-getYRot() + 90);
         double distance = Math.cos(yRot) * (getX() - nearby.getX()) - Math.sin(yRot) * (getZ() - nearby.getZ());
 
@@ -143,9 +144,9 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     private float modifyMiningFatigueMultiplier(float multiplier) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> 1 + levelBasedValuePreset.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
+                .calculate(MINING_SPEED_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
+                .map(value -> value + 1)
                 .orElse(multiplier);
     }
 }

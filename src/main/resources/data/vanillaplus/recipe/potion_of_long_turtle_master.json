@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:turtle_master",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_turtle_master"
+}

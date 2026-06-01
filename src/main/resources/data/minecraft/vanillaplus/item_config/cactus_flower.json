@@ -1,0 +1,7 @@
+{
+  "item_components": {
+    "minecraft:damage_resistant": {
+      "types": "#vanillaplus:is_cactus"
+    }
+  }
+}

@@ -1,22 +1,18 @@
 package com.dace.vanillaplus.extension.world.entity.boss.enderdragon;
 
-import com.dace.vanillaplus.extension.world.entity.VPEntity;
-import com.dace.vanillaplus.world.entity.EntityModifier;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.extensions.IForgeLivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link EnderDragon}를 확장하는 인터페이스.
- *
- * @see EntityModifier.EnderDragonModifier
  */
-public interface VPEnderDragon extends VPEntity<EnderDragon, EntityModifier.EnderDragonModifier>, IForgeLivingEntity {
+public interface VPEnderDragon extends VPLivingEntity<EnderDragon> {
     @NonNull
     static VPEnderDragon cast(@NonNull EnderDragon object) {
         return (VPEnderDragon) object;

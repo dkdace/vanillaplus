@@ -46,9 +46,9 @@ public final class SetRandomFireworks extends LootItemConditionalFunction {
 
     @Override
     @NonNull
-    public ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext lootContext) {
+    public ItemStack run(@NonNull ItemStack itemStack, @NonNull LootContext context) {
         ArrayList<FireworkExplosion> fireworkExplosions = new ArrayList<>();
-        RandomSource randomSource = lootContext.getRandom();
+        RandomSource randomSource = context.getRandom();
 
         for (int i = 0; i < fireworkStars; i++) {
             FireworkExplosion.Shape shape = Util.getRandom(FireworkExplosion.Shape.values(), randomSource);

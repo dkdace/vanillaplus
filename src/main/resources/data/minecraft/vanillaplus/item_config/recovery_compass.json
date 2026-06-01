@@ -1,0 +1,20 @@
+{
+  "components": {
+    "vanillaplus:recovery_compass": {
+      "enable_teleport": true,
+      "teleport_effects": [
+        {
+          "type": "minecraft:apply_effects",
+          "effects": [
+            {
+              "amplifier": 3,
+              "duration": 100,
+              "id": "minecraft:resistance",
+              "show_icon": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

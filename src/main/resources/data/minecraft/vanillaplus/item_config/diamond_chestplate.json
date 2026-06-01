@@ -1,0 +1,27 @@
+{
+  "item_components": {
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 8.0,
+        "id": "minecraft:armor.chestplate",
+        "operation": "add_value",
+        "slot": "chest"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 2.0,
+        "id": "minecraft:armor.chestplate",
+        "operation": "add_value",
+        "slot": "chest"
+      },
+      {
+        "type": "vanillaplus:food_exhaustion_multiplier",
+        "amount": 0.04,
+        "id": "minecraft:armor.chestplate",
+        "operation": "add_multiplied_base",
+        "slot": "chest"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "asset_name": "gold",
+  "description": {
+    "color": "#DEB12D",
+    "translate": "trim_material.minecraft.gold"
+  },
+  "override_armor_assets": {
+    "minecraft:gold": "gold_darker"
+  },
+  "effects": {
+    "vanillaplus:bartering_rolls": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "description_value_multiplier": 100,
+            "value": 0.5
+          }
+        }
+      }
+    ]
+  }
+}

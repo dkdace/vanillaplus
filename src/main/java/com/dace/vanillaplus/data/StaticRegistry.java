@@ -2,17 +2,11 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.IdentifierUtil;
-import com.dace.vanillaplus.world.block.BlockModifier;
-import com.dace.vanillaplus.world.entity.EntityModifier;
-import com.dace.vanillaplus.world.entity.raid.RaiderEffect;
-import com.dace.vanillaplus.world.item.ItemModifier;
 import com.google.common.reflect.ClassPath;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import lombok.NonNull;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
@@ -37,16 +31,12 @@ public final class StaticRegistry<T> {
     /** 생성된 레지스트리 목록 */
     private static final HashSet<DeferredRegister<?>> REGISTRIES = new HashSet<>();
 
-    /** 블록 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends BlockModifier>> BLOCK_MODIFIER_TYPE = new StaticRegistry<>("modifier/block/type");
-    /** 엔티티 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends EntityModifier>> ENTITY_MODIFIER_TYPE = new StaticRegistry<>("modifier/entity/type");
-    /** 엔티티 수정자 인터페이스 */
-    public static final StaticRegistry<DataComponentType<?>> ENTITY_MODIFIER_INTERFACE = new StaticRegistry<>("modifier/entity/interface");
-    /** 아이템 수정자 타입 */
-    public static final StaticRegistry<MapCodec<? extends ItemModifier>> ITEM_MODIFIER_TYPE = new StaticRegistry<>("modifier/item/type");
-    /** 습격자 효과 타입 */
-    public static final StaticRegistry<MapCodec<? extends RaiderEffect>> RAIDER_EFFECT_TYPE = new StaticRegistry<>("raider_effect/type");
+    /** 블록 설정 데이터 요소 타입 */
+    public static final StaticRegistry<Codec<?>> BLOCK_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("block_config/component_type");
+    /** 엔티티 설정 데이터 요소 타입 */
+    public static final StaticRegistry<Codec<?>> ENTITY_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("entity_config/component_type");
+    /** 아이템 설정 데이터 요소 타입 */
+    public static final StaticRegistry<Codec<?>> ITEM_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("item_config/component_type");
 
     /** {@link com.dace.vanillaplus.data.registryobject} 패키지 */
     private static final String PACKAGE = "com.dace.vanillaplus.data.registryobject";

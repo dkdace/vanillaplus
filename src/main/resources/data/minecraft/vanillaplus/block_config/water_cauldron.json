@@ -1,0 +1,8 @@
+{
+  "components": {
+    "vanillaplus:water_cauldron": {
+      "max_potion_effects": 3,
+      "max_tipped_arrow_count": 8
+    }
+  }
+}

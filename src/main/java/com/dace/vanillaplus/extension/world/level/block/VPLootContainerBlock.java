@@ -2,7 +2,6 @@ package com.dace.vanillaplus.extension.world.level.block;
 
 import com.dace.vanillaplus.extension.world.level.block.entity.VPRandomizableContainerBlockEntity;
 import com.dace.vanillaplus.world.LootTableReward;
-import com.dace.vanillaplus.world.block.BlockModifier;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -10,16 +9,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 /**
- * 모드에서 사용하는 보관함 블록(상자, 통 등)을 확장하는 인터페이스.
+ * 전리품을 제공하는 보관함 블록(상자, 통 등)을 확장하는 인터페이스.
  *
  * @param <T> {@link BaseEntityBlock}를 상속받는 타입
- * @param <U> {@link BlockModifier}를 상속받는 블록 수정자
  */
-public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends BlockModifier> extends VPBlock<T, U> {
+public interface VPLootContainerBlock<T extends BaseEntityBlock> extends VPBlock<T>, EntityBlock {
     /** 전리품 보관함 여부 */
     BooleanProperty LOOT = BooleanProperty.create("loot");
     /** 항상 열려 있는지 여부 */
@@ -39,7 +38,7 @@ public interface VPLootContainerBlock<T extends BaseEntityBlock, U extends Block
                 && level.getBlockEntity(blockPos) instanceof VPRandomizableContainerBlockEntity<?> vpRandomizableContainerBlockEntity) {
             LootTableReward lootTableReward = vpRandomizableContainerBlockEntity.getLootTableReward();
             if (lootTableReward != null)
-                return lootTableReward.getXpRange().sample(randomSource);
+                return lootTableReward.xpRange().sample(randomSource);
         }
 
         return 0;

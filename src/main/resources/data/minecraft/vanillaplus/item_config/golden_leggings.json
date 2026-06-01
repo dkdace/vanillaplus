@@ -1,0 +1,29 @@
+{
+  "item_components": {
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "vanillaplus:enchantment_level_multiplier": 2,
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 3.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 0.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      },
+      {
+        "type": "vanillaplus:food_exhaustion_multiplier",
+        "amount": 0.02,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_multiplied_base",
+        "slot": "legs"
+      }
+    ]
+  }
+}

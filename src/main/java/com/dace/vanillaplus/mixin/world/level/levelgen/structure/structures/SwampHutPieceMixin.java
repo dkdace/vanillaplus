@@ -58,6 +58,6 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
 
         if (level.getBlockEntity(getWorldPos(x, y, z)) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
             BuiltInRegistries.POTION.getRandom(random).ifPresent(potionHolder ->
-                    waterCauldronBlockEntity.overridePotionContents(new PotionContents(potionHolder)));
+                    waterCauldronBlockEntity.setPotionContents(new PotionContents(potionHolder)));
     }
 }

@@ -1,36 +1,31 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.sensing;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.google.common.collect.ImmutableMap;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.dace.vanillaplus.world.entity.npc.NpcConfig;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Map;
 
 @Mixin(VillagerHostilesSensor.class)
 public abstract class VillagerHostilesSensorMixin implements VPMixin<VillagerHostilesSensor> {
-    @Unique
-    private static final float DISTANCE_MELEE = 8;
-    @Unique
-    private static final float DISTANCE_RANGED = 12;
-    @Unique
-    private static final float DISTANCE_LONG_RANGED = 15;
+    @Inject(method = "isMatchingEntity", at = @At("RETURN"), cancellable = true)
+    private void checkAvoidEntities(ServerLevel level, LivingEntity body, LivingEntity mob, CallbackInfoReturnable<Boolean> cir) {
+        if (!(body instanceof AbstractVillager abstractVillager))
+            return;
 
-    @ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE",
-            target = "Lcom/google/common/collect/ImmutableMap;builder()Lcom/google/common/collect/ImmutableMap$Builder;"))
-    private static ImmutableMap.Builder<EntityType<?>, Float> addHostileEntityTypes(ImmutableMap.Builder<EntityType<?>, Float> map) {
-        return map.put(EntityType.SKELETON, DISTANCE_LONG_RANGED)
-                .put(EntityType.STRAY, DISTANCE_LONG_RANGED)
-                .put(EntityType.BOGGED, DISTANCE_LONG_RANGED)
-                .put(EntityType.PARCHED, DISTANCE_LONG_RANGED)
-                .put(EntityType.WITHER_SKELETON, DISTANCE_LONG_RANGED)
-                .put(EntityType.WITCH, DISTANCE_RANGED)
-                .put(EntityType.SPIDER, DISTANCE_MELEE)
-                .put(EntityType.CAVE_SPIDER, DISTANCE_MELEE)
-                .put(EntityType.SLIME, DISTANCE_MELEE)
-                .put(EntityType.MAGMA_CUBE, DISTANCE_MELEE)
-                .put(EntityType.SILVERFISH, DISTANCE_MELEE);
+        Map<EntityType<?>, Integer> avoidEntityDistanceMap = NpcConfig.get(abstractVillager).avoidEntityDistanceMap();
+        if (avoidEntityDistanceMap.isEmpty())
+            return;
+
+        Integer distance = avoidEntityDistanceMap.get(mob.getType());
+        cir.setReturnValue(distance != null && mob.distanceToSqr(body) <= distance * distance);
     }
 }

@@ -2,9 +2,12 @@ package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.data.registryobject.VPRecipeTypes;
 import com.dace.vanillaplus.extension.world.level.block.entity.VPBrewingStandBlockEntity;
+import com.dace.vanillaplus.world.block.BrewingStandConfig;
 import com.dace.vanillaplus.world.item.crafting.BrewingRecipe;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -15,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +39,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -74,10 +77,13 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
                 .orElse(null);
     }
 
-    @Redirect(method = "serverTick", at = @At(value = "INVOKE",
+    @WrapOperation(method = "serverTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;isBrewable(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/core/NonNullList;)Z"))
-    private static boolean redirectIsBrewable(PotionBrewing potionBrewing, NonNullList<ItemStack> items, @Local(argsOnly = true) Level level,
-                                              @Local(argsOnly = true) BrewingStandBlockEntity entity) {
+    private static boolean redirectIsBrewable(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Operation<Boolean> original,
+                                              @Local(argsOnly = true) Level level, @Local(argsOnly = true) BrewingStandBlockEntity entity) {
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
+            return original.call(potionBrewing, items);
+
         ItemStack ingredient = items.get(INGREDIENT_SLOT);
 
         if (!ingredient.isEmpty())
@@ -95,6 +101,9 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     @ModifyExpressionValue(method = "serverTick", at = @At(value = "CONSTANT", args = "intValue=400"))
     private static int modifyBrewingDuration(int duration, @Local(argsOnly = true) Level level,
                                              @Local(argsOnly = true) BrewingStandBlockEntity entity) {
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
+            return duration;
+
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
             ItemStack potion = entity.getItem(i);
             BrewingRecipe.Input input = new BrewingRecipe.Input(potion, entity.getItem(INGREDIENT_SLOT));
@@ -108,10 +117,13 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
         return duration;
     }
 
-    @Redirect(method = "doBrew", at = @At(value = "INVOKE",
+    @WrapOperation(method = "doBrew", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;mix(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))
-    private static ItemStack redirectResult(PotionBrewing instance, ItemStack ingredient, ItemStack source, @Local(argsOnly = true) Level level,
-                                            @Local(argsOnly = true) BlockPos pos) {
+    private static ItemStack redirectResult(PotionBrewing instance, ItemStack ingredient, ItemStack source, Operation<ItemStack> original,
+                                            @Local(argsOnly = true) Level level, @Local(argsOnly = true) BlockPos pos) {
+        if (!BrewingStandConfig.get().useDataDrivenRecipe())
+            return original.call(instance, ingredient, source);
+
         BrewingStandBlockEntity brewingStandBlockEntity = (BrewingStandBlockEntity) Objects.requireNonNull(level.getBlockEntity(pos));
         BrewingRecipe.Input input = new BrewingRecipe.Input(source, ingredient);
         RecipeHolder<? extends BrewingRecipe> recipeHolder = getRecipeResult(brewingStandBlockEntity, input, level);
@@ -125,7 +137,8 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
     }
 
     @Unique
-    private List<RecipeHolder<?>> getRecipesToAward(ServerLevel level) {
+    @NonNull
+    private List<RecipeHolder<?>> getRecipesToAward(@NonNull ServerLevel level) {
         ArrayList<RecipeHolder<?>> list = new ArrayList<>();
         recipesUsed.reference2IntEntrySet().forEach(entry -> level.recipeAccess().byKey(entry.getKey()).ifPresent(list::add));
 
@@ -140,8 +153,13 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     public void setRecipeUsed(@Nullable RecipeHolder<?> recipeUsed) {
-        if (recipeUsed != null)
+        if (BrewingStandConfig.get().useDataDrivenRecipe() && recipeUsed != null)
             recipesUsed.addTo(recipeUsed.id(), 1);
+    }
+
+    @Override
+    public boolean setRecipeUsed(@NonNull ServerPlayer player, @NonNull RecipeHolder<?> recipe) {
+        return BrewingStandConfig.get().useDataDrivenRecipe() && VPBrewingStandBlockEntity.super.setRecipeUsed(player, recipe);
     }
 
     @Override
@@ -150,7 +168,10 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     public void awardUsedRecipes(@NonNull Player player) {
-        List<RecipeHolder<?>> list = getRecipesToAward((ServerLevel) player.level());
+        if (!BrewingStandConfig.get().useDataDrivenRecipe() || !(player.level() instanceof ServerLevel serverLevel))
+            return;
+
+        List<RecipeHolder<?>> list = getRecipesToAward(serverLevel);
 
         player.awardRecipes(list);
         list.stream().filter(Objects::nonNull).forEach(recipeholder -> player.triggerRecipeCrafted(recipeholder, items));
@@ -160,7 +181,7 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
 
     @Override
     protected void onPreRemoveSideEffects(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (level instanceof ServerLevel serverlevel)
+        if (BrewingStandConfig.get().useDataDrivenRecipe() && level instanceof ServerLevel serverlevel)
             getRecipesToAward(serverlevel);
     }
 
@@ -183,16 +204,20 @@ public abstract class BrewingStandBlockEntityMixin extends BlockEntityMixin<Brew
         output.store("RecipesUsed", RECIPES_USED_CODEC, recipesUsed);
     }
 
-    @Redirect(method = "canPlaceItem", at = @At(value = "INVOKE",
+    @WrapOperation(method = "canPlaceItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean redirectIsIngredient(PotionBrewing instance, ItemStack ingredient) {
-        return ((ServerLevel) Objects.requireNonNull(level)).recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET).test(ingredient);
+    private boolean redirectIsIngredient(PotionBrewing instance, ItemStack ingredient, Operation<Boolean> original) {
+        return BrewingStandConfig.get().useDataDrivenRecipe()
+                ? ((ServerLevel) Objects.requireNonNull(level)).recipeAccess().propertySet(BrewingRecipe.INGREDIENT_SET).test(ingredient)
+                : original.call(instance, ingredient);
     }
 
-    @Redirect(method = "canPlaceItem", at = @At(value = "INVOKE",
+    @WrapOperation(method = "canPlaceItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isValidInput(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean redirectIsValidInput(PotionBrewing instance, ItemStack stack) {
-        return BrewingStandMenu.PotionSlot.mayPlaceItem(stack);
+    private boolean redirectIsValidInput(PotionBrewing instance, ItemStack stack, Operation<Boolean> original) {
+        return BrewingStandConfig.get().useDataDrivenRecipe()
+                ? BrewingStandMenu.PotionSlot.mayPlaceItem(stack)
+                : original.call(instance, stack);
     }
 
     @Mixin(targets = "net.minecraft.world.level.block.entity.BrewingStandBlockEntity$1")

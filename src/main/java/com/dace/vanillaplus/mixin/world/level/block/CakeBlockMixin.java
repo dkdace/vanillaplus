@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.extension.VPModifiableData;
-import com.dace.vanillaplus.world.block.BlockModifier;
+import com.dace.vanillaplus.data.registryobject.BlockConfigComponentTypes;
+import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundEvents;
@@ -15,14 +15,14 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(CakeBlock.class)
-public abstract class CakeBlockMixin extends BlockMixin<CakeBlock, BlockModifier.CakeModifier> {
+public abstract class CakeBlockMixin extends BlockMixin<CakeBlock> {
     @Unique
     private static final Consumable CONSUMABLE = Consumable.builder().sound(SoundEvents.GENERIC_EAT).build();
 
     @WrapWithCondition(method = "eat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;eat(IF)V"))
     private static boolean redirectEat(FoodData instance, int food, float saturationModifier, @Local(argsOnly = true) Player player) {
-        return VPModifiableData.getDataModifier(Blocks.CAKE, BlockModifier.CakeModifier.class).map(cakeModifier -> {
-            cakeModifier.getFoodProperties().onConsume(player.level(), player, null, CONSUMABLE);
+        return VPBlock.cast(Blocks.CAKE).getConfigComponents().get(BlockConfigComponentTypes.FOOD).map(foodProperties -> {
+            foodProperties.onConsume(player.level(), player, null, CONSUMABLE);
             return false;
         }).orElse(true);
     }

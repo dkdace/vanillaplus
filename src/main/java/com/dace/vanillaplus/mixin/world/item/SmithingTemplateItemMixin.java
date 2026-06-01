@@ -2,7 +2,6 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
-import com.dace.vanillaplus.world.item.ItemModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -20,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(SmithingTemplateItem.class)
-public abstract class SmithingTemplateItemMixin extends ItemMixin<SmithingTemplateItem, ItemModifier> {
+public abstract class SmithingTemplateItemMixin extends ItemMixin<SmithingTemplateItem> {
     @Inject(method = "appendHoverText", at = @At(value = "FIELD",
             target = "Lnet/minecraft/network/chat/CommonComponents;EMPTY:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC))
     private void addEffectTooltip(ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder,

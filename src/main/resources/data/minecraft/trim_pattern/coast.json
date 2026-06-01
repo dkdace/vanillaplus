@@ -1,0 +1,34 @@
+{
+  "asset_id": "minecraft:coast",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.minecraft.coast"
+  },
+  "effects": {
+    "minecraft:location_changed": [
+      {
+        "effect": {
+          "type": "minecraft:attribute",
+          "amount": {
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "description_value_multiplier": 100,
+            "value": 0.25
+          },
+          "attribute": "forge:swim_speed",
+          "id": "minecraft:trim_pattern_effect.coast",
+          "operation": "add_multiplied_base"
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_swimming": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

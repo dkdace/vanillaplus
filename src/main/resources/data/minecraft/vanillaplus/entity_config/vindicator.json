@@ -1,0 +1,74 @@
+{
+  "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "minecraft:follow_range",
+        "base": 16
+      },
+      {
+        "id": "vanillaplus:sprinting_speed",
+        "base": 0
+      }
+    ],
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:raider": {
+      "attack_baby_villagers": true,
+      "always_open_doors": true,
+      "sprint_during_raids": true,
+      "use_data_driven_raid_equipment": true,
+      "raid_mob_effects": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0.17,
+                  0.34,
+                  0.51,
+                  0.68,
+                  0.85
+                ]
+              }
+            }
+          },
+          "effect": "minecraft:speed",
+          "amplifier": 0
+        },
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.1,
+                  0.2,
+                  0.3,
+                  0.4,
+                  0.5,
+                  0.6
+                ]
+              }
+            }
+          },
+          "effect": "minecraft:speed",
+          "amplifier": 1
+        }
+      ]
+    }
+  }
+}

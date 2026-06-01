@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,11 +16,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.portal.TeleportTransition;
@@ -32,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * 만회 나침반 아이템 클래스.
  */
 public final class RecoveryCompassItem extends Item {
-    /** 컴포넌트 키 */
+    /** 유효하지 않은 위치 컴포넌트 */
     private static final Component COMPONENT_TELEPORT_NOT_VALID = Component.translatable("item.minecraft.recovery_compass.teleport_not_valid");
 
     public RecoveryCompassItem(@NonNull Properties properties) {
@@ -55,7 +53,10 @@ public final class RecoveryCompassItem extends Item {
 
     @Override
     @NonNull
-    public InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand interactionHand) {
+    public InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
+        if (!RecoveryCompassConfig.get().enableTeleport())
+            return super.use(level, player, hand);
+
         if (!(level instanceof ServerLevel serverLevel))
             return InteractionResult.PASS;
 
@@ -73,19 +74,20 @@ public final class RecoveryCompassItem extends Item {
 
         player.teleport(new TeleportTransition(serverLevel, pos, Vec3.ZERO, 0, 0, Relative.union(Relative.ROTATION, Relative.DELTA),
                 TeleportTransition.DO_NOTHING));
+        serverLevel.gameEvent(GameEvent.TELEPORT, pos, GameEvent.Context.of(player));
 
         playUseEffects(serverLevel, oldPos);
         playUseEffects(serverLevel, pos);
 
-        NetworkManager.sendToPlayer(new ItemOverlayPacket(BuiltInRegistries.ITEM.wrapAsHolder(this)), (ServerPlayer) player);
+        ItemStack itemInHand = player.getItemInHand(hand);
 
-        player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
+        NetworkManager.sendToPlayer(new ItemOverlayPacket(itemInHand.typeHolder()), (ServerPlayer) player);
+        RecoveryCompassConfig.get().teleportEffects().forEach(consumeEffect -> consumeEffect.apply(level, itemInHand, player));
 
         player.resetFallDistance();
         player.resetCurrentImpulseContext();
-
         player.awardStat(Stats.ITEM_USED.get(this));
-        player.getItemInHand(interactionHand).consume(1, player);
+        itemInHand.consume(1, player);
 
         return InteractionResult.SUCCESS_SERVER;
     }

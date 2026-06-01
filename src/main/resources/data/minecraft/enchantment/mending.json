@@ -9,9 +9,9 @@
         "effect": {
           "type": "minecraft:multiply",
           "factor": {
-            "type": "vanillaplus:preset",
-            "value": "vanillaplus:enchantment/mending",
-            "name": "amount"
+            "type": "vanillaplus:described",
+            "description_index": 0,
+            "value": 2.0
           }
         }
       }

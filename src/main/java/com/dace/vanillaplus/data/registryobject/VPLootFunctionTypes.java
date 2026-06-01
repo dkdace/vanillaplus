@@ -20,8 +20,8 @@ public final class VPLootFunctionTypes {
     private static final DeferredRegister<MapCodec<? extends LootItemFunction>> REGISTRY = StaticRegistry.createDeferredRegister(Registries.LOOT_FUNCTION_TYPE);
 
     static {
-        REGISTRY.register("set_random_tropical_fish", () -> SetRandomTropicalFish.TYPE_CODEC);
-        REGISTRY.register("set_random_axolotl", () -> SetRandomAxolotl.TYPE_CODEC);
+        REGISTRY.register("set_random_tropical_fish", () -> SetRandomTropicalFish.TYPED_CODEC);
+        REGISTRY.register("set_random_axolotl", () -> SetRandomAxolotl.TYPED_CODEC);
         REGISTRY.register("fill_map", () -> FillMap.TYPED_CODEC);
         REGISTRY.register("set_random_fireworks", () -> SetRandomFireworks.TYPED_CODEC);
     }

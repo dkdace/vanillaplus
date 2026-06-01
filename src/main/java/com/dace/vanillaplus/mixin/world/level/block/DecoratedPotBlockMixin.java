@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.world.block.BlockModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DecoratedPotBlock.class)
-public abstract class DecoratedPotBlockMixin extends BlockMixin<DecoratedPotBlock, BlockModifier> {
+public abstract class DecoratedPotBlockMixin extends BlockMixin<DecoratedPotBlock> {
     @Shadow
     @Final
     public static BooleanProperty CRACKED;
