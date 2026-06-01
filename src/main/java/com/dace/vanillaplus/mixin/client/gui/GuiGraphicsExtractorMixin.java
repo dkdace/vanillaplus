@@ -4,14 +4,16 @@ import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.world.item.component.RepairWithXP;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,9 +33,19 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
     @Shadow
     public abstract void fill(RenderPipeline pipeline, int x0, int y0, int x1, int y1, int col);
 
-    @Inject(method = "itemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;itemBar(Lnet/minecraft/world/item/ItemStack;II)V"))
-    private void renderItemRepairLimitBar(Font font, ItemStack itemStack, int x, int y, @Nullable String countText, CallbackInfo ci) {
+    @Definition(id = "top", local = @Local(type = int.class, name = "top"))
+    @Expression("top")
+    @ModifyExpressionValue(method = "itemBar", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private int modifyDamageBarTop(int top, @Local(argsOnly = true) ItemStack itemStack) {
+        VPItemStack vpItemStack = VPItemStack.cast(itemStack);
+        if (vpItemStack.isRepairLimitBarVisible())
+            top -= ITEM_REPAIR_LIMIT_BAR_HEIGHT;
+
+        return top;
+    }
+
+    @Inject(method = "itemBar", at = @At("TAIL"))
+    private void renderItemRepairLimitBar(ItemStack itemStack, int x, int y, CallbackInfo ci) {
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);
         if (!vpItemStack.isRepairLimitBarVisible())
             return;
@@ -44,8 +56,6 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
 
         x += ITEM_REPAIR_LIMIT_BAR_OFFSET_X;
         y += ITEM_REPAIR_LIMIT_BAR_OFFSET_Y;
-        if (itemStack.isBarVisible())
-            y -= ITEM_REPAIR_LIMIT_BAR_HEIGHT;
 
         int value = Math.round(Item.MAX_BAR_WIDTH - (float) (vpItemStack.getRepairLimit() * Item.MAX_BAR_WIDTH) / vpItemStack.getMaxRepairLimit());
         int barWidth = Math.clamp(value, 0, Item.MAX_BAR_WIDTH);
