@@ -37,39 +37,19 @@
               }
             },
             {
-              "condition": "minecraft:any_of",
-              "terms": [
-                {
-                  "condition": "minecraft:damage_source_properties",
-                  "predicate": {
-                    "tags": [
-                      {
-                        "expected": false,
-                        "id": "vanillaplus:environmental"
-                      },
-                      {
-                        "expected": false,
-                        "id": "minecraft:bypasses_invulnerability"
-                      }
-                    ]
+              "condition": "minecraft:damage_source_properties",
+              "predicate": {
+                "tags": [
+                  {
+                    "expected": false,
+                    "id": "minecraft:is_fall"
+                  },
+                  {
+                    "expected": false,
+                    "id": "minecraft:bypasses_invulnerability"
                   }
-                },
-                {
-                  "condition": "minecraft:damage_source_properties",
-                  "predicate": {
-                    "tags": [
-                      {
-                        "expected": true,
-                        "id": "minecraft:is_lightning"
-                      },
-                      {
-                        "expected": false,
-                        "id": "minecraft:bypasses_invulnerability"
-                      }
-                    ]
-                  }
-                }
-              ]
+                ]
+              }
             }
           ]
         }
