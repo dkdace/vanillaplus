@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "-": "minecraft:stone_slab",
+    "G": "minecraft:gold_block",
+    "I": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    "-G-"
+  ],
+  "result": {
+    "id": "minecraft:bell"
+  }
+}
