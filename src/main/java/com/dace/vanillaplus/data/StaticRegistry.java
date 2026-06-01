@@ -2,7 +2,7 @@ package com.dace.vanillaplus.data;
 
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.util.IdentifierUtil;
-import com.google.common.reflect.ClassPath;
+import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
@@ -14,9 +14,10 @@ import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
-import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * 모드의 정적 레지스트리를 관리하는 클래스.
@@ -38,8 +39,8 @@ public final class StaticRegistry<T> {
     /** 아이템 설정 데이터 요소 타입 */
     public static final StaticRegistry<Codec<?>> ITEM_CONFIG_COMPONENT_TYPE = new StaticRegistry<>("item_config/component_type");
 
-    /** {@link com.dace.vanillaplus.data.registryobject} 패키지 */
-    private static final String PACKAGE = "com.dace.vanillaplus.data.registryobject";
+    /** {@link com.dace.vanillaplus.data.registryobject} 패키지 경로 */
+    private static final UnaryOperator<Path> PACKAGE_PATH = path -> path.resolve("com", "dace", "vanillaplus", "data", "registryobject");
 
     /** DeferredRegister 인스턴스 */
     private final DeferredRegister<T> deferredRegister;
@@ -56,13 +57,10 @@ public final class StaticRegistry<T> {
         this.registryHolder = deferredRegister.makeRegistry(RegistryBuilder::of);
     }
 
-    public static void bootstrap(@NonNull BusGroup busGroup) {
+    public static void bootstrap(@NonNull Path rootPath, @NonNull BusGroup busGroup) {
         try {
-            for (ClassPath.ClassInfo classInfo : ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClasses(PACKAGE)) {
-                Class.forName(classInfo.getName());
-                LOGGER.debug("Loaded {}", classInfo);
-            }
-        } catch (ClassNotFoundException | IOException ex) {
+            ReflectionUtil.loadClassesFromPackage(PACKAGE_PATH.apply(rootPath), clazz -> LOGGER.debug("Loaded {}", clazz));
+        } catch (Exception ex) {
             throw new IllegalStateException("Cannot initialize StaticRegistry", ex);
         }
 

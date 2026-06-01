@@ -11,6 +11,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forgespi.language.IModInfo;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
+
 /**
  * 모드 메인 클래스.
  */
@@ -25,9 +27,11 @@ public final class VanillaPlus {
         IModInfo modInfo = context.getContainer().getModInfo();
         LOGGER.info("Starting {} {}", modInfo.getModId(), modInfo.getVersion());
 
-        StaticRegistry.bootstrap(context.getModBusGroup());
+        Path rootPath = context.getContainer().getModInfo().getOwningFile().getFile().getSecureJar().getRootPath();
+
+        StaticRegistry.bootstrap(rootPath, context.getModBusGroup());
         DataPackRegistry.bootstrap();
         ReloadableDataManager.bootstrap();
-        NetworkManager.bootstrap();
+        NetworkManager.bootstrap(rootPath);
     }
 }

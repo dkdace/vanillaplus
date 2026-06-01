@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.network;
 
 import com.dace.vanillaplus.util.IdentifierUtil;
-import com.google.common.reflect.ClassPath;
+import com.dace.vanillaplus.util.ReflectionUtil;
 import com.mojang.logging.LogUtils;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.nio.file.Path;
+import java.util.function.UnaryOperator;
 
 /**
  * 네트워크 관련 기능을 제공하는 클래스.
@@ -29,61 +31,50 @@ public final class NetworkManager {
     private static final Logger LOGGER = LogUtils.getLogger();
     /** 프로토콜 버전 */
     private static final int PROTOCOL_VERSION = 5;
-    /** {@link com.dace.vanillaplus.network.client} 패키지 */
-    private static final String PACKAGE_CLIENT = "com.dace.vanillaplus.network.client";
-    /** {@link com.dace.vanillaplus.network.server} 패키지 */
-    private static final String PACKAGE_SERVER = "com.dace.vanillaplus.network.server";
+    /** {@link com.dace.vanillaplus.network.client} 패키지 경로 */
+    private static final UnaryOperator<Path> PACKAGE_CLIENT = path -> path.resolve("com", "dace", "vanillaplus", "network", "client");
+    /** {@link com.dace.vanillaplus.network.server} 패키지 경로 */
+    private static final UnaryOperator<Path> PACKAGE_SERVER = path -> path.resolve("com", "dace", "vanillaplus", "network", "server");
     /** 패킷 전송 채널 */
-    private static final SimpleChannel CHANNEL = createChannel();
+    private static final SimpleChannel CHANNEL = ChannelBuilder.named(IdentifierUtil.fromPath("main"))
+            .networkProtocolVersion(PROTOCOL_VERSION)
+            .simpleChannel();
 
-    public static void bootstrap() {
+    public static void bootstrap(@NonNull Path rootPath) {
+        SimpleProtocol<RegistryFriendlyByteBuf, Object> protocol = CHANNEL.play();
+
+        try {
+            addPackets(PACKAGE_CLIENT.apply(rootPath), protocol.clientbound());
+            addPackets(PACKAGE_SERVER.apply(rootPath), protocol.serverbound());
+        } catch (Exception ex) {
+            throw new IllegalStateException("Cannot initialize NetworkManager", ex);
+        }
+
+        CHANNEL.build();
+
         LOGGER.info("Initialized");
     }
 
-    @NonNull
-    private static SimpleChannel createChannel() {
-        SimpleProtocol<RegistryFriendlyByteBuf, Object> protocol = ChannelBuilder.named(IdentifierUtil.fromPath("main"))
-                .networkProtocolVersion(PROTOCOL_VERSION)
-                .simpleChannel()
-                .play();
-
-        try {
-            SimpleFlow<RegistryFriendlyByteBuf, Object> flow;
-            flow = addPackets(PACKAGE_CLIENT, protocol.clientbound());
-            flow = addPackets(PACKAGE_SERVER, flow.serverbound());
-
-            return flow.build();
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new IllegalStateException("Cannot initialize NetworkManager", ex);
-        }
-    }
-
-    @NonNull
     @SuppressWarnings("unchecked")
-    private static SimpleFlow<RegistryFriendlyByteBuf, Object> addPackets(@NonNull String packageName,
-                                                                          @NonNull SimpleFlow<RegistryFriendlyByteBuf, Object> flow)
-            throws IOException, ClassNotFoundException {
-        for (ClassPath.ClassInfo classInfo : ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClasses(packageName)) {
-            Class<?> clazz = Class.forName(classInfo.getName());
+    private static void addPackets(@NonNull Path packageName, @NonNull SimpleFlow<RegistryFriendlyByteBuf, Object> flow) throws IOException {
+        ReflectionUtil.loadClassesFromPackage(packageName, clazz -> {
+            if (!VPPacket.class.isAssignableFrom(clazz))
+                return;
 
-            if (VPPacket.class.isAssignableFrom(clazz)) {
-                StreamCodec<RegistryFriendlyByteBuf, VPPacket> streamCodec = StreamCodec.ofMember(VPPacket::encode, buf -> {
-                    try {
-                        return (VPPacket) MethodHandles.lookup()
-                                .findConstructor(clazz, MethodType.methodType(void.class, RegistryFriendlyByteBuf.class))
-                                .invoke(buf);
-                    } catch (Throwable ex) {
-                        throw new IllegalStateException("Cannot create VPPacket instance", ex);
-                    }
-                });
+            StreamCodec<RegistryFriendlyByteBuf, VPPacket> streamCodec = StreamCodec.ofMember(VPPacket::encode, buf -> {
+                try {
+                    return (VPPacket) MethodHandles.lookup()
+                            .findConstructor(clazz, MethodType.methodType(void.class, RegistryFriendlyByteBuf.class))
+                            .invoke(buf);
+                } catch (Throwable ex) {
+                    throw new IllegalStateException("Cannot create VPPacket instance", ex);
+                }
+            });
 
-                flow = flow.addMain((Class<VPPacket>) clazz, streamCodec, VPPacket::handle);
+            flow.addMain((Class<VPPacket>) clazz, streamCodec, VPPacket::handle);
 
-                LOGGER.debug("Loaded {}", classInfo);
-            }
-        }
-
-        return flow;
+            LOGGER.debug("Loaded {}", clazz);
+        });
     }
 
     /**
