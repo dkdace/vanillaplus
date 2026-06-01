@@ -25,11 +25,14 @@ public final class MobEffectValues {
 
     /** 식별자별 레벨 기반 값 목록 (식별자 : 레벨 기반 값) */
     @NonNull
-    private final TreeMap<Identifier, Described> describedMap;
+    private final Map<Identifier, Described> describedMap;
+    /** 레벨 기반 값 목록 */
+    @NonNull
+    private final TreeSet<Described> describeds;
 
     private MobEffectValues(@NonNull Map<Identifier, Described> describedMap) {
-        this.describedMap = new TreeMap<>(Comparator.comparing(describedMap::get));
-        this.describedMap.putAll(describedMap);
+        this.describedMap = describedMap;
+        this.describeds = new TreeSet<>(describedMap.values());
     }
 
     /**
@@ -40,19 +43,19 @@ public final class MobEffectValues {
     @NonNull
     @UnmodifiableView
     public Collection<Described> getValues() {
-        return Collections.unmodifiableCollection(describedMap.values());
+        return Collections.unmodifiableCollection(describeds);
     }
 
     /**
-     * 지정한 이름에 해당하는 상태 효과 값을 계산하여 반환한다.
+     * 지정한 식별자에 해당하는 상태 효과 값을 계산하여 반환한다.
      *
-     * @param name      이름
-     * @param amplifier 효과 레벨
+     * @param identifier 식별자
+     * @param amplifier  효과 레벨
      * @return 계산된 값
      */
     @NonNull
-    public Optional<Float> calculate(@NonNull Identifier name, int amplifier) {
-        Described described = describedMap.get(name);
+    public Optional<Float> calculate(@NonNull Identifier identifier, int amplifier) {
+        Described described = describedMap.get(identifier);
         return described == null ? Optional.empty() : Optional.of(described.calculate(amplifier + 1));
     }
 }

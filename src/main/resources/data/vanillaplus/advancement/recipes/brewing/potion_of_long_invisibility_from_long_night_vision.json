@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "vanillaplus:corrupted_potion"
+        "recipe": "vanillaplus:potion_of_long_invisibility_from_long_night_vision"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "vanillaplus:corrupted_potion"
+      "vanillaplus:potion_of_long_invisibility_from_long_night_vision"
     ]
   }
 }

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_glowstone_dust": {
+    "has_fermented_spider_eye": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:glowstone_dust"
+            "items": "minecraft:fermented_spider_eye"
           }
         ]
       },
@@ -13,20 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "vanillaplus:strong_potion"
+        "recipe": "vanillaplus:potion_of_harming_from_poison"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_glowstone_dust",
+      "has_fermented_spider_eye",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "vanillaplus:strong_potion"
+      "vanillaplus:potion_of_harming_from_poison"
     ]
   }
 }

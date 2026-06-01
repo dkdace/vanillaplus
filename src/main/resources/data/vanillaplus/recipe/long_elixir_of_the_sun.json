@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "vanillaplus:elixir_of_the_sun",
+  "ingredient": "minecraft:redstone",
+  "result": "vanillaplus:long_elixir_of_the_sun"
+}

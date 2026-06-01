@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "vanillaplus:long_potion"
+        "recipe": "vanillaplus:potion_of_long_slowness_from_slowness"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "vanillaplus:long_potion"
+      "vanillaplus:potion_of_long_slowness_from_slowness"
     ]
   }
 }

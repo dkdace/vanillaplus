@@ -18,6 +18,5 @@ public final class VPRecipeSerializers {
     static {
         REGISTRY.register("brewing_mix", () -> BrewingRecipe.Mix.SERIALIZER);
         REGISTRY.register("brewing_transmute", () -> BrewingRecipe.Transmute.SERIALIZER);
-        REGISTRY.register("brewing_mapped", () -> BrewingRecipe.Mapped.SERIALIZER);
     }
 }

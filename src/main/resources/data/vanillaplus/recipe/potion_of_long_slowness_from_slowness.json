@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:slowness",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_slowness"
+}

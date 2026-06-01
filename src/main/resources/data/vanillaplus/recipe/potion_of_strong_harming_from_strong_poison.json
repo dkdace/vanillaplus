@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:strong_poison",
+  "ingredient": "minecraft:fermented_spider_eye",
+  "result": "minecraft:strong_harming"
+}
