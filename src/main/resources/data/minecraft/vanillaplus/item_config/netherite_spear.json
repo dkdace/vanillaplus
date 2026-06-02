@@ -9,7 +9,8 @@
       "mob_factor": 0.5
     },
     "minecraft:weapon": {
-      "disable_blocking_for_seconds": 0.4
+      "disable_blocking_for_seconds": 0.4,
+      "disable_blocking_on_full_strength_attack": true
     },
     "minecraft:kinetic_weapon": {
       "damage_multiplier": 1.1,

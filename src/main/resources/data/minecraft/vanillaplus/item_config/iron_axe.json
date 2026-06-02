@@ -3,7 +3,8 @@
     "vanillaplus:smelting_damage_ratio": 0.21,
     "minecraft:weapon": {
       "disable_blocking_for_seconds": 2,
-      "item_damage_per_attack": 2
+      "item_damage_per_attack": 2,
+      "disable_blocking_on_full_strength_attack": true
     }
   }
 }

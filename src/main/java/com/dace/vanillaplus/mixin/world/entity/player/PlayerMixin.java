@@ -3,6 +3,7 @@ package com.dace.vanillaplus.mixin.world.entity.player;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
+import com.dace.vanillaplus.extension.world.item.component.VPWeapon;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,6 +43,10 @@ import java.util.Objects;
 public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T> implements VPPlayer<T> {
     @Unique
     private static final Identifier MINING_SPEED_EFFECT_VALUE_ID = IdentifierUtil.fromPath("mining_speed");
+    @Unique
+    private static final double SWEEPING_RANGE_Y = 0.25;
+    @Unique
+    private static final float FULL_STRENGTH_ATTACK_THRESHOLD = 0.9F;
 
     @Unique
     protected boolean isProneKeyDown = false;
@@ -52,6 +58,9 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
     @Shadow
     @Final
     private ItemCooldowns cooldowns;
+
+    @Shadow
+    public abstract float getAttackStrengthScale(float a);
 
     @Override
     protected boolean canUseTotem(boolean hasDeathProtection, ItemStack itemStack) {
@@ -101,11 +110,11 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
         return entities;
     }
 
-    @ModifyExpressionValue(method = "doSweepAttack", at = @At(value = "INVOKE",
+    @Redirect(method = "doSweepAttack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getSweepHitBox(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/AABB;"))
-    private AABB modifySweepHitbox(AABB aabb) {
-        double sweepingRange = getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
-        return aabb.inflate(aabb.getXsize() * sweepingRange, 0, aabb.getZsize() * sweepingRange);
+    private AABB modifySweepHitbox(ItemStack instance, Player player, Entity target) {
+        double sweepingRange = player.getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
+        return target.getBoundingBox().inflate(sweepingRange, SWEEPING_RANGE_Y, sweepingRange);
     }
 
     @Definition(id = "distanceToSqr", method = "Lnet/minecraft/world/entity/player/Player;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D")
@@ -127,14 +136,19 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
     }
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isSprinting()Z"))
-    private void setCanDisableBlockingOnAttack(Entity entity, CallbackInfo ci, @Local(name = "fullStrengthAttack") boolean fullStrengthAttack) {
-        canDisableBlocking = fullStrengthAttack;
+    private void setCanDisableBlockingOnAttack(Entity entity, CallbackInfo ci, @Local(name = "attackingItemStack") ItemStack attackingItemStack,
+                                               @Local(name = "fullStrengthAttack") boolean fullStrengthAttack) {
+        Weapon weapon = attackingItemStack.get(DataComponents.WEAPON);
+        canDisableBlocking = weapon == null || !VPWeapon.cast(weapon).isDisableBlockingOnFullStrengthAttack() || fullStrengthAttack;
     }
 
-    @Inject(method = "stabAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getItemBySlot(Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;"))
+    @Inject(method = "stabAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;"))
     private void setCanDisableBlockingOnStab(EquipmentSlot slot, Entity target, float baseDamage, boolean dealsDamage, boolean dealsKnockback,
-                                             boolean dismounts, CallbackInfoReturnable<Boolean> cir) {
-        canDisableBlocking = true;
+                                             boolean dismounts, CallbackInfoReturnable<Boolean> cir, @Local(name = "weaponItem") ItemStack weaponItem) {
+        Weapon weapon = weaponItem.get(DataComponents.WEAPON);
+        canDisableBlocking = weapon == null || !VPWeapon.cast(weapon).isDisableBlockingOnFullStrengthAttack()
+                || getAttackStrengthScale(0.5F) > FULL_STRENGTH_ATTACK_THRESHOLD;
     }
 
     @Definition(id = "scale", local = @Local(type = float.class, name = "scale"))
