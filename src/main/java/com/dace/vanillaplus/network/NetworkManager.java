@@ -30,7 +30,7 @@ public final class NetworkManager {
     /** 로거 인스턴스 */
     private static final Logger LOGGER = LogUtils.getLogger();
     /** 프로토콜 버전 */
-    private static final int PROTOCOL_VERSION = 5;
+    private static final int PROTOCOL_VERSION = 6;
     /** {@link com.dace.vanillaplus.network.client} 패키지 경로 */
     private static final UnaryOperator<Path> PACKAGE_CLIENT = path -> path.resolve("com", "dace", "vanillaplus", "network", "client");
     /** {@link com.dace.vanillaplus.network.server} 패키지 경로 */
