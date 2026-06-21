@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/armorer/level_3",
+  "trades": [
+    [
+      "vanillaplus:armorer/3/buy_diamond",
+      [
+        "vanillaplus:armorer/3/sell_enchanted_iron_helmet",
+        "vanillaplus:armorer/3/sell_enchanted_iron_boots"
+      ]
+    ],
+    [
+      "vanillaplus:armorer/3/buy_armor_stand",
+      [
+        "vanillaplus:armorer/3/sell_enchanted_iron_chestplate",
+        "vanillaplus:armorer/3/sell_enchanted_iron_leggings"
+      ]
+    ]
+  ]
+}

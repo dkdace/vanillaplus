@@ -1,0 +1,78 @@
+{
+  "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "minecraft:max_health",
+        "base": 75
+      },
+      {
+        "id": "minecraft:armor",
+        "base": 15
+      },
+      {
+        "id": "vanillaplus:sprinting_speed",
+        "base": 0
+      }
+    ],
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:raider": {
+      "attack_baby_villagers": true,
+      "sprint_during_raids": true,
+      "raid_mob_effects": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0.2,
+                  0.4,
+                  0.6,
+                  0.8
+                ]
+              }
+            }
+          },
+          "effect": "minecraft:resistance",
+          "amplifier": 0
+        },
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.2,
+                  0.4,
+                  0.6,
+                  0.8
+                ]
+              }
+            }
+          },
+          "effect": "minecraft:resistance",
+          "amplifier": 1
+        }
+      ]
+    },
+    "vanillaplus:ravager": {
+      "roar_cooldown_seconds": 10
+    }
+  }
+}

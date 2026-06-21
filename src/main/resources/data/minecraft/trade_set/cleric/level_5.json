@@ -1,0 +1,29 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cleric/level_5",
+  "trades": [
+    [
+      "vanillaplus:cleric/5/sell_potion_long_fire_resistance",
+      "vanillaplus:cleric/5/sell_potion_long_night_vision",
+      "vanillaplus:cleric/5/sell_potion_long_leaping",
+      "vanillaplus:cleric/5/sell_potion_strong_leaping",
+      "vanillaplus:cleric/5/sell_potion_long_swiftness",
+      "vanillaplus:cleric/5/sell_potion_strong_swiftness",
+      "vanillaplus:cleric/5/sell_potion_long_water_breathing",
+      "vanillaplus:cleric/5/sell_potion_long_strength",
+      "vanillaplus:cleric/5/sell_potion_strong_strength",
+      "vanillaplus:cleric/5/sell_potion_long_invisibility",
+      "vanillaplus:cleric/5/sell_potion_long_regeneration",
+      "vanillaplus:cleric/5/sell_potion_strong_regeneration"
+    ],
+    [
+      "vanillaplus:cleric/5/sell_splash_potion_strong_healing",
+      "vanillaplus:cleric/5/sell_splash_potion_strong_harming",
+      "vanillaplus:cleric/5/sell_splash_potion_long_slowness",
+      "vanillaplus:cleric/5/sell_splash_potion_strong_slowness",
+      "vanillaplus:cleric/5/sell_splash_potion_long_weakness",
+      "vanillaplus:cleric/5/sell_splash_potion_long_poison",
+      "vanillaplus:cleric/5/sell_splash_potion_strong_poison"
+    ]
+  ]
+}

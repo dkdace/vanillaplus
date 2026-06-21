@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends PlayerMixin<ServerPlayer> {
     @Inject(method = "die", at = @At("TAIL"))
-    private void stopUsingItemOnDie(DamageSource damageSource, CallbackInfo ci) {
+    private void stopUsingItemOnDie(DamageSource source, CallbackInfo ci) {
         stopUsingItem();
     }
 }

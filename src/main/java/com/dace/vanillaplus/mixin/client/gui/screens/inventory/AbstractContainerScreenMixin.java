@@ -18,5 +18,5 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerSc
     protected int leftPos;
 
     @Shadow
-    protected abstract boolean isHovering(int x, int y, int width, int height, double mouseX, double mouseY);
+    protected abstract boolean isHovering(int left, int top, int w, int h, double xm, double ym);
 }

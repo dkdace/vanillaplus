@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/weaponsmith/level_4",
+  "trades": [
+    [
+      "vanillaplus:weaponsmith/4/sell_fire_charge",
+      [
+        "vanillaplus:weaponsmith/4/sell_firework_rocket_1",
+        "vanillaplus:weaponsmith/4/sell_firework_rocket_2"
+      ]
+    ],
+    [
+      "vanillaplus:weaponsmith/4/sell_enchanted_diamond_spear",
+      "vanillaplus:weaponsmith/4/sell_enchanted_diamond_sword",
+      "vanillaplus:weaponsmith/4/sell_enchanted_diamond_axe"
+    ]
+  ]
+}

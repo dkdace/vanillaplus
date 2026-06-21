@@ -1,0 +1,53 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/shepherd/level_2",
+  "trades": [
+    [
+      [
+        "vanillaplus:shepherd/2/buy_white_dye",
+        "vanillaplus:shepherd/2/buy_light_gray_dye",
+        "vanillaplus:shepherd/2/buy_gray_dye",
+        "vanillaplus:shepherd/2/buy_black_dye",
+        "vanillaplus:shepherd/2/buy_brown_dye",
+        "vanillaplus:shepherd/2/buy_red_dye",
+        "vanillaplus:shepherd/2/buy_orange_dye",
+        "vanillaplus:shepherd/2/buy_yellow_dye",
+        "vanillaplus:shepherd/2/buy_lime_dye",
+        "vanillaplus:shepherd/2/buy_green_dye",
+        "vanillaplus:shepherd/2/buy_cyan_dye",
+        "vanillaplus:shepherd/2/buy_light_blue_dye",
+        "vanillaplus:shepherd/2/buy_blue_dye",
+        "vanillaplus:shepherd/2/buy_purple_dye",
+        "vanillaplus:shepherd/2/buy_magenta_dye",
+        "vanillaplus:shepherd/2/buy_pink_dye"
+      ],
+      [
+        "vanillaplus:shepherd/2/sell_white_carpet",
+        "vanillaplus:shepherd/2/sell_light_gray_carpet",
+        "vanillaplus:shepherd/2/sell_gray_carpet",
+        "vanillaplus:shepherd/2/sell_black_carpet",
+        "vanillaplus:shepherd/2/sell_brown_carpet",
+        "vanillaplus:shepherd/2/sell_red_carpet",
+        "vanillaplus:shepherd/2/sell_orange_carpet",
+        "vanillaplus:shepherd/2/sell_yellow_carpet",
+        "vanillaplus:shepherd/2/sell_lime_carpet",
+        "vanillaplus:shepherd/2/sell_green_carpet",
+        "vanillaplus:shepherd/2/sell_cyan_carpet",
+        "vanillaplus:shepherd/2/sell_light_blue_carpet",
+        "vanillaplus:shepherd/2/sell_blue_carpet",
+        "vanillaplus:shepherd/2/sell_purple_carpet",
+        "vanillaplus:shepherd/2/sell_magenta_carpet",
+        "vanillaplus:shepherd/2/sell_pink_carpet"
+      ]
+    ],
+    [
+      [
+        "vanillaplus:shepherd/2/buy_white_wool",
+        "vanillaplus:shepherd/2/buy_light_gray_wool",
+        "vanillaplus:shepherd/2/buy_gray_wool",
+        "vanillaplus:shepherd/2/buy_black_wool"
+      ],
+      "vanillaplus:shepherd/2/sell_painting"
+    ]
+  ]
+}

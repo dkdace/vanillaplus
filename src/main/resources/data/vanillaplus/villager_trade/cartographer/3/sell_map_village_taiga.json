@@ -1,0 +1,62 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 9
+  },
+  "additional_wants": {
+    "id": "minecraft:compass"
+  },
+  "gives": {
+    "id": "minecraft:map"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:exploration_map",
+      "destination": "minecraft:on_taiga_village_maps",
+      "decoration": "minecraft:village_taiga",
+      "search_radius": 100,
+      "skip_existing_chunks": false
+    },
+    {
+      "function": "minecraft:set_components",
+      "components": {
+        "minecraft:map_color": 7318947
+      }
+    },
+    {
+      "function": "minecraft:set_name",
+      "target": "item_name",
+      "name": {
+        "translate": "filled_map.village_taiga"
+      }
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:filled_map",
+        "predicates": {
+          "minecraft:map_id": {}
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 21,
+  "multiply_xp_by_cost": true,
+  "merchant_predicate": {
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "predicates": {
+        "minecraft:villager/variant": [
+          "minecraft:plains",
+          "minecraft:snow"
+        ]
+      }
+    }
+  }
+}

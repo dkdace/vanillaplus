@@ -1,0 +1,50 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 25
+  },
+  "additional_wants": {
+    "id": "minecraft:compass"
+  },
+  "gives": {
+    "id": "minecraft:map"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:exploration_map",
+      "destination": "vanillaplus:ancient_city",
+      "decoration": "minecraft:target_point",
+      "search_radius": 100,
+      "skip_existing_chunks": false
+    },
+    {
+      "function": "minecraft:set_components",
+      "components": {
+        "minecraft:map_color": 2629473
+      }
+    },
+    {
+      "function": "minecraft:set_name",
+      "target": "item_name",
+      "name": {
+        "translate": "filled_map.ancient_city"
+      }
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:filled_map",
+        "predicates": {
+          "minecraft:map_id": {}
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

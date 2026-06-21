@@ -1,0 +1,41 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "additional_wants": {
+    "id": "minecraft:bowl"
+  },
+  "gives": {
+    "id": "minecraft:suspicious_stew"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_stew_effect",
+      "effects": [
+        {
+          "type": "minecraft:saturation",
+          "duration": 7
+        },
+        {
+          "type": "minecraft:night_vision",
+          "duration": 30
+        },
+        {
+          "type": "minecraft:jump_boost",
+          "duration": 30
+        },
+        {
+          "type": "minecraft:regeneration",
+          "duration": 15
+        },
+        {
+          "type": "minecraft:fire_resistance",
+          "duration": 30
+        }
+      ]
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 28
+}

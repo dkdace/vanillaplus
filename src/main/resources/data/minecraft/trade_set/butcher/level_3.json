@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/butcher/level_3",
+  "trades": [
+    [
+      "vanillaplus:butcher/3/buy_wheat",
+      "vanillaplus:butcher/3/sell_cooked_porkchop"
+    ],
+    [
+      "vanillaplus:butcher/3/buy_carrot",
+      "vanillaplus:butcher/3/sell_cooked_beef"
+    ]
+  ]
+}

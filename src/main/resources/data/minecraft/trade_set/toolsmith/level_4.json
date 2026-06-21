@@ -1,0 +1,16 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/toolsmith/level_4",
+  "trades": [
+    [
+      "vanillaplus:toolsmith/4/sell_bell",
+      "vanillaplus:toolsmith/4/sell_anvil"
+    ],
+    [
+      "vanillaplus:toolsmith/4/sell_enchanted_diamond_hoe",
+      "vanillaplus:toolsmith/4/sell_enchanted_diamond_shovel",
+      "vanillaplus:toolsmith/4/sell_enchanted_diamond_pickaxe",
+      "vanillaplus:toolsmith/4/sell_enchanted_diamond_axe"
+    ]
+  ]
+}

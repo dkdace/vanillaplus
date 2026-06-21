@@ -1,0 +1,17 @@
+{
+  "asset_name": "redstone",
+  "description": {
+    "color": "#971607",
+    "translate": "trim_material.minecraft.redstone"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.3,
+        "attribute": "vanillaplus:item_pickup_range",
+        "id": "vanillaplus:trim_material_effect.redstone",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

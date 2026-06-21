@@ -1,0 +1,19 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fletcher/level_5",
+  "trades": [
+    [
+      "vanillaplus:fletcher/5/sell_tipped_arrow_strong_healing",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_strong_harming",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_long_slowness",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_strong_slowness",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_long_weakness",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_long_poison",
+      "vanillaplus:fletcher/5/sell_tipped_arrow_strong_poison"
+    ],
+    [
+      "vanillaplus:fletcher/5/sell_enchanted_bow",
+      "vanillaplus:fletcher/5/sell_enchanted_crossbow"
+    ]
+  ]
+}

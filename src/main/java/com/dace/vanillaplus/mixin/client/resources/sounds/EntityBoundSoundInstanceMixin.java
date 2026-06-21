@@ -19,7 +19,7 @@ public abstract class EntityBoundSoundInstanceMixin implements VPEntityBoundSoun
     private long seed;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void setSeed(SoundEvent soundEvent, SoundSource soundSource, float volume, float pitch, Entity entity, long seed, CallbackInfo ci) {
+    private void setSeed(SoundEvent event, SoundSource source, float volume, float pitch, Entity entity, long seed, CallbackInfo ci) {
         this.seed = seed;
     }
 }

@@ -1,0 +1,45 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/librarian/level_2",
+  "trades": [
+    [
+      "vanillaplus:librarian/2/buy_book",
+      "vanillaplus:librarian/2/sell_bookshelf"
+    ],
+    [
+      "vanillaplus:librarian/2/buy_chiseled_bookshelf",
+      [
+        "vanillaplus:librarian/2/sell_enchanted_book_unbreaking",
+        [
+          "vanillaplus:librarian/2/sell_enchanted_book_sharpness",
+          "vanillaplus:librarian/2/sell_enchanted_book_protection",
+          "vanillaplus:librarian/2/sell_enchanted_book_efficiency",
+          "vanillaplus:librarian/2/sell_enchanted_book_smite",
+          "vanillaplus:librarian/2/sell_enchanted_book_bane_of_arthropods",
+          "vanillaplus:librarian/2/sell_enchanted_book_looting",
+          "vanillaplus:librarian/2/sell_enchanted_book_sweeping_edge",
+          "vanillaplus:librarian/2/sell_enchanted_book_fire_aspect",
+          "vanillaplus:librarian/2/sell_enchanted_book_flame",
+          "vanillaplus:librarian/2/sell_enchanted_book_silk_touch",
+          "vanillaplus:librarian/2/sell_enchanted_book_aqua_affinity",
+          "vanillaplus:librarian/2/sell_enchanted_book_fire_protection",
+          "vanillaplus:librarian/2/sell_enchanted_book_fortune",
+          "vanillaplus:librarian/2/sell_enchanted_book_thorns",
+          "vanillaplus:librarian/2/sell_enchanted_book_knockback",
+          "vanillaplus:librarian/2/sell_enchanted_book_projectile_protection",
+          "vanillaplus:librarian/2/sell_enchanted_book_power",
+          "vanillaplus:librarian/2/sell_enchanted_book_infinity",
+          "vanillaplus:librarian/2/sell_enchanted_book_punch",
+          "vanillaplus:librarian/2/sell_enchanted_book_feather_falling",
+          "vanillaplus:librarian/2/sell_enchanted_book_quick_charge",
+          "vanillaplus:librarian/2/sell_enchanted_book_multishot",
+          "vanillaplus:librarian/2/sell_enchanted_book_piercing",
+          "vanillaplus:librarian/2/sell_enchanted_book_blast_protection",
+          "vanillaplus:librarian/2/sell_enchanted_book_depth_strider",
+          "vanillaplus:librarian/2/sell_enchanted_book_respiration",
+          "vanillaplus:librarian/2/sell_enchanted_book_lunge"
+        ]
+      ]
+    ]
+  ]
+}

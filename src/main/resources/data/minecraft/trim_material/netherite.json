@@ -1,0 +1,20 @@
+{
+  "asset_name": "netherite",
+  "description": {
+    "color": "#625859",
+    "translate": "trim_material.minecraft.netherite"
+  },
+  "override_armor_assets": {
+    "minecraft:netherite": "netherite_darker"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.25,
+        "attribute": "vanillaplus:beacon_effect_range",
+        "id": "vanillaplus:trim_material_effect.netherite",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

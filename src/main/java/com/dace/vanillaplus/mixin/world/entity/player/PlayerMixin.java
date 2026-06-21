@@ -1,16 +1,19 @@
 package com.dace.vanillaplus.mixin.world.entity.player;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
+import com.dace.vanillaplus.extension.world.item.component.VPWeapon;
 import com.dace.vanillaplus.mixin.world.entity.LivingEntityMixin;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,9 +40,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T, EntityModifier.LivingEntityModifier> implements VPPlayer<T> {
+public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T> implements VPPlayer<T> {
     @Unique
-    private static final String MINING_FATIGUE_DEFINED_VALUE_NAME = "mining_speed";
+    private static final Identifier MINING_SPEED_EFFECT_VALUE_ID = IdentifierUtil.fromPath("mining_speed");
+    @Unique
+    private static final double SWEEPING_RANGE_Y = 0.25;
+    @Unique
+    private static final float FULL_STRENGTH_ATTACK_THRESHOLD = 0.9F;
 
     @Unique
     protected boolean isProneKeyDown = false;
@@ -51,26 +59,29 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     @Final
     private ItemCooldowns cooldowns;
 
+    @Shadow
+    public abstract float getAttackStrengthScale(float a);
+
     @Override
-    protected boolean canUseTotem(boolean canUse, ItemStack itemStack) {
-        return canUse && !cooldowns.isOnCooldown(itemStack);
+    protected boolean canUseTotem(boolean hasDeathProtection, ItemStack itemStack) {
+        return hasDeathProtection && !cooldowns.isOnCooldown(itemStack);
     }
 
     @Override
-    protected void onUseTotem(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir, ItemStack itemStack) {
-        UseCooldown useCooldown = itemStack.get(DataComponents.USE_COOLDOWN);
+    protected void onUseTotem(DamageSource killingDamage, CallbackInfoReturnable<Boolean> cir, ItemStack protectionItem) {
+        UseCooldown useCooldown = protectionItem.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null)
-            useCooldown.apply(itemStack, getThis());
-    }
-
-    @Override
-    public void setProneKeyDown(boolean isProneKeyDown) {
-        this.isProneKeyDown = isProneKeyDown;
+            useCooldown.apply(protectionItem, getThis());
     }
 
     @Override
     public float getSecondsToDisableBlocking() {
         return canDisableBlocking ? super.getSecondsToDisableBlocking() : 0;
+    }
+
+    @Override
+    public void setProneKeyDown(boolean isProneKeyDown) {
+        this.isProneKeyDown = isProneKeyDown;
     }
 
     @ModifyReturnValue(method = "getDesiredPose", at = @At(value = "RETURN", ordinal = 4))
@@ -79,22 +90,21 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     }
 
     @ModifyArg(method = "causeFoodExhaustion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"))
-    private float modifyFoodExhaustion(float exhaustion) {
-        return (float) (exhaustion * getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
+    private float modifyFoodExhaustion(float amount) {
+        return (float) (amount * getAttributeValue(VPAttributes.FOOD_EXHAUSTION_MULTIPLIER.getHolder().orElseThrow()));
     }
 
     @Redirect(method = "causeExtraKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V"))
     private void removeSprintCancelOnAttack(Player player, boolean isSprinting) {
-        // 미사용
     }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;"))
-    private List<Entity> modifyTouchEntities(List<Entity> entities, @Local AABB aabb) {
+    private List<Entity> modifyTouchEntities(List<Entity> entities, @Local(name = "pickupArea") AABB pickupArea) {
         double pickupRange = (getAttributeValue(VPAttributes.ITEM_PICKUP_RANGE.getHolder().orElseThrow()) - 1) * 0.5;
 
         entities.addAll(level().getEntities(getThis(),
-                aabb.inflate(aabb.getXsize() * pickupRange, aabb.getYsize() * pickupRange, aabb.getZsize() * pickupRange),
+                pickupArea.inflate(pickupArea.getXsize() * pickupRange, pickupArea.getYsize() * pickupRange, pickupArea.getZsize() * pickupRange),
                 entity -> entity instanceof ItemEntity || entity instanceof AbstractArrow || entity instanceof ExperienceOrb));
 
         return entities;
@@ -104,17 +114,17 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
             target = "Lnet/minecraft/world/item/ItemStack;getSweepHitBox(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/AABB;"))
     private AABB modifySweepHitbox(ItemStack instance, Player player, Entity target) {
         double sweepingRange = player.getAttributeValue(VPAttributes.SWEEPING_RANGE.getHolder().orElseThrow());
-        return target.getBoundingBox().inflate(sweepingRange, 0.25, sweepingRange);
+        return target.getBoundingBox().inflate(sweepingRange, SWEEPING_RANGE_Y, sweepingRange);
     }
 
     @Definition(id = "distanceToSqr", method = "Lnet/minecraft/world/entity/player/Player;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D")
     @Expression("this.distanceToSqr(?) < ?")
     @ModifyExpressionValue(method = "doSweepAttack", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean redirectSweepDistanceCheck(boolean original, @Local LivingEntity sweepTarget) {
+    private boolean modifySweepDistanceCheck(boolean original, @Local(name = "nearby") LivingEntity nearby) {
         double yRot = Math.toRadians(-getYRot() + 90);
-        double distance = Math.cos(yRot) * (getX() - sweepTarget.getX()) - Math.sin(yRot) * (getZ() - sweepTarget.getZ());
+        double distance = Math.cos(yRot) * (getX() - nearby.getX()) - Math.sin(yRot) * (getZ() - nearby.getZ());
 
-        return distance > 0 && distance < entityAttackRange().effectiveMaxRange(getThis());
+        return distance > 0 && distance < getAttackRangeWith(getItemInHand(InteractionHand.MAIN_HAND)).effectiveMaxRange(getThis());
     }
 
     @ModifyArgs(method = "doSweepAttack", at = @At(value = "INVOKE",
@@ -126,26 +136,31 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T,
     }
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isSprinting()Z"))
-    private void setCanDisableBlockingOnAttack(Entity target, CallbackInfo ci, @Local boolean isCharged) {
-        canDisableBlocking = isCharged;
+    private void setCanDisableBlockingOnAttack(Entity entity, CallbackInfo ci, @Local(name = "attackingItemStack") ItemStack attackingItemStack,
+                                               @Local(name = "fullStrengthAttack") boolean fullStrengthAttack) {
+        Weapon weapon = attackingItemStack.get(DataComponents.WEAPON);
+        canDisableBlocking = weapon == null || !VPWeapon.cast(weapon).isDisableBlockingOnFullStrengthAttack() || fullStrengthAttack;
     }
 
-    @Inject(method = "stabAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getItemBySlot(Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;"))
-    private void setCanDisableBlockingOnStab(EquipmentSlot equipmentSlot, Entity target, float damage, boolean canDamage, boolean canKnockback,
-                                             boolean canDismount, CallbackInfoReturnable<Boolean> cir) {
-        canDisableBlocking = true;
+    @Inject(method = "stabAttack", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;"))
+    private void setCanDisableBlockingOnStab(EquipmentSlot slot, Entity target, float baseDamage, boolean dealsDamage, boolean dealsKnockback,
+                                             boolean dismounts, CallbackInfoReturnable<Boolean> cir, @Local(name = "weaponItem") ItemStack weaponItem) {
+        Weapon weapon = weaponItem.get(DataComponents.WEAPON);
+        canDisableBlocking = weapon == null || !VPWeapon.cast(weapon).isDisableBlockingOnFullStrengthAttack()
+                || getAttackStrengthScale(0.5F) > FULL_STRENGTH_ATTACK_THRESHOLD;
     }
 
-    @Definition(id = "f1", local = @Local(type = float.class, ordinal = 1))
-    @Expression("f1")
+    @Definition(id = "scale", local = @Local(type = float.class, name = "scale"))
+    @Expression("scale")
     @ModifyExpressionValue(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)F",
             at = @At(value = "MIXINEXTRAS:EXPRESSION"))
     private float modifyMiningFatigueMultiplier(float multiplier) {
         MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.MINING_FATIGUE));
 
-        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getLevelBasedValuePreset()
-                .map(levelBasedValuePreset -> 1 + levelBasedValuePreset.calculate(MINING_FATIGUE_DEFINED_VALUE_NAME,
-                        mobEffectInstance.getAmplifier() + 1))
+        return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
+                .calculate(MINING_SPEED_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
+                .map(value -> value + 1)
                 .orElse(multiplier);
     }
 }

@@ -1,0 +1,29 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cartographer/level_3",
+  "trades": [
+    [
+      "vanillaplus:cartographer/3/buy_glow_ink_sac",
+      [
+        "vanillaplus:cartographer/3/sell_map_village_plains",
+        "vanillaplus:cartographer/3/sell_map_village_taiga",
+        "vanillaplus:cartographer/3/sell_map_village_snowy",
+        "vanillaplus:cartographer/3/sell_map_village_desert",
+        "vanillaplus:cartographer/3/sell_map_village_savanna"
+      ]
+    ],
+    [
+      [
+        "vanillaplus:cartographer/3/buy_oak_sign",
+        "vanillaplus:cartographer/3/buy_birch_sign",
+        "vanillaplus:cartographer/3/buy_cherry_sign",
+        "vanillaplus:cartographer/3/buy_spruce_sign",
+        "vanillaplus:cartographer/3/buy_jungle_sign",
+        "vanillaplus:cartographer/3/buy_bamboo_sign",
+        "vanillaplus:cartographer/3/buy_acacia_sign",
+        "vanillaplus:cartographer/3/buy_mangrove_sign"
+      ],
+      "vanillaplus:cartographer/3/sell_map_buried_treasure"
+    ]
+  ]
+}

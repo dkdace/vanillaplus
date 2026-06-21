@@ -1,0 +1,22 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cartographer/level_2",
+  "trades": [
+    [
+      "vanillaplus:cartographer/2/buy_ink_sac",
+      "vanillaplus:cartographer/2/sell_item_frame"
+    ],
+    [
+      "vanillaplus:cartographer/2/buy_compass",
+      [
+        "vanillaplus:cartographer/2/sell_map_mineshaft",
+        "vanillaplus:cartographer/2/sell_map_pillager_outpost",
+        "vanillaplus:cartographer/2/sell_map_trail_ruins",
+        "vanillaplus:cartographer/2/sell_map_explorer_swamp",
+        "vanillaplus:cartographer/2/sell_map_explorer_snowy",
+        "vanillaplus:cartographer/2/sell_map_explorer_jungle",
+        "vanillaplus:cartographer/2/sell_map_explorer_desert"
+      ]
+    ]
+  ]
+}

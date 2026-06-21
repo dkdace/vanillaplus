@@ -1,0 +1,29 @@
+{
+  "item_components": {
+    "vanillaplus:smelting_damage_ratio": 0.21,
+    "vanillaplus:enchantment_level_multiplier": 2,
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 2.0,
+        "id": "minecraft:armor.helmet",
+        "operation": "add_value",
+        "slot": "head"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 0.0,
+        "id": "minecraft:armor.helmet",
+        "operation": "add_value",
+        "slot": "head"
+      },
+      {
+        "type": "vanillaplus:food_exhaustion_multiplier",
+        "amount": 0.01,
+        "id": "minecraft:armor.helmet",
+        "operation": "add_multiplied_base",
+        "slot": "head"
+      }
+    ]
+  }
+}

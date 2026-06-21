@@ -15,6 +15,6 @@ public abstract class OminousBottleAmplifierMixin implements VPMixin<OminousBott
     public static final int MAX_AMPLIFIER = Byte.MAX_VALUE;
     @Shadow
     @Final
-    public static final Codec<OminousBottleAmplifier> CODEC =
-            ExtraCodecs.intRange(0, MAX_AMPLIFIER).xmap(OminousBottleAmplifier::new, OminousBottleAmplifier::value);
+    public static final Codec<OminousBottleAmplifier> CODEC = ExtraCodecs.intRange(0, MAX_AMPLIFIER)
+            .xmap(OminousBottleAmplifier::new, OminousBottleAmplifier::value);
 }

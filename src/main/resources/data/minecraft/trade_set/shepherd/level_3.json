@@ -1,0 +1,31 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/shepherd/level_3",
+  "trades": [
+    [
+      "vanillaplus:shepherd/3/buy_wheat",
+      [
+        "vanillaplus:shepherd/3/sell_white_bed",
+        "vanillaplus:shepherd/3/sell_light_gray_bed",
+        "vanillaplus:shepherd/3/sell_gray_bed",
+        "vanillaplus:shepherd/3/sell_black_bed",
+        "vanillaplus:shepherd/3/sell_brown_bed",
+        "vanillaplus:shepherd/3/sell_red_bed",
+        "vanillaplus:shepherd/3/sell_orange_bed",
+        "vanillaplus:shepherd/3/sell_yellow_bed",
+        "vanillaplus:shepherd/3/sell_lime_bed",
+        "vanillaplus:shepherd/3/sell_green_bed",
+        "vanillaplus:shepherd/3/sell_cyan_bed",
+        "vanillaplus:shepherd/3/sell_light_blue_bed",
+        "vanillaplus:shepherd/3/sell_blue_bed",
+        "vanillaplus:shepherd/3/sell_purple_bed",
+        "vanillaplus:shepherd/3/sell_magenta_bed",
+        "vanillaplus:shepherd/3/sell_pink_bed"
+      ]
+    ],
+    [
+      "vanillaplus:shepherd/3/buy_lead",
+      "vanillaplus:shepherd/3/sell_enchanted_shears"
+    ]
+  ]
+}

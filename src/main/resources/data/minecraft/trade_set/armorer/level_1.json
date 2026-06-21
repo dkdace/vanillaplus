@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/armorer/level_1",
+  "trades": [
+    [
+      "vanillaplus:armorer/1/buy_coal",
+      [
+        "vanillaplus:armorer/1/sell_iron_helmet",
+        "vanillaplus:armorer/1/sell_iron_boots"
+      ]
+    ],
+    [
+      "vanillaplus:armorer/1/buy_raw_iron",
+      [
+        "vanillaplus:armorer/1/sell_iron_chestplate",
+        "vanillaplus:armorer/1/sell_iron_leggings"
+      ]
+    ]
+  ]
+}

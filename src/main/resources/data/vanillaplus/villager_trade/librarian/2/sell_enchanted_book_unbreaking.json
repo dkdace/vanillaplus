@@ -1,0 +1,40 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 6
+  },
+  "additional_wants": {
+    "id": "minecraft:book"
+  },
+  "gives": {
+    "id": "minecraft:enchanted_book"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_enchantments",
+      "enchantments": {
+        "minecraft:unbreaking": 1
+      }
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:enchanted_book",
+        "predicates": {
+          "minecraft:stored_enchantments": [
+            {
+              "levels": 1
+            }
+          ]
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 14,
+  "multiply_xp_by_cost": true
+}

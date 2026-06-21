@@ -1,0 +1,36 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/leatherworker/level_2",
+  "trades": [
+    [
+      "vanillaplus:leatherworker/2/buy_rabbit_hide",
+      "vanillaplus:leatherworker/2/sell_saddle"
+    ],
+    [
+      [
+        "vanillaplus:leatherworker/2/buy_white_dye",
+        "vanillaplus:leatherworker/2/buy_light_gray_dye",
+        "vanillaplus:leatherworker/2/buy_gray_dye",
+        "vanillaplus:leatherworker/2/buy_black_dye",
+        "vanillaplus:leatherworker/2/buy_brown_dye",
+        "vanillaplus:leatherworker/2/buy_red_dye",
+        "vanillaplus:leatherworker/2/buy_orange_dye",
+        "vanillaplus:leatherworker/2/buy_yellow_dye",
+        "vanillaplus:leatherworker/2/buy_lime_dye",
+        "vanillaplus:leatherworker/2/buy_green_dye",
+        "vanillaplus:leatherworker/2/buy_cyan_dye",
+        "vanillaplus:leatherworker/2/buy_light_blue_dye",
+        "vanillaplus:leatherworker/2/buy_blue_dye",
+        "vanillaplus:leatherworker/2/buy_purple_dye",
+        "vanillaplus:leatherworker/2/buy_magenta_dye",
+        "vanillaplus:leatherworker/2/buy_pink_dye"
+      ],
+      [
+        "vanillaplus:leatherworker/2/sell_enchanted_leather_helmet",
+        "vanillaplus:leatherworker/2/sell_enchanted_leather_boots",
+        "vanillaplus:leatherworker/2/sell_enchanted_leather_chestplate",
+        "vanillaplus:leatherworker/2/sell_enchanted_leather_leggings"
+      ]
+    ]
+  ]
+}

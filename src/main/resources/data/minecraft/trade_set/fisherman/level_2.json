@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fisherman/level_2",
+  "trades": [
+    [
+      "vanillaplus:fisherman/2/buy_string",
+      "vanillaplus:fisherman/2/sell_dried_kelp_block"
+    ],
+    [
+      "vanillaplus:fisherman/2/buy_kelp",
+      "vanillaplus:fisherman/2/sell_cooked_salmon"
+    ]
+  ]
+}

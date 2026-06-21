@@ -1,0 +1,19 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "additional_wants": {
+    "id": "minecraft:bucket"
+  },
+  "gives": {
+    "id": "minecraft:tropical_fish_bucket"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "vanillaplus:set_random_tropical_fish"
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 21
+}

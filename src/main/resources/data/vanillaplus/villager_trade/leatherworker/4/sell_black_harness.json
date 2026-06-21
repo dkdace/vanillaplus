@@ -1,0 +1,13 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "minecraft:black_harness"
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 28,
+  "multiply_xp_by_cost": true
+}

@@ -1,0 +1,17 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/farmer/level_1",
+  "trades": [
+    [
+      [
+        "vanillaplus:farmer/1/buy_wheat_seeds",
+        "vanillaplus:farmer/1/buy_beetroot_seeds"
+      ],
+      "vanillaplus:farmer/1/sell_cookie"
+    ],
+    [
+      "vanillaplus:farmer/1/buy_bone_meal",
+      "vanillaplus:farmer/1/sell_bread"
+    ]
+  ]
+}

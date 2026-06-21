@@ -1,12 +1,9 @@
 package com.dace.vanillaplus.mixin.advancements.criterion;
 
-import com.dace.vanillaplus.extension.advancements.critereon.VPLocationPredicate;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.FluidPredicate;
 import net.minecraft.advancements.criterion.LightPredicate;
@@ -31,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(LocationPredicate.class)
-public abstract class LocationPredicateMixin implements VPLocationPredicate {
+public abstract class LocationPredicateMixin {
     @Shadow
     @Final
     public static final Codec<LocationPredicate> CODEC = RecordCodecBuilder.create(instance -> instance
@@ -45,11 +42,9 @@ public abstract class LocationPredicateMixin implements VPLocationPredicate {
                     FluidPredicate.CODEC.optionalFieldOf("fluid").forGetter(LocationPredicate::fluid),
                     Codec.BOOL.optionalFieldOf("can_see_sky").forGetter(LocationPredicate::canSeeSky),
                     Biome.Precipitation.CODEC.optionalFieldOf("precipitation")
-                            .forGetter(locationPredicate -> VPLocationPredicate.cast(locationPredicate).getPrecipitation()))
+                            .forGetter(locationPredicate -> ((LocationPredicateMixin) (Object) locationPredicate).precipitation))
             .apply(instance, LocationPredicateMixin::create));
     @Unique
-    @Getter
-    @Setter
     private Optional<Biome.Precipitation> precipitation = Optional.empty();
 
     @Unique
@@ -59,17 +54,16 @@ public abstract class LocationPredicateMixin implements VPLocationPredicate {
                                             Optional<Boolean> smokey, Optional<LightPredicate> light, Optional<BlockPredicate> block,
                                             Optional<FluidPredicate> fluid, Optional<Boolean> canSeeSky, Optional<Biome.Precipitation> precipitation) {
         LocationPredicate locationPredicate = new LocationPredicate(position, biomes, structures, dimension, smokey, light, block, fluid, canSeeSky);
-        VPLocationPredicate.cast(locationPredicate).setPrecipitation(precipitation);
+        ((LocationPredicateMixin) (Object) locationPredicate).precipitation = precipitation;
 
         return locationPredicate;
     }
 
     @Inject(method = "matches", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;isLoaded(Lnet/minecraft/core/BlockPos;)Z",
             shift = At.Shift.AFTER), cancellable = true)
-    private void checkExtraConditions(ServerLevel serverLevel, double x, double y, double z, CallbackInfoReturnable<Boolean> cir,
-                                      @Local BlockPos blockPos) {
-        if (precipitation.map(target -> !serverLevel.isLoaded(blockPos) || target != serverLevel.precipitationAt(blockPos))
-                .orElse(false))
+    private void checkExtraConditions(ServerLevel level, double x, double y, double z, CallbackInfoReturnable<Boolean> cir,
+                                      @Local(name = "pos") BlockPos pos) {
+        if (precipitation.map(target -> !level.isLoaded(pos) || target != level.precipitationAt(pos)).orElse(false))
             cir.setReturnValue(false);
     }
 }

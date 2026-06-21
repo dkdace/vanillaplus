@@ -1,0 +1,25 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/farmer/level_3",
+  "trades": [
+    [
+      [
+        "vanillaplus:farmer/3/buy_pumpkin",
+        "vanillaplus:farmer/3/buy_melon"
+      ],
+      "vanillaplus:farmer/3/sell_baked_potato"
+    ],
+    [
+      [
+        "vanillaplus:farmer/3/buy_oak_sapling",
+        "vanillaplus:farmer/3/buy_birch_sapling",
+        "vanillaplus:farmer/3/buy_cherry_sapling",
+        "vanillaplus:farmer/3/buy_spruce_sapling",
+        "vanillaplus:farmer/3/buy_jungle_sapling",
+        "vanillaplus:farmer/3/buy_acacia_sapling",
+        "vanillaplus:farmer/3/buy_mangrove_propagule"
+      ],
+      "vanillaplus:farmer/3/sell_apple"
+    ]
+  ]
+}

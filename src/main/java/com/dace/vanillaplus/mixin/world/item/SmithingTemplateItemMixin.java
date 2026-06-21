@@ -1,8 +1,7 @@
 package com.dace.vanillaplus.mixin.world.item;
 
-import com.dace.vanillaplus.data.modifier.ItemModifier;
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimPattern;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -20,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(SmithingTemplateItem.class)
-public abstract class SmithingTemplateItemMixin extends ItemMixin<SmithingTemplateItem, ItemModifier> {
+public abstract class SmithingTemplateItemMixin extends ItemMixin<SmithingTemplateItem> {
     @Inject(method = "appendHoverText", at = @At(value = "FIELD",
             target = "Lnet/minecraft/network/chat/CommonComponents;EMPTY:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC))
-    private void addEffectTooltip(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay,
-                                  Consumer<Component> componentConsumer, TooltipFlag tooltipFlag, CallbackInfo ci) {
+    private void addEffectTooltip(ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder,
+                                  TooltipFlag tooltipFlag, CallbackInfo ci) {
         Holder<TrimPattern> trimPatternHolder = itemStack.get(VPDataComponentTypes.PROVIDES_TRIM_PATTERN.get());
         if (trimPatternHolder != null)
-            VPTrimPattern.cast(trimPatternHolder.value()).applyTooltip(componentConsumer);
+            VPTrimPattern.cast(trimPatternHolder.value()).applyTooltip(builder);
     }
 }

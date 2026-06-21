@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "vanillaplus:elixir_of_the_earth",
+  "ingredient": "minecraft:glowstone_dust",
+  "result": "vanillaplus:strong_elixir_of_the_earth"
+}

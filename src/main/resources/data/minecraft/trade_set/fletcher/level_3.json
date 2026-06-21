@@ -1,0 +1,14 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fletcher/level_3",
+  "trades": [
+    [
+      "vanillaplus:fletcher/3/buy_glowstone_dust",
+      "vanillaplus:fletcher/3/sell_target"
+    ],
+    [
+      "vanillaplus:fletcher/3/buy_tripwire_hook",
+      "vanillaplus:fletcher/3/sell_enchanted_bow"
+    ]
+  ]
+}

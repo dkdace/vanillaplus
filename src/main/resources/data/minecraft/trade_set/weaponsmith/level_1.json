@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/weaponsmith/level_1",
+  "trades": [
+    [
+      "vanillaplus:weaponsmith/1/buy_coal",
+      [
+        "vanillaplus:weaponsmith/1/sell_iron_spear",
+        "vanillaplus:weaponsmith/1/sell_iron_sword_1"
+      ]
+    ],
+    [
+      "vanillaplus:weaponsmith/1/buy_raw_iron",
+      [
+        "vanillaplus:weaponsmith/1/sell_iron_sword_2",
+        "vanillaplus:weaponsmith/1/sell_iron_axe"
+      ]
+    ]
+  ]
+}

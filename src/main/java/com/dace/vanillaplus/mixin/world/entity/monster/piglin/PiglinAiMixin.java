@@ -2,6 +2,9 @@ package com.dace.vanillaplus.mixin.world.entity.monster.piglin;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.CrossbowMobConfig;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
@@ -16,16 +19,18 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PiglinAi.class)
 public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
-    @Redirect(method = "getBarterResponseItems", at = @At(value = "INVOKE",
+    @WrapOperation(method = "getBarterResponseItems", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/storage/loot/LootTable;getRandomItems(Lnet/minecraft/world/level/storage/loot/LootParams;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"))
-    private static ObjectArrayList<ItemStack> modifyBarteringResult(LootTable lootTable, LootParams lootParams, @Local(argsOnly = true) Piglin piglin) {
-        Player player = piglin.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).orElse(null);
+    private static ObjectArrayList<ItemStack> modifyBarteringResult(LootTable instance, LootParams params,
+                                                                    Operation<ObjectArrayList<ItemStack>> original,
+                                                                    @Local(argsOnly = true) Piglin body) {
+        Player player = body.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).orElse(null);
         if (player == null)
-            return lootTable.getRandomItems(lootParams);
+            return original.call(instance, params);
 
         MutableFloat value = new MutableFloat(1);
 
@@ -36,12 +41,19 @@ public abstract class PiglinAiMixin implements VPMixin<PiglinAi> {
         ObjectArrayList<ItemStack> itemStacks = new ObjectArrayList<>();
 
         int rolls = value.intValue();
-        if (piglin.getRandom().nextFloat() < value.floatValue() - rolls)
+        if (body.getRandom().nextFloat() < value.floatValue() - rolls)
             rolls++;
 
         for (int i = 0; i < rolls; i++)
-            itemStacks.addAll(lootTable.getRandomItems(lootParams));
+            itemStacks.addAll(original.call(instance, params));
 
         return itemStacks;
+    }
+
+    @ModifyArg(method = "initFightActivity", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ai/behavior/BackUpIfTooClose;create(IF)Lnet/minecraft/world/entity/ai/behavior/OneShot;"),
+            index = 0)
+    private static int modifyBackupDistance(int tooCloseDistance, @Local(argsOnly = true) Piglin body) {
+        return CrossbowMobConfig.get(body).backupDistance().orElse(tooCloseDistance);
     }
 }

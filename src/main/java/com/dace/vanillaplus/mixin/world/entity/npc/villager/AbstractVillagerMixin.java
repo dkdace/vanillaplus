@@ -1,17 +1,97 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.extension.world.item.trading.VPMerchantOffer;
+import com.dace.vanillaplus.extension.world.item.trading.VPTradeSet;
 import com.dace.vanillaplus.mixin.world.entity.MobMixin;
+import com.dace.vanillaplus.world.TradeSetOffer;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
+import lombok.NonNull;
+import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Util;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
-import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.item.trading.*;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin<T extends AbstractVillager, U extends EntityModifier.LivingEntityModifier> extends MobMixin<T, U> {
+public abstract class AbstractVillagerMixin<T extends AbstractVillager> extends MobMixin<T> implements Merchant, InventoryCarrier {
+    @Unique
+    private static final int TRADE_XP_BASE = 3;
+    @Unique
+    private static final int TRADE_XP_RANDOM = 4;
+
     @Shadow
+    protected abstract void addOffersFromTradeSet(ServerLevel level, MerchantOffers offers, ResourceKey<TradeSet> resourceKey);
+
+    @Shadow
+    @NonNull
     public abstract MerchantOffers getOffers();
 
     @Shadow
     public abstract boolean isTrading();
+
+    @Unique
+    protected int getTradePlayerXP(int xp, @NonNull MerchantOffer offer) {
+        if (!VPMerchantOffer.cast(offer).isMultiplyRewardXPByCost())
+            return xp;
+
+        int count = offer.getItemCostA().count();
+        return TRADE_XP_BASE * count + random.nextInt(TRADE_XP_RANDOM * count);
+    }
+
+    @WrapWithCondition(method = "addOffersFromTradeSet", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;addOffersFromItemListings(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/core/HolderSet;I)V"))
+    private boolean redirectAddOffer(LootContext lootContext, MerchantOffers merchantOffers, HolderSet<VillagerTrade> potentialOffers,
+                                     int numberOfOffers, @Local(name = "tradeSet") TradeSet tradeSet) {
+        List<TradeSetOffer> tradeSetOffers = VPTradeSet.cast(tradeSet).getTradeSetOffers();
+        if (tradeSetOffers == null)
+            return true;
+
+        int offersFound = 0;
+        while (offersFound < numberOfOffers) {
+            TradeSetOffer tradeSetOffer = Util.getRandom(tradeSetOffers, lootContext.getRandom());
+            MerchantOffer merchantOffer = tradeSetOffer.getRandomMerchantOffer(lootContext);
+
+            if (merchantOffer != null) {
+                merchantOffers.add(merchantOffer);
+                offersFound++;
+            }
+        }
+
+        return false;
+    }
+
+    @WrapWithCondition(method = "addOffersFromTradeSet", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;addOffersFromItemListingsWithoutDuplicates(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/core/HolderSet;I)V"))
+    private boolean redirectAddOfferWithoutDuplicates(LootContext lootContext, MerchantOffers merchantOffers, HolderSet<VillagerTrade> potentialOffers,
+                                                      int numberOfOffers, @Local(name = "tradeSet") TradeSet tradeSet) {
+        List<TradeSetOffer> tradeSetOffers = VPTradeSet.cast(tradeSet).getTradeSetOffers();
+        if (tradeSetOffers == null)
+            return true;
+
+        int offersFound = 0;
+        List<TradeSetOffer> list = new ArrayList<>(tradeSetOffers);
+
+        while (offersFound < numberOfOffers && !list.isEmpty()) {
+            TradeSetOffer tradeSetOffer = list.remove(lootContext.getRandom().nextInt(list.size()));
+            MerchantOffer merchantOffer = tradeSetOffer.getRandomMerchantOffer(lootContext);
+
+            if (merchantOffer != null) {
+                merchantOffers.add(merchantOffer);
+                offersFound++;
+            }
+        }
+
+        return false;
+    }
 }

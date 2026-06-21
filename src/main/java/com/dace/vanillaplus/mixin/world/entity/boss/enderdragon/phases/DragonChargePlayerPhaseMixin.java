@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -30,30 +30,9 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     private static final int BREATH_FLAME_LANDING_THRESHOLD = 8;
 
     @Unique
-    private int flameTicks;
+    private int flameTicks = 0;
     @Unique
-    private boolean isFlaming;
-
-    @Override
-    protected void onClientTick(CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().isEmpty())
-            return;
-
-        if (flameTicks++ < ROAR_DURATION)
-            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
-                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
-
-        playParticles();
-    }
-
-    @Override
-    public float getTurnSpeed() {
-        if (getVPEnderDragon().getDataModifier().isEmpty())
-            return super.getTurnSpeed();
-
-        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
-        return Math.min(distance, 40) / distance;
-    }
+    private boolean isFlaming = false;
 
     @Unique
     private void playParticles() {
@@ -73,7 +52,8 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
     }
 
     @Unique
-    private void createFlame(@NonNull EntityModifier.EnderDragonModifier.PhaseInfo.Charge charge, ServerLevel serverLevel, Vec3 pos, float radius) {
+    private void createFlame(@NonNull EnderDragonConfig.PhaseInfo.Charge charge, @NonNull ServerLevel serverLevel, @NonNull Vec3 pos) {
+        float radius = charge.flameRadius();
         double x = dragon.head.getX() + pos.x() * radius / 2;
         double y = dragon.head.getY();
         double z = dragon.head.getZ() + pos.z() * radius / 2;
@@ -96,7 +76,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         AreaEffectCloud flame = new AreaEffectCloud(serverLevel, pos.x(), pos.y(), pos.z());
         flame.setOwner(dragon);
         flame.setRadius(radius);
-        flame.setDuration(charge.getFlameDuration());
+        flame.setDuration(charge.flameDuration());
         flame.setCustomParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1));
         flame.setPotionDurationScale(0.25F);
         flame.addEffect(getVPEnderDragon().getFlameMobEffectInstance());
@@ -104,21 +84,40 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
         serverLevel.addFreshEntity(flame);
     }
 
-    @Definition(id = "d0", local = @Local(type = double.class))
-    @Expression("d0 < ?")
+    @Override
+    protected void onClientTick(CallbackInfo ci) {
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
+            return;
+
+        if (flameTicks++ < ROAR_DURATION)
+            dragon.level().playLocalSound(dragon.getX(), dragon.getY(), dragon.getZ(), SoundEvents.ENDER_DRAGON_GROWL, dragon.getSoundSource(),
+                    2.5F, 0.8F + dragon.getRandom().nextFloat() * 0.3F, false);
+
+        playParticles();
+    }
+
+    @Override
+    public float getTurnSpeed() {
+        if (EnderDragonConfig.get().phaseInfo().isEmpty())
+            return super.getTurnSpeed();
+
+        float distance = (float) (dragon.getDeltaMovement().horizontalDistance() + 1);
+        return Math.min(distance, 40) / distance;
+    }
+
+    @Definition(id = "distToTarget", local = @Local(type = double.class, name = "distToTarget"))
+    @Expression("distToTarget < ?")
     @Inject(method = "doServerTick", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
-    private void performBreathAttack(ServerLevel serverLevel, CallbackInfo ci, @Local double distanceToSqr) {
-        getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
-            if (distanceToSqr < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
+    private void performBreathAttack(ServerLevel level, CallbackInfo ci, @Local(name = "distToTarget") double distToTarget) {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
+            if (distToTarget < BREATH_START_DISTANCE * BREATH_START_DISTANCE)
                 isFlaming = true;
 
             if (!isFlaming || flameTicks++ % 4 != 0)
                 return;
 
             Vec3 pos = new Vec3(dragon.head.getX() - dragon.getX(), 0, dragon.head.getZ() - dragon.getZ()).normalize();
-            float radius = enderDragonModifier.getPhaseInfo().getCharge().getFlameRadius();
-
-            createFlame(enderDragonModifier.getPhaseInfo().getCharge(), serverLevel, pos, radius);
+            createFlame(phaseInfo.charge(), level, pos);
         });
     }
 

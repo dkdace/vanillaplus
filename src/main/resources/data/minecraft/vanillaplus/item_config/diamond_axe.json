@@ -1,0 +1,9 @@
+{
+  "item_components": {
+    "minecraft:weapon": {
+      "disable_blocking_for_seconds": 2.5,
+      "item_damage_per_attack": 2,
+      "disable_blocking_on_full_strength_attack": true
+    }
+  }
+}

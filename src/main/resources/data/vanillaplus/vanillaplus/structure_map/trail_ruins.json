@@ -1,8 +1,0 @@
-{
-  "description": {
-    "translate": "filled_map.trail_ruins"
-  },
-  "structure_tag": "#vanillaplus:trail_ruins",
-  "color": 13411231,
-  "decoration_type": "minecraft:red_x"
-}

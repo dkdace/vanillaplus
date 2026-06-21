@@ -1,14 +1,14 @@
 package com.dace.vanillaplus.mixin.world.level.block;
 
-import com.dace.vanillaplus.data.modifier.BlockModifier;
+import com.dace.vanillaplus.data.VPDataComponentMap;
 import com.dace.vanillaplus.extension.world.level.block.VPBlock;
+import com.dace.vanillaplus.world.block.BlockConfig;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,36 +18,36 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Mixin(Block.class)
-public abstract class BlockMixin<T extends Block, U extends BlockModifier> implements VPBlock<T, U> {
+public abstract class BlockMixin<T extends Block> implements VPBlock<T> {
     @Unique
     @Nullable
-    private U dataModifier;
+    private BlockConfig config;
+
+    @Shadow
+    public abstract void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random);
+
+    @Shadow
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack destroyedWith) {
+    }
 
     @Override
     @NonNull
-    public Optional<U> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
+    public final VPDataComponentMap getConfigComponents() {
+        return getConfig().components();
+    }
+
+    @Override
+    @NonNull
+    public final BlockConfig getConfig() {
+        return Objects.requireNonNull(config, "Not initialized yet");
     }
 
     @Override
     @MustBeInvokedByOverriders
-    public void setDataModifier(@Nullable U dataModifier) {
-        this.dataModifier = dataModifier;
-    }
-
-    @Shadow
-    public abstract void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource);
-
-    @Shadow
-    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity,
-                              ItemStack tool) {
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return getDataModifier().map(blockModifier -> silkTouchLevel == 0 ? blockModifier.getXpRange().sample(randomSource) : 0).orElse(0);
+    public void setConfig(@Nullable BlockConfig config) {
+        this.config = config == null ? BlockConfig.DEFAULT : config;
     }
 }

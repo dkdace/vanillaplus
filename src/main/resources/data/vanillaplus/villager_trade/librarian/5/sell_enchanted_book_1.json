@@ -1,0 +1,43 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 0
+  },
+  "additional_wants": {
+    "id": "minecraft:book"
+  },
+  "gives": {
+    "id": "minecraft:book"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:enchant_with_levels",
+      "include_additional_cost_component": true,
+      "additional_cost_multiplier": 1.2,
+      "levels": {
+        "type": "minecraft:uniform",
+        "max": 30,
+        "min": 20
+      },
+      "options": "#minecraft:non_treasure"
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:enchanted_book",
+        "predicates": {
+          "minecraft:stored_enchantments": [
+            {}
+          ]
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

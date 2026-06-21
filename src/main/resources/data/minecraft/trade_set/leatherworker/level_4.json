@@ -1,0 +1,33 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/leatherworker/level_4",
+  "trades": [
+    [
+      [
+        "vanillaplus:leatherworker/4/sell_white_harness",
+        "vanillaplus:leatherworker/4/sell_light_gray_harness",
+        "vanillaplus:leatherworker/4/sell_gray_harness",
+        "vanillaplus:leatherworker/4/sell_black_harness",
+        "vanillaplus:leatherworker/4/sell_brown_harness",
+        "vanillaplus:leatherworker/4/sell_red_harness",
+        "vanillaplus:leatherworker/4/sell_orange_harness",
+        "vanillaplus:leatherworker/4/sell_yellow_harness",
+        "vanillaplus:leatherworker/4/sell_lime_harness",
+        "vanillaplus:leatherworker/4/sell_green_harness",
+        "vanillaplus:leatherworker/4/sell_cyan_harness",
+        "vanillaplus:leatherworker/4/sell_light_blue_harness",
+        "vanillaplus:leatherworker/4/sell_blue_harness",
+        "vanillaplus:leatherworker/4/sell_purple_harness",
+        "vanillaplus:leatherworker/4/sell_magenta_harness",
+        "vanillaplus:leatherworker/4/sell_pink_harness"
+      ],
+      "vanillaplus:leatherworker/4/sell_turtle_helmet"
+    ],
+    [
+      "vanillaplus:leatherworker/4/sell_enchanted_leather_helmet",
+      "vanillaplus:leatherworker/4/sell_enchanted_leather_boots",
+      "vanillaplus:leatherworker/4/sell_enchanted_leather_chestplate",
+      "vanillaplus:leatherworker/4/sell_enchanted_leather_leggings"
+    ]
+  ]
+}

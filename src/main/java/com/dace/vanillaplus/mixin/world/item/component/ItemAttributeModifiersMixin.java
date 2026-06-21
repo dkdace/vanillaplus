@@ -39,14 +39,14 @@ public abstract class ItemAttributeModifiersMixin implements VPMixin<ItemAttribu
         @Inject(method = "apply", at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;operation()Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;",
                 ordinal = 0))
-        private void applyExtraBaseAttributes(Consumer<Component> componentConsumer, @Nullable Player player, Holder<Attribute> attributeHolder,
-                                              AttributeModifier attributeModifier, CallbackInfo ci, @Local LocalDoubleRef amount,
-                                              @Local LocalBooleanRef flag) {
-            if (player == null || !attributeModifier.is(BASE_SWEEPING_DAMAGE_RATIO) && !attributeModifier.is(BASE_SWEEPING_RANGE))
+        private void applyExtraBaseAttributes(Consumer<Component> consumer, @Nullable Player player, Holder<Attribute> attribute,
+                                              AttributeModifier modifier, CallbackInfo ci, @Local(name = "amount") LocalDoubleRef amount,
+                                              @Local(name = "displayWithBase") LocalBooleanRef displayWithBase) {
+            if (player == null || !modifier.is(BASE_SWEEPING_DAMAGE_RATIO) && !modifier.is(BASE_SWEEPING_RANGE))
                 return;
 
-            amount.set(amount.get() + player.getAttributeBaseValue(attributeHolder));
-            flag.set(true);
+            amount.set(amount.get() + player.getAttributeBaseValue(attribute));
+            displayWithBase.set(true);
         }
     }
 }

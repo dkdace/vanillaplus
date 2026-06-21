@@ -234,6 +234,20 @@
       },
       "trigger": "minecraft:bred_animals"
     },
+    "minecraft:nautilus": {
+      "conditions": {
+        "child": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:nautilus"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:bred_animals"
+    },
     "minecraft:ocelot": {
       "conditions": {
         "child": [
@@ -460,6 +474,9 @@
       "minecraft:armadillo"
     ],
     [
+      "minecraft:nautilus"
+    ],
+    [
       "minecraft:turtle"
     ],
     [
@@ -470,7 +487,6 @@
     ]
   ],
   "rewards": {
-    "_experience": 100,
     "experience": 800
   },
   "sends_telemetry_event": true

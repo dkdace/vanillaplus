@@ -1,0 +1,19 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/leatherworker/level_3",
+  "trades": [
+    [
+      "vanillaplus:leatherworker/3/buy_turtle_scute",
+      "vanillaplus:leatherworker/3/sell_leather_horse_armor"
+    ],
+    [
+      "vanillaplus:leatherworker/3/buy_water_bucket",
+      [
+        "vanillaplus:leatherworker/3/sell_enchanted_leather_helmet",
+        "vanillaplus:leatherworker/3/sell_enchanted_leather_boots",
+        "vanillaplus:leatherworker/3/sell_enchanted_leather_chestplate",
+        "vanillaplus:leatherworker/3/sell_enchanted_leather_leggings"
+      ]
+    ]
+  ]
+}

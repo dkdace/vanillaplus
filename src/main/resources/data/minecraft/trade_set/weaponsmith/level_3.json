@@ -1,0 +1,20 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/weaponsmith/level_3",
+  "trades": [
+    [
+      "vanillaplus:weaponsmith/3/buy_diamond",
+      [
+        "vanillaplus:weaponsmith/3/sell_enchanted_iron_spear",
+        "vanillaplus:weaponsmith/3/sell_enchanted_iron_sword_1"
+      ]
+    ],
+    [
+      "vanillaplus:weaponsmith/3/buy_gunpowder",
+      [
+        "vanillaplus:weaponsmith/3/sell_enchanted_iron_sword_2",
+        "vanillaplus:weaponsmith/3/sell_enchanted_iron_axe"
+      ]
+    ]
+  ]
+}

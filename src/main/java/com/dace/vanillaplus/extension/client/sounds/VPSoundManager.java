@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.extension.client.sounds;
 
 import com.dace.vanillaplus.extension.VPMixin;
+import lombok.NonNull;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
-import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SoundManager}를 확장하는 인터페이스.

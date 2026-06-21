@@ -1,10 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity.projectile.arrow;
 
-import com.dace.vanillaplus.data.modifier.EntityModifier;
-import com.dace.vanillaplus.data.modifier.ItemModifier;
-import com.dace.vanillaplus.extension.VPModifiableData;
+import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.mixin.world.entity.projectile.ProjectileMixin;
-import com.dace.vanillaplus.registryobject.VPAttributes;
+import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -29,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends EntityModifier> extends ProjectileMixin<T, U> {
+public abstract class AbstractArrowMixin<T extends AbstractArrow> extends ProjectileMixin<T> {
     @Shadow
     private double baseDamage;
     @Shadow
@@ -46,23 +44,22 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends Enti
 
     @ModifyExpressionValue(method = "doKnockback", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    private double modifyKnockbackStrength(double original, @Local(argsOnly = true) LivingEntity livingEntity,
-                                           @Local(argsOnly = true) DamageSource damageSource) {
-        return VPAttributes.getFinalKnockbackResistance(livingEntity, damageSource);
+    private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) LivingEntity mob,
+                                             @Local(argsOnly = true) DamageSource damageSource) {
+        return VPLivingEntity.cast(mob).getFinalKnockbackResistance(knockbackResistance, damageSource);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;DDDLnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V",
             at = @At("TAIL"))
-    private void modifyBaseDamage(EntityType<? extends AbstractArrow> entityType, double x, double y, double z, Level level, ItemStack pickupItemStack,
-                                  ItemStack weaponItemStack, CallbackInfo ci) {
-        if (weaponItemStack != null)
-            VPModifiableData.getDataModifier(weaponItemStack.getItem(), ItemModifier.ProjectileWeaponModifier.class)
-                    .ifPresent(projectileWeaponModifier -> this.baseDamage = projectileWeaponModifier.getBaseDamage());
+    private void modifyBaseDamage(EntityType<? extends AbstractArrow> type, double x, double y, double z, Level level, ItemStack pickupItemStack,
+                                  @Nullable ItemStack firedFromWeapon, CallbackInfo ci) {
+        if (firedFromWeapon != null)
+            ProjectileWeaponConfig.get(firedFromWeapon.getItem()).baseDamage().ifPresent(value -> baseDamage = value);
     }
 
-    @Definition(id = "livingentity", local = @Local(type = LivingEntity.class))
+    @Definition(id = "mob", local = @Local(type = LivingEntity.class, name = "mob"))
     @Definition(id = "Player", type = Player.class)
-    @Expression("livingentity instanceof Player")
+    @Expression("mob instanceof Player")
     @ModifyExpressionValue(method = "onHitEntity", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean modifyHitSoundCondition(boolean original) {
         return true;
@@ -70,7 +67,7 @@ public abstract class AbstractArrowMixin<T extends AbstractArrow, U extends Enti
 
     @ModifyArg(method = "onHitEntity", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;hurtOrSimulate(Lnet/minecraft/world/damagesource/DamageSource;F)Z"), index = 1)
-    private float modifyDamage(float damage, @Local float velocity, @Local double baseDamage) {
-        return (float) Math.clamp(velocity * baseDamage, 0, Integer.MAX_VALUE);
+    private float modifyDamage(float damage, @Local(name = "pow") float pow, @Local(name = "arrowDamage") double arrowDamage) {
+        return (float) Math.clamp(pow * arrowDamage, 0, Integer.MAX_VALUE);
     }
 }

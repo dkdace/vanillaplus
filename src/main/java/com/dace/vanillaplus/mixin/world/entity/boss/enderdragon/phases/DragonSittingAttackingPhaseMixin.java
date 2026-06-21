@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingAttackingPhase;
@@ -18,21 +19,19 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
     @Shadow
     private int attackingTicks;
     @Unique
-    private float yRot;
+    private float yRot = 0;
     @Unique
-    private boolean isSpinClockwise;
+    private boolean isSpinClockwise = false;
 
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=40"))
     private int modifyRoaringDuration(int duration) {
-        return getVPEnderDragon().getDataModifier()
-                .map(enderDragonModifier -> enderDragonModifier.getPhaseInfo().getSitting().getSpinAttackDuration() + 10)
-                .orElse(duration);
+        return EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.sitting().spinAttackDuration() + 10).orElse(duration);
     }
 
     @Inject(method = "doServerTick", at = @At("TAIL"))
-    private void spin(ServerLevel serverLevel, CallbackInfo ci) {
-        getVPEnderDragon().getDataModifier().ifPresent(enderDragonModifier -> {
-            int spinAttackDuration = enderDragonModifier.getPhaseInfo().getSitting().getSpinAttackDuration();
+    private void spin(ServerLevel level, CallbackInfo ci) {
+        EnderDragonConfig.get().phaseInfo().ifPresent(phaseInfo -> {
+            int spinAttackDuration = phaseInfo.sitting().spinAttackDuration();
 
             if (attackingTicks >= spinAttackDuration)
                 return;
@@ -44,8 +43,8 @@ public abstract class DragonSittingAttackingPhaseMixin extends AbstractDragonPha
 
     @Inject(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhaseManager;setPhase(Lnet/minecraft/world/entity/boss/enderdragon/phases/EnderDragonPhase;)V"))
-    private void resetYRot(ServerLevel serverLevel, CallbackInfo ci) {
-        if (getVPEnderDragon().getDataModifier().isPresent())
+    private void resetYRot(ServerLevel level, CallbackInfo ci) {
+        if (EnderDragonConfig.get().phaseInfo().isPresent())
             dragon.setYRot(yRot);
     }
 

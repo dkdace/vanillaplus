@@ -1,8 +1,8 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
+import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPDataComponentTypes;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lombok.NonNull;
@@ -24,26 +24,22 @@ import java.util.function.Consumer;
 @Mixin(ItemEnchantments.class)
 public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
-    private int getFinalEnchantmentLevel(@NonNull DataComponentGetter dataComponentGetter, int level) {
+    private static int getFinalEnchantmentLevel(@NonNull DataComponentGetter dataComponentGetter, int level) {
         return level * dataComponentGetter.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0,
             shift = At.Shift.AFTER))
-    private void addEffectsTooltip0(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                    DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Holder<Enchantment> enchantmentHolder,
-                                    @Local int level) {
-        VPEnchantment.cast(enchantmentHolder.value()).applyTooltip(componentConsumer, enchantmentHolder.value().description(),
-                getFinalEnchantmentLevel(dataComponentGetter, level));
+    private void addEffectsTooltip0(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components,
+                                    CallbackInfo ci, @Local(name = "enchantment") Holder<Enchantment> enchantment, @Local(name = "level") int level) {
+        VPEnchantment.cast(enchantment.value()).applyTooltip(consumer, enchantment.value().description(), getFinalEnchantmentLevel(components, level));
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1,
             shift = At.Shift.AFTER))
-    private void addEffectsTooltip1(Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag,
-                                    DataComponentGetter dataComponentGetter, CallbackInfo ci, @Local Object2IntMap.Entry<Holder<Enchantment>> entry) {
+    private void addEffectsTooltip1(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components,
+                                    CallbackInfo ci, @Local(name = "entry") Object2IntMap.Entry<Holder<Enchantment>> entry) {
         Enchantment enchantment = entry.getKey().value();
-
-        VPEnchantment.cast(enchantment).applyTooltip(componentConsumer, enchantment.description(),
-                getFinalEnchantmentLevel(dataComponentGetter, entry.getIntValue()));
+        VPEnchantment.cast(enchantment).applyTooltip(consumer, enchantment.description(), getFinalEnchantmentLevel(components, entry.getIntValue()));
     }
 }

@@ -1,0 +1,19 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/mason/level_4",
+  "trades": [
+    [
+      "vanillaplus:mason/4/sell_polished_blackstone",
+      "vanillaplus:mason/4/sell_polished_blackstone_bricks"
+    ],
+    [
+      [
+        "vanillaplus:mason/4/sell_quartz_block",
+        "vanillaplus:mason/4/sell_quartz_pillar",
+        "vanillaplus:mason/4/sell_quartz_bricks",
+        "vanillaplus:mason/4/sell_chiseled_quartz_block"
+      ],
+      "vanillaplus:mason/4/sell_smooth_quartz"
+    ]
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "components": {
+    "vanillaplus:attributes": [
+      {
+        "id": "vanillaplus:sprinting_speed",
+        "base": 0
+      }
+    ],
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:jump_at_target_if_cannot_reach": true,
+    "vanillaplus:attack_npcs": true,
+    "vanillaplus:raider": {
+      "attack_baby_villagers": true,
+      "always_open_doors": true,
+      "sprint_during_raids": true
+    },
+    "vanillaplus:witch": {
+      "attack_cooldown_multipliers": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0.2,
+                  0.4,
+                  0.6,
+                  0.8
+                ]
+              }
+            }
+          },
+          "value": 0.75
+        },
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.17,
+                  0.34,
+                  0.51,
+                  0.68,
+                  0.85
+                ]
+              }
+            }
+          },
+          "value": 0.5
+        }
+      ],
+      "self_potion_modifiers": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0.17,
+                  0.34,
+                  0.51,
+                  0.68,
+                  0.85
+                ]
+              }
+            }
+          },
+          "functions": [
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:healing"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:strong_healing"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:fire_resistance"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:long_fire_resistance"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:water_breathing"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:long_water_breathing"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:swiftness"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_random_potion",
+                "options": [
+                  "minecraft:long_swiftness",
+                  "minecraft:strong_swiftness"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.1,
+                  0.2,
+                  0.3,
+                  0.4,
+                  0.5
+                ]
+              }
+            }
+          },
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "conditions": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                      "effects": {
+                        "minecraft:invisibility": {}
+                      }
+                    }
+                  }
+                }
+              ],
+              "id": "minecraft:invisibility"
+            }
+          ]
+        }
+      ],
+      "support_potion_modifiers": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "functions": [
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:regeneration"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:swiftness"
+              }
+            }
+          ]
+        },
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0.17,
+                  0.34,
+                  0.51,
+                  0.68,
+                  0.85
+                ]
+              }
+            }
+          },
+          "functions": [
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:healing"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:strong_healing"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:regeneration"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_random_potion",
+                "options": [
+                  "minecraft:long_regeneration",
+                  "minecraft:strong_regeneration"
+                ]
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:swiftness"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_random_potion",
+                "options": [
+                  "minecraft:long_swiftness",
+                  "minecraft:strong_swiftness"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "attack_potion_modifiers": [
+        {
+          "predicate": {
+            "condition": "minecraft:random_chance",
+            "chance": {
+              "type": "vanillaplus:bad_omen_level",
+              "amount": {
+                "type": "minecraft:lookup",
+                "fallback": 1,
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.1,
+                  0.2,
+                  0.3,
+                  0.4,
+                  0.5,
+                  0.6
+                ]
+              }
+            }
+          },
+          "functions": [
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:harming"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:strong_harming"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:weakness"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_potion",
+                "id": "minecraft:long_weakness"
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:poison"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_random_potion",
+                "options": [
+                  "minecraft:long_poison",
+                  "minecraft:strong_poison"
+                ]
+              }
+            },
+            {
+              "function": "minecraft:filtered",
+              "item_filter": {
+                "predicates": {
+                  "minecraft:potion_contents": "minecraft:slowness"
+                }
+              },
+              "on_pass": {
+                "function": "minecraft:set_random_potion",
+                "options": [
+                  "minecraft:long_slowness",
+                  "minecraft:strong_slowness"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

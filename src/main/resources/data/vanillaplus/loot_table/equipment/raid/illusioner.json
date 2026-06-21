@@ -1,0 +1,239 @@
+{
+  "type": "minecraft:equipment",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bow",
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0.2,
+                        0.4,
+                        0.6,
+                        0.8
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:power": 1
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0.17,
+                        0.34,
+                        0.51,
+                        0.68,
+                        0.85
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:power": 2
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0.17,
+                        0.34,
+                        0.51,
+                        0.68,
+                        0.85
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:power": 3
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4,
+                        0.5,
+                        0.6
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:power": 4
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4,
+                        0.5
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:power": 5
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0.2,
+                        0.4,
+                        0.6,
+                        0.8
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:punch": 1
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0.17,
+                        0.34,
+                        0.51,
+                        0.68,
+                        0.85
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:punch": 2
+              }
+            },
+            {
+              "function": "minecraft:set_enchantments",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": {
+                    "type": "vanillaplus:bad_omen_level",
+                    "amount": {
+                      "type": "minecraft:lookup",
+                      "fallback": 1,
+                      "values": [
+                        0,
+                        0,
+                        0,
+                        0.17,
+                        0.34,
+                        0.51,
+                        0.68,
+                        0.85
+                      ]
+                    }
+                  }
+                }
+              ],
+              "enchantments": {
+                "minecraft:flame": 1
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "vanillaplus:equipment/raid/illusioner"
+}

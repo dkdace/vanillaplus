@@ -1,0 +1,19 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 5
+  },
+  "gives": {
+    "id": "minecraft:firework_rocket"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "vanillaplus:set_random_fireworks",
+      "firework_stars": 3
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

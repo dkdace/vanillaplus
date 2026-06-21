@@ -1,0 +1,95 @@
+package com.dace.vanillaplus.data;
+
+import com.dace.vanillaplus.extension.VPConfigurable;
+import com.dace.vanillaplus.util.IdentifierUtil;
+import com.dace.vanillaplus.world.LootTableReward;
+import com.dace.vanillaplus.world.MobEffectValues;
+import com.dace.vanillaplus.world.block.BlockConfig;
+import com.dace.vanillaplus.world.entity.EntityConfig;
+import com.dace.vanillaplus.world.entity.raid.RaidWave;
+import com.dace.vanillaplus.world.item.ItemConfig;
+import com.dace.vanillaplus.world.item.PotionConfig;
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.registries.DataPackRegistryEvent;
+import org.slf4j.Logger;
+
+/**
+ * 모드의 데이터 팩 레지스트리를 관리하는 클래스.
+ */
+@UtilityClass
+public final class DataPackRegistry {
+    /** 로거 인스턴스 */
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    /** 노획물 테이블 보상 */
+    public static final ResourceKey<Registry<LootTableReward>> LOOT_TABLE_REWARD = create("loot_table_reward");
+    /** 상태 효과 값 */
+    public static final ResourceKey<Registry<MobEffectValues>> MOB_EFFECT_VALUES = create("mob_effect",
+            MobEffectValues.DIRECT_CODEC, Registries.MOB_EFFECT);
+    /** 습격 웨이브 정보 */
+    public static final ResourceKey<Registry<RaidWave>> RAID_WAVE = create("raid_wave");
+    /** 블록 설정 */
+    public static final ResourceKey<Registry<BlockConfig>> BLOCK_CONFIG = create("block_config",
+            BlockConfig.DIRECT_CODEC, Registries.BLOCK);
+    /** 엔티티 설정 */
+    public static final ResourceKey<Registry<EntityConfig>> ENTITY_CONFIG = create("entity_config",
+            EntityConfig.DIRECT_CODEC, Registries.ENTITY_TYPE);
+    /** 아이템 설정 */
+    public static final ResourceKey<Registry<ItemConfig>> ITEM_CONFIG = create("item_config",
+            ItemConfig.DIRECT_CODEC, Registries.ITEM);
+    /** 물약 수정자 */
+    public static final ResourceKey<Registry<PotionConfig>> POTION_CONFIG = create("potion_config",
+            PotionConfig.DIRECT_CODEC, Registries.POTION);
+
+    public static void bootstrap() {
+        LOGGER.info("Initialized");
+    }
+
+    @NonNull
+    private static <T> ResourceKey<Registry<T>> create(@NonNull String name) {
+        return ResourceKey.createRegistryKey(IdentifierUtil.fromPath(name));
+    }
+
+    @NonNull
+    private static <T> ResourceKey<Registry<T>> create(@NonNull String name, @NonNull Codec<T> codec) {
+        ResourceKey<Registry<T>> registryKey = create(name);
+        DataPackRegistryEvent.NewRegistry.BUS.addListener(event -> event.dataPackRegistry(registryKey, codec, codec));
+
+        return registryKey;
+    }
+
+    @NonNull
+    private static <T, U> ResourceKey<Registry<T>> create(@NonNull String name, @NonNull Codec<T> codec,
+                                                          @NonNull ResourceKey<Registry<U>> targetRegistryKey) {
+        ResourceKey<Registry<T>> registryKey = create(name, codec);
+
+        ServerAboutToStartEvent.BUS.addListener(event ->
+                applyConfigs(registryKey, event.getServer().registryAccess(), targetRegistryKey));
+        ClientPlayerNetworkEvent.LoggingIn.BUS.addListener(event ->
+                applyConfigs(registryKey, event.getPlayer().registryAccess(), targetRegistryKey));
+
+        return registryKey;
+    }
+
+    private static <T, U> void applyConfigs(@NonNull ResourceKey<Registry<T>> registryKey, @NonNull HolderLookup.Provider registries,
+                                            @NonNull ResourceKey<Registry<U>> targetRegistryKey) {
+        registries.lookupOrThrow(targetRegistryKey).listElements().forEach(element -> {
+            T config = registries.get(ResourceKey.create(registryKey, element.key().identifier())).map(Holder::value).orElse(null);
+
+            VPConfigurable.cast(element.value()).setConfig(config);
+
+            if (config != null)
+                LOGGER.debug("Applied Config to {}", element.key());
+        });
+    }
+}

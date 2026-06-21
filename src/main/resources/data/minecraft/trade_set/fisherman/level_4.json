@@ -1,0 +1,8 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fisherman/level_4",
+  "trades": [
+    "vanillaplus:fisherman/4/sell_axolotl_bucket",
+    "vanillaplus:fisherman/4/sell_enchanted_fishing_rod"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "item_components": {
+    "minecraft:attribute_modifiers": [
+      {
+        "type": "minecraft:armor",
+        "amount": 6.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      },
+      {
+        "type": "minecraft:armor_toughness",
+        "amount": 2.0,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_value",
+        "slot": "legs"
+      },
+      {
+        "type": "vanillaplus:food_exhaustion_multiplier",
+        "amount": 0.04,
+        "id": "minecraft:armor.leggings",
+        "operation": "add_multiplied_base",
+        "slot": "legs"
+      }
+    ]
+  }
+}

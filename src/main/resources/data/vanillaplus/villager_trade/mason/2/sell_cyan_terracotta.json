@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "minecraft:cyan_terracotta",
+    "count": 16
+  },
+  "max_uses": 10,
+  "reputation_discount": 0.05,
+  "xp": 14
+}

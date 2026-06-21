@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fletcher/level_4",
+  "trades": [
+    [
+      "vanillaplus:fletcher/4/sell_tipped_arrow_healing",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_harming",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_infested",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_slowness",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_weaving",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_weakness",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_wind_charged",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_poison",
+      "vanillaplus:fletcher/4/sell_tipped_arrow_oozing"
+    ],
+    "vanillaplus:fletcher/4/sell_enchanted_crossbow"
+  ]
+}

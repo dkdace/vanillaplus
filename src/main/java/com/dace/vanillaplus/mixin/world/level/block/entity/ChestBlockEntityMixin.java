@@ -1,7 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.world.level.block.VPLootContainerBlock;
-import com.dace.vanillaplus.extension.world.level.block.entity.VPChestBlockEntity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChestBlockEntity.class)
-public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends RandomizableContainerBlockEntityMixin<T> implements VPChestBlockEntity<T> {
+public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends RandomizableContainerBlockEntityMixin<T> {
     @Unique
     private static final Component COMPONENT_CHEST_LOOT = Component.translatable("container.chest_loot");
     @Shadow
@@ -28,24 +27,20 @@ public abstract class ChestBlockEntityMixin<T extends ChestBlockEntity> extends 
     private ChestLidController chestLidController;
 
     @Inject(method = "lidAnimateTick", at = @At("HEAD"))
-    private static void openIfAlwaysOpen(Level level, BlockPos blockPos, BlockState blockState, ChestBlockEntity chestBlockEntity, CallbackInfo ci) {
-        if (blockState.getValue(VPLootContainerBlock.ALWAYS_OPEN))
-            VPChestBlockEntity.cast(chestBlockEntity).openLid();
-    }
-
-    @Override
-    public void openLid() {
-        chestLidController.shouldBeOpen(true);
+    @SuppressWarnings("unchecked")
+    private static void openIfAlwaysOpen(Level level, BlockPos pos, BlockState state, ChestBlockEntity entity, CallbackInfo ci) {
+        if (state.getValue(VPLootContainerBlock.ALWAYS_OPEN))
+            ((ChestBlockEntityMixin<ChestBlockEntity>) (Object) entity).chestLidController.shouldBeOpen(true);
     }
 
     @Inject(method = "loadAdditional", at = @At("TAIL"))
-    private void loadAdditional(ValueInput valueInput, CallbackInfo ci) {
-        onLoadAdditional(valueInput);
+    private void loadAdditional(ValueInput input, CallbackInfo ci) {
+        onLoadAdditional(input);
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void saveAdditional(ValueOutput valueOutput, CallbackInfo ci) {
-        onSaveAdditional(valueOutput);
+    private void saveAdditional(ValueOutput output, CallbackInfo ci) {
+        onSaveAdditional(output);
     }
 
     @ModifyReturnValue(method = "getDefaultName", at = @At(value = "RETURN"))

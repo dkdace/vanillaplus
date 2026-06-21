@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:strength",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_strength"
+}

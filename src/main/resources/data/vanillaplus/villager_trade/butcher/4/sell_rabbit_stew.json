@@ -1,0 +1,16 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "additional_wants": {
+    "id": "minecraft:bowl",
+    "count": 2
+  },
+  "gives": {
+    "id": "minecraft:rabbit_stew",
+    "count": 2
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 28
+}

@@ -1,0 +1,36 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/mason/level_3",
+  "trades": [
+    [
+      "vanillaplus:mason/3/buy_blackstone",
+      [
+        "vanillaplus:mason/3/sell_white_glazed_terracotta",
+        "vanillaplus:mason/3/sell_light_gray_glazed_terracotta",
+        "vanillaplus:mason/3/sell_gray_glazed_terracotta",
+        "vanillaplus:mason/3/sell_black_glazed_terracotta",
+        "vanillaplus:mason/3/sell_brown_glazed_terracotta",
+        "vanillaplus:mason/3/sell_red_glazed_terracotta",
+        "vanillaplus:mason/3/sell_orange_glazed_terracotta",
+        "vanillaplus:mason/3/sell_yellow_glazed_terracotta",
+        "vanillaplus:mason/3/sell_lime_glazed_terracotta",
+        "vanillaplus:mason/3/sell_green_glazed_terracotta",
+        "vanillaplus:mason/3/sell_cyan_glazed_terracotta",
+        "vanillaplus:mason/3/sell_light_blue_glazed_terracotta",
+        "vanillaplus:mason/3/sell_blue_glazed_terracotta",
+        "vanillaplus:mason/3/sell_purple_glazed_terracotta",
+        "vanillaplus:mason/3/sell_magenta_glazed_terracotta",
+        "vanillaplus:mason/3/sell_pink_glazed_terracotta"
+      ]
+    ],
+    [
+      "vanillaplus:mason/3/buy_quartz",
+      [
+        "vanillaplus:mason/3/sell_polished_deepslate",
+        "vanillaplus:mason/3/sell_deepslate_bricks",
+        "vanillaplus:mason/3/sell_deepslate_tiles",
+        "vanillaplus:mason/3/sell_chiseled_deepslate"
+      ]
+    ]
+  ]
+}

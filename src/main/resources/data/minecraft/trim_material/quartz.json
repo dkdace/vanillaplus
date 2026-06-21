@@ -1,0 +1,17 @@
+{
+  "asset_name": "quartz",
+  "description": {
+    "color": "#E3D4C4",
+    "translate": "trim_material.minecraft.quartz"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.3,
+        "attribute": "vanillaplus:fog_distance",
+        "id": "vanillaplus:trim_material_effect.quartz",
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }
+}

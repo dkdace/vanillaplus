@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:water_breathing",
+  "ingredient": "minecraft:redstone",
+  "result": "minecraft:long_water_breathing"
+}

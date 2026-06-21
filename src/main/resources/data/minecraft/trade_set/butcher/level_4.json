@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/butcher/level_4",
+  "trades": [
+    [
+      [
+        "vanillaplus:butcher/4/sell_egg",
+        "vanillaplus:butcher/4/sell_blue_egg",
+        "vanillaplus:butcher/4/sell_brown_egg"
+      ],
+      "vanillaplus:butcher/4/sell_armadillo_scute"
+    ],
+    [
+      "vanillaplus:butcher/4/sell_honey_bottle",
+      "vanillaplus:butcher/4/sell_rabbit_stew"
+    ]
+  ]
+}

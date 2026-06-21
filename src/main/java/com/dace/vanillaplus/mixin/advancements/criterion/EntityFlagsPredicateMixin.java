@@ -1,11 +1,8 @@
 package com.dace.vanillaplus.mixin.advancements.criterion;
 
-import com.dace.vanillaplus.extension.advancements.critereon.VPEntityFlagsPredicate;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import net.minecraft.advancements.criterion.EntityFlagsPredicate;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(EntityFlagsPredicate.class)
-public abstract class EntityFlagsPredicateMixin implements VPEntityFlagsPredicate {
+public abstract class EntityFlagsPredicateMixin {
     @Shadow
     @Final
     public static final Codec<EntityFlagsPredicate> CODEC = RecordCodecBuilder.create(instance -> instance
@@ -34,18 +31,15 @@ public abstract class EntityFlagsPredicateMixin implements VPEntityFlagsPredicat
                     Codec.BOOL.optionalFieldOf("is_in_water").forGetter(EntityFlagsPredicate::isInWater),
                     Codec.BOOL.optionalFieldOf("is_fall_flying").forGetter(EntityFlagsPredicate::isFallFlying),
                     Codec.BOOL.optionalFieldOf("is_spin_attacking").forGetter(entityFlagsPredicate ->
-                            VPEntityFlagsPredicate.cast(entityFlagsPredicate).getIsSpinAttacking()),
+                            ((EntityFlagsPredicateMixin) (Object) entityFlagsPredicate).isSpinAttacking),
                     Codec.BOOL.optionalFieldOf("is_in_rain").forGetter(entityFlagsPredicate ->
-                            VPEntityFlagsPredicate.cast(entityFlagsPredicate).getIsInRain()))
+                            ((EntityFlagsPredicateMixin) (Object) entityFlagsPredicate).isInRain))
             .apply(instance, EntityFlagsPredicateMixin::create));
+
     @Unique
-    @Getter
-    @Setter
-    private Optional<Boolean> isSpinAttacking;
+    private Optional<Boolean> isSpinAttacking = Optional.empty();
     @Unique
-    @Getter
-    @Setter
-    private Optional<Boolean> isInRain;
+    private Optional<Boolean> isInRain = Optional.empty();
 
     @Unique
     @NonNull
@@ -55,8 +49,10 @@ public abstract class EntityFlagsPredicateMixin implements VPEntityFlagsPredicat
                                                Optional<Boolean> isSpinAttacking, Optional<Boolean> isInRain) {
         EntityFlagsPredicate entityFlagsPredicate = new EntityFlagsPredicate(isOnGround, isOnFire, isCrouching, isSprinting, isSwimming, isFlying,
                 isBaby, isInWater, isFallFlying);
-        VPEntityFlagsPredicate.cast(entityFlagsPredicate).setIsSpinAttacking(isSpinAttacking);
-        VPEntityFlagsPredicate.cast(entityFlagsPredicate).setIsInRain(isInRain);
+
+        EntityFlagsPredicateMixin entityFlagsPredicateMixin = (EntityFlagsPredicateMixin) (Object) entityFlagsPredicate;
+        entityFlagsPredicateMixin.isSpinAttacking = isSpinAttacking;
+        entityFlagsPredicateMixin.isInRain = isInRain;
 
         return entityFlagsPredicate;
     }

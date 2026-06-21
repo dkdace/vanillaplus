@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/butcher/level_1",
+  "trades": [
+    [
+      "vanillaplus:butcher/1/buy_charcoal",
+      "vanillaplus:butcher/1/sell_campfire"
+    ],
+    [
+      [
+        "vanillaplus:butcher/1/buy_mutton",
+        "vanillaplus:butcher/1/buy_chicken",
+        "vanillaplus:butcher/1/buy_rabbit"
+      ],
+      "vanillaplus:butcher/1/sell_cooked_rabbit"
+    ]
+  ]
+}

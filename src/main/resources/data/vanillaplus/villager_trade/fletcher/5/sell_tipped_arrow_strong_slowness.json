@@ -1,0 +1,36 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 2
+  },
+  "additional_wants": {
+    "id": "minecraft:arrow",
+    "count": 7
+  },
+  "gives": {
+    "id": "minecraft:tipped_arrow",
+    "count": 7
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_potion",
+      "id": "minecraft:strong_slowness"
+    }
+  ],
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 35,
+  "multiply_xp_by_cost": true,
+  "merchant_predicate": {
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "predicates": {
+        "minecraft:villager/variant": [
+          "minecraft:taiga",
+          "minecraft:snow"
+        ]
+      }
+    }
+  }
+}

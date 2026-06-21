@@ -1,17 +1,16 @@
 package com.dace.vanillaplus.extension.world.level.block.entity;
 
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.registryobject.VPRecipeTypes;
 import lombok.NonNull;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.RecipeCraftingHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
+import net.minecraftforge.common.extensions.IForgeBlockEntity;
 
 /**
  * {@link BrewingStandBlockEntity}를 확장하는 인터페이스.
  */
-public interface VPBrewingStandBlockEntity extends VPMixin<BrewingStandBlockEntity>, RecipeCraftingHolder {
+public interface VPBrewingStandBlockEntity extends VPMixin<BrewingStandBlockEntity>, IForgeBlockEntity, RecipeCraftingHolder {
     /** 전체 양조 시간 데이터 인덱스 */
     int DATA_TOTAL_BREW_TIME = 2;
     /** 데이터 수 */
@@ -38,10 +37,4 @@ public interface VPBrewingStandBlockEntity extends VPMixin<BrewingStandBlockEnti
      * @param player 대상 플레이어
      */
     void awardUsedRecipes(@NonNull Player player);
-
-    /**
-     * @return 제작법 캐시
-     */
-    @NonNull
-    RecipeManager.CachedCheck<VPRecipeTypes.Brewing.Input, ? extends VPRecipeTypes.Brewing> getQuickCheck();
 }

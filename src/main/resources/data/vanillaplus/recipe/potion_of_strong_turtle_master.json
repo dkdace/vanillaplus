@@ -1,0 +1,6 @@
+{
+  "type": "vanillaplus:brewing_mix",
+  "base": "minecraft:turtle_master",
+  "ingredient": "minecraft:glowstone_dust",
+  "result": "minecraft:strong_turtle_master"
+}

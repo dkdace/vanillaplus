@@ -1,36 +1,97 @@
 {
   "waves": [
-    {
-      "pillager": 5,
-      "vindicator": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 3
-    },
-    {
-      "pillager": 5,
-      "vindicator": 3,
-      "witch": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 2,
-      "witch": 1,
-      "ravager": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 4,
-      "witch": 2,
-      "evoker": 1
-    },
-    {
-      "pillager": 4,
-      "vindicator": 4,
-      "witch": 1,
-      "evoker": 1,
-      "ravager_with_pillager": 1
-    }
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 3
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 5
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 3
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 2
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 4
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 2
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 1
+      }
+    ],
+    [
+      {
+        "type": "minecraft:pillager",
+        "count": 4
+      },
+      {
+        "type": "minecraft:vindicator",
+        "count": 4
+      },
+      {
+        "type": "minecraft:witch",
+        "count": 1
+      },
+      {
+        "type": "minecraft:evoker",
+        "count": 1
+      },
+      {
+        "type": "minecraft:ravager",
+        "rider": "minecraft:pillager",
+        "count": 1
+      }
+    ]
   ]
 }

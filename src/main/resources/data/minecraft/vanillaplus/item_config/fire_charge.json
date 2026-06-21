@@ -1,0 +1,12 @@
+{
+  "item_components": {
+    "minecraft:use_cooldown": {
+      "seconds": 0.5
+    }
+  },
+  "components": {
+    "vanillaplus:fire_charge": {
+      "enable_throwing": true
+    }
+  }
+}

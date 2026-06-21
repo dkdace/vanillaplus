@@ -1,9 +1,9 @@
 package com.dace.vanillaplus.mixin.world.item.enchantment;
 
-import com.dace.vanillaplus.data.LevelBasedValuePreset;
-import com.dace.vanillaplus.data.modifier.EnchantmentModifier;
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.registryobject.VPEnchantmentEffectComponentTypes;
+import com.dace.vanillaplus.extension.world.item.enchantment.VPLevelBasedProvider;
+import com.dace.vanillaplus.world.item.enchantment.Described;
 import lombok.NonNull;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
@@ -15,7 +15,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
@@ -28,89 +27,59 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.mutable.MutableFloat;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin implements VPEnchantment {
     @Unique
-    @Nullable
-    private EnchantmentModifier dataModifier;
-    @Unique
-    @Nullable
-    private LevelBasedValuePreset levelBasedValuePreset;
-    @Shadow
-    @Final
-    private Enchantment.EnchantmentDefinition definition;
-    @Mutable
-    @Shadow
-    @Final
-    private HolderSet<Enchantment> exclusiveSet;
-    @Mutable
-    @Shadow
-    @Final
-    private DataComponentMap effects;
+    private final TreeSet<Described> describedLevelBasedValues = new TreeSet<>();
 
     @Shadow
-    @UnknownNullability
-    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity entity, DamageSource damageSource) {
-        return null;
+    public static LootContext damageContext(ServerLevel serverLevel, int enchantmentLevel, Entity victim, DamageSource source) {
+        throw new UnsupportedOperationException();
     }
 
     @Shadow
-    private static <T> void applyEffects(List<ConditionalEffect<T>> conditionalEffects, LootContext lootContext, Consumer<T> onApply) {
+    private static <T> void applyEffects(List<ConditionalEffect<T>> effects, LootContext filterData, Enchantment.GenericAction<T> action) {
     }
 
     @Shadow
-    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
+    protected abstract void modifyEntityFilteredValue(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
                                                       ServerLevel serverLevel, int enchantmentLevel, ItemStack itemStack, Entity entity,
                                                       MutableFloat value);
 
     @Shadow
-    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> componentType, RandomSource randomSource,
-                                               int enchantmentLevel, MutableFloat value);
+    public abstract void modifyUnfilteredValue(DataComponentType<EnchantmentValueEffect> component, RandomSource random, int enchantmentLevel,
+                                               MutableFloat value);
 
     @Shadow
-    public abstract <T> List<T> getEffects(DataComponentType<List<T>> dataComponentType);
+    public abstract <T> List<T> getEffects(DataComponentType<List<T>> type);
 
-    @Override
-    @NonNull
-    public Optional<EnchantmentModifier> getDataModifier() {
-        return Optional.ofNullable(dataModifier);
-    }
-
-    @Override
-    public void setDataModifier(@Nullable EnchantmentModifier dataModifier) {
-        this.dataModifier = dataModifier;
-
-        if (dataModifier == null)
-            return;
-
-        dataModifier.getExclusiveSet().ifPresent(value -> this.exclusiveSet = value);
-        dataModifier.getEffects().ifPresent(value -> this.effects = value);
-        VPEnchantmentDefinition.cast(definition).set(dataModifier.getDefinition());
-    }
-
-    @Override
-    @NonNull
-    public Optional<LevelBasedValuePreset> getLevelBasedValuePreset() {
-        return Optional.ofNullable(levelBasedValuePreset);
-    }
-
-    @Override
-    public void setLevelBasedValuePreset(@Nullable LevelBasedValuePreset levelBasedValuePreset) {
-        this.levelBasedValuePreset = levelBasedValuePreset;
+    @Unique
+    private void addDescribed(@NonNull Object value) {
+        switch (value) {
+            case VPLevelBasedProvider vpLevelBasedProvider -> vpLevelBasedProvider.getLevelBasedValues().forEach(this::addDescribed);
+            case Iterable<?> iterable -> iterable.forEach(this::addDescribed);
+            case Described described -> describedLevelBasedValues.add(described);
+            default -> {
+                // 미사용
+            }
+        }
     }
 
     @Override
     public void applyTooltip(@NonNull Consumer<Component> componentConsumer, @NonNull Component descriptionComponent, int level) {
-        if (levelBasedValuePreset != null)
-            levelBasedValuePreset.applyTooltip(componentConsumer, descriptionComponent, level);
+        describedLevelBasedValues.forEach(described -> described.applyTooltip(componentConsumer, descriptionComponent, level));
 
         getEffects(EnchantmentEffectComponents.ATTRIBUTES).forEach(enchantmentAttributeEffect ->
                 ItemAttributeModifiers.Display.attributeModifiers().apply(component ->
@@ -183,51 +152,9 @@ public abstract class EnchantmentMixin implements VPEnchantment {
                 conditionalEffect.effect().apply(serverLevel, enchantmentLevel, enchantedItemInUse, entity, entity.position());
     }
 
-    @Mixin(Enchantment.EnchantmentDefinition.class)
-    public abstract static class EnchantmentDefinitionMixin implements VPEnchantmentDefinition {
-        @Mutable
-        @Shadow
-        @Final
-        private HolderSet<Item> supportedItems;
-        @Mutable
-        @Shadow
-        @Final
-        private Optional<HolderSet<Item>> primaryItems;
-        @Mutable
-        @Shadow
-        @Final
-        private int weight;
-        @Mutable
-        @Shadow
-        @Final
-        private int maxLevel;
-        @Mutable
-        @Shadow
-        @Final
-        private Enchantment.Cost minCost;
-        @Mutable
-        @Shadow
-        @Final
-        private Enchantment.Cost maxCost;
-        @Mutable
-        @Shadow
-        @Final
-        private int anvilCost;
-        @Mutable
-        @Shadow
-        @Final
-        private List<EquipmentSlotGroup> slots;
-
-        @Override
-        public void set(@NonNull EnchantmentModifier.EnchantmentDefinition enchantmentDefinition) {
-            enchantmentDefinition.supportedItems().ifPresent(value -> supportedItems = value);
-            enchantmentDefinition.primaryItems().ifPresent(value -> primaryItems = value);
-            enchantmentDefinition.weight().ifPresent(value -> weight = value);
-            enchantmentDefinition.maxLevel().ifPresent(value -> maxLevel = value);
-            enchantmentDefinition.minCost().ifPresent(value -> minCost = value);
-            enchantmentDefinition.maxCost().ifPresent(value -> maxCost = value);
-            enchantmentDefinition.anvilCost().ifPresent(value -> anvilCost = value);
-            enchantmentDefinition.slots().ifPresent(value -> slots = value);
-        }
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void setDescribedLevelBasedValues(Component description, Enchantment.EnchantmentDefinition definition, HolderSet<Enchantment> exclusiveSet,
+                                              DataComponentMap effects, CallbackInfo ci) {
+        effects.forEach(typedDataComponent -> addDescribed(typedDataComponent.value()));
     }
 }

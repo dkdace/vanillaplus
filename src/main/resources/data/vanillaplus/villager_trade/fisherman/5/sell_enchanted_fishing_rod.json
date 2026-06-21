@@ -1,0 +1,44 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 0
+  },
+  "double_trade_price_enchantments": "#minecraft:double_trade_price",
+  "additional_wants": {
+    "id": "minecraft:fishing_rod"
+  },
+  "gives": {
+    "id": "minecraft:fishing_rod"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:enchant_with_levels",
+      "include_additional_cost_component": true,
+      "additional_cost_multiplier": 0.5,
+      "levels": {
+        "type": "minecraft:uniform",
+        "max": 40,
+        "min": 30
+      },
+      "options": "#vanillaplus:tradeable"
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:fishing_rod",
+        "predicates": {
+          "minecraft:enchantments": [
+            {}
+          ]
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

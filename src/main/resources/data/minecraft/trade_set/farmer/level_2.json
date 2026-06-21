@@ -1,0 +1,25 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/farmer/level_2",
+  "trades": [
+    [
+      [
+        "vanillaplus:farmer/2/buy_wheat",
+        "vanillaplus:farmer/2/buy_beetroot"
+      ],
+      "vanillaplus:farmer/2/sell_mushroom_stew"
+    ],
+    [
+      [
+        "vanillaplus:farmer/2/buy_potato",
+        "vanillaplus:farmer/2/buy_carrot",
+        "vanillaplus:farmer/2/buy_sweet_berries",
+        "vanillaplus:farmer/2/buy_cactus",
+        "vanillaplus:farmer/2/buy_cocoa_beans",
+        "vanillaplus:farmer/2/buy_red_mushroom",
+        "vanillaplus:farmer/2/buy_brown_mushroom"
+      ],
+      "vanillaplus:farmer/2/sell_beetroot_soup"
+    ]
+  ]
+}

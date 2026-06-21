@@ -1,0 +1,35 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/weaponsmith/level_2",
+  "trades": [
+    [
+      "vanillaplus:weaponsmith/2/buy_stick",
+      [
+        "vanillaplus:weaponsmith/2/sell_shield_white",
+        "vanillaplus:weaponsmith/2/sell_shield_light_gray",
+        "vanillaplus:weaponsmith/2/sell_shield_gray",
+        "vanillaplus:weaponsmith/2/sell_shield_black",
+        "vanillaplus:weaponsmith/2/sell_shield_brown",
+        "vanillaplus:weaponsmith/2/sell_shield_red",
+        "vanillaplus:weaponsmith/2/sell_shield_orange",
+        "vanillaplus:weaponsmith/2/sell_shield_yellow",
+        "vanillaplus:weaponsmith/2/sell_shield_lime",
+        "vanillaplus:weaponsmith/2/sell_shield_green",
+        "vanillaplus:weaponsmith/2/sell_shield_cyan",
+        "vanillaplus:weaponsmith/2/sell_shield_light_blue",
+        "vanillaplus:weaponsmith/2/sell_shield_blue",
+        "vanillaplus:weaponsmith/2/sell_shield_purple",
+        "vanillaplus:weaponsmith/2/sell_shield_magenta",
+        "vanillaplus:weaponsmith/2/sell_shield_pink"
+      ]
+    ],
+    [
+      "vanillaplus:weaponsmith/2/buy_iron_ingot",
+      [
+        "vanillaplus:weaponsmith/2/sell_enchanted_iron_spear",
+        "vanillaplus:weaponsmith/2/sell_enchanted_iron_sword",
+        "vanillaplus:weaponsmith/2/sell_enchanted_iron_axe"
+      ]
+    ]
+  ]
+}

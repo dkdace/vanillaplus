@@ -1,0 +1,11 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/fisherman/level_5",
+  "trades": [
+    [
+      "vanillaplus:fisherman/5/sell_prismarine_shard",
+      "vanillaplus:fisherman/5/sell_nautilus_shell"
+    ],
+    "vanillaplus:fisherman/5/sell_enchanted_fishing_rod"
+  ]
+}

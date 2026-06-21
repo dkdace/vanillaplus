@@ -1,0 +1,9 @@
+{
+  "components": {
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:armor_stand": {
+      "enable_quick_swap": true,
+      "has_toggleable_arms": true
+    }
+  }
+}

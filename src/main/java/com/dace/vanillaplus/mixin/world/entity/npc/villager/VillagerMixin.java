@@ -1,30 +1,26 @@
 package com.dace.vanillaplus.mixin.world.entity.npc.villager;
 
-import com.dace.vanillaplus.data.Trade;
-import com.dace.vanillaplus.data.modifier.EntityModifier;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import lombok.NonNull;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerData;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.item.trading.TradeSet;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, EntityModifier.LivingEntityModifier> {
+public abstract class VillagerMixin extends AbstractVillagerMixin<Villager> {
     @Unique
     private static final Component COMPONENT_CLOSED = Component.translatable("merchant.closed");
     @Unique
@@ -50,43 +46,34 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
 
     @Unique
     private boolean isTradingClosed() {
-        return !getOffers().isEmpty() && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
+        return VillagerConfig.get().closeTradingAtNight() && !getOffers().isEmpty()
+                && brain.getActiveNonCoreActivity().orElse(null) == Activity.REST;
     }
 
     @Unique
     private boolean isTradingOutOfStock() {
-        return !getOffers().isEmpty() && getOffers().stream().allMatch(MerchantOffer::isOutOfStock);
-    }
+        if (!VillagerConfig.get().rerollOffersEveryday())
+            return false;
 
-    @Unique
-    private void addOffers(@NonNull ServerLevel serverLevel, int level) {
-        getVillagerData().profession().unwrapKey()
-                .flatMap(Trade.getDataManager()::get)
-                .ifPresent(trade -> {
-                    VillagerTrades.ItemListing[] itemListings = trade.getOfferList(level).toItemListings();
-                    MerchantOffers offers = getOffers();
-
-                    for (VillagerTrades.ItemListing itemListing : itemListings) {
-                        MerchantOffer offer = itemListing.getOffer(serverLevel, getThis(), random);
-                        if (offer != null)
-                            offers.add(offer);
-                    }
-                });
-    }
-
-    @Overwrite
-    protected void updateTrades(ServerLevel serverLevel) {
-        addOffers(serverLevel, getVillagerData().level());
+        MerchantOffers merchantOffers = getOffers();
+        return !merchantOffers.isEmpty() && merchantOffers.stream().allMatch(MerchantOffer::isOutOfStock);
     }
 
     @Inject(method = "shouldRestock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;resetNumberOfRestocks()V",
             shift = At.Shift.AFTER))
-    private void rerollOffers(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir) {
-        getOffers().clear();
+    private void rerollOffers(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
+        if (!VillagerConfig.get().rerollOffersEveryday())
+            return;
+
+        MerchantOffers merchantOffers = getOffers();
+        merchantOffers.clear();
 
         VillagerData villagerData = getVillagerData();
-        for (int i = 1; i <= villagerData.level(); i++)
-            addOffers(serverLevel, i);
+        for (int i = 1; i <= villagerData.level(); i++) {
+            ResourceKey<TradeSet> tradeSetResourceKey = villagerData.profession().value().getTrades(i);
+            if (tradeSetResourceKey != null)
+                addOffersFromTradeSet(level, merchantOffers, tradeSetResourceKey);
+        }
 
         resendOffersToTradingPlayer();
     }
@@ -95,36 +82,30 @@ public abstract class VillagerMixin extends AbstractVillagerMixin<Villager, Enti
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
     @Expression("3 + this.random.nextInt(4)")
     @ModifyExpressionValue(method = "rewardTradeXp", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private int modifyRewardBaseXP(int xp, @Local(argsOnly = true) MerchantOffer merchantOffer) {
-        ItemCost itemCost = merchantOffer.getItemCostA();
-
-        if (itemCost.itemStack().is(Items.EMERALD)) {
-            int count = itemCost.count();
-            return 3 * count + random.nextInt(4 * count);
-        }
-
-        return xp;
+    private int modifyTradePlayerXP(int xp, @Local(argsOnly = true) MerchantOffer offer) {
+        return getTradePlayerXP(xp, offer);
     }
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;isEmpty()Z"))
-    private boolean preventTradingIfClosed(boolean flag) {
-        return flag || isTradingClosed() || isTradingOutOfStock();
+    private boolean modifyNoTradingCondition(boolean isEmpty) {
+        return isEmpty || isTradingClosed() || isTradingOutOfStock();
     }
 
     @Inject(method = "mobInteract", at = @At(value = "RETURN", ordinal = 2))
-    private void sendClosedMessage(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sendNoTradingMessage(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (isTradingClosed())
-            player.displayClientMessage(COMPONENT_CLOSED, true);
+            player.sendOverlayMessage(COMPONENT_CLOSED);
         else if (isTradingOutOfStock())
-            player.displayClientMessage(COMPONENT_OUT_OF_STOCK, true);
+            player.sendOverlayMessage(COMPONENT_OUT_OF_STOCK);
     }
 
     @Inject(method = "customServerAiStep", at = @At("RETURN"))
-    private void closeTrading(ServerLevel serverLevel, CallbackInfo ci) {
+    private void closeTrading(ServerLevel level, CallbackInfo ci) {
         if (!isTradingClosed())
             return;
 
-        getOffers().forEach(MerchantOffer::setToOutOfStock);
+        if (VillagerConfig.get().rerollOffersEveryday())
+            getOffers().forEach(MerchantOffer::setToOutOfStock);
         if (isTrading())
             stopTrading();
     }

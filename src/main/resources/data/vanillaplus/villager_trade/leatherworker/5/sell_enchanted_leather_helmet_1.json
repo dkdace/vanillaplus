@@ -1,0 +1,69 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 0
+  },
+  "additional_wants": {
+    "id": "minecraft:leather_helmet"
+  },
+  "gives": {
+    "id": "minecraft:leather_helmet"
+  },
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_random_dyes",
+      "number_of_dyes": {
+        "type": "minecraft:sum",
+        "summands": [
+          1,
+          {
+            "type": "minecraft:binomial",
+            "n": 1,
+            "p": 0.6
+          }
+        ]
+      }
+    },
+    {
+      "function": "minecraft:enchant_with_levels",
+      "include_additional_cost_component": true,
+      "additional_cost_multiplier": 0.4,
+      "levels": {
+        "type": "minecraft:uniform",
+        "max": 30,
+        "min": 20
+      },
+      "options": "#minecraft:non_treasure"
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:leather_helmet",
+        "predicates": {
+          "minecraft:dyed_color": {}
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:leather_helmet",
+        "predicates": {
+          "minecraft:enchantments": [
+            {}
+          ]
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ],
+  "max_uses": 2,
+  "reputation_discount": 0.2,
+  "xp": 35,
+  "multiply_xp_by_cost": true
+}

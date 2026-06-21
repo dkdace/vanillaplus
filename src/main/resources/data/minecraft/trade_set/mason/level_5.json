@@ -1,0 +1,35 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/mason/level_5",
+  "trades": [
+    [
+      "vanillaplus:mason/5/sell_angler_pottery_sherd",
+      "vanillaplus:mason/5/sell_shelter_pottery_sherd",
+      "vanillaplus:mason/5/sell_snort_pottery_sherd",
+      "vanillaplus:mason/5/sell_blade_pottery_sherd",
+      "vanillaplus:mason/5/sell_explorer_pottery_sherd",
+      "vanillaplus:mason/5/sell_mourner_pottery_sherd",
+      "vanillaplus:mason/5/sell_plenty_pottery_sherd",
+      "vanillaplus:mason/5/sell_burn_pottery_sherd",
+      "vanillaplus:mason/5/sell_danger_pottery_sherd",
+      "vanillaplus:mason/5/sell_friend_pottery_sherd",
+      "vanillaplus:mason/5/sell_heart_pottery_sherd",
+      "vanillaplus:mason/5/sell_heartbreak_pottery_sherd",
+      "vanillaplus:mason/5/sell_howl_pottery_sherd",
+      "vanillaplus:mason/5/sell_sheaf_pottery_sherd",
+      "vanillaplus:mason/5/sell_archer_pottery_sherd",
+      "vanillaplus:mason/5/sell_miner_pottery_sherd",
+      "vanillaplus:mason/5/sell_prize_pottery_sherd",
+      "vanillaplus:mason/5/sell_skull_pottery_sherd",
+      "vanillaplus:mason/5/sell_arms_up_pottery_sherd",
+      "vanillaplus:mason/5/sell_brewer_pottery_sherd",
+      "vanillaplus:mason/5/sell_scrape_pottery_sherd",
+      "vanillaplus:mason/5/sell_flow_pottery_sherd",
+      "vanillaplus:mason/5/sell_guster_pottery_sherd"
+    ],
+    [
+      "vanillaplus:mason/5/sell_lodestone",
+      "vanillaplus:mason/5/sell_ender_chest"
+    ]
+  ]
+}

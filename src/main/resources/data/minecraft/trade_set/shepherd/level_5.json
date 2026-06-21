@@ -1,0 +1,18 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/shepherd/level_5",
+  "trades": [
+    [
+      [
+        "vanillaplus:shepherd/5/sell_field_masoned_banner_pattern",
+        "vanillaplus:shepherd/5/sell_bordure_indented_banner_pattern",
+        "vanillaplus:shepherd/5/sell_flower_banner_pattern"
+      ],
+      [
+        "vanillaplus:shepherd/5/sell_skull_banner_pattern",
+        "vanillaplus:shepherd/5/sell_creeper_banner_pattern"
+      ]
+    ],
+    "vanillaplus:shepherd/5/sell_enchanted_shears"
+  ]
+}

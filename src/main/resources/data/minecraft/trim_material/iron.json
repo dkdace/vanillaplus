@@ -1,0 +1,21 @@
+{
+  "asset_name": "iron",
+  "description": {
+    "color": "#ECECEC",
+    "translate": "trim_material.minecraft.iron"
+  },
+  "override_armor_assets": {
+    "minecraft:iron": "iron_darker"
+  },
+  "effects": {
+    "vanillaplus:iron_golem_heal_multiplier": {
+      "type": "minecraft:add",
+      "value": {
+        "type": "vanillaplus:described",
+        "description_index": 0,
+        "description_value_multiplier": 100,
+        "value": 1
+      }
+    }
+  }
+}

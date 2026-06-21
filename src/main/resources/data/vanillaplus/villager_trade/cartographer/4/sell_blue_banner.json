@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "minecraft:blue_banner"
+  },
+  "max_uses": 6,
+  "reputation_discount": 0.05,
+  "xp": 28
+}

@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:magenta_dye",
+    "count": 16
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 10,
+  "reputation_discount": 0.05,
+  "xp": 28
+}

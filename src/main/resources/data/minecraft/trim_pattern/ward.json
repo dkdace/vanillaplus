@@ -1,0 +1,23 @@
+{
+  "asset_id": "minecraft:ward",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.minecraft.ward"
+  },
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": 0.1,
+        "attribute": "minecraft:knockback_resistance",
+        "id": "vanillaplus:trim_pattern_effect.ward",
+        "operation": "add_value"
+      },
+      {
+        "amount": 2.5,
+        "attribute": "minecraft:armor_toughness",
+        "id": "vanillaplus:trim_pattern_effect.ward",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

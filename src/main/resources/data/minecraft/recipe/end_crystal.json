@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "E": "minecraft:ender_eye",
+    "T": "minecraft:ghast_tear"
+  },
+  "pattern": [
+    "AAA",
+    "AEA",
+    "ATA"
+  ],
+  "result": {
+    "id": "minecraft:end_crystal"
+  }
+}

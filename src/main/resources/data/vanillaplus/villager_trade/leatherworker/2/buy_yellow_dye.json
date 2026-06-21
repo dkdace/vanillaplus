@@ -1,0 +1,28 @@
+{
+  "wants": {
+    "id": "minecraft:yellow_dye",
+    "count": 16
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 10,
+  "reputation_discount": 0.05,
+  "xp": 28,
+  "merchant_predicate": {
+    "condition": "minecraft:inverted",
+    "term": {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "predicates": {
+          "minecraft:villager/variant": [
+            "minecraft:plains",
+            "minecraft:taiga",
+            "minecraft:savanna"
+          ]
+        }
+      }
+    }
+  }
+}

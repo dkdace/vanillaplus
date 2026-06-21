@@ -15,5 +15,5 @@ public abstract class StructurePieceMixin<T extends StructurePiece> implements V
     protected abstract BlockPos.MutableBlockPos getWorldPos(int x, int y, int z);
 
     @Shadow
-    protected abstract void placeBlock(WorldGenLevel level, BlockState blockState, int x, int y, int z, BoundingBox boundingBox);
+    protected abstract void placeBlock(WorldGenLevel level, BlockState blockState, int x, int y, int z, BoundingBox chunkBB);
 }

@@ -1,0 +1,23 @@
+{
+  "amount": 2,
+  "random_sequence": "minecraft:trade_set/cleric/level_3",
+  "trades": [
+    [
+      "vanillaplus:cleric/3/buy_nether_wart",
+      "vanillaplus:cleric/3/sell_ender_pearl"
+    ],
+    [
+      "vanillaplus:cleric/3/buy_glass_bottle",
+      [
+        "vanillaplus:cleric/3/sell_potion_fire_resistance",
+        "vanillaplus:cleric/3/sell_potion_night_vision",
+        "vanillaplus:cleric/3/sell_potion_leaping",
+        "vanillaplus:cleric/3/sell_potion_swiftness",
+        "vanillaplus:cleric/3/sell_potion_water_breathing",
+        "vanillaplus:cleric/3/sell_potion_strength",
+        "vanillaplus:cleric/3/sell_potion_invisibility",
+        "vanillaplus:cleric/3/sell_potion_regeneration"
+      ]
+    ]
+  ]
+}

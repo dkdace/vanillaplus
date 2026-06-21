@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.entity.boss.enderdragon.phases;
 
+import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingFlamingPhase;
@@ -11,22 +12,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonPhaseInstanceMixin {
     @ModifyExpressionValue(method = "doServerTick", at = @At(value = "CONSTANT", args = "intValue=200"))
     private int modifyFlamingDuration(int duration) {
-        return getVPEnderDragon().getDataModifier()
-                .map(enderDragonModifier ->
-                        (int) (enderDragonModifier.getPhaseInfo().getSitting().getFlamingDurationSeconds().get(dragon) * 20.0))
-                .orElse(duration);
+        return EnderDragonConfig.get().phaseInfo().map(phaseInfo -> (int) phaseInfo.sitting().flamingDuration().get(dragon)).orElse(duration);
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setRadius(F)V"))
     private float modifyFlameRadius(float radius) {
-        return getVPEnderDragon().getDataModifier()
-                .map(enderDragonModifier -> enderDragonModifier.getPhaseInfo().getSitting().getFlameRadius())
-                .orElse(radius);
+        return EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.sitting().flameRadius()).orElse(radius);
     }
 
     @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
-    private MobEffectInstance modifyFlameEffect(MobEffectInstance mobEffectInstance) {
-        return getVPEnderDragon().getDataModifier().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : mobEffectInstance;
+    private MobEffectInstance modifyFlameEffect(MobEffectInstance effect) {
+        return EnderDragonConfig.get().phaseInfo().isPresent() ? getVPEnderDragon().getFlameMobEffectInstance() : effect;
     }
 }
