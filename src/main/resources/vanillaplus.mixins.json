@@ -171,6 +171,7 @@
     "world.level.storage.loot.providers.number.EnchantmentLevelProviderMixin"
   ],
   "client": [
+    "client.MinecraftMixin",
     "client.OptionsMixin",
     "client.color.item.PotionMixin",
     "client.gui.GuiGraphicsExtractorMixin",

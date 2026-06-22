@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * {@link InstrumentItem}의 아이템 설정 데이터 요소 클래스.
  *
- * @param useDuration 지속시간
+ * @param useDuration 사용 시간
  */
 public record InstrumentConfig(@NonNull Optional<Integer> useDuration) {
     /** JSON 코덱 */
