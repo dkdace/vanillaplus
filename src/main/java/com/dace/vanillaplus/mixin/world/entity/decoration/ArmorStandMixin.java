@@ -49,6 +49,11 @@ public abstract class ArmorStandMixin extends LivingEntityMixin<ArmorStand> {
         return true;
     }
 
+    @Override
+    public boolean canRenderHealth(boolean isPicked) {
+        return false;
+    }
+
     @Inject(method = "interact", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/decoration/ArmorStand;getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;"),
             cancellable = true)

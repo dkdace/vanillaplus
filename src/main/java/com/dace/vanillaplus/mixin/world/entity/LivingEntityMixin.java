@@ -156,8 +156,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     }
 
     @Override
-    public boolean canRenderHealth() {
-        return renderHealthTick > 0 || hasEffect(MobEffects.GLOWING);
+    public boolean canRenderHealth(boolean isPicked) {
+        return isPicked || renderHealthTick > 0 || hasEffect(MobEffects.GLOWING);
     }
 
     @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")

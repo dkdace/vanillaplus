@@ -149,6 +149,11 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     }
 
     @Override
+    public boolean canRenderHealth(boolean isPicked) {
+        return false;
+    }
+
+    @Override
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,
                                              float resistance) {
         if (EnderDragonConfig.get().phaseInfo().isPresent())

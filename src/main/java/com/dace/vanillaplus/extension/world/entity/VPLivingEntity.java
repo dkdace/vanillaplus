@@ -37,7 +37,8 @@ public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, Att
     /**
      * 생명력을 표시할 수 있는지 확인한다.
      *
+     * @param isPicked 조준선 선택 여부
      * @return 생명력 표시 여부
      */
-    boolean canRenderHealth();
+    boolean canRenderHealth(boolean isPicked);
 }

@@ -178,8 +178,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         vpLivingEntityRenderState.setMaxHealth(entity.getMaxHealth());
         vpLivingEntityRenderState.setAbsorptionHealth(entity.getAbsorptionAmount());
         vpLivingEntityRenderState.setArmor(entity.getArmorValue());
-        vpLivingEntityRenderState.setCanRenderHealth(!state.isInvisibleToPlayer && (entityRenderDispatcher.crosshairPickEntity == entity
-                || VPLivingEntity.cast(entity).canRenderHealth()));
+        vpLivingEntityRenderState.setCanRenderHealth(!state.isInvisibleToPlayer
+                && VPLivingEntity.cast(entity).canRenderHealth(entityRenderDispatcher.crosshairPickEntity == entity));
         vpLivingEntityRenderState.setHeartType(getHeartType(entity));
     }
 }
