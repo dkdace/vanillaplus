@@ -34,6 +34,10 @@ public interface VPLivingEntityRenderState extends VPMixin<LivingEntityRenderSta
 
     void setArmor(int armor);
 
+    int getArmorToughness();
+
+    void setArmorToughness(int armorToughness);
+
     @NonNull
     Gui.HeartType getHeartType();
 

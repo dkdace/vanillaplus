@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
+import com.dace.vanillaplus.extension.client.gui.VPGui;
 import com.dace.vanillaplus.extension.client.renderer.entity.state.VPLivingEntityRenderState;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -160,16 +161,36 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Unique
     private void submitArmor(@NonNull S state, @NonNull PoseStack matrixStack, @NonNull SubmitNodeCollector orderedRenderCommandQueue) {
         int armor = VPLivingEntityRenderState.cast(state).getArmor();
-        if (armor <= 0)
+        int armorToughness = VPLivingEntityRenderState.cast(state).getArmorToughness();
+        if (armor <= 0 && armorToughness <= 0)
             return;
 
         int armorCount = (int) Math.ceil(armor / 2.0);
-        float interval = getIconInterval(armorCount);
-        float x = getIconStartPosition(interval, armorCount);
+        int armorToughnessCount = (int) Math.ceil(armorToughness / 2.0);
 
-        for (int i = 0; i < armorCount; i++) {
-            Identifier sprite = i * 2 + 1 == armor ? ARMOR_SPRITE_HALF : ARMOR_SPRITE_FULL;
-            renderIcon(state, matrixStack, orderedRenderCommandQueue, sprite, ARMOR_OFFSET_Y, i, x);
+        int maxArmorCount = Math.max(armorCount, armorToughnessCount);
+        float interval = getIconInterval(maxArmorCount);
+        float x = getIconStartPosition(interval, maxArmorCount);
+
+        for (int i = 0; i < maxArmorCount; i++) {
+            int value = i * 2 + 1;
+
+            Identifier armorSprite = null;
+            if (value == armor)
+                armorSprite = ARMOR_SPRITE_HALF;
+            else if (value < armor)
+                armorSprite = ARMOR_SPRITE_FULL;
+
+            Identifier armorToughnessSprite = null;
+            if (value == armorToughness)
+                armorToughnessSprite = VPGui.ARMOR_TOUGHNESS_HALF_SPRITE;
+            else if (value < armorToughness)
+                armorToughnessSprite = VPGui.ARMOR_TOUGHNESS_FULL_SPRITE;
+
+            if (armorSprite != null)
+                renderIcon(state, matrixStack, orderedRenderCommandQueue, armorSprite, ARMOR_OFFSET_Y, i, x);
+            if (armorToughnessSprite != null)
+                renderIcon(state, matrixStack, orderedRenderCommandQueue, armorToughnessSprite, ARMOR_OFFSET_Y, i + armorCount, x);
 
             x -= interval;
         }

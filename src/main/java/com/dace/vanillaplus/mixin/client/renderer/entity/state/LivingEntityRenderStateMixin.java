@@ -24,6 +24,8 @@ public abstract class LivingEntityRenderStateMixin implements VPLivingEntityRend
     @Unique
     private int armor;
     @Unique
+    private int armorToughness;
+    @Unique
     @NonNull
     private Gui.HeartType heartType = Gui.HeartType.NORMAL;
 }

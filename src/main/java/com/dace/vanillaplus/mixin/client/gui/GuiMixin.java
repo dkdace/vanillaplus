@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
@@ -44,6 +46,15 @@ public abstract class GuiMixin implements VPGui {
     private static final int CROSSHAIR_HITMARKER_COLOR = ARGB.color(204, 255, 255, 255);
     @Unique
     private static final int CROSSHAIR_HITMARKER_COLOR_KILLED = ARGB.color(255, 255, 0, 0);
+    @Shadow
+    @Final
+    private static int LINE_HEIGHT;
+    @Shadow
+    @Final
+    private static int HEART_SIZE;
+    @Shadow
+    @Final
+    private static int HEART_SEPARATION;
 
     @Shadow
     @Final
@@ -58,6 +69,22 @@ public abstract class GuiMixin implements VPGui {
     private Identifier hitmarkerSprite;
     @Unique
     private int hitmarkerColor = 0;
+
+    @Inject(method = "extractArmor", at = @At("TAIL"))
+    private static void renderArmorToughness(GuiGraphicsExtractor graphics, Player player, int yLineBase, int numHealthRows, int healthRowHeight,
+                                             int xLeft, CallbackInfo ci) {
+        int armorToughness = (int) Math.floor(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        if (armorToughness <= 0)
+            return;
+
+        int armorToughnessCount = (int) Math.ceil(armorToughness / 2.0);
+        int yLineArmor = yLineBase - (numHealthRows - 1) * healthRowHeight - LINE_HEIGHT;
+
+        for (int i = 0; i < armorToughnessCount; i++) {
+            Identifier sprite = i * 2 + 1 == armorToughness ? ARMOR_TOUGHNESS_HALF_SPRITE : ARMOR_TOUGHNESS_FULL_SPRITE;
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xLeft + i * HEART_SEPARATION, yLineArmor, HEART_SIZE, HEART_SIZE);
+        }
+    }
 
     @Override
     public void updateRecentDamage(float damage, boolean isKilled) {
