@@ -28,4 +28,16 @@ public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, Att
      * @return 밀치기 저항. 0~1 사이의 값
      */
     double getFinalKnockbackResistance(double knockbackResistance, @Nullable DamageSource damageSource);
+
+    /**
+     * 생명력 표시 상태를 갱신한다.
+     */
+    void updateRenderHealth();
+
+    /**
+     * 생명력을 표시할 수 있는지 확인한다.
+     *
+     * @return 생명력 표시 여부
+     */
+    boolean canRenderHealth();
 }

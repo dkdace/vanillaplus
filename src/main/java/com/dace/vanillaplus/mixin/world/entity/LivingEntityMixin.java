@@ -61,6 +61,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private static final Identifier RESISTANCE_EFFECT_VALUE_ID = IdentifierUtil.fromPath("resistance");
     @Unique
     private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
+    @Unique
+    private static final int RENDER_HEALTH_DURATION = 60;
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -75,6 +77,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Unique
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
+    @Unique
+    private int renderHealthTick = 0;
 
     @Shadow
     public abstract void setSprinting(boolean isSprinting);
@@ -141,6 +145,24 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
         return Math.max(knockbackResistance, damageSource != null && damageSource.is(DamageTypeTags.IS_PROJECTILE)
                 ? getAttributeValue(VPAttributes.PROJECTILE_KNOCKBACK_RESISTANCE.getHolder().orElseThrow())
                 : 0);
+    }
+
+    @Override
+    public void updateRenderHealth() {
+        renderHealthTick = RENDER_HEALTH_DURATION;
+    }
+
+    @Override
+    public boolean canRenderHealth() {
+        return renderHealthTick > 0;
+    }
+
+    @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")
+    @Expression("this.invulnerableTime > 0")
+    @Inject(method = "baseTick", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
+    private void decreaseRenderHealthTick(CallbackInfo ci) {
+        if (renderHealthTick > 0)
+            renderHealthTick--;
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
