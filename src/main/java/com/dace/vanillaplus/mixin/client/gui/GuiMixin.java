@@ -14,6 +14,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
@@ -122,6 +123,28 @@ public abstract class GuiMixin implements VPGui {
     private void decreaseRecentDamageTick(CallbackInfo ci) {
         if (recentDamageTick > 0)
             recentDamageTick--;
+    }
+
+    @Inject(method = "extractFood", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
+            ordinal = 0, shift = At.Shift.AFTER))
+    private void renderFoodSaturation(GuiGraphicsExtractor graphics, Player player, int yLineBase, int xRight, CallbackInfo ci,
+                                      @Local(name = "foodData") FoodData foodData, @Local(name = "i") int i, @Local(name = "yo") int yo,
+                                      @Local(name = "xo") int xo) {
+        int saturation = (int) Math.ceil(foodData.getSaturationLevel());
+        if (saturation <= 0)
+            return;
+
+        int value = i * 2 + 1;
+
+        Identifier sprite = null;
+        if (value == saturation)
+            sprite = FOOD_SATURATION_HALF_SPRITE;
+        else if (value < saturation)
+            sprite = FOOD_SATURATION_FULL_SPRITE;
+
+        if (sprite != null)
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xo, yo, HEART_SIZE, HEART_SIZE);
     }
 
     @Inject(method = "extractHotbarAndDecorations", at = @At("HEAD"))

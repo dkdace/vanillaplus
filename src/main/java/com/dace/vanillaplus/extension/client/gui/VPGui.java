@@ -14,6 +14,10 @@ public interface VPGui extends VPMixin<Gui> {
     Identifier ARMOR_TOUGHNESS_HALF_SPRITE = IdentifierUtil.fromPath("hud/armor_toughness_half");
     /** 방어 강도 스프라이트 식별자 (한 칸) */
     Identifier ARMOR_TOUGHNESS_FULL_SPRITE = IdentifierUtil.fromPath("hud/armor_toughness_full");
+    /** 포만감 스프라이트 식별자 (반 칸) */
+    Identifier FOOD_SATURATION_HALF_SPRITE = IdentifierUtil.fromPath("hud/food_saturation_half");
+    /** 포만감 스프라이트 식별자 (한 칸) */
+    Identifier FOOD_SATURATION_FULL_SPRITE = IdentifierUtil.fromPath("hud/food_saturation_full");
 
     @NonNull
     static VPGui cast(@NonNull Gui object) {
