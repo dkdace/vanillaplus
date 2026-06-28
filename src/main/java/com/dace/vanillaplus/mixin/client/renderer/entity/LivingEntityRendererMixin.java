@@ -12,8 +12,8 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.CommonColors;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -49,19 +49,34 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private static final Identifier ARMOR_SPRITE_HALF = Identifier.withDefaultNamespace("hud/armor_half");
 
     @Unique
+    private static float getIconInterval(int count) {
+        return ICON_INTERVAL * ((float) Math.min(count, MAX_WIDTH_ICON_COUNT) / count);
+    }
+
+    @Unique
+    private static float getIconStartPosition(float interval, int count) {
+        return (interval * count + (ICON_INTERVAL - interval) + 1) / 2F;
+    }
+
+    @Unique
     @NonNull
     private static <T extends LivingEntity> Gui.HeartType getHeartType(@NonNull T entity) {
-        Gui.HeartType heartType;
-        if (entity.hasEffect(MobEffects.POISON))
-            heartType = Gui.HeartType.POISIONED;
-        else if (entity.hasEffect(MobEffects.WITHER))
-            heartType = Gui.HeartType.WITHERED;
-        else if (entity.isFullyFrozen())
-            heartType = Gui.HeartType.FROZEN;
-        else
-            heartType = Gui.HeartType.NORMAL;
+        VPLivingEntity<T> vpLivingEntity = VPLivingEntity.cast(entity);
 
-        return heartType;
+        if (vpLivingEntity.isPoisoned())
+            return Gui.HeartType.POISIONED;
+        if (vpLivingEntity.isWithered())
+            return Gui.HeartType.WITHERED;
+        if (entity.isFullyFrozen())
+            return Gui.HeartType.FROZEN;
+
+        return Gui.HeartType.NORMAL;
+    }
+
+    @Unique
+    protected boolean canRenderHealth(@NonNull T entity, @NonNull S state) {
+        return !state.isInvisibleToPlayer && (VPLivingEntity.cast(entity).canRenderHealth() || entityRenderDispatcher.crosshairPickEntity == entity
+                || state.appearsGlowing());
     }
 
     @Unique
@@ -114,8 +129,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         int absorptionHeartCount = (int) Math.ceil(absorption / 2.0);
 
         int totalHeartCount = maxHealthHeartCount + absorptionHeartCount;
-        float interval = ICON_INTERVAL * ((float) Math.min(totalHeartCount, MAX_WIDTH_ICON_COUNT) / totalHeartCount);
-        float x = (interval * maxHealthHeartCount + (ICON_INTERVAL - interval) + 1) / 2F;
+        float interval = getIconInterval(totalHeartCount);
+        float x = getIconStartPosition(interval, totalHeartCount);
 
         for (int i = 0; i < totalHeartCount; i++) {
             Gui.HeartType heartType;
@@ -149,8 +164,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             return;
 
         int armorCount = (int) Math.ceil(armor / 2.0);
-        float interval = ICON_INTERVAL * ((float) Math.min(armorCount, MAX_WIDTH_ICON_COUNT) / armorCount);
-        float x = (interval * armorCount + (ICON_INTERVAL - interval) + 1) / 2F;
+        float interval = getIconInterval(armorCount);
+        float x = getIconStartPosition(interval, armorCount);
 
         for (int i = 0; i < armorCount; i++) {
             Identifier sprite = i * 2 + 1 == armor ? ARMOR_SPRITE_HALF : ARMOR_SPRITE_FULL;
@@ -178,8 +193,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         vpLivingEntityRenderState.setMaxHealth(entity.getMaxHealth());
         vpLivingEntityRenderState.setAbsorptionHealth(entity.getAbsorptionAmount());
         vpLivingEntityRenderState.setArmor(entity.getArmorValue());
-        vpLivingEntityRenderState.setCanRenderHealth(!state.isInvisibleToPlayer
-                && VPLivingEntity.cast(entity).canRenderHealth(entityRenderDispatcher.crosshairPickEntity == entity));
+        vpLivingEntityRenderState.setArmorToughness((int) Math.floor(entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
+        vpLivingEntityRenderState.setCanRenderHealth(canRenderHealth(entity, state));
         vpLivingEntityRenderState.setHeartType(getHeartType(entity));
     }
 }

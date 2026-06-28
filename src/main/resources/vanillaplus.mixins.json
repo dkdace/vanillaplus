@@ -188,6 +188,7 @@
     "client.player.LocalPlayerMixin",
     "client.renderer.ItemInHandRendererMixin",
     "client.renderer.ScreenEffectRendererMixin",
+    "client.renderer.entity.ArmorStandRendererMixin",
     "client.renderer.entity.EnderDragonRendererMixin",
     "client.renderer.entity.EntityRendererMixin",
     "client.renderer.entity.LivingEntityRendererMixin",

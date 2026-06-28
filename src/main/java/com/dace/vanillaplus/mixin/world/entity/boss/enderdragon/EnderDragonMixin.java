@@ -69,7 +69,8 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     @Unique
     private static final int ENDERMITE_POS_SPREAD = 4;
     @Unique
-    private static final EntityDataAccessor<Optional<BlockPos>> METEOR_POS = SynchedEntityData.defineId(EnderDragon.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    private static final EntityDataAccessor<Optional<BlockPos>> METEOR_POS = SynchedEntityData.defineId(EnderDragon.class,
+            EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
     @Unique
     private final HashSet<ServerPlayer> targets = new HashSet<>();
@@ -146,11 +147,6 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
 
             return;
         }
-    }
-
-    @Override
-    public boolean canRenderHealth(boolean isPicked) {
-        return false;
     }
 
     @Override

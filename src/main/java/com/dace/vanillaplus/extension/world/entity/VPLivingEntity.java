@@ -2,6 +2,7 @@ package com.dace.vanillaplus.extension.world.entity;
 
 import lombok.NonNull;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Attackable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.waypoints.WaypointTransmitter;
@@ -37,8 +38,21 @@ public interface VPLivingEntity<T extends LivingEntity> extends VPEntity<T>, Att
     /**
      * 생명력을 표시할 수 있는지 확인한다.
      *
-     * @param isPicked 조준선 선택 여부
      * @return 생명력 표시 여부
      */
-    boolean canRenderHealth(boolean isPicked);
+    boolean canRenderHealth();
+
+    /**
+     * 엔티티가 독({@link MobEffects#POISON}) 상태에 걸렸는지 확인한다.
+     *
+     * @return 독 상태에 걸렸으면 {@code true} 반환
+     */
+    boolean isPoisoned();
+
+    /**
+     * 엔티티가 위더({@link MobEffects#WITHER}) 상태에 걸렸는지 확인한다.
+     *
+     * @return 위더 상태에 걸렸으면 {@code true} 반환
+     */
+    boolean isWithered();
 }

@@ -17,6 +17,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -43,10 +46,7 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -63,6 +63,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
     @Unique
     private static final int RENDER_HEALTH_DURATION = 60;
+    @Unique
+    private static final EntityDataAccessor<Float> ABSORPTION = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
+    @Unique
+    private static final EntityDataAccessor<Boolean> IS_POISONED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Boolean> IS_WITHERED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
@@ -156,8 +162,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     }
 
     @Override
-    public boolean canRenderHealth(boolean isPicked) {
-        return isPicked || renderHealthTick > 0 || hasEffect(MobEffects.GLOWING);
+    public boolean canRenderHealth() {
+        return renderHealthTick > 0;
+    }
+
+    @Override
+    public boolean isPoisoned() {
+        return getEntityData().get(IS_POISONED);
+    }
+
+    @Override
+    public boolean isWithered() {
+        return getEntityData().get(IS_WITHERED);
     }
 
     @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")
@@ -166,6 +182,29 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private void decreaseRenderHealthTick(CallbackInfo ci) {
         if (renderHealthTick > 0)
             renderHealthTick--;
+    }
+
+    @Inject(method = "defineSynchedData", at = @At("TAIL"))
+    private void defineSynchedData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
+        entityData.define(ABSORPTION, 0F);
+        entityData.define(IS_POISONED, false);
+        entityData.define(IS_WITHERED, false);
+    }
+
+    @Overwrite
+    public float getAbsorptionAmount() {
+        return getEntityData().get(ABSORPTION);
+    }
+
+    @Overwrite
+    protected void internalSetAbsorptionAmount(float absorptionAmount) {
+        getEntityData().set(ABSORPTION, absorptionAmount);
+    }
+
+    @Inject(method = "updateDirtyEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;updateGlowingStatus()V"))
+    private void updateSyncedEffects(CallbackInfo ci) {
+        getEntityData().set(IS_POISONED, hasEffect(MobEffects.POISON));
+        getEntityData().set(IS_WITHERED, hasEffect(MobEffects.WITHER));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
@@ -221,7 +260,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Expression("absorbValue")
     @ModifyExpressionValue(method = "getDamageAfterMagicAbsorb", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyResistanceMultiplier(int absorbValue) {
-        MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.RESISTANCE));
 
         return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
                 .calculate(RESISTANCE_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
