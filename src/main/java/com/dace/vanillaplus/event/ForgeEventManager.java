@@ -4,9 +4,13 @@ import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
+import com.dace.vanillaplus.network.NetworkManager;
+import com.dace.vanillaplus.network.client.PlayerDamageEntityPacket;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,10 +57,15 @@ public final class ForgeEventManager {
     @SubscribeEvent
     private static void onLivingDamage(@NonNull LivingDamageEvent event) {
         LivingEntity entity = event.getEntity();
+        DamageSource damageSource = event.getSource();
+        float damage = event.getAmount();
 
         EnchantmentHelper.runIterationOnEquipment(entity, (enchantmentHolder, level, enchantedItemInUse) ->
                 VPEnchantment.cast(enchantmentHolder.value()).runPostDamageEffects((ServerLevel) entity.level(), level, enchantedItemInUse, entity,
-                        event.getSource()));
+                        damageSource));
+
+        if (damageSource.getEntity() instanceof ServerPlayer serverPlayer && serverPlayer != entity)
+            NetworkManager.sendToPlayer(new PlayerDamageEntityPacket(entity.getId(), damage), serverPlayer);
     }
 
     @SubscribeEvent

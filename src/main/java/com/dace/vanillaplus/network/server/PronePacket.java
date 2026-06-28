@@ -27,5 +27,7 @@ public record PronePacket(boolean isPressed) implements VPPacket {
         ServerPlayer player = context.getSender();
         if (player != null)
             VPPlayer.cast(player).setProneKeyDown(isPressed);
+
+        context.setPacketHandled(true);
     }
 }
