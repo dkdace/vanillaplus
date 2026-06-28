@@ -102,6 +102,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     public abstract double getAttributeValue(Holder<Attribute> attribute);
 
     @Shadow
+    public abstract boolean hasEffect(Holder<MobEffect> effect);
+
+    @Shadow
     @Nullable
     public abstract MobEffectInstance getEffect(Holder<MobEffect> effect);
 
@@ -154,7 +157,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Override
     public boolean canRenderHealth() {
-        return renderHealthTick > 0;
+        return renderHealthTick > 0 || hasEffect(MobEffects.GLOWING);
     }
 
     @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")
