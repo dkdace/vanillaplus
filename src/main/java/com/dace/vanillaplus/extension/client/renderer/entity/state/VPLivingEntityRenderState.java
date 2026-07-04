@@ -22,6 +22,10 @@ public interface VPLivingEntityRenderState extends VPMixin<LivingEntityRenderSta
 
     void setHealth(float health);
 
+    float getOldHealth();
+
+    void setOldHealth(float health);
+
     float getMaxHealth();
 
     void setMaxHealth(float maxHealth);

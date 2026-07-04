@@ -2,6 +2,8 @@ package com.dace.vanillaplus.mixin.client.gui;
 
 import com.dace.vanillaplus.extension.client.gui.VPGui;
 import com.dace.vanillaplus.util.IdentifierUtil;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
@@ -49,13 +51,7 @@ public abstract class GuiMixin implements VPGui {
     private static final int CROSSHAIR_HITMARKER_COLOR_KILLED = ARGB.color(255, 255, 0, 0);
     @Shadow
     @Final
-    private static int LINE_HEIGHT;
-    @Shadow
-    @Final
     private static int HEART_SIZE;
-    @Shadow
-    @Final
-    private static int HEART_SEPARATION;
 
     @Shadow
     @Final
@@ -71,20 +67,26 @@ public abstract class GuiMixin implements VPGui {
     @Unique
     private int hitmarkerColor = 0;
 
-    @Inject(method = "extractArmor", at = @At("TAIL"))
+    @Definition(id = "i", local = @Local(type = int.class, name = "i"))
+    @Expression("i + 1")
+    @Inject(method = "extractArmor", at = @At("MIXINEXTRAS:EXPRESSION"))
     private static void renderArmorToughness(GuiGraphicsExtractor graphics, Player player, int yLineBase, int numHealthRows, int healthRowHeight,
-                                             int xLeft, CallbackInfo ci) {
+                                             int xLeft, CallbackInfo ci, @Local(name = "yLineArmor") int yLineArmor, @Local(name = "i") int i,
+                                             @Local(name = "xo") int xo) {
         int armorToughness = (int) Math.floor(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
         if (armorToughness <= 0)
             return;
 
-        int armorToughnessCount = (int) Math.ceil(armorToughness / 2.0);
-        int yLineArmor = yLineBase - (numHealthRows - 1) * healthRowHeight - LINE_HEIGHT;
+        int value = i * 2 + 1;
 
-        for (int i = 0; i < armorToughnessCount; i++) {
-            Identifier sprite = i * 2 + 1 == armorToughness ? ARMOR_TOUGHNESS_HALF_SPRITE : ARMOR_TOUGHNESS_FULL_SPRITE;
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xLeft + i * HEART_SEPARATION, yLineArmor, HEART_SIZE, HEART_SIZE);
-        }
+        Identifier sprite = null;
+        if (value == armorToughness)
+            sprite = ARMOR_TOUGHNESS_HALF_SPRITE;
+        else if (value < armorToughness)
+            sprite = ARMOR_TOUGHNESS_FULL_SPRITE;
+
+        if (sprite != null)
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xo, yLineArmor, HEART_SIZE, HEART_SIZE);
     }
 
     @Override

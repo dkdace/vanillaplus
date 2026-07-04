@@ -18,6 +18,8 @@ public abstract class LivingEntityRenderStateMixin implements VPLivingEntityRend
     @Unique
     private float health;
     @Unique
+    private float oldHealth;
+    @Unique
     private float maxHealth;
     @Unique
     private float absorptionHealth;

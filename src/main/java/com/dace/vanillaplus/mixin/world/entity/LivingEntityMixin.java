@@ -16,6 +16,7 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.Getter;
 import net.minecraft.core.Holder;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -62,7 +63,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Unique
     private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
     @Unique
-    private static final int RENDER_HEALTH_DURATION = 60;
+    private static final int CLIENT_HURT_DURATION = 60;
+    @Unique
+    private static final EntityDataAccessor<Float> OLD_HEALTH = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
     @Unique
     private static final EntityDataAccessor<Float> ABSORPTION = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
     @Unique
@@ -74,6 +77,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private static Identifier SPRINTING_MODIFIER_ID;
 
     @Shadow
+    public int hurtTime;
+    @Shadow
+    public int hurtDuration;
+    @Shadow
     protected Brain<?> brain;
     @Shadow
     protected int attackStrengthTicker;
@@ -84,7 +91,8 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
     @Unique
-    private int renderHealthTick = 0;
+    @Getter
+    private int clientHurtTime = 0;
 
     @Shadow
     public abstract void setSprinting(boolean isSprinting);
@@ -157,13 +165,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     }
 
     @Override
-    public void updateRenderHealth() {
-        renderHealthTick = RENDER_HEALTH_DURATION;
+    public boolean canRenderHealth() {
+        return true;
     }
 
     @Override
-    public boolean canRenderHealth() {
-        return renderHealthTick > 0;
+    public void onDamagedByClient() {
+        clientHurtTime = CLIENT_HURT_DURATION;
+    }
+
+    @Override
+    public float getOldHealth() {
+        return hurtDuration > 0 && hurtTime >= hurtDuration / 2.0 ? getEntityData().get(OLD_HEALTH) : getHealth();
     }
 
     @Override
@@ -179,13 +192,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")
     @Expression("this.invulnerableTime > 0")
     @Inject(method = "baseTick", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
-    private void decreaseRenderHealthTick(CallbackInfo ci) {
-        if (renderHealthTick > 0)
-            renderHealthTick--;
+    private void decreaseClientHurtTime(CallbackInfo ci) {
+        if (clientHurtTime > 0)
+            clientHurtTime--;
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void defineSynchedData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
+        entityData.define(OLD_HEALTH, 0F);
         entityData.define(ABSORPTION, 0F);
         entityData.define(IS_POISONED, false);
         entityData.define(IS_WITHERED, false);
@@ -231,6 +245,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Inject(method = "checkTotemDeathProtection", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
     protected void onUseTotem(DamageSource killingDamage, CallbackInfoReturnable<Boolean> cir,
                               @Local(name = "protectionItem") ItemStack protectionItem) {
+    }
+
+    @Inject(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
+    private void setOldHealth(ServerLevel level, DamageSource source, float dmg, CallbackInfo ci) {
+        if (hurtTime <= 0)
+            getEntityData().set(OLD_HEALTH, getHealth());
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))

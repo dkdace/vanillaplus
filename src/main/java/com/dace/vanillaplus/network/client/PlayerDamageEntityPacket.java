@@ -34,7 +34,7 @@ public record PlayerDamageEntityPacket(int entityId, float damage) implements VP
 
         if (clientLevel != null && clientLevel.getEntity(entityId) instanceof LivingEntity livingEntity) {
             VPGui.cast(minecraft.gui).updateRecentDamage(damage, damage >= livingEntity.getHealth());
-            VPLivingEntity.cast(livingEntity).updateRenderHealth();
+            VPLivingEntity.cast(livingEntity).onDamagedByClient();
         }
 
         context.setPacketHandled(true);

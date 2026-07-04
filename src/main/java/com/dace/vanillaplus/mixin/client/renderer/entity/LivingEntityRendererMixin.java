@@ -75,9 +75,11 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @Unique
-    protected boolean canRenderHealth(@NonNull T entity, @NonNull S state) {
-        return !state.isInvisibleToPlayer && (VPLivingEntity.cast(entity).canRenderHealth() || entityRenderDispatcher.crosshairPickEntity == entity
-                || state.appearsGlowing());
+    private boolean canRenderHealth(@NonNull T entity, @NonNull S state) {
+        VPLivingEntity<T> vpLivingEntity = VPLivingEntity.cast(entity);
+
+        return vpLivingEntity.canRenderHealth() && !state.isInvisibleToPlayer && (vpLivingEntity.getClientHurtTime() > 0
+                || entityRenderDispatcher.crosshairPickEntity == entity || state.appearsGlowing());
     }
 
     @Unique
@@ -123,7 +125,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void submitHearts(@NonNull S state, @NonNull PoseStack matrixStack, @NonNull SubmitNodeCollector orderedRenderCommandQueue) {
         VPLivingEntityRenderState vpLivingEntityRenderState = VPLivingEntityRenderState.cast(state);
         int health = (int) Math.ceil(vpLivingEntityRenderState.getHealth());
-        int healthHeartCount = (int) Math.ceil(health / 2.0);
+        int oldHealth = (int) Math.ceil(vpLivingEntityRenderState.getOldHealth());
         int maxHealth = (int) Math.ceil(vpLivingEntityRenderState.getMaxHealth());
         int maxHealthHeartCount = (int) Math.ceil(maxHealth / 2.0);
         int absorption = (int) Math.ceil(vpLivingEntityRenderState.getAbsorptionHealth());
@@ -132,26 +134,31 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         int totalHeartCount = maxHealthHeartCount + absorptionHeartCount;
         float interval = getIconInterval(totalHeartCount);
         float x = getIconStartPosition(interval, totalHeartCount);
+        int containerIndex = 0;
+        int heartIndex = totalHeartCount;
 
         for (int i = 0; i < totalHeartCount; i++) {
-            Gui.HeartType heartType;
-            boolean isAbsorption = i >= maxHealthHeartCount;
-            boolean isHalf;
+            int value = i * 2 + 1;
+            Gui.HeartType heartType = vpLivingEntityRenderState.getHeartType();
+            boolean isBlink = oldHealth > health;
 
-            if (isAbsorption) {
-                heartType = Gui.HeartType.ABSORBING;
-                isHalf = (i - maxHealthHeartCount) * 2 + 1 == absorption;
-            } else {
-                heartType = vpLivingEntityRenderState.getHeartType();
-                isHalf = i * 2 + 1 == health;
+            Identifier containerSprite = Gui.HeartType.CONTAINER.getSprite(false, false, isBlink);
+            renderIcon(state, matrixStack, orderedRenderCommandQueue, containerSprite, HEALTH_OFFSET_Y, containerIndex++, x);
+
+            if (isBlink && value <= oldHealth) {
+                Identifier heartSprite = heartType.getSprite(false, value == oldHealth, true);
+                renderIcon(state, matrixStack, orderedRenderCommandQueue, heartSprite, HEALTH_OFFSET_Y, heartIndex++, x);
             }
 
-            Identifier containerSprite = Gui.HeartType.CONTAINER.getSprite(false, false, false);
-            renderIcon(state, matrixStack, orderedRenderCommandQueue, containerSprite, HEALTH_OFFSET_Y, i, x);
+            if (value <= health) {
+                Identifier heartSprite = heartType.getSprite(false, value == health, false);
+                renderIcon(state, matrixStack, orderedRenderCommandQueue, heartSprite, HEALTH_OFFSET_Y, heartIndex++, x);
+            }
 
-            if (i < healthHeartCount || isAbsorption) {
-                Identifier heartSprite = heartType.getSprite(false, isHalf, false);
-                renderIcon(state, matrixStack, orderedRenderCommandQueue, heartSprite, HEALTH_OFFSET_Y, i + totalHeartCount, x);
+            if (value > maxHealth) {
+                Identifier heartSprite = Gui.HeartType.ABSORBING.getSprite(false, (i - maxHealthHeartCount) * 2 + 1 == absorption,
+                        false);
+                renderIcon(state, matrixStack, orderedRenderCommandQueue, heartSprite, HEALTH_OFFSET_Y, heartIndex++, x);
             }
 
             x -= interval;
@@ -211,6 +218,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     public void extractHealth(T entity, S state, float partialTicks, CallbackInfo ci) {
         VPLivingEntityRenderState vpLivingEntityRenderState = VPLivingEntityRenderState.cast(state);
         vpLivingEntityRenderState.setHealth(entity.getHealth());
+        vpLivingEntityRenderState.setOldHealth(VPLivingEntity.cast(entity).getOldHealth());
         vpLivingEntityRenderState.setMaxHealth(entity.getMaxHealth());
         vpLivingEntityRenderState.setAbsorptionHealth(entity.getAbsorptionAmount());
         vpLivingEntityRenderState.setArmor(entity.getArmorValue());
