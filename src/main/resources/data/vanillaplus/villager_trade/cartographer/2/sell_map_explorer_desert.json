@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "vanillaplus:on_desert_explorer_maps",
-      "decoration": "minecraft:target_point",
+      "decoration": "vanillaplus:desert_pyramid",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 10719049
-      }
     },
     {
       "function": "minecraft:set_name",

@@ -18,12 +18,6 @@
       "skip_existing_chunks": false
     },
     {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 12870424
-      }
-    },
-    {
       "function": "minecraft:set_name",
       "target": "item_name",
       "name": {

@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "vanillaplus:ancient_city",
-      "decoration": "minecraft:target_point",
+      "decoration": "vanillaplus:ancient_city",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 2629473
-      }
     },
     {
       "function": "minecraft:set_name",

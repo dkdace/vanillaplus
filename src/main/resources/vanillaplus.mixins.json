@@ -160,6 +160,7 @@
     "world.level.levelgen.feature.EndSpikeFeatureMixin$SpikeCacheLoaderMixin",
     "world.level.levelgen.structure.StructurePieceMixin",
     "world.level.levelgen.structure.structures.SwampHutPieceMixin",
+    "world.level.saveddata.maps.MapDecorationTypesMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin",
     "world.level.storage.loot.functions.ApplyBonusCountMixin$OreDropsMixin",
     "world.level.storage.loot.functions.EnchantWithLevelsFunctionMixin",

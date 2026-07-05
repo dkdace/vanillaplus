@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "vanillaplus:trail_ruins",
-      "decoration": "minecraft:red_x",
+      "decoration": "vanillaplus:trail_ruins",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 13411231
-      }
     },
     {
       "function": "minecraft:set_name",

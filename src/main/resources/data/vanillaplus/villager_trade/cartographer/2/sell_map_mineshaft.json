@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "minecraft:mineshaft",
-      "decoration": "minecraft:target_point",
+      "decoration": "vanillaplus:mineshaft",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 6051399
-      }
     },
     {
       "function": "minecraft:set_name",
