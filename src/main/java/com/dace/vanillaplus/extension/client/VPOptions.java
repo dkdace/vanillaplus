@@ -22,6 +22,18 @@ public interface VPOptions extends VPMixin<Options> {
     OptionInstance<Boolean> getToggleProne();
 
     /**
+     * @return 공격 표식 설정
+     */
+    @NonNull
+    OptionInstance<Boolean> getAttackMarker();
+
+    /**
+     * @return 몹 생명력 지표 설정
+     */
+    @NonNull
+    OptionInstance<Boolean> getMobHealthIndicator();
+
+    /**
      * @return 엎드리기 키
      */
     @NonNull

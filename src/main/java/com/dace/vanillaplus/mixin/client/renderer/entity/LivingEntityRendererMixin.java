@@ -1,10 +1,12 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
+import com.dace.vanillaplus.extension.client.VPOptions;
 import com.dace.vanillaplus.extension.client.gui.VPGui;
 import com.dace.vanillaplus.extension.client.renderer.entity.state.VPLivingEntityRenderState;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.NonNull;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -206,7 +208,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
             at = @At("TAIL"))
     private void submit(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci) {
-        if (!VPLivingEntityRenderState.cast(state).isCanRenderHealth())
+        if (!VPOptions.cast(Minecraft.getInstance().options).getMobHealthIndicator().get()
+                || !VPLivingEntityRenderState.cast(state).isCanRenderHealth())
             return;
 
         submitHearts(state, poseStack, submitNodeCollector);

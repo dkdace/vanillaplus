@@ -183,6 +183,7 @@
     "client.gui.screens.inventory.AnvilScreenMixin",
     "client.gui.screens.inventory.BrewingStandScreenMixin",
     "client.gui.screens.inventory.MerchantScreenMixin",
+    "client.gui.screens.options.VideoSettingsScreenMixin",
     "client.gui.screens.options.controls.ControlsScreenMixin",
     "client.particle.AttackSweepParticleMixin",
     "client.particle.SingleQuadParticleMixin",

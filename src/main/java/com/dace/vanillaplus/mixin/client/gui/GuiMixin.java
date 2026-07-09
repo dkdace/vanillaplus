@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.client.gui;
 
+import com.dace.vanillaplus.extension.client.VPOptions;
 import com.dace.vanillaplus.extension.client.gui.VPGui;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -151,7 +152,7 @@ public abstract class GuiMixin implements VPGui {
 
     @Inject(method = "extractHotbarAndDecorations", at = @At("HEAD"))
     private void renderCrosshairHitmarker(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (recentDamageTick <= 0 || hitmarkerSprite == null)
+        if (!VPOptions.cast(minecraft.options).getAttackMarker().get() || recentDamageTick <= 0 || hitmarkerSprite == null)
             return;
 
         int color = ARGB.multiplyAlpha(hitmarkerColor, (float) recentDamageTick / RECENT_DAMAGE_DURATION);
