@@ -49,7 +49,7 @@ public abstract class GuiMixin implements VPGui {
     @Unique
     private static final int CROSSHAIR_HITMARKER_COLOR = ARGB.color(204, 255, 255, 255);
     @Unique
-    private static final int CROSSHAIR_HITMARKER_COLOR_KILLED = ARGB.color(255, 255, 0, 0);
+    private static final int CROSSHAIR_HITMARKER_COLOR_KILLED = ARGB.color(255, 255, 48, 48);
     @Shadow
     @Final
     private static int HEART_SIZE;

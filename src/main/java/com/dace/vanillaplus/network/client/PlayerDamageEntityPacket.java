@@ -15,16 +15,18 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
  *
  * @param entityId 엔티티 ID
  * @param damage   피해량
+ * @param isKilled 처치 여부
  */
-public record PlayerDamageEntityPacket(int entityId, float damage) implements VPPacket {
+public record PlayerDamageEntityPacket(int entityId, float damage, boolean isKilled) implements VPPacket {
     public PlayerDamageEntityPacket(@NonNull RegistryFriendlyByteBuf buf) {
-        this(buf.readVarInt(), buf.readFloat());
+        this(buf.readVarInt(), buf.readFloat(), buf.readBoolean());
     }
 
     @Override
     public void encode(@NonNull RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(entityId);
         buf.writeFloat(damage);
+        buf.writeBoolean(isKilled);
     }
 
     @Override
@@ -33,7 +35,7 @@ public record PlayerDamageEntityPacket(int entityId, float damage) implements VP
         ClientLevel clientLevel = minecraft.level;
 
         if (clientLevel != null && clientLevel.getEntity(entityId) instanceof LivingEntity livingEntity) {
-            VPGui.cast(minecraft.gui).updateRecentDamage(damage, damage >= livingEntity.getHealth());
+            VPGui.cast(minecraft.gui).updateRecentDamage(damage, isKilled);
             VPLivingEntity.cast(livingEntity).onDamagedByClient();
         }
 

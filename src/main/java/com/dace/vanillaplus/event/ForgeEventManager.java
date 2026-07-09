@@ -65,7 +65,7 @@ public final class ForgeEventManager {
                         damageSource));
 
         if (damageSource.getEntity() instanceof ServerPlayer serverPlayer && serverPlayer != entity)
-            NetworkManager.sendToPlayer(new PlayerDamageEntityPacket(entity.getId(), damage), serverPlayer);
+            NetworkManager.sendToPlayer(new PlayerDamageEntityPacket(entity.getId(), damage, damage >= entity.getHealth()), serverPlayer);
     }
 
     @SubscribeEvent
