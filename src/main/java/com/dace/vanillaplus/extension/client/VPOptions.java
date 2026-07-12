@@ -22,6 +22,12 @@ public interface VPOptions extends VPMixin<Options> {
     OptionInstance<Boolean> getToggleProne();
 
     /**
+     * @return 최대 아이템 설명 폭
+     */
+    @NonNull
+    OptionInstance<Double> getMaxItemTooltipWidth();
+
+    /**
      * @return 공격 표식 설정
      */
     @NonNull

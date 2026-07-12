@@ -13,8 +13,14 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(VideoSettingsScreen.class)
 public abstract class VideoSettingsScreenMixin extends ScreenMixin<VideoSettingsScreen> {
+    @ModifyReturnValue(method = "displayOptions", at = @At("RETURN"))
+    private static OptionInstance<?>[] addExtraDisplayOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
+        return ArrayUtils.add(optionInstances, VPOptions.cast(options).getMaxItemTooltipWidth());
+    }
+
     @ModifyReturnValue(method = "preferenceOptions", at = @At("RETURN"))
-    private static OptionInstance<?>[] addExtraOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
-        return ArrayUtils.addAll(optionInstances, VPOptions.cast(options).getAttackMarker(), VPOptions.cast(options).getMobHealthIndicator());
+    private static OptionInstance<?>[] addExtraPreferenceOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
+        VPOptions vpOptions = VPOptions.cast(options);
+        return ArrayUtils.addAll(optionInstances, vpOptions.getAttackMarker(), vpOptions.getMobHealthIndicator());
     }
 }

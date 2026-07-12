@@ -128,6 +128,7 @@
   "merchant.stock": "남은 재고: %s / %s",
   "options.attack_marker": "공격 표식",
   "options.attack_marker.tooltip": "공격이 적중했을 때 조준선에 나타나는 표식입니다.",
+  "options.item_tooltip_width": "최대 아이템 설명 폭",
   "options.mob_health_indicator": "몹 생명력 지표",
   "options.mob_health_indicator.tooltip": "플레이어 및 몹의 머리 위에 생명력 지표를 표시합니다.",
   "pack.vanillaplus.description": "VanillaPlus 데이터 팩",

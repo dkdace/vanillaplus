@@ -18,10 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -45,6 +42,11 @@ public final class ClientForgeEventManager {
 
         VPPlayer.cast(event.getEntity()).setProneKeyDown(vpOptions.getKeyProne().isDown());
         NetworkManager.sendToServer(new PronePacket(vpOptions.getKeyProne().isDown()));
+    }
+
+    @SubscribeEvent
+    private static void onRenderTooltipGatherComponents(@NonNull RenderTooltipEvent.GatherComponents event) {
+        event.setMaxWidth((int) (event.getScreenWidth() * VPOptions.cast(Minecraft.getInstance().options).getMaxItemTooltipWidth().get()));
     }
 
     @SubscribeEvent

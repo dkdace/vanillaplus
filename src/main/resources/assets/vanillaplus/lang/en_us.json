@@ -128,6 +128,7 @@
   "merchant.stock": "Remaining Stock: %s / %s",
   "options.attack_marker": "Attack Marker",
   "options.attack_marker.tooltip": "A marker that appears on the crosshair when an attack hits.",
+  "options.item_tooltip_width": "Max Item Tooltip Width",
   "options.mob_health_indicator": "Mob Health Indicator",
   "options.mob_health_indicator.tooltip": "Displays a health indicator above players and mobs.",
   "pack.vanillaplus.description": "VanillaPlus data pack",

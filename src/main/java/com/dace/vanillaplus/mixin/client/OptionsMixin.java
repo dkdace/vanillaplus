@@ -1,11 +1,9 @@
 package com.dace.vanillaplus.mixin.client;
 
 import com.dace.vanillaplus.extension.client.VPOptions;
+import com.mojang.serialization.Codec;
 import lombok.Getter;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.OptionInstance;
-import net.minecraft.client.Options;
-import net.minecraft.client.ToggleKeyMapping;
+import net.minecraft.client.*;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
@@ -24,6 +22,12 @@ public abstract class OptionsMixin implements VPOptions {
     private static final Component COMPONENT_ATTACK_MARKER_TOOLTIP = Component.translatable("options.attack_marker.tooltip");
     @Unique
     private static final Component COMPONENT_MOB_HEALTH_INDICATOR_TOOLTIP = Component.translatable("options.mob_health_indicator.tooltip");
+    @Unique
+    private static final double MAX_ITEM_TOOLTIP_WIDTH_MIN = 0.1;
+    @Unique
+    private static final double MAX_ITEM_TOOLTIP_WIDTH_MAX = 1;
+    @Unique
+    private static final double MAX_ITEM_TOOLTIP_WIDTH_DEFAULT = 0.3;
     @Shadow
     @Final
     private static Component KEY_TOGGLE;
@@ -36,6 +40,9 @@ public abstract class OptionsMixin implements VPOptions {
     private OptionInstance<Boolean> toggleProne;
     @Unique
     @Getter
+    private OptionInstance<Double> maxItemTooltipWidth;
+    @Unique
+    @Getter
     private OptionInstance<Boolean> attackMarker;
     @Unique
     @Getter
@@ -44,10 +51,21 @@ public abstract class OptionsMixin implements VPOptions {
     @Getter
     private ToggleKeyMapping keyProne;
 
+    @Shadow
+    private static Component pixelValueLabel(Component caption, int value) {
+        throw new UnsupportedOperationException();
+    }
+
     @Inject(method = "setForgeKeybindProperties", at = @At(value = "TAIL"))
     private void init(CallbackInfo ci) {
         toggleProne = new OptionInstance<>("key.prone", OptionInstance.noTooltip(),
                 (_, value) -> value ? KEY_TOGGLE : KEY_HOLD, OptionInstance.BOOLEAN_VALUES, false, _ -> {
+        });
+        maxItemTooltipWidth = new OptionInstance<>("options.item_tooltip_width", OptionInstance.noTooltip(),
+                (caption, value) -> pixelValueLabel(caption, (int) (value * Minecraft.getInstance().getWindow().getGuiScaledWidth())),
+                new OptionInstance.IntRange((int) (MAX_ITEM_TOOLTIP_WIDTH_MIN * 100), (int) (MAX_ITEM_TOOLTIP_WIDTH_MAX * 100))
+                        .xmap(to -> to / 100.0, from -> (int) (from * 100), true),
+                Codec.doubleRange(MAX_ITEM_TOOLTIP_WIDTH_MIN, MAX_ITEM_TOOLTIP_WIDTH_MAX), MAX_ITEM_TOOLTIP_WIDTH_DEFAULT, _ -> {
         });
         attackMarker = OptionInstance.createBoolean("options.attack_marker",
                 OptionInstance.cachedConstantTooltip(COMPONENT_ATTACK_MARKER_TOOLTIP), true);
