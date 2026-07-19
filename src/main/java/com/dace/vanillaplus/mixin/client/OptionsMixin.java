@@ -7,7 +7,6 @@ import net.minecraft.client.*;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Options.class)
 public abstract class OptionsMixin implements VPOptions {
+    @Unique
+    private static final Component COMPONENT_ITEM_DESCRIPTION_TOOLTIP = Component.translatable("options.item_description.tooltip");
     @Unique
     private static final Component COMPONENT_ATTACK_MARKER_TOOLTIP = Component.translatable("options.attack_marker.tooltip");
     @Unique
@@ -43,6 +44,9 @@ public abstract class OptionsMixin implements VPOptions {
     private OptionInstance<Double> maxItemTooltipWidth;
     @Unique
     @Getter
+    private OptionInstance<Boolean> itemDescription;
+    @Unique
+    @Getter
     private OptionInstance<Boolean> attackMarker;
     @Unique
     @Getter
@@ -64,9 +68,11 @@ public abstract class OptionsMixin implements VPOptions {
         maxItemTooltipWidth = new OptionInstance<>("options.item_tooltip_width", OptionInstance.noTooltip(),
                 (caption, value) -> pixelValueLabel(caption, (int) (value * Minecraft.getInstance().getWindow().getGuiScaledWidth())),
                 new OptionInstance.IntRange((int) (MAX_ITEM_TOOLTIP_WIDTH_MIN * 100), (int) (MAX_ITEM_TOOLTIP_WIDTH_MAX * 100))
-                        .xmap(to -> to / 100.0, from -> (int) (from * 100), true),
+                        .xmap(to -> to / 100.0, from -> (int) (from * 100.0), true),
                 Codec.doubleRange(MAX_ITEM_TOOLTIP_WIDTH_MIN, MAX_ITEM_TOOLTIP_WIDTH_MAX), MAX_ITEM_TOOLTIP_WIDTH_DEFAULT, _ -> {
         });
+        itemDescription = OptionInstance.createBoolean("options.item_description",
+                OptionInstance.cachedConstantTooltip(COMPONENT_ITEM_DESCRIPTION_TOOLTIP), true);
         attackMarker = OptionInstance.createBoolean("options.attack_marker",
                 OptionInstance.cachedConstantTooltip(COMPONENT_ATTACK_MARKER_TOOLTIP), true);
         mobHealthIndicator = OptionInstance.createBoolean("options.mob_health_indicator",
@@ -76,15 +82,12 @@ public abstract class OptionsMixin implements VPOptions {
         keyProne.setKeyConflictContext(KeyConflictContext.IN_GAME);
     }
 
-    @Inject(method = "processOptions", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/client/Options;toggleSprint:Lnet/minecraft/client/OptionInstance;", opcode = Opcodes.GETFIELD))
-    private void addExtraOptions0(Options.FieldAccess access, CallbackInfo ci) {
+    @Inject(method = "processOptions", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/Options;processOptionsKeysOnly(Lnet/minecraft/client/Options$FieldAccess;)V"))
+    private void addExtraOptions(Options.FieldAccess access, CallbackInfo ci) {
         access.process("toggleProne", toggleProne);
-    }
-
-    @Inject(method = "processOptions", at = @At(value = "FIELD",
-            target = "Lnet/minecraft/client/Options;tutorialStep:Lnet/minecraft/client/tutorial/TutorialSteps;", opcode = Opcodes.PUTFIELD))
-    private void addExtraOptions1(Options.FieldAccess access, CallbackInfo ci) {
+        access.process("maxItemTooltipWidth", maxItemTooltipWidth);
+        access.process("itemDescription", itemDescription);
         access.process("attackMarker", attackMarker);
         access.process("mobHealthIndicator", mobHealthIndicator);
     }

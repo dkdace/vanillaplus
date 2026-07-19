@@ -320,7 +320,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     }
 
     @ModifyExpressionValue(method = "getRarity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEnchanted()Z"))
-    public boolean removeRarityCondition(boolean isEnchanted) {
+    public boolean removeRarityEnchantedCondition(boolean isEnchanted) {
         return false;
     }
 

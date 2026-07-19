@@ -15,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class VideoSettingsScreenMixin extends ScreenMixin<VideoSettingsScreen> {
     @ModifyReturnValue(method = "displayOptions", at = @At("RETURN"))
     private static OptionInstance<?>[] addExtraDisplayOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
-        return ArrayUtils.add(optionInstances, VPOptions.cast(options).getMaxItemTooltipWidth());
+        VPOptions vpOptions = VPOptions.cast(options);
+        return ArrayUtils.addAll(optionInstances, vpOptions.getItemDescription(), vpOptions.getMaxItemTooltipWidth());
     }
 
     @ModifyReturnValue(method = "preferenceOptions", at = @At("RETURN"))

@@ -28,6 +28,12 @@ public interface VPOptions extends VPMixin<Options> {
     OptionInstance<Double> getMaxItemTooltipWidth();
 
     /**
+     * @return 아이템 설명 설정
+     */
+    @NonNull
+    OptionInstance<Boolean> getItemDescription();
+
+    /**
      * @return 공격 표식 설정
      */
     @NonNull
