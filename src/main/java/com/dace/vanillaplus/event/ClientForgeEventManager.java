@@ -66,7 +66,8 @@ public final class ClientForgeEventManager {
             return;
 
         List<Either<FormattedText, TooltipComponent>> tooltipElements = event.getTooltipElements();
-        if (tooltipElements.size() > (options.advancedItemTooltips ? 3 : 1))
+        if (tooltipElements.size() > (options.advancedItemTooltips ? 3 : 1)
+                && tooltipElements.get(1).map(targetLine -> !targetLine.equals(Component.empty()), _ -> true))
             tooltipElements.add(1, Either.left(Component.empty()));
 
         String[] lines = value.split("\n");

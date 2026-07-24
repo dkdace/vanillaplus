@@ -16,12 +16,12 @@ public abstract class VideoSettingsScreenMixin extends ScreenMixin<VideoSettings
     @ModifyReturnValue(method = "displayOptions", at = @At("RETURN"))
     private static OptionInstance<?>[] addExtraDisplayOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
         VPOptions vpOptions = VPOptions.cast(options);
-        return ArrayUtils.addAll(optionInstances, vpOptions.getItemDescription(), vpOptions.getMaxItemTooltipWidth());
+        return ArrayUtils.addAll(optionInstances, vpOptions.getMaxItemTooltipWidth());
     }
 
     @ModifyReturnValue(method = "preferenceOptions", at = @At("RETURN"))
     private static OptionInstance<?>[] addExtraPreferenceOptions(OptionInstance<?>[] optionInstances, @Local(argsOnly = true) Options options) {
         VPOptions vpOptions = VPOptions.cast(options);
-        return ArrayUtils.addAll(optionInstances, vpOptions.getAttackMarker(), vpOptions.getMobHealthIndicator());
+        return ArrayUtils.addAll(optionInstances, vpOptions.getItemDescription(), vpOptions.getAttackMarker(), vpOptions.getMobHealthIndicator());
     }
 }

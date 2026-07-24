@@ -21,7 +21,7 @@ public abstract class CreativeModeInventoryScreenMixin extends AbstractContainer
     private void addEmptyLineAfterTabLine(ItemStack itemStack, CallbackInfoReturnable<List<Component>> cir,
                                           @Local(name = "originalLines") List<Component> originalLines,
                                           @Local(name = "linesToDisplay") List<Component> linesToDisplay, @Local(name = "i") int i) {
-        if (i > 1 && originalLines.size() > (minecraft.options.advancedItemTooltips ? 3 : 1))
+        if (i > 1 && originalLines.size() > (minecraft.options.advancedItemTooltips ? 3 : 1) && !linesToDisplay.get(i).equals(Component.empty()))
             linesToDisplay.add(i, Component.empty());
     }
 }
