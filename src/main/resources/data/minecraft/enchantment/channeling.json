@@ -107,6 +107,12 @@
           ]
         }
       }
+    ],
+    "vanillaplus:values": [
+      {
+        "description_index": 0,
+        "value": 1
+      }
     ]
   },
   "max_cost": {
