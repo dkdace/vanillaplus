@@ -1,6 +1,5 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
-import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.client.renderer.entity.state.VPEnderDragonRenderState;
 import com.dace.vanillaplus.extension.world.entity.boss.enderdragon.VPEnderDragon;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EnderDragonRenderer.class)
-public abstract class EnderDragonRendererMixin implements VPMixin<EnderDragonRenderer> {
+public abstract class EnderDragonRendererMixin extends EntityRendererMixin<EnderDragon, EnderDragonRenderState> {
     @Unique
     private static final int METEOR_BEAM_ANIMATION_TIME = 80;
     @Unique

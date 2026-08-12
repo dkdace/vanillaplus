@@ -29,5 +29,6 @@ public record StopSoundPacket(@NonNull SoundSource soundSource, long seed) imple
     @Override
     public void handle(@NonNull CustomPayloadEvent.Context context) {
         VPSoundEngine.cast(VPSoundManager.cast(Minecraft.getInstance().getSoundManager()).getSoundEngine()).stop(soundSource, seed);
+        context.setPacketHandled(true);
     }
 }

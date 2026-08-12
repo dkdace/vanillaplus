@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "vanillaplus:pillager_outpost",
-      "decoration": "minecraft:target_point",
+      "decoration": "vanillaplus:pillager_outpost",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 7026706
-      }
     },
     {
       "function": "minecraft:set_name",

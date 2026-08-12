@@ -13,15 +13,9 @@
     {
       "function": "minecraft:exploration_map",
       "destination": "vanillaplus:on_snowy_explorer_maps",
-      "decoration": "minecraft:target_point",
+      "decoration": "vanillaplus:igloo",
       "search_radius": 100,
       "skip_existing_chunks": false
-    },
-    {
-      "function": "minecraft:set_components",
-      "components": {
-        "minecraft:map_color": 5872317
-      }
     },
     {
       "function": "minecraft:set_name",

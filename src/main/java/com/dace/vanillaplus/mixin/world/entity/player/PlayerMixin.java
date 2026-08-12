@@ -22,6 +22,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
@@ -48,6 +49,8 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
     @Unique
     private static final float FULL_STRENGTH_ATTACK_THRESHOLD = 0.9F;
 
+    @Shadow
+    protected FoodData foodData;
     @Unique
     protected boolean isProneKeyDown = false;
     @Unique

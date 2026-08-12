@@ -12,7 +12,7 @@
           "damage_type": "minecraft:thorns",
           "max_damage": {
             "type": "vanillaplus:described",
-            "description_index": 0,
+            "description_index": 1,
             "value": 5.0
           },
           "min_damage": 5.0
@@ -26,7 +26,7 @@
                 "type": "minecraft:enchantment_level",
                 "amount": {
                   "type": "vanillaplus:described",
-                  "description_index": 1,
+                  "description_index": 0,
                   "description_value_multiplier": 100,
                   "value": {
                     "type": "minecraft:clamped",

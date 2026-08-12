@@ -24,5 +24,6 @@ public record ShowHeadOnLocatorBarPacket(boolean isEnabled) implements VPPacket 
     @Override
     public void handle(@NonNull CustomPayloadEvent.Context context) {
         VPGameRules.ClientState.getInstance().setShowHeadOnLocatorBar(isEnabled);
+        context.setPacketHandled(true);
     }
 }

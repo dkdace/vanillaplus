@@ -16,7 +16,11 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import lombok.Getter;
 import net.minecraft.core.Holder;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -43,10 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -61,10 +62,24 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     private static final Identifier RESISTANCE_EFFECT_VALUE_ID = IdentifierUtil.fromPath("resistance");
     @Unique
     private static final Identifier JUMP_STRENGTH_EFFECT_VALUE_ID = IdentifierUtil.fromPath("jump_strength");
+    @Unique
+    private static final int CLIENT_HURT_DURATION = 60;
+    @Unique
+    private static final EntityDataAccessor<Float> OLD_HEALTH = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
+    @Unique
+    private static final EntityDataAccessor<Float> ABSORPTION = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
+    @Unique
+    private static final EntityDataAccessor<Boolean> IS_POISONED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Boolean> IS_WITHERED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Shadow
     @Final
     private static Identifier SPRINTING_MODIFIER_ID;
 
+    @Shadow
+    public int hurtTime;
+    @Shadow
+    public int hurtDuration;
     @Shadow
     protected Brain<?> brain;
     @Shadow
@@ -75,6 +90,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Unique
     @Nullable
     private DamageSource lastDamageSourceForKnockback;
+    @Unique
+    @Getter
+    private int clientHurtTime = 0;
 
     @Shadow
     public abstract void setSprinting(boolean isSprinting);
@@ -96,6 +114,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Shadow
     public abstract double getAttributeValue(Holder<Attribute> attribute);
+
+    @Shadow
+    public abstract boolean hasEffect(Holder<MobEffect> effect);
 
     @Shadow
     @Nullable
@@ -143,6 +164,63 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
                 : 0);
     }
 
+    @Override
+    public boolean canRenderHealth() {
+        return true;
+    }
+
+    @Override
+    public void onDamagedByClient() {
+        clientHurtTime = CLIENT_HURT_DURATION;
+    }
+
+    @Override
+    public float getOldHealth() {
+        return hurtDuration > 0 && hurtTime >= hurtDuration / 2.0 ? getEntityData().get(OLD_HEALTH) : getHealth();
+    }
+
+    @Override
+    public boolean isPoisoned() {
+        return getEntityData().get(IS_POISONED);
+    }
+
+    @Override
+    public boolean isWithered() {
+        return getEntityData().get(IS_WITHERED);
+    }
+
+    @Definition(id = "invulnerableTime", field = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I")
+    @Expression("this.invulnerableTime > 0")
+    @Inject(method = "baseTick", at = @At(value = "MIXINEXTRAS:EXPRESSION"))
+    private void decreaseClientHurtTime(CallbackInfo ci) {
+        if (clientHurtTime > 0)
+            clientHurtTime--;
+    }
+
+    @Inject(method = "defineSynchedData", at = @At("TAIL"))
+    private void defineSynchedData(SynchedEntityData.Builder entityData, CallbackInfo ci) {
+        entityData.define(OLD_HEALTH, 0F);
+        entityData.define(ABSORPTION, 0F);
+        entityData.define(IS_POISONED, false);
+        entityData.define(IS_WITHERED, false);
+    }
+
+    @Overwrite
+    public float getAbsorptionAmount() {
+        return getEntityData().get(ABSORPTION);
+    }
+
+    @Overwrite
+    protected void internalSetAbsorptionAmount(float absorptionAmount) {
+        getEntityData().set(ABSORPTION, absorptionAmount);
+    }
+
+    @Inject(method = "updateDirtyEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;updateGlowingStatus()V"))
+    private void updateSyncedEffects(CallbackInfo ci) {
+        getEntityData().set(IS_POISONED, hasEffect(MobEffects.POISON));
+        getEntityData().set(IS_WITHERED, hasEffect(MobEffects.WITHER));
+    }
+
     @Inject(method = "<init>", at = @At("TAIL"))
     private void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
         getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES).ifPresent(attributes::apply);
@@ -167,6 +245,12 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Inject(method = "checkTotemDeathProtection", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
     protected void onUseTotem(DamageSource killingDamage, CallbackInfoReturnable<Boolean> cir,
                               @Local(name = "protectionItem") ItemStack protectionItem) {
+    }
+
+    @Inject(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
+    private void setOldHealth(ServerLevel level, DamageSource source, float dmg, CallbackInfo ci) {
+        if (hurtTime <= 0)
+            getEntityData().set(OLD_HEALTH, getHealth());
     }
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
@@ -196,7 +280,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Expression("absorbValue")
     @ModifyExpressionValue(method = "getDamageAfterMagicAbsorb", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyResistanceMultiplier(int absorbValue) {
-        MobEffectInstance mobEffectInstance = Objects.requireNonNull(this.getEffect(MobEffects.RESISTANCE));
+        MobEffectInstance mobEffectInstance = Objects.requireNonNull(getEffect(MobEffects.RESISTANCE));
 
         return VPMobEffect.cast(mobEffectInstance.getEffect().value()).getConfig()
                 .calculate(RESISTANCE_EFFECT_VALUE_ID, mobEffectInstance.getAmplifier())
