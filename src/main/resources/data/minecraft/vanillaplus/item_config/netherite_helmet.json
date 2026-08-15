@@ -1,5 +1,6 @@
 {
   "item_components": {
+    "minecraft:rarity": "uncommon",
     "minecraft:attribute_modifiers": [
       {
         "type": "minecraft:armor",

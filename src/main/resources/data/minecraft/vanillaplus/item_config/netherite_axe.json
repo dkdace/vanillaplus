@@ -1,5 +1,6 @@
 {
   "item_components": {
+    "minecraft:rarity": "uncommon",
     "minecraft:weapon": {
       "disable_blocking_for_seconds": 3,
       "item_damage_per_attack": 2,
