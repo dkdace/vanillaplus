@@ -113,21 +113,6 @@ public abstract class GuiMixin implements VPGui {
             str.withStyle(ChatFormatting.BOLD);
     }
 
-    @ModifyArg(method = "extractCrosshair", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
-            ordinal = 0), index = 1)
-    private Identifier modifyCrosshairSprite(Identifier location) {
-        HitResult hitResult = minecraft.hitResult;
-        return hitResult != null && hitResult.getType() == HitResult.Type.BLOCK ? location : CROSSHAIR_AIR_SPRITE;
-    }
-
-    @Inject(method = "tick()V", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"))
-    private void decreaseRecentDamageTick(CallbackInfo ci) {
-        if (recentDamageTick > 0)
-            recentDamageTick--;
-    }
-
     @Inject(method = "extractFood", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
             ordinal = 0, shift = At.Shift.AFTER))
@@ -150,7 +135,23 @@ public abstract class GuiMixin implements VPGui {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xo, yo, HEART_SIZE, HEART_SIZE);
     }
 
-    @Inject(method = "extractHotbarAndDecorations", at = @At("HEAD"))
+    @ModifyArg(method = "extractCrosshair", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
+            ordinal = 0), index = 1)
+    private Identifier modifyCrosshairSprite(Identifier location) {
+        HitResult hitResult = minecraft.hitResult;
+        return hitResult != null && hitResult.getType() == HitResult.Type.BLOCK ? location : CROSSHAIR_AIR_SPRITE;
+    }
+
+    @Inject(method = "tick()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"))
+    private void decreaseRecentDamageTick(CallbackInfo ci) {
+        if (recentDamageTick > 0)
+            recentDamageTick--;
+    }
+
+    @Inject(method = "extractCrosshair", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/components/debug/DebugScreenEntryList;isCurrentlyEnabled(Lnet/minecraft/resources/Identifier;)Z"))
     private void renderCrosshairHitmarker(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!VPOptions.cast(minecraft.options).getAttackMarker().get() || recentDamageTick <= 0 || hitmarkerSprite == null)
             return;
