@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientMannequin;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
-import net.minecraft.client.gui.contextualbar.LocatorBarRenderer;
+import net.minecraft.client.gui.contextualbar.LocatorBar;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.Entity;
@@ -29,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-@Mixin(LocatorBarRenderer.class)
-public abstract class LocatorBarRendererMixin implements VPMixin<LocatorBarRenderer> {
+@Mixin(LocatorBar.class)
+public abstract class LocatorBarMixin implements VPMixin<LocatorBar> {
     @Unique
     private static final int PLAYER_HEAD_SIZE = 8;
 

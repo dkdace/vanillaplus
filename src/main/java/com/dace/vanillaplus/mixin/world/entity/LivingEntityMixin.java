@@ -88,9 +88,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Final
     private AttributeMap attributes;
     @Unique
-    @Nullable
-    private DamageSource lastDamageSourceForKnockback;
-    @Unique
     @Getter
     private int clientHurtTime = 0;
 
@@ -253,21 +250,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
             getEntityData().set(OLD_HEALTH, getHealth());
     }
 
-    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void setLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        lastDamageSourceForKnockback = source;
-    }
-
-    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V",
-            shift = At.Shift.AFTER))
-    private void removeLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        lastDamageSourceForKnockback = null;
-    }
-
-    @ModifyExpressionValue(method = "knockback", at = @At(value = "INVOKE",
+    @ModifyExpressionValue(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    private double modifyKnockbackResistance(double knockbackResistance) {
-        return getFinalKnockbackResistance(knockbackResistance, lastDamageSourceForKnockback);
+    private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) DamageSource damageSource) {
+        return getFinalKnockbackResistance(knockbackResistance, damageSource);
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))

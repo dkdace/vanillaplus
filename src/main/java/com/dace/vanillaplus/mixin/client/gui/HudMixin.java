@@ -1,7 +1,7 @@
 package com.dace.vanillaplus.mixin.client.gui;
 
 import com.dace.vanillaplus.extension.client.VPOptions;
-import com.dace.vanillaplus.extension.client.gui.VPGui;
+import com.dace.vanillaplus.extension.client.gui.VPHud;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -9,8 +9,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -32,8 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-@Mixin(Gui.class)
-public abstract class GuiMixin implements VPGui {
+@Mixin(Hud.class)
+public abstract class HudMixin implements VPHud {
     @Unique
     private static final Identifier CROSSHAIR_AIR_SPRITE = IdentifierUtil.fromPath("hud/crosshair_air");
     @Unique

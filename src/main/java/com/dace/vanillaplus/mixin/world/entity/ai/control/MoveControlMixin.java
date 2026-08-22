@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MoveControl.class)
-public abstract class MoveControlMixin implements VPMixin<MoveControl> {
+public abstract class MoveControlMixin<T extends Mob> implements VPMixin<MoveControl<T>> {
     @Shadow
     @Final
-    protected Mob mob;
+    protected T mob;
     @Shadow
     protected MoveControl.Operation operation;
 

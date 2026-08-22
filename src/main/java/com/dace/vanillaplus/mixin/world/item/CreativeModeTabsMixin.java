@@ -20,26 +20,26 @@ public abstract class CreativeModeTabsMixin implements VPMixin<CreativeModeTabs>
         return VPGameRules.MAX_POSSIBLE_BAD_OMEN_LEVEL - 1;
     }
 
-    @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
+    @Inject(method = "lambda$bootstrap$24", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;SWEET_BERRIES:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
     private static void addGoldenCarrotToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
         consumables.accept(Items.GLISTERING_MELON_SLICE);
     }
 
-    @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
+    @Inject(method = "lambda$bootstrap$24", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;COOKIE:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
     private static void addSugarToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
         consumables.accept(Items.SUGAR);
     }
 
-    @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
+    @Inject(method = "lambda$bootstrap$24", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;CARROT:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
     private static void addPoppedChorusFruitToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables,
                                                     CallbackInfo ci) {
         consumables.accept(Items.POPPED_CHORUS_FRUIT);
     }
 
-    @Inject(method = "lambda$bootstrap$22", at = @At(value = "FIELD",
+    @Inject(method = "lambda$bootstrap$24", at = @At(value = "FIELD",
             target = "Lnet/minecraft/world/item/Items;MILK_BUCKET:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
     private static void addMilkBottleToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
         consumables.accept(VPItems.MILK_BOTTLE.get());

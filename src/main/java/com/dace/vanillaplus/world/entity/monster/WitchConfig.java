@@ -9,7 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.item.ItemStack;
 
@@ -48,6 +48,6 @@ public record WitchConfig(@NonNull ConditionalModifierList<NumberModifier<Float>
      */
     @NonNull
     public static WitchConfig get() {
-        return VPEntityType.cast(EntityType.WITCH).getConfigComponents().getOrDefault(EntityConfigComponentTypes.WITCH, DEFAULT);
+        return VPEntityType.cast(EntityTypes.WITCH).getConfigComponents().getOrDefault(EntityConfigComponentTypes.WITCH, DEFAULT);
     }
 }
