@@ -23,8 +23,8 @@ public abstract class ItemsMixin implements VPMixin<Items> {
 
     @Redirect(method = "<clinit>", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;",
-            ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;RECOVERY_COMPASS:Lnet/minecraft/world/item/Item;",
-            opcode = Opcodes.PUTSTATIC)))
+            ordinal = 0), slice = @Slice(from = @At(value = "FIELD",
+            target = "Lnet/minecraft/references/ItemIds;RECOVERY_COMPASS:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC)))
     private static Item registerRecoveryCompassItem(ResourceKey<Item> id, Item.Properties properties) {
         return registerItem(id, RecoveryCompassItem::new, properties);
     }
