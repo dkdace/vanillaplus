@@ -21,7 +21,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "attacker",
           "predicate": {
-            "type": "#minecraft:undead"
+            "minecraft:entity_type": "#minecraft:undead"
           }
         }
       }

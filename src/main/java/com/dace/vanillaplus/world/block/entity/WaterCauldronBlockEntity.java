@@ -223,13 +223,13 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
         float scale = 1F / levelValue;
 
         this.potionContents.getAllEffects().forEach(mobEffectInstance -> {
-            if (!mobEffectInstance.getEffect().value().isInstantenous())
+            if (!mobEffectInstance.getEffect().value().isInstantaneous())
                 result.add(mobEffectInstance.withScaledDuration(1 - scale));
         });
 
         outer:
         for (MobEffectInstance newEffect : potionContents.getAllEffects()) {
-            if (newEffect.getEffect().value().isInstantenous())
+            if (newEffect.getEffect().value().isInstantaneous())
                 continue;
 
             newEffect = newEffect.withScaledDuration(scale);
@@ -283,7 +283,7 @@ public final class WaterCauldronBlockEntity extends BlockEntity {
         if (!(level instanceof ServerLevel serverLevel))
             return;
 
-        Vec3 pos = getBlockPos().getCenter();
+        Vec3 pos = Vec3.atCenterOf(getBlockPos());
         serverLevel.sendParticles(ParticleTypes.POOF, pos.x(), pos.y(), pos.z(), 30, 0.25, 0.25, 0.25, 0.1);
 
         level.playSound(null, getBlockPos(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 2F, 1F);

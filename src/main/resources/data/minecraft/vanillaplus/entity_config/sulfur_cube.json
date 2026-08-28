@@ -1,0 +1,6 @@
+{
+  "components": {
+    "vanillaplus:see_through_transparent_blocks": true,
+    "vanillaplus:prevent_riding_if_has_target": true
+  }
+}

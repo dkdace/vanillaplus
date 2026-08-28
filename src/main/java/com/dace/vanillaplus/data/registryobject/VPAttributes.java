@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -86,7 +87,7 @@ public final class VPAttributes {
         RegistryObject<Attribute> registryObject = REGISTRY.register(name, () -> attribute);
 
         EntityAttributeModificationEvent.BUS.addListener(event ->
-                event.add(EntityType.PLAYER, registryObject.getHolder().orElseThrow()));
+                event.add(EntityTypes.PLAYER, registryObject.getHolder().orElseThrow()));
 
         return registryObject;
     }

@@ -5,7 +5,7 @@ import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.npc.villager.Villager;
 
 /**
@@ -30,6 +30,6 @@ public record VillagerConfig(boolean closeTradingAtNight, boolean rerollOffersEv
      */
     @NonNull
     public static VillagerConfig get() {
-        return VPEntityType.cast(EntityType.VILLAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.VILLAGER, DEFAULT);
+        return VPEntityType.cast(EntityTypes.VILLAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.VILLAGER, DEFAULT);
     }
 }

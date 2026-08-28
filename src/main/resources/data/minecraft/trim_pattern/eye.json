@@ -21,7 +21,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "attacker",
           "predicate": {
-            "type": "minecraft:enderman"
+            "minecraft:entity_type": "minecraft:enderman"
           }
         }
       }

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ScreenEffectRenderer.class)
 public abstract class ScreenEffectRendererMixin implements VPMixin<ScreenEffectRenderer> {
-    @ModifyArg(method = "renderFire", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"), index = 1)
+    @ModifyArg(method = "lambda$submitFire$0", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;translate(FFF)Lorg/joml/Matrix4f;"), index = 1)
     private static float modifyRenderFireY(float yo) {
         return -0.55F;
     }
