@@ -1,13 +1,12 @@
 package com.dace.vanillaplus.mixin.client.particle;
 
-import com.dace.vanillaplus.extension.VPMixin;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SingleQuadParticle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SingleQuadParticle.class)
-public abstract class SingleQuadParticleMixin implements VPMixin<SingleQuadParticle> {
+public abstract class SingleQuadParticleMixin<T extends SingleQuadParticle> extends ParticleMixin<T> {
     @Shadow
     protected float quadSize;
 

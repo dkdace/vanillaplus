@@ -1,0 +1,24 @@
+{
+  "components": {
+    "vanillaplus:potent_sulfur": {
+      "can_burn": true,
+      "override_noxious_gas_effects": false,
+      "burning_noxious_gas_effects": [
+        {
+          "amplifier": 0,
+          "duration": 160,
+          "id": "minecraft:nausea",
+          "ambient": true,
+          "show_icon": true
+        },
+        {
+          "amplifier": 0,
+          "duration": 80,
+          "id": "minecraft:poison",
+          "ambient": true,
+          "show_icon": true
+        }
+      ]
+    }
+  }
+}

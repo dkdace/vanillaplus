@@ -2,7 +2,9 @@ package com.dace.vanillaplus.event;
 
 import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.data.registryobject.VPParticleTypes;
 import com.dace.vanillaplus.extension.client.VPOptions;
+import com.dace.vanillaplus.extension.client.particle.VPNoxiousGasCloudParticle;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.server.PronePacket;
@@ -14,6 +16,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.particle.NoxiousGasCloudParticle;
+import net.minecraft.client.particle.NoxiousGasParticle;
+import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
@@ -102,5 +107,36 @@ public final class ClientForgeEventManager {
                         : averageWaterColor;
             }
         }), Blocks.WATER_CAULDRON);
+    }
+
+    @SubscribeEvent
+    private static void onRegisterParticleProviders(@NonNull RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(VPParticleTypes.SULFUR_ASH.get(), spriteSet ->
+                (_, level, x, y, z, _, _, _, randomSource) -> {
+                    double xAux = randomSource.nextDouble() * -1.9 * randomSource.nextDouble() * 0.1;
+                    double yAux = randomSource.nextDouble() * -0.5 * randomSource.nextDouble() * 0.1 * 5;
+                    double zAux = randomSource.nextDouble() * -1.9 * randomSource.nextDouble() * 0.1;
+
+                    WhiteAshParticle particle = new WhiteAshParticle(level, x, y, z, xAux, yAux, zAux, 1, spriteSet);
+                    particle.setColor(0.54F, 0.54F, 0.44F);
+
+                    return particle;
+                });
+        event.registerSpriteSet(VPParticleTypes.NOXIOUS_GAS_BURNING.get(), spriteSet ->
+                (_, level, x, y, z, xAux, yAux, zAux, randomSource) -> {
+                    NoxiousGasParticle particle = new NoxiousGasParticle(level, x, y, z, xAux, yAux, zAux, 4.5F, spriteSet);
+                    particle.setLifetime(randomSource.nextInt(20) + 30);
+                    particle.setParticleSpeed(0, 0.08 + randomSource.nextDouble() * 0.04, 0);
+                    particle.fadeOutStartingPoint = 0;
+
+                    return particle;
+                });
+        event.registerSpecial(VPParticleTypes.NOXIOUS_GAS_CLOUD_BURNING.get(),
+                (_, level, x, y, z, _, _, _, _) -> {
+                    NoxiousGasCloudParticle particle = new NoxiousGasCloudParticle(level, x, y, z);
+                    VPNoxiousGasCloudParticle.cast(particle).setBurning(true);
+
+                    return particle;
+                });
     }
 }
