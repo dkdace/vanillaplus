@@ -65,6 +65,22 @@
       },
       "trigger": "minecraft:location"
     },
+    "vanillaplus:sulfur_valley": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "vanillaplus:sulfur_valley"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
     "minecraft:warped_forest": {
       "conditions": {
         "player": [
@@ -110,6 +126,9 @@
     ],
     [
       "minecraft:basalt_deltas"
+    ],
+    [
+      "vanillaplus:sulfur_valley"
     ]
   ],
   "rewards": {

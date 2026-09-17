@@ -79,5 +79,31 @@
         "pitch": 1.4
       }
     ]
+  },
+  "music.nether.sulfur_valley": {
+    "sounds": [
+      {
+        "name": "music/game/nether/ballad_of_the_cats",
+        "stream": true
+      },
+      {
+        "name": "music/game/nether/concrete_halls",
+        "stream": true
+      },
+      {
+        "name": "music/game/nether/dead_voxel",
+        "stream": true
+      },
+      {
+        "name": "music/game/nether/nether_wastes/rubedo",
+        "volume": 0.5,
+        "weight": 6,
+        "stream": true
+      },
+      {
+        "name": "music/game/nether/warmth",
+        "stream": true
+      }
+    ]
   }
 }

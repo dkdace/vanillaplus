@@ -29,6 +29,7 @@
   "attribute.name.sweeping_range": "Sweeping Range",
   "attribute.name.vehicle_speed_multiplier": "Vehicle Speed Multiplier",
   "attribute.name.vibration_transmit_range": "Vibration Transmit Range",
+  "biome.vanillaplus.sulfur_valley": "Sulfur Valley",
   "block.minecraft.acacia_button.description": "Produces a temporary redstone signal when pressed.",
   "block.minecraft.acacia_hanging_sign.description": "Used for writing and displaying text.\nCan be hung below or on the sides of blocks.",
   "block.minecraft.acacia_pressure_plate.description": "Produces a redstone signal when an entity steps on it.",
