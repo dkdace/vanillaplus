@@ -1,10 +1,7 @@
 package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
-import com.dace.vanillaplus.world.block.AnvilConfig;
-import com.dace.vanillaplus.world.block.BellConfig;
-import com.dace.vanillaplus.world.block.BrewingStandConfig;
-import com.dace.vanillaplus.world.block.WaterCauldronConfig;
+import com.dace.vanillaplus.world.block.*;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -32,6 +29,8 @@ public final class BlockConfigComponentTypes {
             "brewing_stand", () -> BrewingStandConfig.CODEC);
     public static final RegistryObject<Codec<WaterCauldronConfig>> WATER_CAULDRON = create(
             "water_cauldron", () -> WaterCauldronConfig.CODEC);
+    public static final RegistryObject<Codec<PotentSulfurConfig>> POTENT_SULFUR = create(
+            "potent_sulfur", () -> PotentSulfurConfig.CODEC);
 
     @NonNull
     private static <T> RegistryObject<Codec<T>> create(@NonNull String name, @NonNull Supplier<Codec<T>> onCodec) {
