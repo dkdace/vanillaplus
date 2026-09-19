@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -50,6 +51,14 @@ public final class VPTags {
         public static final TagKey<Enchantment> NON_TREASURE_TOOL = create(Registries.ENCHANTMENT, "non_treasure_tool");
         public static final TagKey<Enchantment> NON_TREASURE_WEAPON = create(Registries.ENCHANTMENT, "non_treasure_weapon");
         public static final TagKey<Enchantment> GENERAL_DAMAGE_EXCLUSIVE = create(Registries.ENCHANTMENT, "exclusive_set/general_damage");
+    }
+
+    /**
+     * 물약 데이터 태그.
+     */
+    @UtilityClass
+    public static final class Potions {
+        public static final TagKey<Potion> ON_SWAMP_HUT = create(Registries.POTION, "on_swamp_hut");
     }
 
     /**
