@@ -25,6 +25,7 @@ public final class VPItems {
             .usingConvertsTo(Items.GLASS_BOTTLE)
             .stacksTo(3)
             .component(DataComponents.CONSUMABLE, Consumables.defaultDrink().onConsume(ClearAllStatusEffectsConsumeEffect.INSTANCE).build()));
+    public static final RegistryObject<Item> SULFUR_POWDER = create("sulfur_powder", new Item.Properties());
 
     @NonNull
     private static RegistryObject<Item> create(@NonNull String name, @NonNull Item.Properties properties) {

@@ -44,4 +44,11 @@ public abstract class CreativeModeTabsMixin implements VPMixin<CreativeModeTabs>
     private static void addMilkBottleToFoods(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output consumables, CallbackInfo ci) {
         consumables.accept(VPItems.MILK_BOTTLE.get());
     }
+
+    @Inject(method = "lambda$bootstrap$27", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/world/item/Items;DRAGON_BREATH:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC))
+    private static void addSulfurPowderToIngredients(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output ingredients,
+                                                     CallbackInfo ci) {
+        ingredients.accept(VPItems.SULFUR_POWDER.get());
+    }
 }
