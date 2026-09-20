@@ -80,6 +80,31 @@
       }
     ]
   },
+  "item.sulfur_powder.use": {
+    "subtitle": "subtitles.item.sulfur_powder.use",
+    "sounds": [
+      {
+        "name": "item/bonemeal/bonemeal1",
+        "pitch": 1.4
+      },
+      {
+        "name": "item/bonemeal/bonemeal2",
+        "pitch": 1.4
+      },
+      {
+        "name": "item/bonemeal/bonemeal3",
+        "pitch": 1.4
+      },
+      {
+        "name": "item/bonemeal/bonemeal4",
+        "pitch": 1.4
+      },
+      {
+        "name": "item/bonemeal/bonemeal5",
+        "pitch": 1.4
+      }
+    ]
+  },
   "music.nether.sulfur_valley": {
     "sounds": [
       {

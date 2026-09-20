@@ -21,6 +21,7 @@ public final class VPSoundEvents {
     public static final RegistryObject<SoundEvent> ENDER_DRAGON_SPAWN_METEOR = create("entity.ender_dragon.spawn_meteor");
     public static final RegistryObject<SoundEvent> ENDER_DRAGON_FALL_METEOR = create("entity.ender_dragon.fall_meteor");
     public static final RegistryObject<SoundEvent> ARROW_TIPPED = create("item.arrow.tipped");
+    public static final RegistryObject<SoundEvent> SULFUR_POWDER_USE = create("item.sulfur_powder.use");
     public static final RegistryObject<SoundEvent> MUSIC_BIOME_SULFUR_VALLEY = create("music.nether.sulfur_valley");
 
     @NonNull
