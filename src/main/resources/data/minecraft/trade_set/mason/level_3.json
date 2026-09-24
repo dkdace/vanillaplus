@@ -3,7 +3,10 @@
   "random_sequence": "minecraft:trade_set/mason/level_3",
   "trades": [
     [
-      "vanillaplus:mason/3/buy_blackstone",
+      [
+        "vanillaplus:mason/3/buy_blackstone",
+        "vanillaplus:mason/3/buy_quartz"
+      ],
       [
         "vanillaplus:mason/3/sell_white_glazed_terracotta",
         "vanillaplus:mason/3/sell_light_gray_glazed_terracotta",
@@ -24,7 +27,10 @@
       ]
     ],
     [
-      "vanillaplus:mason/3/buy_quartz",
+      [
+        "vanillaplus:mason/3/buy_sulfur",
+        "vanillaplus:mason/3/buy_cinnabar"
+      ],
       [
         "vanillaplus:mason/3/sell_polished_deepslate",
         "vanillaplus:mason/3/sell_deepslate_bricks",
