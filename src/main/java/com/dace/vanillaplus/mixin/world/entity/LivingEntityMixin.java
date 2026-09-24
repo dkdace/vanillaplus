@@ -146,6 +146,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Shadow
     public abstract void stopUsingItem();
 
+    @Shadow
+    public abstract boolean isBaby();
+
     @Unique
     private float getFinalSpeed(float speed) {
         LivingEntity controller = getControllingPassenger();

@@ -31,6 +31,13 @@ public final class VPTags {
     @UtilityClass
     public static final class Items {
         public static final TagKey<Item> INFESTED = create(Registries.ITEM, "infested");
+        public static final TagKey<Item> BABY_CHICKEN_FOOD = create(Registries.ITEM, "baby_chicken_food");
+        public static final TagKey<Item> BABY_COW_FOOD = create(Registries.ITEM, "baby_cow_food");
+        public static final TagKey<Item> BABY_HOGLIN_FOOD = create(Registries.ITEM, "baby_hoglin_food");
+        public static final TagKey<Item> BABY_PIG_FOOD = create(Registries.ITEM, "baby_pig_food");
+        public static final TagKey<Item> BABY_RABBIT_FOOD = create(Registries.ITEM, "baby_rabbit_food");
+        public static final TagKey<Item> BABY_SHEEP_FOOD = create(Registries.ITEM, "baby_sheep_food");
+        public static final TagKey<Item> BABY_STRIDER_FOOD = create(Registries.ITEM, "baby_strider_food");
     }
 
     /**
