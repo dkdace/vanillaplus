@@ -63,6 +63,7 @@
     "world.entity.monster.WitchMixin",
     "world.entity.monster.cubemob.AbstractCubeMobMixin",
     "world.entity.monster.cubemob.SlimeMixin",
+    "world.entity.monster.cubemob.SulfurCubeMixin",
     "world.entity.monster.hoglin.HoglinMixin",
     "world.entity.monster.illager.AbstractIllagerMixin",
     "world.entity.monster.illager.EvokerMixin",
