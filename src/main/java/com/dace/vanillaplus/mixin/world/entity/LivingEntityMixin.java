@@ -129,6 +129,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     public abstract float getMaxHealth();
 
     @Shadow
+    public abstract boolean isAlive();
+
+    @Shadow
     public abstract boolean isAutoSpinAttack();
 
     @Shadow

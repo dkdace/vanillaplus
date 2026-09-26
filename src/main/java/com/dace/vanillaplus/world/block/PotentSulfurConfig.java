@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @param canBurn                   연소 가능 여부
  * @param overrideNoxiousGasEffects 유독 가스 상태 효과 덮어쓰기 여부 또는 목록
- * @param burningNoxiousGasEffects  유독 가스 연소 상태 효과 목록
+ * @param burningNoxiousGasEffects  연소 상태의 유독 가스 상태 효과 목록
  */
 public record PotentSulfurConfig(boolean canBurn, @NonNull Either<Boolean, List<MobEffectInstance>> overrideNoxiousGasEffects,
                                  @NonNull List<MobEffectInstance> burningNoxiousGasEffects) {

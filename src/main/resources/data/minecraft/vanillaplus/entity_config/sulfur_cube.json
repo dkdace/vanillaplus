@@ -1,6 +1,23 @@
 {
   "components": {
     "vanillaplus:see_through_transparent_blocks": true,
-    "vanillaplus:prevent_riding_if_has_target": true
+    "vanillaplus:prevent_riding_if_has_target": true,
+    "vanillaplus:sulfur_cube": {
+      "can_burn": true,
+      "burning_noxious_gas_effects": [
+        {
+          "amplifier": 0,
+          "duration": 160,
+          "id": "minecraft:nausea",
+          "show_icon": true
+        },
+        {
+          "amplifier": 0,
+          "duration": 80,
+          "id": "minecraft:poison",
+          "show_icon": true
+        }
+      ]
+    }
   }
 }

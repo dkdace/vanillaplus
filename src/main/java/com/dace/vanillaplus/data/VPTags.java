@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -47,6 +48,14 @@ public final class VPTags {
     public static final class Blocks {
         public static final TagKey<Block> DRAGON_EXPLOSION_IMMUNE = create(Registries.BLOCK, "dragon_explosion_immune");
         public static final TagKey<Block> INFESTED = create(Registries.BLOCK, "infested");
+    }
+
+    /**
+     * 엔티티 타입 데이터 태그.
+     */
+    @UtilityClass
+    public static final class EntityTypes {
+        public static final TagKey<EntityType<?>> NOT_AFFECTED_BY_NOXIOUS_GAS = create(Registries.ENTITY_TYPE, "not_affected_by_noxious_gas");
     }
 
     /**

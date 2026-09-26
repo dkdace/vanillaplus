@@ -7,6 +7,7 @@ import com.dace.vanillaplus.world.entity.boss.enderdragon.EnderDragonConfig;
 import com.dace.vanillaplus.world.entity.decoration.ArmorStandConfig;
 import com.dace.vanillaplus.world.entity.monster.RavagerConfig;
 import com.dace.vanillaplus.world.entity.monster.WitchConfig;
+import com.dace.vanillaplus.world.entity.monster.cubemob.SulfurCubeConfig;
 import com.dace.vanillaplus.world.entity.npc.NpcConfig;
 import com.dace.vanillaplus.world.entity.npc.villager.VillagerConfig;
 import com.dace.vanillaplus.world.entity.projectile.FireworkRocketConfig;
@@ -53,6 +54,8 @@ public final class EntityConfigComponentTypes {
             "ravager", () -> RavagerConfig.CODEC);
     public static final RegistryObject<Codec<WitchConfig>> WITCH = create(
             "witch", () -> WitchConfig.CODEC);
+    public static final RegistryObject<Codec<SulfurCubeConfig>> SULFUR_CUBE = create(
+            "sulfur_cube", () -> SulfurCubeConfig.CODEC);
     public static final RegistryObject<Codec<EnderDragonConfig>> ENDER_DRAGON = create(
             "ender_dragon", () -> EnderDragonConfig.CODEC);
 
