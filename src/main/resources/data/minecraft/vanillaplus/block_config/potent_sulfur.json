@@ -6,14 +6,14 @@
       "burning_noxious_gas_effects": [
         {
           "amplifier": 0,
-          "duration": 160,
+          "duration": 120,
           "id": "minecraft:nausea",
           "ambient": true,
           "show_icon": true
         },
         {
           "amplifier": 0,
-          "duration": 80,
+          "duration": 50,
           "id": "minecraft:poison",
           "ambient": true,
           "show_icon": true
