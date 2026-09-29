@@ -199,7 +199,6 @@
     "client.gui.screens.options.VideoSettingsScreenMixin",
     "client.gui.screens.options.controls.ControlsScreenMixin",
     "client.particle.AttackSweepParticleMixin",
-    "client.particle.NoxiousGasCloudParticleMixin",
     "client.particle.ParticleMixin",
     "client.particle.SingleQuadParticleMixin",
     "client.player.LocalPlayerMixin",

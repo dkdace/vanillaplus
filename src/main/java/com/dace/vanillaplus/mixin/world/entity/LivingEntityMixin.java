@@ -135,6 +135,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     public abstract boolean isAutoSpinAttack();
 
     @Shadow
+    public abstract boolean isInWall();
+
+    @Shadow
     public void die(DamageSource source) {
     }
 

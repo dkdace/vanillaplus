@@ -41,9 +41,6 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     public abstract Vec3 position();
 
     @Shadow
-    public abstract BlockPos blockPosition();
-
-    @Shadow
     public abstract double getX();
 
     @Shadow
