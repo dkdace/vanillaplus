@@ -148,6 +148,7 @@
     "world.item.trading.VillagerTradeMixin",
     "world.level.block.BarrelBlockMixin",
     "world.level.block.BlockMixin",
+    "world.level.block.BlocksMixin",
     "world.level.block.CakeBlockMixin",
     "world.level.block.CauldronBlockMixin",
     "world.level.block.ChestBlockMixin",
