@@ -18,7 +18,6 @@ public final class VPParticleTypes {
 
     public static final RegistryObject<SimpleParticleType> SULFUR_ASH = create("sulfur_ash", false);
     public static final RegistryObject<SimpleParticleType> NOXIOUS_GAS_BURNING = create("noxious_gas_burning", false);
-    public static final RegistryObject<SimpleParticleType> NOXIOUS_GAS_CLOUD_BURNING = create("noxious_gas_cloud_burning", false);
 
     @NonNull
     private static RegistryObject<SimpleParticleType> create(@NonNull String name, boolean overrideLimiter) {

@@ -8,7 +8,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -30,6 +32,13 @@ public final class VPTags {
     @UtilityClass
     public static final class Items {
         public static final TagKey<Item> INFESTED = create(Registries.ITEM, "infested");
+        public static final TagKey<Item> BABY_CHICKEN_FOOD = create(Registries.ITEM, "baby_chicken_food");
+        public static final TagKey<Item> BABY_COW_FOOD = create(Registries.ITEM, "baby_cow_food");
+        public static final TagKey<Item> BABY_HOGLIN_FOOD = create(Registries.ITEM, "baby_hoglin_food");
+        public static final TagKey<Item> BABY_PIG_FOOD = create(Registries.ITEM, "baby_pig_food");
+        public static final TagKey<Item> BABY_RABBIT_FOOD = create(Registries.ITEM, "baby_rabbit_food");
+        public static final TagKey<Item> BABY_SHEEP_FOOD = create(Registries.ITEM, "baby_sheep_food");
+        public static final TagKey<Item> BABY_STRIDER_FOOD = create(Registries.ITEM, "baby_strider_food");
     }
 
     /**
@@ -42,6 +51,14 @@ public final class VPTags {
     }
 
     /**
+     * 엔티티 타입 데이터 태그.
+     */
+    @UtilityClass
+    public static final class EntityTypes {
+        public static final TagKey<EntityType<?>> NOT_AFFECTED_BY_NOXIOUS_GAS = create(Registries.ENTITY_TYPE, "not_affected_by_noxious_gas");
+    }
+
+    /**
      * 마법 부여 데이터 태그.
      */
     @UtilityClass
@@ -50,6 +67,14 @@ public final class VPTags {
         public static final TagKey<Enchantment> NON_TREASURE_TOOL = create(Registries.ENCHANTMENT, "non_treasure_tool");
         public static final TagKey<Enchantment> NON_TREASURE_WEAPON = create(Registries.ENCHANTMENT, "non_treasure_weapon");
         public static final TagKey<Enchantment> GENERAL_DAMAGE_EXCLUSIVE = create(Registries.ENCHANTMENT, "exclusive_set/general_damage");
+    }
+
+    /**
+     * 물약 데이터 태그.
+     */
+    @UtilityClass
+    public static final class Potions {
+        public static final TagKey<Potion> ON_SWAMP_HUT = create(Registries.POTION, "on_swamp_hut");
     }
 
     /**

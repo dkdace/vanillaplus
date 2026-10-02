@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.entity.PotentSulfurBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.PotentSulfurState;
-import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -52,16 +51,16 @@ public abstract class PotentSulfurBlockMixin extends BlockMixin<PotentSulfurBloc
             return;
 
         if (type == BlockEntityTypes.POTENT_SULFUR)
-            cir.setReturnValue(level.isClientSide()
-                    ? VPPotentSulfurBlockEntity.BURNING_CLIENT_TICKER.get()
-                    : VPPotentSulfurBlockEntity.BURNING_SERVER_TICKER.get());
+            cir.setReturnValue((level.isClientSide()
+                    ? VPPotentSulfurBlockEntity.BURNING_CLIENT_TICKER
+                    : VPPotentSulfurBlockEntity.BURNING_SERVER_TICKER).get());
         else
             cir.setReturnValue(null);
     }
 
     @Inject(method = "animateTick", at = @At("TAIL"))
     private void playBurningSound(BlockState state, Level level, BlockPos pos, RandomSource random, CallbackInfo ci) {
-        if (state.getValue(STATE) == VPPotentSulfurState.BURNING.get() && level.getFluidState(pos.above()).is(Fluids.LAVA))
+        if (state.getValue(STATE) == VPPotentSulfurState.BURNING.get() && level.getFluidState(pos.above()).is(FluidTags.LAVA))
             level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.NOXIOUS_GAS, SoundSource.AMBIENT, 1, 0.8F,
                     false);
     }

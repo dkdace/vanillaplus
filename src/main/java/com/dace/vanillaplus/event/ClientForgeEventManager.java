@@ -4,7 +4,6 @@ import com.dace.vanillaplus.VanillaPlus;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.data.registryobject.VPParticleTypes;
 import com.dace.vanillaplus.extension.client.VPOptions;
-import com.dace.vanillaplus.extension.client.particle.VPNoxiousGasCloudParticle;
 import com.dace.vanillaplus.extension.world.entity.player.VPPlayer;
 import com.dace.vanillaplus.network.NetworkManager;
 import com.dace.vanillaplus.network.server.PronePacket;
@@ -16,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.color.block.BlockTintSource;
-import net.minecraft.client.particle.NoxiousGasCloudParticle;
 import net.minecraft.client.particle.NoxiousGasParticle;
 import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.renderer.BiomeColors;
@@ -128,13 +126,6 @@ public final class ClientForgeEventManager {
                     particle.setLifetime(randomSource.nextInt(20) + 30);
                     particle.setParticleSpeed(0, 0.08 + randomSource.nextDouble() * 0.04, 0);
                     particle.fadeOutStartingPoint = 0;
-
-                    return particle;
-                });
-        event.registerSpecial(VPParticleTypes.NOXIOUS_GAS_CLOUD_BURNING.get(),
-                (_, level, x, y, z, _, _, _, _) -> {
-                    NoxiousGasCloudParticle particle = new NoxiousGasCloudParticle(level, x, y, z);
-                    VPNoxiousGasCloudParticle.cast(particle).setBurning(true);
 
                     return particle;
                 });

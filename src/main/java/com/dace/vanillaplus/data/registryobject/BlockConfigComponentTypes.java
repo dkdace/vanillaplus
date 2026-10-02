@@ -29,6 +29,8 @@ public final class BlockConfigComponentTypes {
             "brewing_stand", () -> BrewingStandConfig.CODEC);
     public static final RegistryObject<Codec<WaterCauldronConfig>> WATER_CAULDRON = create(
             "water_cauldron", () -> WaterCauldronConfig.CODEC);
+    public static final RegistryObject<Codec<SulfurConfig>> SULFUR = create(
+            "sulfur", () -> SulfurConfig.CODEC);
     public static final RegistryObject<Codec<PotentSulfurConfig>> POTENT_SULFUR = create(
             "potent_sulfur", () -> PotentSulfurConfig.CODEC);
 

@@ -129,7 +129,13 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     public abstract float getMaxHealth();
 
     @Shadow
+    public abstract boolean isAlive();
+
+    @Shadow
     public abstract boolean isAutoSpinAttack();
+
+    @Shadow
+    public abstract boolean isInWall();
 
     @Shadow
     public void die(DamageSource source) {
@@ -145,6 +151,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Shadow
     public abstract void stopUsingItem();
+
+    @Shadow
+    public abstract boolean isBaby();
 
     @Unique
     private float getFinalSpeed(float speed) {
