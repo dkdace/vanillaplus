@@ -4,7 +4,6 @@ import com.dace.vanillaplus.extension.world.level.block.entity.VPPotentSulfurBlo
 import com.dace.vanillaplus.world.entity.monster.cubemob.SulfurCubeConfig;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,8 +47,8 @@ public abstract class SulfurCubeMixin extends AbstractCubeMobMixin<SulfurCube> {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/cubemob/AbstractCubeMob;tick()V"))
     private void playBurningNoxiousGasParticles(CallbackInfo ci) {
-        if (level() instanceof ClientLevel clientLevel && isBurning())
-            VPPotentSulfurBlockEntity.playBurningNoxiousGasParticles(clientLevel, BlockPos.containing(position().subtract(0, 0.1, 0)),
+        if (level().isClientSide() && isBurning())
+            VPPotentSulfurBlockEntity.playBurningNoxiousGasParticles(level(), BlockPos.containing(position().subtract(0, 0.1, 0)),
                     BURNING_NOXIOUS_GAS_RADIUS);
     }
 

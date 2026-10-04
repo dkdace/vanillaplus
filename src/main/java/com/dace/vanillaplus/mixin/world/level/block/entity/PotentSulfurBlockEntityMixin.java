@@ -6,11 +6,10 @@ import com.dace.vanillaplus.world.block.PotentSulfurConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import lombok.NonNull;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PotentSulfurBlock;
 import net.minecraft.world.level.block.entity.PotentSulfurBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,12 +26,12 @@ public abstract class PotentSulfurBlockEntityMixin extends BlockEntityMixin<Pote
     private static final double BURNING_NOXIOUS_GAS_RADIUS = 3;
 
     @Unique
-    private static void tickBurningClient(@NonNull ClientLevel level, @NonNull BlockPos pos) {
+    private static void tickBurningClient(@NonNull Level level, @NonNull BlockPos pos) {
         VPPotentSulfurBlockEntity.playBurningNoxiousGasParticles(level, pos, BURNING_NOXIOUS_GAS_RADIUS);
     }
 
     @Unique
-    private static void tickBurningServer(@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state) {
+    private static void tickBurningServer(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state) {
         if (!PotentSulfurConfig.get().canBurn()) {
             level.setBlockAndUpdate(pos, state.setValue(PotentSulfurBlock.STATE, PotentSulfurState.DRY));
             return;
@@ -44,10 +43,8 @@ public abstract class PotentSulfurBlockEntityMixin extends BlockEntityMixin<Pote
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void clinit(CallbackInfo ci) {
-        BURNING_CLIENT_TICKER.setValue((level, pos, _, _) ->
-                tickBurningClient((ClientLevel) level, pos));
-        BURNING_SERVER_TICKER.setValue((level, pos, state, _) ->
-                tickBurningServer((ServerLevel) level, pos, state));
+        BURNING_CLIENT_TICKER.setValue((level, pos, _, _) -> tickBurningClient(level, pos));
+        BURNING_SERVER_TICKER.setValue((level, pos, state, _) -> tickBurningServer(level, pos, state));
     }
 
     @WrapOperation(method = "applyNauseaEffect", at = @At(value = "INVOKE",

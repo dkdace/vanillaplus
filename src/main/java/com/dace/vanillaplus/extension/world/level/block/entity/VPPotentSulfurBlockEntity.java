@@ -5,10 +5,8 @@ import com.dace.vanillaplus.data.registryobject.VPParticleTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.level.block.state.properties.VPPotentSulfurState;
 import lombok.NonNull;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntitySelector;
@@ -84,7 +82,7 @@ public interface VPPotentSulfurBlockEntity extends VPMixin<PotentSulfurBlockEnti
      * @param pos    블록 위치
      * @param radius 범위
      */
-    static void playBurningNoxiousGasParticles(@NonNull ClientLevel level, @NonNull BlockPos pos, double radius) {
+    static void playBurningNoxiousGasParticles(@NonNull Level level, @NonNull BlockPos pos, double radius) {
         pos = findBurningNoxiousGasSourceBlock(level, pos);
         if (pos == null)
             return;
@@ -105,7 +103,7 @@ public interface VPPotentSulfurBlockEntity extends VPMixin<PotentSulfurBlockEnti
      * @param effects 상태 효과 목록
      * @param radius  범위
      */
-    static void createBurningNoxiousGas(@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull List<MobEffectInstance> effects, double radius) {
+    static void createBurningNoxiousGas(@NonNull Level level, @NonNull BlockPos pos, @NonNull List<MobEffectInstance> effects, double radius) {
         pos = findBurningNoxiousGasSourceBlock(level, pos);
         if (pos == null)
             return;
