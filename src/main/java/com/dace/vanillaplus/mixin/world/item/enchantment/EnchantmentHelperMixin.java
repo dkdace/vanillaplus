@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class EnchantmentHelperMixin implements VPMixin<EnchantmentHelper> {
     @Unique
     private static int getFinalEnchantmentLevel(int level, @NonNull ItemInstance itemInstance) {
-        return level * itemInstance.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
+        return itemInstance.get(VPDataComponentTypes.DOUBLE_ENCHANTMENT_LEVEL.get()) != null ? level * 2 : level;
     }
 
     @Unique

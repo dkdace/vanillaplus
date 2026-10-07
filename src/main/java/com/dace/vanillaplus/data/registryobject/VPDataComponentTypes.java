@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -33,11 +34,10 @@ public final class VPDataComponentTypes {
                     .persistent(TrimPattern.CODEC)
                     .networkSynchronized(TrimPattern.STREAM_CODEC)
                     .cacheEncoding());
-    public static final RegistryObject<DataComponentType<Integer>> ENCHANTMENT_LEVEL_MULTIPLIER = create(
-            "enchantment_level_multiplier", builder -> builder
-                    .persistent(ExtraCodecs.POSITIVE_INT)
-                    .networkSynchronized(ByteBufCodecs.VAR_INT)
-                    .cacheEncoding());
+    public static final RegistryObject<DataComponentType<Unit>> DOUBLE_ENCHANTMENT_LEVEL = create(
+            "double_enchantment_level", builder -> builder
+                    .persistent(Unit.CODEC)
+                    .networkSynchronized(Unit.STREAM_CODEC));
     public static final RegistryObject<DataComponentType<Float>> SMELTING_DAMAGE_RATIO = create(
             "smelting_damage_ratio", builder -> builder
                     .persistent(ExtraCodecs.floatRange(0, 1))
