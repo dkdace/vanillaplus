@@ -28,12 +28,6 @@ import java.util.function.Supplier;
 public final class EntityConfigComponentTypes {
     public static final RegistryObject<Codec<List<AttributeInstance.Packed>>> ATTRIBUTES = create(
             "attributes", () -> AttributeInstance.Packed.LIST_CODEC);
-    public static final RegistryObject<Codec<Boolean>> SEE_THROUGH_TRANSPARENT_BLOCKS = create(
-            "see_through_transparent_blocks", () -> Codec.BOOL);
-    public static final RegistryObject<Codec<Boolean>> PREVENT_RIDING_IF_HAS_TARGET = create(
-            "prevent_riding_if_has_target", () -> Codec.BOOL);
-    public static final RegistryObject<Codec<Boolean>> JUMP_AT_TARGET_IF_CANNOT_REACH = create(
-            "jump_at_target_if_cannot_reach", () -> Codec.BOOL);
     public static final RegistryObject<Codec<Boolean>> ATTACK_NPCS = create(
             "attack_npcs", () -> Codec.BOOL);
     public static final RegistryObject<Codec<NpcConfig>> NPC = create(

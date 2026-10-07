@@ -1,8 +1,7 @@
 package com.dace.vanillaplus.mixin.world.entity.ai.control;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.extension.VPMixin;
-import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -23,7 +22,7 @@ public abstract class MoveControlMixin<T extends Mob> implements VPMixin<MoveCon
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void jumpIfCannotReachTarget(CallbackInfo ci) {
-        if (!VPLivingEntity.cast(mob).getConfigComponents().getBoolean(EntityConfigComponentTypes.JUMP_AT_TARGET_IF_CANNOT_REACH))
+        if (!mob.is(VPTags.EntityTypes.CAN_JUMP_AT_TARGET))
             return;
 
         LivingEntity target = mob.getTarget();

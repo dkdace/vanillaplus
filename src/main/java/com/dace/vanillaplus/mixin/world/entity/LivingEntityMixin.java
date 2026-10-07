@@ -236,9 +236,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return getConfigComponents().getBoolean(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS)
-                ? ClipContext.Block.VISUAL
-                : blockCollidingContext;
+        return is(VPTags.EntityTypes.CAN_SEE_THROUGH_TRANSPARENT_BLOCKS) ? ClipContext.Block.VISUAL : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))

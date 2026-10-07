@@ -55,6 +55,11 @@ public final class VPTags {
      */
     @UtilityClass
     public static final class EntityTypes {
+        public static final TagKey<EntityType<?>> CAN_SEE_THROUGH_TRANSPARENT_BLOCKS = create(Registries.ENTITY_TYPE, "can_see_through_transparent_blocks");
+        public static final TagKey<EntityType<?>> DISMOUNTS_VEHICLE_WHEN_FOLLOWING = create(Registries.ENTITY_TYPE, "dismounts_vehicle_when_following");
+        public static final TagKey<EntityType<?>> CAN_JUMP_AT_TARGET = create(Registries.ENTITY_TYPE, "can_jump_at_target");
+        public static final TagKey<EntityType<?>> CHEST_BOAT = create(Registries.ENTITY_TYPE, "chest_boat");
+        public static final TagKey<EntityType<?>> VEHICLES = create(Registries.ENTITY_TYPE, "vehicles");
         public static final TagKey<EntityType<?>> NOT_AFFECTED_BY_NOXIOUS_GAS = create(Registries.ENTITY_TYPE, "not_affected_by_noxious_gas");
     }
 
