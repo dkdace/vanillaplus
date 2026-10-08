@@ -1,0 +1,12 @@
+{
+  "feature": "vanillaplus:delta_sulfur_valley",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 26
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

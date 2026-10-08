@@ -47,6 +47,9 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     public abstract double getY();
 
     @Shadow
+    public abstract double getY(double progress);
+
+    @Shadow
     public abstract double getZ();
 
     @Shadow
@@ -54,6 +57,12 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
 
     @Shadow
     public abstract boolean onGround();
+
+    @Shadow
+    public abstract boolean isOnFire();
+
+    @Shadow
+    public abstract boolean isInWater();
 
     @Shadow
     public abstract SynchedEntityData getEntityData();
@@ -81,6 +90,9 @@ public abstract class EntityMixin<T extends Entity> implements VPEntity<T> {
     @Shadow
     @Nullable
     public abstract LivingEntity getControllingPassenger();
+
+    @Shadow
+    protected abstract boolean shouldPlayLavaHurtSound();
 
     @Shadow
     public float getBlockExplosionResistance(Explosion explosion, BlockGetter level, BlockPos pos, BlockState block, FluidState fluid,

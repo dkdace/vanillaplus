@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 
 import java.util.Optional;
@@ -44,7 +44,7 @@ public record EnderDragonConfig(float enderPearlDropChance, int maxEnderPearlDro
      */
     @NonNull
     public static EnderDragonConfig get() {
-        return VPEntityType.cast(EntityType.ENDER_DRAGON).getConfigComponents().getOrDefault(EntityConfigComponentTypes.ENDER_DRAGON, DEFAULT);
+        return VPEntityType.cast(EntityTypes.ENDER_DRAGON).getConfigComponents().getOrDefault(EntityConfigComponentTypes.ENDER_DRAGON, DEFAULT);
     }
 
     /**

@@ -1,13 +1,13 @@
 package com.dace.vanillaplus.mixin.client.renderer.entity;
 
 import com.dace.vanillaplus.extension.client.VPOptions;
-import com.dace.vanillaplus.extension.client.gui.VPGui;
+import com.dace.vanillaplus.extension.client.gui.VPHud;
 import com.dace.vanillaplus.extension.client.renderer.entity.state.VPLivingEntityRenderState;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -63,17 +63,17 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Unique
     @NonNull
-    private static <T extends LivingEntity> Gui.HeartType getHeartType(@NonNull T entity) {
+    private static <T extends LivingEntity> Hud.HeartType getHeartType(@NonNull T entity) {
         VPLivingEntity<T> vpLivingEntity = VPLivingEntity.cast(entity);
 
         if (vpLivingEntity.isPoisoned())
-            return Gui.HeartType.POISIONED;
+            return Hud.HeartType.POISIONED;
         if (vpLivingEntity.isWithered())
-            return Gui.HeartType.WITHERED;
+            return Hud.HeartType.WITHERED;
         if (entity.isFullyFrozen())
-            return Gui.HeartType.FROZEN;
+            return Hud.HeartType.FROZEN;
 
-        return Gui.HeartType.NORMAL;
+        return Hud.HeartType.NORMAL;
     }
 
     @Unique
@@ -141,10 +141,10 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
         for (int i = 0; i < totalHeartCount; i++) {
             int value = i * 2 + 1;
-            Gui.HeartType heartType = vpLivingEntityRenderState.getHeartType();
+            Hud.HeartType heartType = vpLivingEntityRenderState.getHeartType();
             boolean isBlink = oldHealth > health;
 
-            Identifier containerSprite = Gui.HeartType.CONTAINER.getSprite(false, false, isBlink);
+            Identifier containerSprite = Hud.HeartType.CONTAINER.getSprite(false, false, isBlink);
             renderIcon(state, matrixStack, orderedRenderCommandQueue, containerSprite, HEALTH_OFFSET_Y, containerIndex++, x);
 
             if (isBlink && value <= oldHealth) {
@@ -158,7 +158,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             }
 
             if (value > maxHealth) {
-                Identifier heartSprite = Gui.HeartType.ABSORBING.getSprite(false, (i - maxHealthHeartCount) * 2 + 1 == absorption,
+                Identifier heartSprite = Hud.HeartType.ABSORBING.getSprite(false, (i - maxHealthHeartCount) * 2 + 1 == absorption,
                         false);
                 renderIcon(state, matrixStack, orderedRenderCommandQueue, heartSprite, HEALTH_OFFSET_Y, heartIndex++, x);
             }
@@ -192,9 +192,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
             Identifier armorToughnessSprite = null;
             if (value == armorToughness)
-                armorToughnessSprite = VPGui.ARMOR_TOUGHNESS_HALF_SPRITE;
+                armorToughnessSprite = VPHud.ARMOR_TOUGHNESS_HALF_SPRITE;
             else if (value < armorToughness)
-                armorToughnessSprite = VPGui.ARMOR_TOUGHNESS_FULL_SPRITE;
+                armorToughnessSprite = VPHud.ARMOR_TOUGHNESS_FULL_SPRITE;
 
             if (armorSprite != null)
                 renderIcon(state, matrixStack, orderedRenderCommandQueue, armorSprite, ARMOR_OFFSET_Y, i, x);

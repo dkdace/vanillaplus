@@ -88,9 +88,6 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     @Final
     private AttributeMap attributes;
     @Unique
-    @Nullable
-    private DamageSource lastDamageSourceForKnockback;
-    @Unique
     @Getter
     private int clientHurtTime = 0;
 
@@ -132,7 +129,13 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     public abstract float getMaxHealth();
 
     @Shadow
+    public abstract boolean isAlive();
+
+    @Shadow
     public abstract boolean isAutoSpinAttack();
+
+    @Shadow
+    public abstract boolean isInWall();
 
     @Shadow
     public void die(DamageSource source) {
@@ -148,6 +151,9 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Shadow
     public abstract void stopUsingItem();
+
+    @Shadow
+    public abstract boolean isBaby();
 
     @Unique
     private float getFinalSpeed(float speed) {
@@ -230,9 +236,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
             target = "Lnet/minecraft/world/entity/LivingEntity;hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z"),
             index = 1)
     private ClipContext.Block modifyLineOfSightClipContextBlock(ClipContext.Block blockCollidingContext) {
-        return getConfigComponents().getBoolean(EntityConfigComponentTypes.SEE_THROUGH_TRANSPARENT_BLOCKS)
-                ? ClipContext.Block.VISUAL
-                : blockCollidingContext;
+        return is(VPTags.EntityTypes.CAN_SEE_THROUGH_TRANSPARENT_BLOCKS) ? ClipContext.Block.VISUAL : blockCollidingContext;
     }
 
     @Definition(id = "protection", local = @Local(type = DeathProtection.class, name = "protection"))
@@ -253,21 +257,10 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
             getEntityData().set(OLD_HEALTH, getHealth());
     }
 
-    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void setLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        lastDamageSourceForKnockback = source;
-    }
-
-    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V",
-            shift = At.Shift.AFTER))
-    private void removeLastDamageSourceForKnockback(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        lastDamageSourceForKnockback = null;
-    }
-
-    @ModifyExpressionValue(method = "knockback", at = @At(value = "INVOKE",
+    @ModifyExpressionValue(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    private double modifyKnockbackResistance(double knockbackResistance) {
-        return getFinalKnockbackResistance(knockbackResistance, lastDamageSourceForKnockback);
+    private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) DamageSource damageSource) {
+        return getFinalKnockbackResistance(knockbackResistance, damageSource);
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))

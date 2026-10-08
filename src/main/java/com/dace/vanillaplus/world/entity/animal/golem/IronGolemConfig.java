@@ -5,7 +5,7 @@ import com.dace.vanillaplus.extension.world.entity.VPEntityType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 
 /**
@@ -27,6 +27,6 @@ public record IronGolemConfig(boolean inflateAttackHitbox) {
      */
     @NonNull
     public static IronGolemConfig get() {
-        return VPEntityType.cast(EntityType.IRON_GOLEM).getConfigComponents().getOrDefault(EntityConfigComponentTypes.IRON_GOLEM, DEFAULT);
+        return VPEntityType.cast(EntityTypes.IRON_GOLEM).getConfigComponents().getOrDefault(EntityConfigComponentTypes.IRON_GOLEM, DEFAULT);
     }
 }

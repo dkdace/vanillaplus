@@ -28,7 +28,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -105,7 +105,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
     @Unique
     private void spawnEndermites(@NonNull ServerLevel level) {
         for (int i = 0; i < EnderDragonConfig.get().endermiteCount(); i++) {
-            Endermite endermite = EntityType.ENDERMITE.create(level, EntitySpawnReason.MOB_SUMMONED);
+            Endermite endermite = EntityTypes.ENDERMITE.create(level, EntitySpawnReason.MOB_SUMMONED);
 
             if (endermite != null) {
                 Vec3 pos = position().offsetRandomXZ(random, ENDERMITE_POS_SPREAD);
@@ -124,7 +124,7 @@ public abstract class EnderDragonMixin extends MobMixin<EnderDragon> implements 
                 1 + random.nextFloat() * 0.2F, false);
 
         for (int i = 0; i < 30; i++) {
-            Vec3 pos = blockPos.getCenter().offsetRandom(random, 3);
+            Vec3 pos = Vec3.atCenterOf(blockPos).offsetRandom(random, 3);
 
             level().addParticle(new DustParticleOptions(METEOR_COLOR, 4), true, false, pos.x(), pos.y(), pos.z(),
                     0, 0, 0);

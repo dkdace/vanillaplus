@@ -1,7 +1,7 @@
 {
   "item_components": {
     "vanillaplus:smelting_damage_ratio": 0.21,
-    "vanillaplus:enchantment_level_multiplier": 2,
+    "vanillaplus:double_enchantment_level": {},
     "minecraft:attribute_modifiers": [
       {
         "type": "minecraft:attack_damage",

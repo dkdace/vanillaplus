@@ -21,7 +21,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "attacker",
           "predicate": {
-            "type": "#minecraft:illager"
+            "minecraft:entity_type": "#minecraft:illager"
           }
         }
       }

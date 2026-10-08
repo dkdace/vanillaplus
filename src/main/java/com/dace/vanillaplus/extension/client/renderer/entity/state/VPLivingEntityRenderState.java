@@ -2,7 +2,7 @@ package com.dace.vanillaplus.extension.client.renderer.entity.state;
 
 import com.dace.vanillaplus.extension.VPMixin;
 import lombok.NonNull;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
 /**
@@ -43,7 +43,7 @@ public interface VPLivingEntityRenderState extends VPMixin<LivingEntityRenderSta
     void setArmorToughness(int armorToughness);
 
     @NonNull
-    Gui.HeartType getHeartType();
+    Hud.HeartType getHeartType();
 
-    void setHeartType(@NonNull Gui.HeartType heartType);
+    void setHeartType(@NonNull Hud.HeartType heartType);
 }

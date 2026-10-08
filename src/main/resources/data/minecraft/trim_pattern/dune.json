@@ -28,7 +28,7 @@
                 "condition": "minecraft:entity_properties",
                 "entity": "this",
                 "predicate": {
-                  "vehicle": {}
+                  "minecraft:vehicle": {}
                 }
               }
             },
@@ -46,7 +46,7 @@
                       "condition": "minecraft:entity_properties",
                       "entity": "this",
                       "predicate": {
-                        "flags": {
+                        "minecraft:flags": {
                           "is_flying": false
                         }
                       }
@@ -58,7 +58,7 @@
                           "condition": "minecraft:entity_properties",
                           "entity": "this",
                           "predicate": {
-                            "movement_affected_by": {
+                            "minecraft:movement_affected_by": {
                               "block": {
                                 "blocks": "#minecraft:sand"
                               }
@@ -69,7 +69,7 @@
                           "condition": "minecraft:entity_properties",
                           "entity": "this",
                           "predicate": {
-                            "flags": {
+                            "minecraft:flags": {
                               "is_on_ground": false
                             }
                           }
@@ -89,10 +89,10 @@
                       "condition": "minecraft:entity_properties",
                       "entity": "this",
                       "predicate": {
-                        "flags": {
+                        "minecraft:flags": {
                           "is_flying": false
                         },
-                        "movement_affected_by": {
+                        "minecraft:movement_affected_by": {
                           "block": {
                             "blocks": "#minecraft:sand"
                           }

@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
-import com.dace.vanillaplus.world.item.component.RepairWithXP;
+import com.dace.vanillaplus.world.item.enchantment.RepairWithItem;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -44,15 +43,13 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb> {
             index = 2)
     private Predicate<ItemStack> modifyRepairFilter(Predicate<ItemStack> predicate, @Local(argsOnly = true) ServerPlayer player) {
         return predicate.and(itemStack -> {
-            RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
-            if (repairWithXP == null)
-                return true;
-
             VPItemStack vpItemStack = VPItemStack.cast(itemStack);
-            if (player.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
+            RepairWithItem repairWithItem = vpItemStack.getRepairWithItem();
+
+            if (repairWithItem == null || player.hasInfiniteMaterials() || vpItemStack.getRepairLimit() < vpItemStack.getMaxRepairLimit())
                 return true;
 
-            return repairWithXP.requiredItem().map(itemHolder ->
+            return repairWithItem.requiredItem().map(itemHolder ->
                     player.getInventory().getNonEquipmentItems().stream().anyMatch(targetItemStack -> {
                         if (targetItemStack.is(itemHolder)) {
                             targetItemStack.shrink(1);
@@ -68,10 +65,11 @@ public abstract class ExperienceOrbMixin extends EntityMixin<ExperienceOrb> {
 
     @ModifyExpressionValue(method = "repairPlayerItems", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     private int modifyRepairValue(int repair, @Local(argsOnly = true) ServerPlayer player, @Local(name = "itemStack") ItemStack itemStack) {
-        if (!itemStack.has(VPDataComponentTypes.REPAIR_WITH_XP.get()) || player.hasInfiniteMaterials())
-            return repair;
-
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);
+        RepairWithItem repairWithItem = vpItemStack.getRepairWithItem();
+
+        if (repairWithItem == null || player.hasInfiniteMaterials())
+            return repair;
 
         int repairLimit = vpItemStack.getRepairLimit();
         int finalValue = Math.min(repair, vpItemStack.getMaxRepairLimit() - repairLimit);

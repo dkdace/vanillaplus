@@ -21,7 +21,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "attacker",
           "predicate": {
-            "type": [
+            "minecraft:entity_type": [
               "minecraft:piglin",
               "minecraft:piglin_brute",
               "minecraft:hoglin",

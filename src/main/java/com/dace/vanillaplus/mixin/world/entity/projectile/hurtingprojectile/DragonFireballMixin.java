@@ -50,8 +50,8 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
     }
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setDuration(I)V"))
-    private int modifyFlameDuration(int duration, @Local(name = "owner") Entity owner) {
-        return owner instanceof EnderDragon
+    private int modifyFlameDuration(int duration) {
+        return getOwner() instanceof EnderDragon
                 ? EnderDragonConfig.get().phaseInfo().map(phaseInfo -> phaseInfo.fireball().flameDuration()).orElse(duration)
                 : duration;
     }
@@ -65,8 +65,8 @@ public abstract class DragonFireballMixin extends ProjectileMixin<DragonFireball
 
     @ModifyArg(method = "onHit", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
-    private MobEffectInstance modifyFlameEffect(MobEffectInstance effect, @Local(name = "owner") Entity owner) {
-        return owner instanceof EnderDragon enderDragon && EnderDragonConfig.get().phaseInfo().isPresent()
+    private MobEffectInstance modifyFlameEffect(MobEffectInstance effect) {
+        return getOwner() instanceof EnderDragon enderDragon && EnderDragonConfig.get().phaseInfo().isPresent()
                 ? VPEnderDragon.cast(enderDragon).getFlameMobEffectInstance()
                 : effect;
     }

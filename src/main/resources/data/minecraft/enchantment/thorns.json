@@ -46,7 +46,7 @@
               "condition": "minecraft:entity_properties",
               "entity": "attacker",
               "predicate": {
-                "distance": {
+                "minecraft:distance": {
                   "absolute": {
                     "min": 0,
                     "max": 5
