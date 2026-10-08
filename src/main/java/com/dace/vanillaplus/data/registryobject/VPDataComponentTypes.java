@@ -2,7 +2,6 @@ package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
-import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -42,11 +41,6 @@ public final class VPDataComponentTypes {
             "smelting_damage_ratio", builder -> builder
                     .persistent(ExtraCodecs.floatRange(0, 1))
                     .networkSynchronized(ByteBufCodecs.FLOAT)
-                    .cacheEncoding());
-    public static final RegistryObject<DataComponentType<RepairWithXP>> REPAIR_WITH_XP = create(
-            "repair_with_xp", builder -> builder
-                    .persistent(RepairWithXP.CODEC)
-                    .networkSynchronized(RepairWithXP.STREAM_CODEC)
                     .cacheEncoding());
     public static final RegistryObject<DataComponentType<Long>> SEED = create(
             "seed", builder -> builder
