@@ -68,7 +68,6 @@ public final class VPTags {
      */
     @UtilityClass
     public static final class Enchantments {
-        public static final TagKey<Enchantment> DURABILITY = create(Registries.ENCHANTMENT, "durability");
         public static final TagKey<Enchantment> NON_TREASURE_TOOL = create(Registries.ENCHANTMENT, "non_treasure_tool");
         public static final TagKey<Enchantment> NON_TREASURE_WEAPON = create(Registries.ENCHANTMENT, "non_treasure_weapon");
         public static final TagKey<Enchantment> GENERAL_DAMAGE_EXCLUSIVE = create(Registries.ENCHANTMENT, "exclusive_set/general_damage");
