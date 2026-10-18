@@ -2,12 +2,16 @@ package com.dace.vanillaplus.mixin.world.entity.monster.cubemob;
 
 import com.dace.vanillaplus.extension.world.level.block.entity.VPPotentSulfurBlockEntity;
 import com.dace.vanillaplus.world.entity.monster.cubemob.SulfurCubeConfig;
+import com.dace.vanillaplus.world.item.FireChargeConfig;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.cubemob.SulfurCube;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,6 +47,15 @@ public abstract class SulfurCubeMixin extends AbstractCubeMobMixin<SulfurCube> {
             target = "Lnet/minecraft/world/entity/monster/cubemob/SulfurCube;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) DamageSource damageSource) {
         return getFinalKnockbackResistance(knockbackResistance, damageSource);
+    }
+
+    @Definition(id = "heldItem", local = @Local(type = ItemStack.class, name = "heldItem"))
+    @Definition(id = "is", method = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z")
+    @Definition(id = "FIRE_CHARGE", field = "Lnet/minecraft/world/item/Items;FIRE_CHARGE:Lnet/minecraft/world/item/Item;")
+    @Expression("heldItem.is(FIRE_CHARGE) == false")
+    @ModifyExpressionValue(method = "mobInteract", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean modifyFireChargeUseCondition(boolean condition) {
+        return FireChargeConfig.get().enableThrowing() || condition;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/cubemob/AbstractCubeMob;tick()V"))
