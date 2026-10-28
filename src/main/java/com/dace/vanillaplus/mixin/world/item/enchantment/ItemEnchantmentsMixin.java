@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public abstract class ItemEnchantmentsMixin implements VPMixin<ItemEnchantments> {
     @Unique
     private static int getFinalEnchantmentLevel(@NonNull DataComponentGetter dataComponentGetter, int level) {
-        return level * dataComponentGetter.getOrDefault(VPDataComponentTypes.ENCHANTMENT_LEVEL_MULTIPLIER.get(), 1);
+        return dataComponentGetter.get(VPDataComponentTypes.DOUBLE_ENCHANTMENT_LEVEL.get()) != null ? level * 2 : level;
     }
 
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0,

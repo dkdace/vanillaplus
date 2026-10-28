@@ -71,7 +71,7 @@ public abstract class DragonChargePlayerPhaseMixin extends AbstractDragonPhaseIn
                     return;
         }
 
-        pos = blockPos.getBottomCenter();
+        pos = Vec3.atBottomCenterOf(blockPos);
 
         AreaEffectCloud flame = new AreaEffectCloud(serverLevel, pos.x(), pos.y(), pos.z());
         flame.setOwner(dragon);

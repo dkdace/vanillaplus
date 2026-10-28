@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Endermite;
@@ -75,7 +75,7 @@ public final class ForgeEventManager {
 
         if (!(entity instanceof Endermite) && !level.getGameRules().get(VPGameRules.SPAWN_MOBS_IN_ENDER_DRAGON_FIGHT.get())
                 && level.getBiome(entity.blockPosition()).is(Biomes.THE_END)
-                && !level.getEntities(EntityType.ENDER_DRAGON, _ -> true).isEmpty())
+                && !level.getEntities(EntityTypes.ENDER_DRAGON, _ -> true).isEmpty())
             event.setResult(Result.ALLOW);
     }
 }

@@ -15,7 +15,12 @@
           }
         }
       }
-    ]
+    ],
+    "vanillaplus:repair_with_item": {
+      "max_repair_limit_ratio": 0.4,
+      "required_item": "minecraft:lapis_lazuli",
+      "bar_color": -13487361
+    }
   },
   "max_cost": {
     "base": 75,

@@ -5,7 +5,6 @@ import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItem;
 import com.dace.vanillaplus.world.item.ItemConfig;
-import com.dace.vanillaplus.world.item.component.RepairWithXP;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -93,10 +92,8 @@ public abstract class ItemMixin<T extends Item> implements VPItem<T> {
             return;
 
         Integer maxDamage = components.get(DataComponents.MAX_DAMAGE);
-        if (maxDamage != null) {
+        if (maxDamage != null)
             map.map().put(VPDataComponentTypes.REPAIR_LIMIT.get(), 0);
-            map.map().put(VPDataComponentTypes.REPAIR_WITH_XP.get(), RepairWithXP.DEFAULT);
-        }
 
         config.dataComponentPatch().ifPresent(dataComponentPatch -> applyDataComponentPatch(map, dataComponentPatch));
     }

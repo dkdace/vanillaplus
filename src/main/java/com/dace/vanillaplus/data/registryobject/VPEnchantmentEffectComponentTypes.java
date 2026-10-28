@@ -2,6 +2,7 @@ package com.dace.vanillaplus.data.registryobject;
 
 import com.dace.vanillaplus.data.StaticRegistry;
 import com.dace.vanillaplus.world.item.enchantment.Described;
+import com.dace.vanillaplus.world.item.enchantment.RepairWithItem;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.component.DataComponentType;
@@ -67,6 +68,9 @@ public final class VPEnchantmentEffectComponentTypes {
             "post_damage", builder -> builder
                     .persistent(EnchantmentEffectComponents.validatedListCodec(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC),
                             LootContextParamSets.ENCHANTED_DAMAGE)));
+    public static final RegistryObject<DataComponentType<RepairWithItem>> REPAIR_WITH_ITEM = create(
+            "repair_with_item", builder -> builder
+                    .persistent(RepairWithItem.CODEC));
 
     @NonNull
     private <T> RegistryObject<DataComponentType<T>> create(@NonNull String name, @NonNull UnaryOperator<DataComponentType.Builder<T>> onBuilder) {

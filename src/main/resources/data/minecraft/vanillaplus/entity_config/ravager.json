@@ -14,9 +14,6 @@
         "base": 0
       }
     ],
-    "vanillaplus:see_through_transparent_blocks": true,
-    "vanillaplus:prevent_riding_if_has_target": true,
-    "vanillaplus:jump_at_target_if_cannot_reach": true,
     "vanillaplus:raider": {
       "attack_baby_villagers": true,
       "sprint_during_raids": true,

@@ -24,6 +24,9 @@ public abstract class BlockEntityMixin<T extends BlockEntity> implements IForgeB
     protected Level level;
 
     @Shadow
+    public abstract BlockPos getBlockPos();
+
+    @Shadow
     public abstract BlockState getBlockState();
 
     @Shadow

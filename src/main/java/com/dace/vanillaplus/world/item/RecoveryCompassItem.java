@@ -107,7 +107,7 @@ public final class RecoveryCompassItem extends Item {
         BlockPos.MutableBlockPos blockPos = globalPos.pos().mutable();
         while (blockPos.getY() > serverLevel.getMinY())
             if (serverLevel.getBlockState(blockPos.move(Direction.DOWN)).blocksMotion())
-                return blockPos.move(Direction.UP).getBottomCenter();
+                return Vec3.atBottomCenterOf(blockPos.move(Direction.UP));
 
         return null;
     }

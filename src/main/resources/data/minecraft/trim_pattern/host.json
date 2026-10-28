@@ -21,8 +21,7 @@
           "entity": "this",
           "predicate": {
             "periodic_tick": 20,
-            "type_specific": {
-              "type": "minecraft:player",
+            "minecraft:type_specific/player": {
               "distance_to_respawn": {
                 "absolute": {
                   "min": 0,

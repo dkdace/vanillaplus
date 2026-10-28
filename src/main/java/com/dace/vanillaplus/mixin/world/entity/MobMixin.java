@@ -1,8 +1,9 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
-import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
+import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import lombok.NonNull;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -58,9 +58,8 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
     public abstract void equip(ResourceKey<LootTable> lootTable, Map<EquipmentSlot, Float> dropChances);
 
     @Unique
-    private boolean canStopRiding(@Nullable Entity vehicle) {
-        return getConfigComponents().getBoolean(EntityConfigComponentTypes.PREVENT_RIDING_IF_HAS_TARGET) && getTarget() != null
-                && vehicle instanceof VehicleEntity;
+    private boolean canStopRiding(@NonNull Entity vehicle) {
+        return is(VPTags.EntityTypes.DISMOUNTS_VEHICLE_WHEN_FOLLOWING) && getTarget() != null && vehicle.is(VPTags.EntityTypes.VEHICLES);
     }
 
     @Override
@@ -76,7 +75,11 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;aiStep()V", shift = At.Shift.AFTER))
     private void stopRidingIfHasTarget(CallbackInfo ci) {
-        if (!level().isClientSide() && canStopRiding(getVehicle()))
+        if (level().isClientSide())
+            return;
+
+        Entity vehicle = getVehicle();
+        if (vehicle != null && canStopRiding(vehicle))
             stopRiding();
     }
 

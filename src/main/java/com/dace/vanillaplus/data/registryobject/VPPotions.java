@@ -20,6 +20,11 @@ public final class VPPotions {
     private static final String PREFIX_LONG = "long_";
     private static final String PREFIX_STRONG = "strong_";
 
+    public static final RegistryObject<Potion> NAUSEA = create("nausea", "",
+            new MobEffectInstance(MobEffects.NAUSEA, 900));
+    public static final RegistryObject<Potion> LONG_NAUSEA = create("nausea", PREFIX_LONG,
+            new MobEffectInstance(MobEffects.NAUSEA, 1800));
+
     private static final String NAME_ELIXIR_OF_THE_SUN = "elixir_of_the_sun";
     public static final RegistryObject<Potion> ELIXIR_OF_THE_SUN = create(NAME_ELIXIR_OF_THE_SUN, "",
             new MobEffectInstance(MobEffects.NIGHT_VISION, 6000),

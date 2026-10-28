@@ -41,7 +41,7 @@ public abstract class EnderDragonRendererMixin extends EntityRendererMixin<Ender
         PoseStack meteorPoseStack = new PoseStack();
         meteorPoseStack.pushPose();
 
-        Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        Vec3 cameraPos = Minecraft.getInstance().gameRenderer.mainCamera().position();
         meteorPoseStack.translate(meteorPos.getX() - cameraPos.x(), meteorPos.getY() - cameraPos.y(), meteorPos.getZ() - cameraPos.z());
 
         int height = BeaconRenderer.MAX_RENDER_Y;

@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.network.client;
 
-import com.dace.vanillaplus.extension.client.gui.VPGui;
+import com.dace.vanillaplus.extension.client.gui.VPHud;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
 import com.dace.vanillaplus.network.VPPacket;
 import lombok.NonNull;
@@ -35,7 +35,7 @@ public record PlayerDamageEntityPacket(int entityId, float damage, boolean isKil
         ClientLevel clientLevel = minecraft.level;
 
         if (clientLevel != null && clientLevel.getEntity(entityId) instanceof LivingEntity livingEntity) {
-            VPGui.cast(minecraft.gui).updateRecentDamage(damage, isKilled);
+            VPHud.cast(minecraft.gui.hud).updateRecentDamage(damage, isKilled);
             VPLivingEntity.cast(livingEntity).onDamagedByClient();
         }
 
