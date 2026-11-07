@@ -23,7 +23,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "flags": {
+            "minecraft:flags": {
               "is_in_rain": true
             }
           }
@@ -41,7 +41,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "flags": {
+            "minecraft:flags": {
               "is_in_water": true
             }
           }

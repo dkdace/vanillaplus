@@ -1,0 +1,8 @@
+{
+  "effects": [
+    {
+      "id": "minecraft:nausea",
+      "duration": 900
+    }
+  ]
+}

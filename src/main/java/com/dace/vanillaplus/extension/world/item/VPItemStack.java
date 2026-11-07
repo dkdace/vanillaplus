@@ -1,17 +1,17 @@
 package com.dace.vanillaplus.extension.world.item;
 
-import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
+import com.dace.vanillaplus.world.item.enchantment.RepairWithItem;
 import lombok.NonNull;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.extensions.IForgeItemStack;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link ItemStack}을 확장하는 인터페이스.
  */
-public interface VPItemStack extends VPMixin<ItemStack>, IForgeItemStack {
+public interface VPItemStack extends VPMixin<ItemStack>, ItemInstance, IForgeItemStack {
     @NonNull
     static VPItemStack cast(@NonNull ItemStack object) {
         return (VPItemStack) (Object) object;
@@ -28,16 +28,15 @@ public interface VPItemStack extends VPMixin<ItemStack>, IForgeItemStack {
     void setRepairLimit(int repairLimit);
 
     /**
-     * 수리 한도 수치가 표시되는지 확인한다.
-     *
-     * @return 수리 한도 표시 여부
-     */
-    default boolean isRepairLimitBarVisible() {
-        return EnchantmentHelper.has(getThis(), EnchantmentEffectComponents.REPAIR_WITH_XP) && getThis().has(VPDataComponentTypes.REPAIR_WITH_XP.get());
-    }
-
-    /**
      * @return 최대 수리 한도
      */
     int getMaxRepairLimit();
+
+    /**
+     * 마법 부여에서 가장 높은 레벨의 아이템 기반 수리 한도를 반환한다.
+     *
+     * @return {@link RepairWithItem}
+     */
+    @Nullable
+    RepairWithItem getRepairWithItem();
 }

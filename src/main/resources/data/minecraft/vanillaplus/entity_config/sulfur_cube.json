@@ -1,0 +1,21 @@
+{
+  "components": {
+    "vanillaplus:sulfur_cube": {
+      "can_burn": true,
+      "burning_noxious_gas_effects": [
+        {
+          "amplifier": 0,
+          "duration": 120,
+          "id": "minecraft:nausea",
+          "show_icon": true
+        },
+        {
+          "amplifier": 0,
+          "duration": 50,
+          "id": "minecraft:poison",
+          "show_icon": true
+        }
+      ]
+    }
+  }
+}

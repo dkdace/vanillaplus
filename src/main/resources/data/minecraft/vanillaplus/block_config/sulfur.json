@@ -1,0 +1,7 @@
+{
+  "components": {
+    "vanillaplus:sulfur": {
+      "can_burn": true
+    }
+  }
+}

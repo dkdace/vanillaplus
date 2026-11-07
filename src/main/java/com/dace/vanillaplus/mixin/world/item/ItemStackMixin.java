@@ -2,6 +2,7 @@ package com.dace.vanillaplus.mixin.world.item;
 
 import com.dace.vanillaplus.data.registryobject.BlockConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
+import com.dace.vanillaplus.data.registryobject.VPEnchantmentEffectComponentTypes;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
 import com.dace.vanillaplus.extension.world.item.alchemy.VPPotion;
 import com.dace.vanillaplus.extension.world.item.equipment.trim.VPTrimMaterial;
@@ -9,7 +10,7 @@ import com.dace.vanillaplus.extension.world.level.block.VPBlock;
 import com.dace.vanillaplus.util.DynamicComponent;
 import com.dace.vanillaplus.world.item.ProjectileWeaponConfig;
 import com.dace.vanillaplus.world.item.component.ExtraFood;
-import com.dace.vanillaplus.world.item.component.RepairWithXP;
+import com.dace.vanillaplus.world.item.enchantment.RepairWithItem;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lombok.NonNull;
@@ -34,6 +35,7 @@ import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
@@ -238,14 +240,14 @@ public abstract class ItemStackMixin implements VPItemStack {
         if (!tooltipDisplay.shows(dataComponentType))
             return;
 
-        T component = getThis().get(dataComponentType);
+        T component = get(dataComponentType);
         if (component != null)
             onAdd.accept(component);
     }
 
     @Override
     public int getRepairLimit() {
-        return Math.clamp(getThis().getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
+        return Math.clamp(getOrDefault(VPDataComponentTypes.REPAIR_LIMIT.get(), 0), 0, getMaxRepairLimit());
     }
 
     @Override
@@ -255,13 +257,17 @@ public abstract class ItemStackMixin implements VPItemStack {
 
     @Override
     public int getMaxRepairLimit() {
-        RepairWithXP repairWithXP = getThis().get(VPDataComponentTypes.REPAIR_WITH_XP.get());
+        RepairWithItem repairWithItem = getRepairWithItem();
         Integer maxDamage = getThis().get(DataComponents.MAX_DAMAGE);
 
-        if (repairWithXP == null || maxDamage == null)
-            return 0;
+        return repairWithItem == null || maxDamage == null ? 0 : (int) (maxDamage * repairWithItem.maxRepairLimitRatio());
+    }
 
-        return (int) (maxDamage * repairWithXP.maxRepairLimitRatio());
+    @Override
+    public RepairWithItem getRepairWithItem() {
+        return EnchantmentHelper.has(getThis(), VPEnchantmentEffectComponentTypes.REPAIR_WITH_ITEM.get())
+                ? EnchantmentHelper.getHighestLevel(getThis(), VPEnchantmentEffectComponentTypes.REPAIR_WITH_ITEM.get()).getFirst()
+                : null;
     }
 
     @ModifyExpressionValue(method = "getRarity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEnchanted()Z"))
@@ -272,7 +278,7 @@ public abstract class ItemStackMixin implements VPItemStack {
     @ModifyExpressionValue(method = "hasFoil", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item;isFoil(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean modifyFoilState(boolean isFoil) {
-        PotionContents potionContents = getThis().get(DataComponents.POTION_CONTENTS);
+        PotionContents potionContents = get(DataComponents.POTION_CONTENTS);
         if (potionContents == null)
             return isFoil;
 
@@ -303,7 +309,7 @@ public abstract class ItemStackMixin implements VPItemStack {
         addTooltip(DataComponents.FOOD, display, foodProperties -> addFoodTooltip(foodProperties, builder));
         addTooltip(VPDataComponentTypes.EXTRA_FOOD.get(), display, extraFood -> addExtraFoodTooltip(extraFood, builder));
 
-        if (getThis().is(Items.CAKE))
+        if (is(Items.CAKE))
             VPBlock.cast(Blocks.CAKE).getConfigComponents().get(BlockConfigComponentTypes.FOOD).ifPresent(foodProperties ->
                     addFoodTooltip(foodProperties, builder));
 
@@ -328,8 +334,12 @@ public abstract class ItemStackMixin implements VPItemStack {
     @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
     private void addRepairLimitTooltip(Item.TooltipContext context, TooltipDisplay display, @Nullable Player player, TooltipFlag tooltipFlag,
                                        Consumer<Component> builder, CallbackInfo ci) {
-        if (isRepairLimitBarVisible() && display.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
-            builder.accept(COMPONENT_REPAIR_LIMIT.get(getMaxRepairLimit() - getRepairLimit(), getMaxRepairLimit()));
+        RepairWithItem repairWithItem = getRepairWithItem();
+        if (repairWithItem == null || !display.shows(VPDataComponentTypes.REPAIR_LIMIT.get()))
+            return;
+
+        int maxRepairLimit = getMaxRepairLimit();
+        builder.accept(COMPONENT_REPAIR_LIMIT.get(maxRepairLimit - getRepairLimit(), maxRepairLimit));
     }
 
     @Redirect(method = "onUseTick", at = @At(value = "INVOKE",

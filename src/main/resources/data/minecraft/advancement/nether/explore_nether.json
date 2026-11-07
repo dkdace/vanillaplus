@@ -8,7 +8,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "location": {
+              "minecraft:location": {
                 "biomes": "minecraft:basalt_deltas"
               }
             }
@@ -24,7 +24,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "location": {
+              "minecraft:location": {
                 "biomes": "minecraft:crimson_forest"
               }
             }
@@ -40,7 +40,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "location": {
+              "minecraft:location": {
                 "biomes": "minecraft:nether_wastes"
               }
             }
@@ -56,8 +56,24 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "location": {
+              "minecraft:location": {
                 "biomes": "minecraft:soul_sand_valley"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "vanillaplus:sulfur_valley": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "vanillaplus:sulfur_valley"
               }
             }
           }
@@ -72,7 +88,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "location": {
+              "minecraft:location": {
                 "biomes": "minecraft:warped_forest"
               }
             }
@@ -110,6 +126,9 @@
     ],
     [
       "minecraft:basalt_deltas"
+    ],
+    [
+      "vanillaplus:sulfur_valley"
     ]
   ],
   "rewards": {

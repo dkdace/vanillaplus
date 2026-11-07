@@ -32,7 +32,7 @@
               "condition": "minecraft:entity_properties",
               "entity": "attacker",
               "predicate": {
-                "type": "minecraft:vex"
+                "minecraft:entity_type": "minecraft:vex"
               }
             },
             {

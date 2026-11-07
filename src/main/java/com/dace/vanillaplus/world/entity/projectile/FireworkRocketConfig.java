@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 
 import java.util.Optional;
@@ -33,6 +33,6 @@ public record FireworkRocketConfig(@NonNull Optional<Float> flightAddSpeedMultip
      */
     @NonNull
     public static FireworkRocketConfig get() {
-        return VPEntityType.cast(EntityType.FIREWORK_ROCKET).getConfigComponents().getOrDefault(EntityConfigComponentTypes.FIREWORK_ROCKET, DEFAULT);
+        return VPEntityType.cast(EntityTypes.FIREWORK_ROCKET).getConfigComponents().getOrDefault(EntityConfigComponentTypes.FIREWORK_ROCKET, DEFAULT);
     }
 }

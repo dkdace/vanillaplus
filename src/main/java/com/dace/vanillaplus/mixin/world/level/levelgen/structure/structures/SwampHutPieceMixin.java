@@ -1,5 +1,6 @@
 package com.dace.vanillaplus.mixin.world.level.levelgen.structure.structures;
 
+import com.dace.vanillaplus.data.VPTags;
 import com.dace.vanillaplus.mixin.world.level.levelgen.structure.StructurePieceMixin;
 import com.dace.vanillaplus.world.block.entity.WaterCauldronBlockEntity;
 import com.llamalad7.mixinextras.expression.Definition;
@@ -7,7 +8,6 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.tags.PotionTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.ChunkPos;
@@ -42,7 +42,7 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
         for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; i++) {
             int index = i;
             BuiltInRegistries.ITEM.getRandomElementOf(Tags.Items.POTIONS, random).ifPresent(potionItem ->
-                    BuiltInRegistries.POTION.getRandomElementOf(PotionTags.TRADEABLE, random).ifPresent(potionHolder ->
+                    BuiltInRegistries.POTION.getRandomElementOf(VPTags.Potions.ON_SWAMP_HUT, random).ifPresent(potionHolder ->
                             brewingStandBlockEntity.setItem(index, PotionContents.createItemStack(potionItem.value(), potionHolder))));
         }
     }
@@ -58,7 +58,7 @@ public abstract class SwampHutPieceMixin extends StructurePieceMixin<SwampHutPie
         placeBlock(level, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, levelValue), x, y, z, chunkBB);
 
         if (level.getBlockEntity(getWorldPos(x, y, z)) instanceof WaterCauldronBlockEntity waterCauldronBlockEntity)
-            BuiltInRegistries.POTION.getRandomElementOf(PotionTags.TRADEABLE, random).ifPresent(potionHolder ->
+            BuiltInRegistries.POTION.getRandomElementOf(VPTags.Potions.ON_SWAMP_HUT, random).ifPresent(potionHolder ->
                     waterCauldronBlockEntity.setPotionContents(new PotionContents(potionHolder)));
     }
 }

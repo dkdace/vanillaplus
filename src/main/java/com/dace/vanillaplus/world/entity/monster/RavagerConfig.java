@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NonNull;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.Ravager;
 
 import java.util.Optional;
@@ -31,6 +31,6 @@ public record RavagerConfig(@NonNull Optional<Integer> roarCooldown) {
      */
     @NonNull
     public static RavagerConfig get() {
-        return VPEntityType.cast(EntityType.RAVAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAVAGER, DEFAULT);
+        return VPEntityType.cast(EntityTypes.RAVAGER).getConfigComponents().getOrDefault(EntityConfigComponentTypes.RAVAGER, DEFAULT);
     }
 }

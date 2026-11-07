@@ -1,9 +1,8 @@
 package com.dace.vanillaplus.mixin.client.gui;
 
-import com.dace.vanillaplus.data.registryobject.VPDataComponentTypes;
 import com.dace.vanillaplus.extension.VPMixin;
 import com.dace.vanillaplus.extension.world.item.VPItemStack;
-import com.dace.vanillaplus.world.item.component.RepairWithXP;
+import com.dace.vanillaplus.world.item.enchantment.RepairWithItem;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -37,8 +36,7 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
     @Expression("top")
     @ModifyExpressionValue(method = "itemBar", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int modifyDamageBarTop(int top, @Local(argsOnly = true) ItemStack itemStack) {
-        VPItemStack vpItemStack = VPItemStack.cast(itemStack);
-        if (vpItemStack.isRepairLimitBarVisible())
+        if (VPItemStack.cast(itemStack).getRepairWithItem() != null)
             top -= ITEM_REPAIR_LIMIT_BAR_HEIGHT;
 
         return top;
@@ -47,11 +45,8 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
     @Inject(method = "itemBar", at = @At("TAIL"))
     private void renderItemRepairLimitBar(ItemStack itemStack, int x, int y, CallbackInfo ci) {
         VPItemStack vpItemStack = VPItemStack.cast(itemStack);
-        if (!vpItemStack.isRepairLimitBarVisible())
-            return;
-
-        RepairWithXP repairWithXP = itemStack.get(VPDataComponentTypes.REPAIR_WITH_XP.get());
-        if (repairWithXP == null)
+        RepairWithItem repairWithItem = vpItemStack.getRepairWithItem();
+        if (repairWithItem == null)
             return;
 
         x += ITEM_REPAIR_LIMIT_BAR_OFFSET_X;
@@ -61,6 +56,6 @@ public abstract class GuiGraphicsExtractorMixin implements VPMixin<GuiGraphicsEx
         int barWidth = Math.clamp(value, 0, Item.MAX_BAR_WIDTH);
 
         fill(RenderPipelines.GUI, x, y, x + Item.MAX_BAR_WIDTH, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT, CommonColors.BLACK);
-        fill(RenderPipelines.GUI, x, y, x + barWidth, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT - 1, repairWithXP.barColor());
+        fill(RenderPipelines.GUI, x, y, x + barWidth, y + ITEM_REPAIR_LIMIT_BAR_HEIGHT - 1, repairWithItem.barColor());
     }
 }
