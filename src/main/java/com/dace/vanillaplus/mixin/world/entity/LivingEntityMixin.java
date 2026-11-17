@@ -228,7 +228,7 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
+    protected void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
         getConfigComponents().get(EntityConfigComponentTypes.ATTRIBUTES).ifPresent(attributes::apply);
     }
 

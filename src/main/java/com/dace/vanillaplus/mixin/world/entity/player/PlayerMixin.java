@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,6 +65,10 @@ public abstract class PlayerMixin<T extends Player> extends LivingEntityMixin<T>
 
     @Shadow
     public abstract float getAttackStrengthScale(float a);
+
+    @Override
+    protected void applyAttributes(EntityType<? extends LivingEntity> type, Level level, CallbackInfo ci) {
+    }
 
     @Override
     protected boolean canUseTotem(boolean hasDeathProtection, ItemStack itemStack) {
