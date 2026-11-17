@@ -104,6 +104,7 @@
     "world.item.ItemMixin",
     "world.item.ItemsMixin",
     "world.item.ItemStackMixin",
+    "world.item.ShearsItemMixin",
     "world.item.SmithingTemplateItemMixin",
     "world.item.TridentItemMixin",
     "world.item.alchemy.PotionContentsMixin",
