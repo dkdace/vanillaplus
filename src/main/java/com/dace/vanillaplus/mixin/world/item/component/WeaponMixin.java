@@ -21,7 +21,7 @@ public abstract class WeaponMixin implements VPWeapon {
     @Final
     public static Codec<Weapon> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(Weapon::itemDamagePerAttack),
-                    ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("disable_blocking_for_seconds", 0.0F)
+                    ExtraCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("disable_blocking_for_seconds", 0F)
                             .forGetter(Weapon::disableBlockingForSeconds),
                     Codec.BOOL.optionalFieldOf("disable_blocking_on_full_strength_attack", false)
                             .forGetter(weapon -> ((WeaponMixin) (Object) weapon).disableBlockingOnFullStrengthAttack))

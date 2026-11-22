@@ -1,6 +1,6 @@
 package com.dace.vanillaplus.extension.world.entity.boss.enderdragon;
 
-import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
+import com.dace.vanillaplus.extension.world.entity.VPMob;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * {@link EnderDragon}를 확장하는 인터페이스.
  */
-public interface VPEnderDragon extends VPLivingEntity<EnderDragon> {
+public interface VPEnderDragon extends VPMob<EnderDragon> {
     @NonNull
     static VPEnderDragon cast(@NonNull EnderDragon object) {
         return (VPEnderDragon) object;

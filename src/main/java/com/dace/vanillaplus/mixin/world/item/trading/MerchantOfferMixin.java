@@ -44,7 +44,7 @@ public abstract class MerchantOfferMixin implements VPMerchantOffer {
                             .forGetter(merchantOffer -> ((MerchantOfferMixin) (Object) merchantOffer).specialPriceDiff),
                     Codec.INT.lenientOptionalFieldOf("demand", 0)
                             .forGetter(merchantOffer -> ((MerchantOfferMixin) (Object) merchantOffer).demand),
-                    Codec.FLOAT.lenientOptionalFieldOf("priceMultiplier", 0.0F)
+                    Codec.FLOAT.lenientOptionalFieldOf("priceMultiplier", 0F)
                             .forGetter(merchantOffer -> ((MerchantOfferMixin) (Object) merchantOffer).priceMultiplier),
                     Codec.INT.lenientOptionalFieldOf("xp", 1)
                             .forGetter(merchantOffer -> ((MerchantOfferMixin) (Object) merchantOffer).xp),

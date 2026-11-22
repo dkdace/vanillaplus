@@ -1,17 +1,29 @@
 package com.dace.vanillaplus.mixin.world.entity;
 
 import com.dace.vanillaplus.data.VPTags;
+import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
+import com.dace.vanillaplus.extension.world.entity.VPMob;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -28,13 +40,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(Mob.class)
-public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> implements EquipmentUser {
+public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> implements VPMob<T> {
     @Shadow
     @Final
     public GoalSelector targetSelector;
     @Shadow
     @Final
     public GoalSelector goalSelector;
+    @Unique
+    @Nullable
+    @Getter
+    @Setter
+    private BlockPos trialSpawnerPos;
 
     @Shadow
     public abstract MoveControl getMoveControl();
