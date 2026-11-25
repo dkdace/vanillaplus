@@ -1,7 +1,11 @@
 package com.dace.vanillaplus.mixin.world.level.block.entity.trialspawner;
 
 import com.dace.vanillaplus.data.registryobject.VPGameRules;
+import com.dace.vanillaplus.extension.world.level.block.entity.trialspawner.VPTrialSpawnerConfig;
 import com.dace.vanillaplus.extension.world.level.block.entity.trialspawner.VPTrialSpawnerStateData;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -9,6 +13,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -22,9 +27,12 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawner;
+import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerConfig;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerStateData;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -90,6 +98,23 @@ public abstract class TrialSpawnerStateDataMixin implements VPTrialSpawnerStateD
     @Inject(method = "apply", at = @At("TAIL"))
     private void apply(TrialSpawnerStateData.Packed packed, CallbackInfo ci) {
         trialOmenLevel = Packed.cast(packed).getTrialOmenLevel();
+    }
+
+    @Definition(id = "dispensing", field = "Lnet/minecraft/world/level/block/entity/trialspawner/TrialSpawnerStateData;dispensing:Lnet/minecraft/util/random/WeightedList;")
+    @Expression("this.dispensing != null")
+    @ModifyExpressionValue(method = "getDispensingItems", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean modifyDispensingCacheCondition(boolean condition, @Local(argsOnly = true) TrialSpawnerConfig trialSpawnerConfig) {
+        return !VPTrialSpawnerConfig.cast(trialSpawnerConfig).getOminous().randomizeOminousItems() && condition;
+    }
+
+    @WrapOperation(method = "getDispensingItems", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/level/storage/loot/LootTable;getRandomItems(Lnet/minecraft/world/level/storage/loot/LootParams;J)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"))
+    private ObjectArrayList<ItemStack> modifyRandomItems(LootTable instance, LootParams params, long optionalLootTableSeed,
+                                                         Operation<ObjectArrayList<ItemStack>> original,
+                                                         @Local(argsOnly = true) TrialSpawnerConfig trialSpawnerConfig) {
+        return VPTrialSpawnerConfig.cast(trialSpawnerConfig).getOminous().randomizeOminousItems()
+                ? instance.getRandomItems(params)
+                : original.call(instance, params, optionalLootTableSeed);
     }
 
     @Mixin(TrialSpawnerStateData.Packed.class)

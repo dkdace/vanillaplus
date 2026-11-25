@@ -35,12 +35,13 @@ public interface VPTrialSpawnerConfig extends VPMixin<TrialSpawnerConfig> {
      * @param experiences                 흉조 레벨별 클리어 시 경험치 목록
      * @param ominousItemCooldowns        흉조 레벨별 불길한 아이템 생성 쿨타임 목록
      * @param ominousItemActivationDelays 흉조 레벨별 불길한 아이템 활성화 딜레이 목록
+     * @param randomizeOminousItems       불길한 아이템이 생성될 때 무작위 재설정 여부
      */
     record Ominous(@NonNull Optional<OverrideLootTable> overrideLootTable, @NonNull List<Integer> experiences,
-                   @NonNull List<Integer> ominousItemCooldowns, @NonNull List<Integer> ominousItemActivationDelays) {
+                   @NonNull List<Integer> ominousItemCooldowns, @NonNull List<Integer> ominousItemActivationDelays, boolean randomizeOminousItems) {
         /** 기본값 */
         public static final Ominous DEFAULT = new Ominous(Optional.empty(), Collections.emptyList(), Collections.emptyList(),
-                Collections.emptyList());
+                Collections.emptyList(), false);
         /** JSON 코덱 */
         public static final Codec<Ominous> CODEC = RecordCodecBuilder.create(instance -> instance
                 .group(OverrideLootTable.CODEC.optionalFieldOf("override_loot_table").forGetter(Ominous::overrideLootTable),
@@ -50,7 +51,9 @@ public interface VPTrialSpawnerConfig extends VPMixin<TrialSpawnerConfig> {
                                 .forGetter(Ominous::ominousItemCooldowns),
                         ExtraCodecs.NON_NEGATIVE_INT.listOf()
                                 .optionalFieldOf("ominous_item_activation_delays", DEFAULT.ominousItemActivationDelays)
-                                .forGetter(Ominous::ominousItemActivationDelays))
+                                .forGetter(Ominous::ominousItemActivationDelays),
+                        Codec.BOOL.optionalFieldOf("randomize_ominous_items", DEFAULT.randomizeOminousItems)
+                                .forGetter(Ominous::randomizeOminousItems))
                 .apply(instance, Ominous::new));
 
         /**
