@@ -113,11 +113,13 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void addAdditionalSaveData(ValueOutput output, CallbackInfo ci) {
         output.putInt("DisableBlockingTime", disableBlockingTime);
+        output.storeNullable("TrialSpawnerPos", BlockPos.CODEC, trialSpawnerPos);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void readAdditionalSaveData(ValueInput input, CallbackInfo ci) {
         disableBlockingTime = input.getIntOr("DisableBlockingTime", 0);
+        trialSpawnerPos = input.read("TrialSpawnerPos", BlockPos.CODEC).orElse(null);
     }
 
     @Inject(method = "serverAiStep", at = @At("TAIL"))
