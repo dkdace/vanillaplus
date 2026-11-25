@@ -5,6 +5,7 @@ import com.dace.vanillaplus.data.registryobject.EntityConfigComponentTypes;
 import com.dace.vanillaplus.data.registryobject.VPAttributes;
 import com.dace.vanillaplus.extension.world.effect.VPMobEffect;
 import com.dace.vanillaplus.extension.world.entity.VPLivingEntity;
+import com.dace.vanillaplus.extension.world.entity.VPMob;
 import com.dace.vanillaplus.extension.world.item.enchantment.VPEnchantment;
 import com.dace.vanillaplus.util.IdentifierUtil;
 import com.dace.vanillaplus.world.item.TridentConfig;
@@ -29,10 +30,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -51,6 +49,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -143,6 +142,14 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
 
     @Shadow
     public abstract AttackRange getAttackRangeWith(ItemStack weaponItem);
+
+    @Shadow
+    @Nullable
+    public abstract ItemStack getItemBlockingWith();
+
+    @Shadow
+    protected void blockUsingItem(ServerLevel level, LivingEntity attacker, DamageSource source, float damage) {
+    }
 
     @Shadow
     public float getSecondsToDisableBlocking() {
@@ -261,6 +268,18 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
     private double modifyKnockbackResistance(double knockbackResistance, @Local(argsOnly = true) DamageSource damageSource) {
         return getFinalKnockbackResistance(knockbackResistance, damageSource);
+    }
+
+    @WrapWithCondition(method = "dealDefaultKnockback", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDDLnet/minecraft/world/damagesource/DamageSource;F)V"))
+    private boolean removeDefaultKnockbackIfNoDamage(LivingEntity instance, double power, double xd, double zd, DamageSource source, float damage,
+                                                     @Local(argsOnly = true) boolean blocked) {
+        return !blocked || damage > 0;
+    }
+
+    @Redirect(method = "blockedByItem", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDDLnet/minecraft/world/damagesource/DamageSource;F)V"))
+    private void removeKnockbackOnBlocked(LivingEntity instance, double power, double xd, double zd, DamageSource source, float damage) {
     }
 
     @ModifyReturnValue(method = "getDamageAfterArmorAbsorb", at = @At("RETURN"))

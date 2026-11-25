@@ -48,6 +48,9 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
     @Final
     public GoalSelector goalSelector;
     @Unique
+    @Getter
+    private int disableBlockingTime = 0;
+    @Unique
     @Nullable
     @Getter
     @Setter
@@ -80,6 +83,23 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
     }
 
     @Override
+    protected void blockUsingItem(ServerLevel level, LivingEntity attacker, DamageSource source, float damage) {
+        super.blockUsingItem(level, attacker, source, damage);
+
+        ItemStack itemBlockingWith = getItemBlockingWith();
+        float secondsToDisableBlocking = attacker.getSecondsToDisableBlocking();
+        BlocksAttacks blocksAttacks = itemBlockingWith != null ? itemBlockingWith.get(DataComponents.BLOCKS_ATTACKS) : null;
+
+        if (secondsToDisableBlocking <= 0 || blocksAttacks == null)
+            return;
+
+        blocksAttacks.disable(level, getThis(), secondsToDisableBlocking, itemBlockingWith);
+
+        float seconds = secondsToDisableBlocking * blocksAttacks.disableCooldownScale();
+        disableBlockingTime = seconds > 0 ? Math.round(seconds * 20) : 0;
+    }
+
+    @Override
     public void die(DamageSource source) {
         super.die(source);
 
@@ -88,6 +108,22 @@ public abstract class MobMixin<T extends Mob> extends LivingEntityMixin<T> imple
                 if (wrappedGoal.getGoal() instanceof HurtByTargetGoal hurtByTargetGoal && hurtByTargetGoal.canUse())
                     hurtByTargetGoal.start();
             });
+    }
+
+    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+    private void addAdditionalSaveData(ValueOutput output, CallbackInfo ci) {
+        output.putInt("DisableBlockingTime", disableBlockingTime);
+    }
+
+    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+    private void readAdditionalSaveData(ValueInput input, CallbackInfo ci) {
+        disableBlockingTime = input.getIntOr("DisableBlockingTime", 0);
+    }
+
+    @Inject(method = "serverAiStep", at = @At("TAIL"))
+    private void decreaseDisableBlockingTime(CallbackInfo ci) {
+        if (disableBlockingTime > 0)
+            disableBlockingTime--;
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;aiStep()V", shift = At.Shift.AFTER))

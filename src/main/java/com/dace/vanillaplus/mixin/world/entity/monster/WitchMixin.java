@@ -38,7 +38,7 @@ public abstract class WitchMixin extends RaiderMixin<Witch> {
     @Nullable
     private RangedAttackGoal rangedAttackGoal;
     @Unique
-    private int attackCooldown;
+    private int attackCooldown = 0;
     @Unique
     @Nullable
     private NearestAttackableWitchTargetGoal<IronGolem> attackIronGolemGoal;
