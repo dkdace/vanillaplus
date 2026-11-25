@@ -294,6 +294,13 @@ public abstract class LivingEntityMixin<T extends LivingEntity> extends EntityMi
         return damage * Math.max(value.floatValue(), 0);
     }
 
+    @Definition(id = "tookFullDamage", local = @Local(type = boolean.class, name = "tookFullDamage"))
+    @Expression("tookFullDamage")
+    @ModifyExpressionValue(method = "hurtServer", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 2))
+    private boolean modifyHurtSoundCondition(boolean tookFullDamage, @Local(name = "damage") float damage) {
+        return tookFullDamage && damage > 0;
+    }
+
     @WrapOperation(method = "travelInWater", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D", ordinal = 0))
     private double modifyWaterMovementEfficiencyValue(LivingEntity instance, Holder<Attribute> attribute, Operation<Double> original) {
